@@ -18,6 +18,7 @@ Technologies Used
 ------------
 
 Server = [node.js, express, jade, passport, mongoose, emailjs, async]
+
 Client = [bootstrap, backbone.js, jquery]
 
 Installation
@@ -39,7 +40,7 @@ db.admingroups.save({ name: 'root' });
 var rootGroup = db.admingroups.findOne();
 db.admins.save({ name: {first: 'Root', last: 'Admin', full: 'Root Admin'}, groups: [rootGroup._id] });
 var rootAdmin = db.admins.findOne();
-db.users.save({ username: 'root', isActive: 'yes', email: 'reza@akhavan.me', roles: {admin: rootAdmin._id} });
+db.users.save({ username: 'root', isActive: 'yes', email: 'your@email.addy', roles: {admin: rootAdmin._id} });
 var rootUser = db.users.findOne();
 rootAdmin.user = rootUser._id;
 db.admins.save(rootAdmin);
