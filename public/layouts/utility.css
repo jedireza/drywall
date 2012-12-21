@@ -1,0 +1,43 @@
+/**
+ * utility
+ */
+.stretch {
+  width: 100%;
+}
+a.stretch,
+input.stretch, 
+textarea.stretch,
+select.stretch {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+input.stretch {
+  height: 27px;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.wrap {
+  white-space: normal;
+}
+.clear {
+  clear: both;
+}
+
+.ajax-spinner {
+  display: none;
+  line-height: 11px;
+  font-size: inherit;
+  padding: 5px;
+  position: absolute;
+  background-color: #ccc;
+  z-index: 999;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}​
+.ajax-spinner img {
+  width: inherit;
+  height: inherit;
+  margin: 0px;
+}

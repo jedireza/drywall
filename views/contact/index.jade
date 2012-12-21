@@ -1,0 +1,53 @@
+extends ../../layouts/default
+
+block head
+  title Contact Us
+  link(rel='stylesheet', href='/views/contact/index.css')
+
+block feet
+  script(src='/views/contact/index.js')
+
+block body
+  div.page-header
+    h1 Contact Us
+  div.row
+    div.span8
+      iframe(
+        width='100%', height='385', frameborder='0', 
+        scrolling='no', marginheight='0', marginwidth='0', 
+        src='https://maps.google.com/?ie=UTF8&amp;ll=37.0625,-95.677068&amp;spn=50.157795,67.5&amp;t=m&amp;z=4&amp;output=embed'
+      )
+    div.span4
+      #contact
+  
+  script(type='text/template', id='tmpl-contact')
+    form
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info
+          | We have received your message. Thank you.
+        |<% } %>
+      |<% if (!success) { %>
+      div.control-group(class!='<%= errfor.name ? "error" : "" %>')
+        label.control-label Name:
+        div.controls
+          input.stretch(type='text', name='name', value!='<%= name %>')
+      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+        label.control-label Email:
+        div.controls
+          input.stretch(type='text', name='email', value!='<%= email %>')
+      div.control-group(class!='<%= errfor.phone ? "error" : "" %>')
+        label.control-label Phone:
+        div.controls
+          input.stretch(type='text', name='phone', value!='<%= phone %>')
+      div.control-group(class!='<%= errfor.message ? "error" : "" %>')
+        label.control-label Message:
+        div.controls
+          textarea.stretch(name='message', rows='7') <%= message %>
+      div.btn-float
+        button.btn.btn-primary.btn-contact(type='button') Send Message
+      |<% } %>

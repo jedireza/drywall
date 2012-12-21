@@ -1,0 +1,35 @@
+extends ../../layouts/default
+
+block head
+  title Login
+
+block feet
+  script(src='/views/login/index.js')
+
+block body
+  div.page-header
+    h1 Please Login
+  #login
+  
+  script(type='text/template', id='tmpl-login')
+    form.form-horizontal
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          |<%= err %>
+        |<% }); %>
+      div.control-group(class!='<%= errfor.username ? "error" : "" %>')
+        label.control-label Username:
+        div.controls
+          input(type='text', name='username', value!='<%= username %>')
+          span.help-inline <%= errfor.username %>
+      div.control-group(class!='<%= errfor.password ? "error" : "" %>')
+        label.control-label Password:
+        div.controls
+          input(type='password', name='password', value!='<%= password %>')
+          span.help-inline <%= errfor.password %>
+      div.form-actions
+        button.btn.btn-primary.btn-login(type='button') Login
+        | 
+        a.btn(href='/login/forgot/') Forgot Password?
+        input(type='hidden', name='returnUrl', value=returnUrl)

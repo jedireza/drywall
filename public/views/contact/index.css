@@ -1,0 +1,11 @@
+/**
+ * page styles
+ */
+.btn-float {
+  position: relative;
+}
+.btn-float .btn {
+  top: -55px;
+  right: 7px;
+  position: absolute;
+}

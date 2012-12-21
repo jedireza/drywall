@@ -1,0 +1,72 @@
+doctype 5
+html
+  head
+    block head
+      title #{title}
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='/layouts/default.css')
+    block neck
+  body
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.navbar-inner
+        div.container
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='/admin/') #{projectName}
+          div.nav-collapse
+            ul.nav
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown')
+                  | System 
+                  span.caret
+                ul.dropdown-menu
+                  li: a(href='/admin/users/') Users
+                  li.divider
+                  li: a(href='/admin/administrators/') Administrators
+                  li: a(href='/admin/admin-groups/') Admin Groups
+                  li.divider
+                  li: a(href='/admin/accounts/') Accounts
+            form.navbar-search.pull-right
+              #_search
+    
+    div.page
+      div.container
+        block body
+    
+    div.footer
+      div.container
+        div.inner
+          span.copyright.pull-right
+            &#169; #{copyrightYear} #{copyrightName}
+          ul.links
+            li: a(href='/') Home
+            li: a(href='/logout/') Logout
+          div.clearfix
+    
+    div.ajax-spinner
+      img(src='/media/ajax-pulse.gif')
+    
+    script(src='/vendor/jquery/jquery-1.8.2.min.js')
+    script(src='/vendor/underscore/underscore-min.js')
+    script(src='/vendor/backbone/backbone-min.js')
+    script(src='/vendor/bootstrap/js/bootstrap.min.js')
+    script(src='/layouts/utility.js')
+    
+    block feet
+    
+    script(type='text/template', id='tmpl-_search')
+      ul.nav
+        li.dropdown.open
+          input.search-query(name='_search', type='text', placeholder='search', tab-index='1')
+          ul#_search-results-rows.dropdown-menu
+    script(type='text/template', id='tmpl-_search-results-row')
+      |<% if (type && type == 'header') { %>
+      |<%= name %>
+      |<% } else { %>
+      a(href!='<%= url %>') <%= name %>
+      |<% } %>
+    script(type='text/template', id='tmpl-_search-results-empty-row')
+      li.nav-header no documents matched
+    script(src='/layouts/admin/search.js')

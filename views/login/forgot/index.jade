@@ -1,0 +1,37 @@
+extends ../../../layouts/default
+
+block head
+  title Forgot Your Password?
+
+block feet
+  script(src='/views/login/forgot/index.js')
+
+block body
+  div.page-header
+    h1 Forgot Your Password?
+  #forgot
+  
+  script(type='text/template', id='tmpl-forgot')
+    form.form-horizontal
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          |<%= err %>
+        |<% }); %>
+        |<% if (wasEmailSent) { %>
+        div.alert.alert-info
+          | We sent password reset instructions to your email address.
+        |<% } %>
+      |<% if (!wasEmailSent) { %>
+      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+        label.control-label Email Address:
+        div.controls
+          input(type='text', name='email', value!='<%= email %>')
+          span.help-inline <%= errfor.email %>
+      |<% } %>
+      div.form-actions
+        |<% if (!wasEmailSent) { %>
+        button.btn.btn-primary.btn-forgot(type='button') Send Reset
+        |<% } %>
+        | 
+        a.btn(href='/login/') Back to Login
