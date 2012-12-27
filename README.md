@@ -21,6 +21,21 @@ Server = [node.js, express, jade, passport, mongoose, emailjs, async]
 
 Client = [bootstrap, backbone.js, jquery]
 
+Test Drive
+------------
+
+https://drywall.herokuapp.com/
+username: root
+password: h3r00t
+
+Note: The app on Heroku has been modified so you cannot change the root user, the root users's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
+
+Screen Shots & Video
+------------
+
+See the project page:
+http://jedireza.github.com/drywall/
+
 Installation
 ------------
 
@@ -76,15 +91,6 @@ Features
  * Admin groups with shared permission settings.
  * Administrator level permissions which override group permissions.
  * Global admin quick search component.
-
-To Do
-------------
-
- * Add uncaught exception handler.
- * Add account registration/sign-up to front end.
- * Extend registration and login with options for using Twitter/Facebook via the passport module.
- * Add notes component to account details using Note schema.
- * App should have option to run as a cluster.
 
 License
 ------------
