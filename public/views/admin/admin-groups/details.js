@@ -23,7 +23,7 @@
       this.set(data);
     },
     update: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   
@@ -43,7 +43,7 @@
       this.set(data);
     },
     savePermissions: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   

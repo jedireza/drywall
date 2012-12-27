@@ -24,7 +24,7 @@
       this.set(data);
     },
     update: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   
@@ -46,7 +46,6 @@
     },
     userLink: function() {
       this.save(undefined, {
-        patch: true,
         url: this.url() +'user/'
       });
     },

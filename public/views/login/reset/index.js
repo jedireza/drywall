@@ -22,7 +22,6 @@
     },
     reset: function() {
       this.save(undefined, {
-        patch: true,
         success: function(model, response, options) {
           if (response.success) {
             model.set({

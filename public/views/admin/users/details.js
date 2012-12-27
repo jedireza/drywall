@@ -25,7 +25,7 @@
       this.set(data);
     },
     update: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   
@@ -47,7 +47,6 @@
     },
     adminLink: function() {
       this.save(undefined, {
-        patch: true,
         url: this.url() +'role-admin/'
       });
     },
@@ -61,7 +60,6 @@
     },
     accountLink: function() {
       this.save(undefined, {
-        patch: true,
         url: this.url() +'role-account/'
       });
     },
@@ -91,7 +89,7 @@
       this.set(data);
     },
     password: function() {
-      this.save(null, {patch: true});
+      this.save(null, {});
     }
   });
   

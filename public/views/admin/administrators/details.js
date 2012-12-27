@@ -23,7 +23,7 @@
       this.set(data);
     },
     update: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   
@@ -44,7 +44,6 @@
     },
     userLink: function() {
       this.save(undefined, {
-        patch: true,
         url: this.url() +'user/'
       });
     },
@@ -76,7 +75,7 @@
     },
     saveGroups: function() {
       var newGroups = _.map(this.get('groups'), function(group) { return group._id; });
-      this.save({newGroups: newGroups}, {patch: true});
+      this.save({newGroups: newGroups}, {});
     }
   });
   
@@ -96,7 +95,7 @@
       this.set(data);
     },
     savePermissions: function() {
-      this.save(undefined, {patch: true});
+      this.save(undefined, {});
     }
   });
   
