@@ -10,8 +10,11 @@ var express = require('express')
 //create express app
 var app = express();
 
+//mongo uri
+app.set('mongodb-uri', process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/drywall');
+
 //setup mongoose
-app.db = mongoose.createConnection('localhost', 'drywall');
+app.db = mongoose.createConnection(app.get('mongodb-uri'));
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
   console.log('mongoose open for business');
@@ -52,7 +55,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.session({ 
     secret: 'Sup3rS3cr3tK3y',
-    store: new mongoStore({ db: 'drywall', host: 'localhost' })
+    store: new mongoStore({ url: app.get('mongodb-uri') })
   }));
   app.use(passport.initialize());
   app.use(passport.session());
