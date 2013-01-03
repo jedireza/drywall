@@ -92,7 +92,7 @@ exports.signup = function(req, res){
   workflow.on('sendWelcomeEmail', function() {
     res.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
-      to: req.app.get('admin-email'),
+      to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',
       textPath: 'signup/email-text',
       htmlPath: 'signup/email-html',
