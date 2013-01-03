@@ -19,6 +19,10 @@ exports = module.exports = function(app) {
   app.get('/contact/', require('./views/contact/index').init);
   app.post('/contact/', require('./views/contact/index').sendMessage);
   
+  //sign up
+  app.get('/signup/', require('./views/signup/index').init);
+  app.post('/signup/', require('./views/signup/index').signup);
+  
   //login/out
   app.get('/login/', require('./views/login/index').init);
   app.post('/login/', require('./views/login/index').login);

@@ -2,7 +2,16 @@ exports = module.exports = function(app, passport) {
   var passportLocalStrategy = require('passport-local').Strategy;
   passport.use(new passportLocalStrategy(
     function(username, password, done) {
-      app.db.models.User.findOne({ username: username, isActive: 'yes' }, function(err, user) {
+      //lookup conditions
+      var conditions = { isActive: 'yes' };
+      if (username.indexOf('@') === -1) {
+        conditions.username = username;
+      }
+      else {
+        conditions.email = username;
+      }
+      
+      app.db.models.User.findOne(conditions, function(err, user) {
         if (err) return done(err);
         
         if (!user) return done(null, false, { message: 'Unknown user' });

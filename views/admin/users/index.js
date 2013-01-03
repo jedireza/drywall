@@ -72,7 +72,12 @@ exports.create = function(req, res, next){
   workflow.on('validate', function() {
     if (!req.body.username) {
       workflow.outcome.errfor.username = 'required';
-      return workflow.emit('response')
+      return workflow.emit('response');
+    }
+    
+    if (req.body.username.match(/^[a-zA-Z0-9\-\_]+$/) !== -1) {
+      workflow.outcome.errfor.username = 'only use letters, numbers, -, _';
+      return workflow.emit('response');
     }
     
     workflow.emit('duplicateUsernameCheck');
@@ -115,7 +120,12 @@ exports.update = function(req, res, next){
     if (!req.body.isActive) req.body.isActive = 'no';
     
     //verify
-    if (!req.body.username) workflow.outcome.errfor.username = 'required';
+    if (!req.body.username) {
+      workflow.outcome.errfor.username = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
+      workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
+    }
     if (!req.body.email) workflow.outcome.errfor.email = 'required';
     
     //return if we have errors already
