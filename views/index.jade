@@ -7,9 +7,12 @@ block body
   div.hero-unit
     h1 #{projectName}
     p.lead
-      | Server = [node.js, express, jade, mongoose, passport, emailjs, async]
-      br
-      | Client = [bootstrap, backbone.js, jquery]
+      | Your Node.js website and user system is running. May the force be with you.
+      div
+        a.btn.btn-large(href='/Login/') Login
+        | 
+        a.btn.btn-large.btn-primary(href='/signup/') Get an Account
+      div.clearfix
   div.row
     div.span4
       h3 About Us
@@ -17,12 +20,12 @@ block body
         | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
       a.btn(href='/about/') Learn More
     div.span4
+      h3 Sign Up
+      p
+        | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+      a.btn(href='/signup/') Learn More
+    div.span4
       h3 Contact Us
       p
         | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
       a.btn(href='/contact/') Learn More
-    div.span4
-      h3 Login
-      p
-        | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-      a.btn(href='/login/') Learn More
