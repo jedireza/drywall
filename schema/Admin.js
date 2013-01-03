@@ -2,10 +2,10 @@ exports = module.exports = function(app, mongoose) {
   var adminSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: {
-      full: String,
-      first: String,
-      middle: String,
-      last:  String
+      full: {type: String, default: ''},
+      first: {type: String, default: ''},
+      middle: {type: String, default: ''},
+      last: {type: String, default: ''},
     },
     groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AdminGroup' }],
     permissions: [{ name: String, permit: Boolean }],

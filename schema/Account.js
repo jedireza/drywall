@@ -2,12 +2,12 @@ exports = module.exports = function(app, mongoose) {
   var accountSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: {
-      full: String,
-      first: String,
-      middle: String,
-      last:  String
+      full: {type: String, default: ''},
+      first: {type: String, default: ''},
+      middle: {type: String, default: ''},
+      last: {type: String, default: ''},
     },
-    company: String,
+    company: {type: String, default: ''},
     notes: [mongoose.modelSchemas['Note']],
     timeCreated: { type: Date, default: Date.now }
   });
