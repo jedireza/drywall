@@ -126,7 +126,12 @@ exports.update = function(req, res, next){
     else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
       workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
     }
-    if (!req.body.email) workflow.outcome.errfor.email = 'required';
+    if (!req.body.email) {
+      workflow.outcome.errfor.email = 'required';
+    }
+    else if (!/^[a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
+      workflow.outcome.errfor.email = 'invalid email format';
+    }
     
     //return if we have errors already
     if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');

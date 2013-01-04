@@ -23,7 +23,7 @@ exports.signup = function(req, res){
     if (!req.body.email) {
       workflow.outcome.errfor.email = 'required';
     }
-    else if (!/^[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
+    else if (!/^[a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
       workflow.outcome.errfor.email = 'invalid email format';
     }
     if (!req.body.password) workflow.outcome.errfor.password = 'required';
