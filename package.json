@@ -10,7 +10,7 @@
     "jade": "~0.27.7",
     "connect-mongo": "~0.2.0",
     "async": "~0.1.22",
-    "mongoose": "~3.5.3",
+    "mongoose": "~3.6.0",
     "emailjs": "~0.3.4",
     "passport": "~0.1.15",
     "passport-local": "~0.1.6"

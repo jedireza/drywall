@@ -12,21 +12,12 @@ exports = module.exports = function(app, mongoose) {
     timeCreated: { type: Date, default: Date.now }
   });
   adminSchema.methods.hasPermissionTo = function(something) {
-    /* 
-     * TODO:
-     * when mongoose supports calling populate on embedded documents,
-     * we can stop using the '_groups' hack since 'groups' will
-     * be populated correctly during the passport login
-     * https://github.com/LearnBoost/mongoose/issues/601
-     *
-     */
-    
     //check group permissions
     var groupHasPermission = false;
-    for (var i = 0 ; i < this._groups.length ; i++) {
-      for (var j = 0 ; j < this._groups[i].permissions.length ; j++) {
-        if (this._groups[i].permissions[j].name == something) {
-          if (this._groups[i].permissions[j].permit) groupHasPermission = true;
+    for (var i = 0 ; i < this.groups.length ; i++) {
+      for (var j = 0 ; j < this.groups[i].permissions.length ; j++) {
+        if (this.groups[i].permissions[j].name == something) {
+          if (this.groups[i].permissions[j].permit) groupHasPermission = true;
         }
       }
     }
@@ -42,8 +33,8 @@ exports = module.exports = function(app, mongoose) {
     return groupHasPermission;
   };
   adminSchema.methods.isMemberOf = function(group) {
-    for (var i = 0 ; i < this._groups.length ; i++) {
-      if (this._groups[i].name == group) {
+    for (var i = 0 ; i < this.groups.length ; i++) {
+      if (this.groups[i].name == group) {
         return true;
       }
     }

@@ -34,18 +34,9 @@ exports = module.exports = function(app, passport) {
   
   passport.deserializeUser(function(id, done) {
     app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      /* 
-       * TODO:
-       * when mongoose supports calling populate on embedded documents,
-       * we can change this code and stop using the '_groups' hack since
-       * assigning direcly to 'groups' doesn't stick right now
-       * https://github.com/LearnBoost/mongoose/issues/601
-       *
-       */
-      
-      if (user.roles && user.roles.admin && user.roles.admin.groups) {
-        app.db.models.AdminGroup.find({ _id: {$in: user.roles.admin.groups} }).exec(function(err, groups) {
-          user.roles.admin._groups = groups;
+      if (user.roles && user.roles.admin) {
+        user.roles.admin.populate("groups", function(err, admin) {
+          user.roles.admin = admin;
           done(err, user);
         });
       }
