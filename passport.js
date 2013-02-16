@@ -36,7 +36,6 @@ exports = module.exports = function(app, passport) {
     app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
       if (user.roles && user.roles.admin) {
         user.roles.admin.populate("groups", function(err, admin) {
-          user.roles.admin = admin;
           done(err, user);
         });
       }
