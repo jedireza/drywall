@@ -1,0 +1,80 @@
+extends ../../../layouts/admin
+
+block head
+  title Manage Categories
+
+block neck
+  link(rel='stylesheet', href='/views/admin/categories/index.css')
+
+block feet
+  script(src='/views/admin/categories/index.js')
+
+block body
+  #header
+  #filters
+  #results-table
+  #results-paging
+  
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      form.form-inline.pull-right
+        div.input-append
+          input.span2(name='pivot', type='text', placeholder='pivot', value!='<%= pivot %>')
+          input.span2(name='name', type='text', placeholder='name', value!='<%= name %>')
+          button.btn.btn-info.btn-add(type='button') Add New
+      h1 Categories
+  
+  script(type='text/template', id='tmpl-filters')
+    form.filters
+      div.row
+        div.span3
+          label Pivot Search
+          input.stretch(name='pivot', type='text')
+        div.span3
+          label Name Search
+          input.stretch(name='name', type='text')
+        div.span3
+          label Sort By
+          select.stretch(name='sort')
+            option(value='_id') id &#9650;
+            option(value='-_id') id &#9660;
+            option(value='name') name &#9650;
+            option(value='-name') name &#9660;
+        div.span3
+          label Limit
+          select.stretch(name='limit')
+            option(value='10') 10 items
+            option(value='20', selected='selected') 20 items
+            option(value='50') 50 items
+            option(value='100') 100 items
+  
+  script(type='text/template', id='tmpl-results-table')
+    table.table.table-striped
+      thead
+        tr
+          th 
+          th pivot
+          th.stretch name
+          th id
+      tbody#results-rows
+  
+  script(type='text/template', id='tmpl-results-row')
+    td
+      input.btn.btn-details(type='button', value='Edit')
+    td <%= pivot %>
+    td <%= name %>
+    td.nowrap <%= _id %>
+  
+  script(type='text/template', id='tmpl-results-empty-row')
+    tr
+      td(colspan='4') no documents matched
+  
+  script(type='text/template', id='tmpl-results-paging')
+    div.well
+      span Page <%= pages.current %> of <%= pages.total %> | Results <%= items.begin %> - <%= items.end %> of <%= items.total %>
+      span.btn-group.pull-right
+        button.btn.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
+        button.btn.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
+      div.clear
+  
+  script(type='text/template', id='data-results') !{data.results}
