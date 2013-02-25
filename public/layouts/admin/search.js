@@ -194,7 +194,7 @@
       location.href = this.model.get('url');
     },
     render: function() {
-      this.$el.html( this.template(this.model.toJSON()) );
+      this.$el.html(this.template( this.model.attributes ));
       if (this.model.get('type') == 'header') {
         this.$el.addClass('nav-header');
       }
