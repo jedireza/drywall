@@ -20,7 +20,7 @@ exports = module.exports = function(req, res, options) {
       }
       else {
         options.text = text;
-        return callback(null, 'done rendering text');
+        return callback(null, 'done');
       }
     });
   };
@@ -32,7 +32,7 @@ exports = module.exports = function(req, res, options) {
       }
       else {
         options.html = html;
-        return callback(null, 'done rendering html');
+        return callback(null, 'done');
       }
     });
   };
