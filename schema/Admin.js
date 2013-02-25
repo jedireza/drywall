@@ -1,15 +1,22 @@
 exports = module.exports = function(app, mongoose) {
   var adminSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    name: {
-      full: {type: String, default: ''},
-      first: {type: String, default: ''},
-      middle: {type: String, default: ''},
-      last: {type: String, default: ''},
+    user: {
+      id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      name: { type: String, default: '' }
     },
-    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AdminGroup' }],
-    permissions: [{ name: String, permit: Boolean }],
-    timeCreated: { type: Date, default: Date.now }
+    name: {
+      full: { type: String, default: '' },
+      first: { type: String, default: '' },
+      middle: { type: String, default: '' },
+      last: { type: String, default: '' },
+    },
+    groups: [{ type: String, ref: 'AdminGroup' }],
+    permissions: [{
+      name: String,
+      permit: Boolean
+    }],
+    timeCreated: { type: Date, default: Date.now },
+    search: [String]
   });
   adminSchema.methods.hasPermissionTo = function(something) {
     //check group permissions
@@ -22,7 +29,7 @@ exports = module.exports = function(app, mongoose) {
       }
     }
     
-    //check user permissions
+    //check admin permissions
     for (var i = 0 ; i < this.permissions.length ; i++) {
       if (this.permissions[i].name == something) {
         if (this.permissions[i].permit) return true;
@@ -34,7 +41,7 @@ exports = module.exports = function(app, mongoose) {
   };
   adminSchema.methods.isMemberOf = function(group) {
     for (var i = 0 ; i < this.groups.length ; i++) {
-      if (this.groups[i].name == group) {
+      if (this.groups[i]._id == group) {
         return true;
       }
     }
@@ -42,9 +49,8 @@ exports = module.exports = function(app, mongoose) {
     return false;
   };
   adminSchema.plugin(require('./plugins/pagedFind'));
-  adminSchema.index({ user: 1 });
-  adminSchema.index({ 'name.full': 1 });
-  adminSchema.index({ timeCreated: 1 });
+  adminSchema.index({ 'user.id': 1 });
+  adminSchema.index({ search: 1 });
   adminSchema.set('autoIndex', (app.get('env') == 'development'));
   app.db.model('Admin', adminSchema);
 }
