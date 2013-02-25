@@ -4,6 +4,9 @@ html
     block head
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='/layouts/utility.css')
     link(rel='stylesheet', href='/layouts/default.css')
     block neck
   body
@@ -14,7 +17,8 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.brand(href='/admin/') #{projectName}
+          a.brand(href='/admin/')
+            img(src='/media/logo-white.png', width='150')
           div.nav-collapse
             ul.nav
               li.dropdown
@@ -22,12 +26,15 @@ html
                   | System 
                   span.caret
                 ul.dropdown-menu
-                  li: a(href='/admin/users/') Users
+                  li.nav-header Pivoted Settings
+                  li: a(href='/admin/statuses/') Statuses
+                  li: a(href='/admin/categories/') Categories
                   li.divider
+                  li.nav-header User Admin
+                  li: a(href='/admin/users/') Users
+                  li: a(href='/admin/accounts/') Accounts
                   li: a(href='/admin/administrators/') Administrators
                   li: a(href='/admin/admin-groups/') Admin Groups
-                  li.divider
-                  li: a(href='/admin/accounts/') Accounts
             form.navbar-search.pull-right
               #_search
     
@@ -52,6 +59,7 @@ html
     script(src='/vendor/underscore/underscore-min.js')
     script(src='/vendor/backbone/backbone-min.js')
     script(src='/vendor/bootstrap/js/bootstrap.min.js')
+    script(src='/vendor/moment/moment.min.js')
     script(src='/layouts/utility.js')
     
     block feet
