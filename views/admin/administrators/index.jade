@@ -10,12 +10,13 @@ block body
   #header
   #filters
   #results-table
+  #results-paging
   
   script(type='text/template', id='tmpl-header')
     div.page-header
       form.form-inline.pull-right
         div.input-append
-          input(name='name', type='text', placeholder='enter name', value!='<%= name %>')
+          input(name='name', type='text', placeholder='enter a name', value!='<%= name.full %>')
           button.btn.btn-info.btn-add(type='button') Add New
       h1 Administrators
   
@@ -24,7 +25,7 @@ block body
       div.row
         div.span3
           label Name Search
-          input.stretch(name='name', type='text')
+          input.stretch(name='search', type='text')
         div.span3
           label Sort By
           select.stretch(name='sort')
@@ -48,7 +49,6 @@ block body
           th.stretch name
           th id
       tbody#results-rows
-    #results-paging
   
   script(type='text/template', id='tmpl-results-row')
     td

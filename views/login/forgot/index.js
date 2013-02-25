@@ -9,7 +9,6 @@ exports.init = function(req, res){
 };
 
 exports.send = function(req, res){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -39,7 +38,7 @@ exports.send = function(req, res){
   });
   
   workflow.on('sendEmail', function(token, user) {
-    res.app.utility.email(req, res, {
+    req.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: user.email,
       subject: 'Reset your '+ req.app.get('project-name') +' password',
@@ -60,6 +59,5 @@ exports.send = function(req, res){
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

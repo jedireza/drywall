@@ -9,7 +9,6 @@ exports.init = function(req, res){
 };
 
 exports.set = function(req, res){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -46,6 +45,5 @@ exports.set = function(req, res){
     );
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

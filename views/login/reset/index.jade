@@ -16,17 +16,20 @@ block body
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
-        |<% if (wasPasswordSet) { %>
+        |<% if (success) { %>
         div.alert.alert-info
+          button.close(type='button', data-dismiss='alert') &times;
           | Your password has been reset. Please login to confirm.
         |<% } %>
         |<% if (id == undefined) { %>
         div.alert.alert-warning
+          button.close(type='button', data-dismiss='alert') &times;
           | You do not have a valid reset request.
         |<% } %>
-      |<% if (!wasPasswordSet && id != undefined) { %>
+      |<% if (!success && id != undefined) { %>
       div.control-group(class!='<%= errfor.password ? "error" : "" %>')
         label.control-label New Password:
         div.controls
@@ -39,7 +42,7 @@ block body
           span.help-inline <%= errfor.confirm %>
       |<% } %>
       div.form-actions
-        |<% if (!wasPasswordSet && id != undefined) { %>
+        |<% if (!success && id != undefined) { %>
         button.btn.btn-primary.btn-reset(type='button') Set Password
         |<% } %>
         | 

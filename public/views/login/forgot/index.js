@@ -11,37 +11,10 @@
   app.Forgot = Backbone.Model.extend({
     url: '/login/forgot/',
     defaults: {
+      success: false,
       errors: [],
       errfor: {},
       email: '',
-      emailHelp: '',
-      wasEmailSent: false
-    },
-    forgot: function() {
-      this.save(undefined, {
-        success: function(model, response, options) {
-          if (response.success) {
-            model.set({
-              errors: [],
-              errfor: {},
-              wasEmailSent: true
-            });
-          }
-          else {
-            model.set({
-              errors: response.errors,
-              errfor: response.errfor
-            });
-          }
-        },
-        error: function(model, xhr, options) {
-          var response = JSON.parse(xhr.responseText);
-          model.set({
-            errors: response.errors,
-            errfor: response.errfor
-          });
-        }
-      });
     }
   });
 
@@ -59,11 +32,12 @@
       'click .btn-forgot': 'forgot'
     },
     initialize: function() {
+      this.model = new app.Forgot();
       this.model.bind('change', this.render, this);
       this.render();
     },
     render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
+      this.$el.html(this.template( this.model.attributes ));
       this.$el.find('[name="email"]').focus();
       return this;
     },
@@ -72,21 +46,15 @@
     },
     forgotOnEnter: function(event) {
       if (event.keyCode != 13) return;
-      this.forgot(event);
+      event.preventDefault();
+      this.forgot();
     },
-    forgot: function(event) {
-      if (event) event.preventDefault();
-      this.model.set({
+    forgot: function() {
+      this.$el.find('.btn-forgot').attr('disabled', true);
+      
+      this.model.save({
         email: this.$el.find('[name="email"]').val()
       });
-      this.$el.find('.btn-forgot').attr('disabled', true);
-      this.model.forgot();
-    }
-  });
-  
-  app.MainView = Backbone.View.extend({
-    initialize: function() {
-      app.forgotView = new app.ForgotView({model: new app.Forgot()});
     }
   });
 
@@ -96,7 +64,7 @@
  * BOOTUP
  **/
   $(document).ready(function() {
-    app.mainView = new app.MainView();
+    app.forgotView = new app.ForgotView();
   });
 
 

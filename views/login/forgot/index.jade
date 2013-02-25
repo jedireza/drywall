@@ -16,13 +16,15 @@ block body
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
-        |<% if (wasEmailSent) { %>
+        |<% if (success) { %>
         div.alert.alert-info
+          button.close(type='button', data-dismiss='alert') &times;
           | We sent password reset instructions to your email address.
         |<% } %>
-      |<% if (!wasEmailSent) { %>
+      |<% if (!success) { %>
       div.control-group(class!='<%= errfor.email ? "error" : "" %>')
         label.control-label Email Address:
         div.controls
@@ -30,7 +32,7 @@ block body
           span.help-inline <%= errfor.email %>
       |<% } %>
       div.form-actions
-        |<% if (!wasEmailSent) { %>
+        |<% if (!success) { %>
         button.btn.btn-primary.btn-forgot(type='button') Send Reset
         |<% } %>
         | 

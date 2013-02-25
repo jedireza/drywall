@@ -3,15 +3,16 @@ extends ../layouts/default
 block head
   title Drywall.js is Running
 
+block neck
+  link(rel='stylesheet', href='/views/index.css')
+
 block body
   div.hero-unit
     h1 #{projectName}
     p.lead
       | Your Node.js website and user system is running. May the force be with you.
       div
-        a.btn.btn-large(href='/Login/') Login
-        | 
-        a.btn.btn-large.btn-primary(href='/signup/') Get an Account
+        a.btn.btn-large(href='/signup/') Create an Account
       div.clearfix
   div.row
     div.span4

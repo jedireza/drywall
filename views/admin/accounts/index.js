@@ -1,90 +1,149 @@
 exports.find = function(req, res, next){
-  //defaults
-  req.query.name = req.query.name ? req.query.name : '';
-  req.query.company = req.query.company ? req.query.company : '';
-  req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  req.query.page = req.query.page ? parseInt(req.query.page) : 1;
-  req.query.sort = req.query.sort ? req.query.sort : '_id';
+  var outcome = {};
   
-  //filters
-  var filters = {};
-  if (req.query.name) filters['name.full'] = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
-  if (req.query.company) filters.company = new RegExp('^.*?'+ req.query.company +'.*$', 'i');
+  var getStatusOptions = function(callback) {
+    req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
+      if (err) return callback(err, null);
+      
+      outcome.statuses = statuses;
+      return callback(null, 'done');
+    });
+  };
   
-  //get results
-  res.app.db.models.Account.pagedFind({
-    filters: filters,
-    keys: 'name.full company',
-    limit: req.query.limit,
-    page: req.query.page,
-    sort: req.query.sort
-  }, function(err, results) {
+  var getResults = function(callback) {
+    //defaults
+    req.query.search = req.query.search ? req.query.search : '';
+    req.query.status = req.query.status ? req.query.status : '';
+    req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
+    req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+    req.query.sort = req.query.sort ? req.query.sort : '_id';
+    
+    //filters
+    var filters = {};
+    if (req.query.search) filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
+    if (req.query.status) filters['status.id'] = req.query.status;
+    
+    //get results
+    req.app.db.models.Account.pagedFind({
+      filters: filters,
+      keys: 'name company phone zip userCreated status',
+      limit: req.query.limit,
+      page: req.query.page,
+      sort: req.query.sort
+    }, function(err, results) {
+      if (err) return callback(err, null);
+      
+      outcome.results = results;
+      return callback(null, 'done');
+    });
+  };
+  
+  var asyncFinally = function(err, results) {
     if (err) {
-      res.send(500, 'Model pagedFind error. '+ err);
+      res.send(500, 'Exception: '+ err);
       return;
     }
     
     if (req.header('x-requested-with') == 'XMLHttpRequest') {
       res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-      results.filters = req.query;
-      res.send(results);
+      outcome.results.filters = req.query;
+      res.send(outcome.results);
     }
     else {
-      results.filters = req.query;
-      res.render('admin/accounts/index', { data: {results: JSON.stringify(results)} });
+      outcome.results.filters = req.query;
+      res.render('admin/accounts/index', { 
+        data: { 
+          results: JSON.stringify(outcome.results), 
+          statuses: outcome.statuses
+        }
+      });
     }
-  });
+  };
+  
+  require('async').parallel([getStatusOptions, getResults], asyncFinally);
 };
 
 
 
 exports.read = function(req, res, next){
-  res.app.db.models.Account.findOne({ _id: req.params.id }).populate('user', 'username').exec(function(err, account) {
+  var outcome = {};
+  
+  var getStatusOptions = function(callback) {
+    req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
+      if (err) return callback(err, null);
+      
+      outcome.statuses = statuses;
+      return callback(null, 'done');
+    });
+  };
+  
+  var getRecord = function(callback) {
+    req.app.db.models.Account.findById(req.params.id).exec(function(err, record) {
+      if (err) return callback(err, null);
+      
+      outcome.record = record;
+      return callback(null, 'done');
+    });
+  };
+  
+  var asyncFinally = function(err, results) {
     if (err) {
       res.send(500, 'Model findOne error. '+ err);
       return;
     }
     
     if (req.header('x-requested-with') == 'XMLHttpRequest') {
-      res.send(account);
+      res.send(outcome.record);
     }
     else {
       res.render('admin/accounts/details', {
         data: {
-          record: JSON.stringify(account)
+          record: JSON.stringify(outcome.record),
+          statuses: outcome.statuses
         }
       });
     }
-  });
+  };
+  
+  require('async').parallel([getStatusOptions, getRecord], asyncFinally);
 };
 
 
 
 exports.create = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.name) {
-      workflow.outcome.errfor.name = 'required';
-      return workflow.emit('response')
+    if (!req.body['name.full']) {
+      workflow.outcome.errors.push('Please enter a name.');
+      return workflow.emit('response');
     }
     
     workflow.emit('createAccount');
   });
   
   workflow.on('createAccount', function() {
-    var nameParts = req.body.name.trim().split(/\s/);
+    var nameParts = req.body['name.full'].trim().split(/\s/);
     var fieldsToSet = {
       name: {
         first: nameParts.shift(),
         middle: (nameParts.length > 1 ? nameParts.shift() : ''),
         last: (nameParts.length == 0 ? '' : nameParts.join(' ')),
+      },
+      userCreated: {
+        id: req.user._id,
+        name: req.user.username,
+        time: new Date().toISOString()
       }
     };
     fieldsToSet.name.full = fieldsToSet.name.first + (fieldsToSet.name.last ? ' '+ fieldsToSet.name.last : '');
+    fieldsToSet.search = [
+      fieldsToSet.name.first,
+      fieldsToSet.name.middle,
+      fieldsToSet.name.last
+    ];
     
-    res.app.db.models.Account.create(fieldsToSet, function(err, account) {
+    req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       workflow.outcome.record = account;
@@ -92,19 +151,17 @@ exports.create = function(req, res, next){
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.update = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (req.body.name && !req.body.name.first) workflow.outcome.errfor['name.first'] = 'required';
-    if (req.body.name && !req.body.name.last) workflow.outcome.errfor['name.last'] = 'required';
+    if (!req.body.first) workflow.outcome.errfor.first = 'required';
+    if (!req.body.last) workflow.outcome.errfor.last = 'required';
     
     //return if we have errors already
     if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
@@ -115,28 +172,38 @@ exports.update = function(req, res, next){
   workflow.on('patchAccount', function() {
     var fieldsToSet = {
       name: {
-        first: req.body.name.first,
-        middle: req.body.name.middle,
-        last: req.body.name.last,
-        full: req.body.name.full
+        first: req.body.first,
+        middle: req.body.middle,
+        last: req.body.last,
+        full: req.body.first +' '+ req.body.last
       },
-      company: req.body.company
+      company: req.body.company,
+      phone: req.body.phone,
+      zip: req.body.zip,
+      search: [
+        req.body.first,
+        req.body.middle,
+        req.body.last,
+        req.body.company,
+        req.body.phone,
+        req.body.zip
+      ]
     };
     
     req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, account) {
       if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.account = account;
       return workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.linkUser = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -154,7 +221,7 @@ exports.linkUser = function(req, res, next){
   });
   
   workflow.on('verifyUser', function(callback) {
-    res.app.db.models.User.findOne({ username: req.body.newUsername }).exec(function(err, user) {
+    req.app.db.models.User.findOne({ username: req.body.newUsername }).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -172,7 +239,7 @@ exports.linkUser = function(req, res, next){
   });
   
   workflow.on('duplicateLinkCheck', function(callback) {
-    res.app.db.models.Account.findOne({ user: workflow.user._id, _id: {$ne: req.params.id} }).exec(function(err, account) {
+    req.app.db.models.Account.findOne({ 'user.id': workflow.user._id, _id: {$ne: req.params.id} }).exec(function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       if (account) {
@@ -180,34 +247,33 @@ exports.linkUser = function(req, res, next){
         return workflow.emit('response');
       }
       
+      workflow.emit('patchUser');
+    });
+  });
+  
+  
+  workflow.on('patchUser', function() {
+    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.account': req.params.id }).exec(function(err, user) {
+      if (err) return workflow.emit('exception', err);
       workflow.emit('patchAccount');
     });
   });
   
   workflow.on('patchAccount', function(callback) {
-    res.app.db.models.Account.findByIdAndUpdate(req.params.id, { user: workflow.user._id }).exec(function(err, account) {
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, account) {
       if (err) return workflow.emit('exception', err);
-      workflow.emit('patchUser')
-    });
-  });
-  
-  workflow.on('patchUser', function() {
-    workflow.user.roles.account = req.params.id;
-    workflow.user.save(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.user = user;
+      
+      workflow.outcome.account = account;
       workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.unlinkUser = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -220,7 +286,7 @@ exports.unlinkUser = function(req, res, next){
   });
   
   workflow.on('patchAccount', function() {
-    res.app.db.models.Account.findOne({ _id: req.params.id }).exec(function(err, account) {
+    req.app.db.models.Account.findById(req.params.id).exec(function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       if (!account) {
@@ -228,18 +294,19 @@ exports.unlinkUser = function(req, res, next){
         return workflow.emit('response');
       }
       
-      var userId = account.user;
-      account.user = undefined;
+      var userId = account.user.id;
+      account.user = { id: undefined, name: '' };
       account.save(function(err, account) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.user = {};
+        
+        workflow.outcome.account = account;
         workflow.emit('patchUser', userId);
       });
     });
   });
   
   workflow.on('patchUser', function(id) {
-    res.app.db.models.User.findOne({ _id: id }).exec(function(err, user) {
+    req.app.db.models.User.findById(id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -250,20 +317,88 @@ exports.unlinkUser = function(req, res, next){
       user.roles.account = undefined;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        console.log(user);
         workflow.emit('response');
       });
     });
   });
   
-  //start the workflow
+  workflow.emit('validate');
+};
+
+
+
+exports.newNote = function(req, res, next){
+  var workflow = new req.app.utility.Workflow(req, res);
+  
+  workflow.on('validate', function() {
+    if (!req.body.data) {
+      workflow.outcome.errors.push('Data is required.');
+      return workflow.emit('response');
+    }
+    
+    workflow.emit('addNote');
+  });
+  
+  workflow.on('addNote', function() {
+    var noteToAdd = {
+      data: req.body.data,
+      userCreated: {
+        id: req.user._id,
+        name: req.user.username,
+        time: new Date().toISOString()
+      }
+    };
+    
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { $push: { notes: noteToAdd } }, function(err, account) {
+      if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.account = account;
+      return workflow.emit('response');
+    });
+  });
+  
+  workflow.emit('validate');
+};
+
+
+
+exports.newStatus = function(req, res, next){
+  var workflow = new req.app.utility.Workflow(req, res);
+  
+  workflow.on('validate', function() {
+    if (!req.body.id) workflow.outcome.errors.push('Please choose a status.');
+    
+    //return if we have errors already
+    if (workflow.outcome.errors.length != 0) return workflow.emit('response');
+    
+    workflow.emit('addStatus');
+  });
+  
+  workflow.on('addStatus', function() {
+    var statusToAdd = {
+      id: req.body.id,
+      name: req.body.name,
+      userCreated: {
+        id: req.user._id,
+        name: req.user.username,
+        time: new Date().toISOString()
+      }
+    };
+    
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { status: statusToAdd, $push: { statusLog: statusToAdd } }, function(err, account) {
+      if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.account = account;
+      return workflow.emit('response');
+    });
+  });
+  
   workflow.emit('validate');
 };
 
 
 
 exports.delete = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -277,11 +412,12 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteAccount', function(err) {
     req.app.db.models.Account.findByIdAndRemove(req.params.id, function(err, account) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.account = account;
+      workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

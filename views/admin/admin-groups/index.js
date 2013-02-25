@@ -10,7 +10,7 @@ exports.find = function(req, res, next){
   if (req.query.name) filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
   
   //get results
-  res.app.db.models.AdminGroup.pagedFind({
+  req.app.db.models.AdminGroup.pagedFind({
     filters: filters,
     keys: 'name',
     limit: req.query.limit,
@@ -29,7 +29,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/admin-groups/index', { data: {results: JSON.stringify(results)} });
+      res.render('admin/admin-groups/index', { data: { results: JSON.stringify(results) } });
     }
   });
 };
@@ -37,21 +37,17 @@ exports.find = function(req, res, next){
 
 
 exports.read = function(req, res, next){
-  res.app.db.models.AdminGroup.findOne({ _id: req.params.id }).populate('user', 'username').exec(function(err, account) {
+  req.app.db.models.AdminGroup.findById(req.params.id).exec(function(err, adminGroup) {
     if (err) {
       res.send(500, 'Model findOne error. '+ err);
       return;
     }
     
     if (req.header('x-requested-with') == 'XMLHttpRequest') {
-      res.send(account);
+      res.send(adminGroup);
     }
     else {
-      res.render('admin/admin-groups/details', {
-        data: {
-          record: JSON.stringify(account)
-        }
-      });
+      res.render('admin/admin-groups/details', { data: { record: JSON.stringify(adminGroup) } });
     }
   });
 };
@@ -59,7 +55,6 @@ exports.read = function(req, res, next){
 
 
 exports.create = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -69,19 +64,19 @@ exports.create = function(req, res, next){
     }
     
     if (!req.body.name) {
-      workflow.outcome.errfor.name = 'required';
-      return workflow.emit('response')
+      workflow.outcome.errors.push('Please enter a name.');
+      return workflow.emit('response');
     }
     
     workflow.emit('duplicateAdminGroupCheck');
   });
   
   workflow.on('duplicateAdminGroupCheck', function() {
-    res.app.db.models.AdminGroup.findOne({ name: req.body.name }, function(err, adminGroup) {
+    req.app.db.models.AdminGroup.findById(req.app.utility.slugify(req.body.name)).exec(function(err, adminGroup) {
       if (err) return workflow.emit('exception', err);
       
       if (adminGroup) {
-        workflow.outcome.errors.push('That group name is already taken.');
+        workflow.outcome.errors.push('That group already exists.');
         return workflow.emit('response');
       }
       
@@ -91,25 +86,24 @@ exports.create = function(req, res, next){
   
   workflow.on('createAdminGroup', function() {
     var fieldsToSet = {
+      _id: req.app.utility.slugify(req.body.name),
       name: req.body.name
     };
     
-    res.app.db.models.AdminGroup.create(fieldsToSet, function(err, group) {
+    req.app.db.models.AdminGroup.create(fieldsToSet, function(err, adminGroup) {
       if (err) return workflow.emit('exception', err);
       
-      workflow.outcome.record = group;
+      workflow.outcome.record = adminGroup;
       return workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.update = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -133,18 +127,18 @@ exports.update = function(req, res, next){
     
     req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
       if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.adminGroup = adminGroup;
       return workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.permissions = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -155,7 +149,7 @@ exports.permissions = function(req, res, next){
     
     if (!req.body.permissions) {
       workflow.outcome.errfor.permissions = 'required';
-      return workflow.emit('response')
+      return workflow.emit('response');
     }
     
     workflow.emit('patchAdminGroup');
@@ -168,18 +162,18 @@ exports.permissions = function(req, res, next){
     
     req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
       if (err) return workflow.emit('exception', err);
+      
+      workflow.outcome.adminGroup = adminGroup;
       return workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.delete = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -198,6 +192,5 @@ exports.delete = function(req, res, next){
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

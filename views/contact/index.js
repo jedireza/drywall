@@ -2,7 +2,6 @@ exports.init = function(req, res){
   res.render('contact/index');
 };
 exports.sendMessage = function(req, res){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -21,7 +20,7 @@ exports.sendMessage = function(req, res){
   });
   
   workflow.on('sendEmail', function() {
-    res.app.utility.email(req, res, {
+    req.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.app.get('admin-email'),
       subject: req.app.get('project-name') +' contact form',
@@ -44,6 +43,5 @@ exports.sendMessage = function(req, res){
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

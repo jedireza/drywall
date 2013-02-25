@@ -17,7 +17,7 @@ exports.find = function(req, res, next){
   }
   
   //get results
-  res.app.db.models.User.pagedFind({
+  req.app.db.models.User.pagedFind({
     filters: filters,
     keys: 'username email isActive',
     limit: req.query.limit,
@@ -36,7 +36,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/users/index', { data: {results: JSON.stringify(results)} });
+      res.render('admin/users/index', { data: { results: JSON.stringify(results) } });
     }
   });
 };
@@ -44,7 +44,7 @@ exports.find = function(req, res, next){
 
 
 exports.read = function(req, res, next){
-  res.app.db.models.User.findOne({ _id: req.params.id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
+  req.app.db.models.User.findById(req.params.id).populate('roles.admin', 'name.full').populate('roles.account', 'name.full').exec(function(err, user) {
     if (err) {
       res.send(500, 'Model findOne error. '+ err);
       return;
@@ -54,11 +54,7 @@ exports.read = function(req, res, next){
       res.send(user);
     }
     else {
-      res.render('admin/users/details', {
-        data: {
-          record: JSON.stringify(user)
-        }
-      });
+      res.render('admin/users/details', { data: { record: JSON.stringify(user) } });
     }
   });
 };
@@ -66,17 +62,16 @@ exports.read = function(req, res, next){
 
 
 exports.create = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.username) {
-      workflow.outcome.errfor.username = 'required';
+      workflow.outcome.errors.push('Please enter a username.');
       return workflow.emit('response');
     }
     
-    if (req.body.username.match(/^[a-zA-Z0-9\-\_]+$/) !== -1) {
-      workflow.outcome.errfor.username = 'only use letters, numbers, -, _';
+    if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
+      workflow.outcome.errors.push('only use letters, numbers, -, _');
       return workflow.emit('response');
     }
     
@@ -84,11 +79,11 @@ exports.create = function(req, res, next){
   });
   
   workflow.on('duplicateUsernameCheck', function() {
-    res.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
+    req.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
-        workflow.outcome.errfor.username = 'username already taken';
+        workflow.outcome.errors.push('That username is already taken.');
         return workflow.emit('response');
       }
       
@@ -97,7 +92,7 @@ exports.create = function(req, res, next){
   });
   
   workflow.on('createUser', function() {
-    res.app.db.models.User.create({ username: req.body.username }, function(err, user) {
+    req.app.db.models.User.create({ username: req.body.username }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       workflow.outcome.record = user;
@@ -105,14 +100,12 @@ exports.create = function(req, res, next){
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.update = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -140,7 +133,7 @@ exports.update = function(req, res, next){
   });
   
   workflow.on('duplicateUsernameCheck', function() {
-    res.app.db.models.User.findOne({ username: req.body.username, _id: {$ne: req.params.id} }, function(err, user) {
+    req.app.db.models.User.findOne({ username: req.body.username, _id: { $ne: req.params.id } }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -153,7 +146,7 @@ exports.update = function(req, res, next){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    res.app.db.models.User.findOne({ email: req.body.email, _id: {$ne: req.params.id} }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email, _id: { $ne: req.params.id } }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -174,18 +167,22 @@ exports.update = function(req, res, next){
     
     req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      return workflow.emit('response');
+      
+      user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.user = user;
+        workflow.emit('response');
+      });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.password = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -210,20 +207,24 @@ exports.password = function(req, res, next){
     
     req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      workflow.outcome.newPassword = '';
-      workflow.outcome.confirm = '';
-      return workflow.emit('response');
+      
+      user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.user = user;
+        workflow.outcome.newPassword = '';
+        workflow.outcome.confirm = '';
+        workflow.emit('response');
+      });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.linkAdmin = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -241,10 +242,15 @@ exports.linkAdmin = function(req, res, next){
   });
   
   workflow.on('verifyAdmin', function(callback) {
-    res.app.db.models.Admin.findOne({ _id: req.body.newAdminId }).exec(function(err, admin) {
+    req.app.db.models.Admin.findById(req.body.newAdminId).exec(function(err, admin) {
       if (err) return workflow.emit('exception', err);
       
-      if (admin.user && admin.user != req.params.id) {
+      if (!admin) {
+        workflow.outcome.errors.push('Admin not found.');
+        return workflow.emit('response');
+      }
+      
+      if (admin.user.id && admin.user.id != req.params.id) {
         workflow.outcome.errors.push('Admin is already linked to a different user.');
         return workflow.emit('response');
       }
@@ -255,7 +261,7 @@ exports.linkAdmin = function(req, res, next){
   });
   
   workflow.on('duplicateLinkCheck', function(callback) {
-    res.app.db.models.User.findOne({ 'roles.admin': req.body.newAdminId, _id: {$ne: req.params.id} }).exec(function(err, user) {
+    req.app.db.models.User.findOne({ 'roles.admin': req.body.newAdminId, _id: {$ne: req.params.id} }).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -268,42 +274,37 @@ exports.linkAdmin = function(req, res, next){
   });
   
   workflow.on('patchUser', function(callback) {
-    res.app.db.models.User.findOne({ _id: req.params.id }).exec(function(err, user) {
+    req.app.db.models.User.findById(req.params.id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       user.roles.admin = req.body.newAdminId;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.roles = user.roles;
-        workflow.emit('patchAdmin')
+        
+        user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+          if (err) return workflow.emit('exception', err);
+          
+          workflow.outcome.user = user;
+          workflow.emit('patchAdmin')
+        });
       });
     });
   });
   
   workflow.on('patchAdmin', function() {
-    workflow.admin.user = req.params.id;
+    workflow.admin.user = { id: req.params.id, name: workflow.outcome.user.username };
     workflow.admin.save(function(err, admin) {
       if (err) return workflow.emit('exception', err);
-      workflow.emit('finalize');
-    });
-  });
-  
-  workflow.on('finalize', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }, 'roles').populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.roles = user.roles;
       workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.unlinkAdmin = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -321,7 +322,7 @@ exports.unlinkAdmin = function(req, res, next){
   });
   
   workflow.on('patchUser', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }).exec(function(err, user) {
+    req.app.db.models.User.findById(req.params.id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -330,17 +331,22 @@ exports.unlinkAdmin = function(req, res, next){
       }
       
       var adminId = user.roles.admin;
-      user.roles.admin = undefined;
+      user.roles.admin = null;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.roles = user.roles;
-        workflow.emit('patchAdmin', adminId);
+        
+        user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+          if (err) return workflow.emit('exception', err);
+          
+          workflow.outcome.user = user;
+          workflow.emit('patchAdmin', adminId);
+        });
       });
     });
   });
   
   workflow.on('patchAdmin', function(id) {
-    res.app.db.models.Admin.findOne({ _id: id }).exec(function(err, admin) {
+    req.app.db.models.Admin.findById(id).exec(function(err, admin) {
       if (err) return workflow.emit('exception', err);
       
       if (!admin) {
@@ -351,27 +357,17 @@ exports.unlinkAdmin = function(req, res, next){
       admin.user = undefined;
       admin.save(function(err, admin) {
         if (err) return workflow.emit('exception', err);
-        workflow.emit('finalize');
+        workflow.emit('response');
       });
     });
   });
   
-  workflow.on('finalize', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }, 'roles').populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.roles = user.roles;
-      workflow.emit('response');
-    });
-  });
-  
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.linkAccount = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -389,10 +385,15 @@ exports.linkAccount = function(req, res, next){
   });
   
   workflow.on('verifyAccount', function(callback) {
-    res.app.db.models.Account.findOne({ _id: req.body.newAccountId }).exec(function(err, account) {
+    req.app.db.models.Account.findById(req.body.newAccountId).exec(function(err, account) {
       if (err) return workflow.emit('exception', err);
       
-      if (account.user && account.user != req.params.id) {
+      if (!account) {
+        workflow.outcome.errors.push('Account not found.');
+        return workflow.emit('response');
+      }
+      
+      if (account.user.id && account.user.id != req.params.id) {
         workflow.outcome.errors.push('Account is already linked to a different user.');
         return workflow.emit('response');
       }
@@ -403,7 +404,7 @@ exports.linkAccount = function(req, res, next){
   });
   
   workflow.on('duplicateLinkCheck', function(callback) {
-    res.app.db.models.User.findOne({ 'roles.account': req.body.newAccountId, _id: {$ne: req.params.id} }).exec(function(err, user) {
+    req.app.db.models.User.findOne({ 'roles.account': req.body.newAccountId, _id: {$ne: req.params.id} }).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -416,42 +417,37 @@ exports.linkAccount = function(req, res, next){
   });
   
   workflow.on('patchUser', function(callback) {
-    res.app.db.models.User.findOne({ _id: req.params.id }).exec(function(err, user) {
+    req.app.db.models.User.findById(req.params.id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       user.roles.account = req.body.newAccountId;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.roles = user.roles;
-        workflow.emit('patchAccount')
+        
+        user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+          if (err) return workflow.emit('exception', err);
+          
+          workflow.outcome.user = user;
+          workflow.emit('patchAccount');
+        });
       });
     });
   });
   
   workflow.on('patchAccount', function() {
-    workflow.account.user = req.params.id;
+    workflow.account.user = { id: req.params.id, name: workflow.outcome.user.username };
     workflow.account.save(function(err, account) {
       if (err) return workflow.emit('exception', err);
-      workflow.emit('finalize');
-    });
-  });
-  
-  workflow.on('finalize', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }, 'roles').populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.roles = user.roles;
       workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.unlinkAccount = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -464,7 +460,7 @@ exports.unlinkAccount = function(req, res, next){
   });
   
   workflow.on('patchUser', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }).exec(function(err, user) {
+    req.app.db.models.User.findById(req.params.id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -473,17 +469,22 @@ exports.unlinkAccount = function(req, res, next){
       }
       
       var accountId = user.roles.account;
-      user.roles.account = undefined;
+      user.roles.account = null;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.roles = user.roles;
-        workflow.emit('patchAccount', accountId);
+        
+        user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+          if (err) return workflow.emit('exception', err);
+          
+          workflow.outcome.user = user;
+          workflow.emit('patchAccount', accountId);
+        });
       });
     });
   });
   
   workflow.on('patchAccount', function(id) {
-    res.app.db.models.Account.findOne({ _id: id }).exec(function(err, account) {
+    req.app.db.models.Account.findById(id).exec(function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       if (!account) {
@@ -494,27 +495,17 @@ exports.unlinkAccount = function(req, res, next){
       account.user = undefined;
       account.save(function(err, account) {
         if (err) return workflow.emit('exception', err);
-        workflow.emit('finalize');
+        workflow.emit('response');
       });
     });
   });
   
-  workflow.on('finalize', function() {
-    res.app.db.models.User.findOne({ _id: req.params.id }, 'roles').populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.roles = user.roles;
-      workflow.emit('response');
-    });
-  });
-  
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.delete = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -533,11 +524,10 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteUser', function(err) {
     req.app.db.models.User.findByIdAndRemove(req.params.id, function(err, user) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) return workflow.emit('exception', err);
+      workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

@@ -4,13 +4,11 @@ exports.init = function(req, res){
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
-    if (!req.query.returnUrl) req.query.returnUrl = '/';
-    res.render('signup/index', { returnUrl: req.query.returnUrl });
+    res.render('signup/index');
   }
 };
 
 exports.signup = function(req, res){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -35,7 +33,7 @@ exports.signup = function(req, res){
   });
   
   workflow.on('duplicateUsernameCheck', function() {
-    res.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
+    req.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -48,7 +46,7 @@ exports.signup = function(req, res){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    res.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (user) {
@@ -67,30 +65,29 @@ exports.signup = function(req, res){
       email: req.body.email,
       password: req.app.db.models.User.encryptPassword(req.body.password)
     };
-    res.app.db.models.User.create(fieldsToSet, function(err, user) {
+    req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
-      workflow.outcome.user = user;
+      workflow.user = user;
       workflow.emit('createAccount');
     });
   });
   
   workflow.on('createAccount', function() {
-    res.app.db.models.Account.create({ user: workflow.outcome.user._id}, function(err, account) {
+    req.app.db.models.Account.create({ 'name.full': workflow.user.username, user: { id: workflow.user._id, name: workflow.user.username } }, function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       //update user with account
-      workflow.outcome.user.roles.account = account._id;
-      workflow.outcome.user.save(function(err, user) {
+      workflow.user.roles.account = account._id;
+      workflow.user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        delete workflow.outcome.user;
         workflow.emit('sendWelcomeEmail');
       });
     });
   });
   
   workflow.on('sendWelcomeEmail', function() {
-    res.app.utility.email(req, res, {
+    req.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',
@@ -110,8 +107,6 @@ exports.signup = function(req, res){
         workflow.emit('response');
       }
     });
-    
-    workflow.emit('logUserIn');
   });
   
   workflow.on('logUserIn', function() {
@@ -125,6 +120,7 @@ exports.signup = function(req, res){
       else {
         req.login(user, function(err) {
           if (err) return workflow.emit('exception', err);
+          
           workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           workflow.emit('response');
         });
@@ -132,6 +128,5 @@ exports.signup = function(req, res){
     })(req, res);
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

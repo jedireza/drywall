@@ -10,12 +10,13 @@ block body
   #header
   #filters
   #results-table
+  #results-paging
   
   script(type='text/template', id='tmpl-header')
     div.page-header
       form.form-inline.pull-right
         div.input-append
-          input(name='username', type='text', placeholder='enter username', value!='<%= username %>')
+          input(name='username', type='text', placeholder='enter a username', value!='<%= username %>')
           button.btn.btn-info.btn-add(type='button') Add New
       h1 Users
   
@@ -64,7 +65,6 @@ block body
           th active
           th id
       tbody#results-rows
-    #results-paging
   
   script(type='text/template', id='tmpl-results-row')
     td

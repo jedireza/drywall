@@ -10,12 +10,13 @@ block body
   #header
   #filters
   #results-table
+  #results-paging
   
   script(type='text/template', id='tmpl-header')
     div.page-header
       form.form-inline.pull-right
         div.input-append
-          input(name='name', type='text', placeholder='enter name', value!='<%= name %>')
+          input(name='name', type='text', placeholder='enter a name', value!='<%= name %>')
           button.btn.btn-info.btn-add(type='button') Add New
       h1 Admin Groups
   
@@ -48,13 +49,12 @@ block body
           th.stretch name
           th id
       tbody#results-rows
-    #results-paging
   
   script(type='text/template', id='tmpl-results-row')
     td
       input.btn.btn-details(type='button', value='Edit')
     td <%= name %>
-    td <%= _id %>
+    td.nowrap <%= _id %>
   
   script(type='text/template', id='tmpl-results-empty-row')
     tr

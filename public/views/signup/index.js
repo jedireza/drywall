@@ -15,34 +15,7 @@
       errfor: {},
       username: '',
       email: '',
-      password: '',
-      isAuthenticated: false
-    },
-    signup: function() {
-      this.save(undefined, {
-        success: function(model, response, options) {
-          if (response.success) {
-            model.set({
-              errors: [],
-              errfor: {},
-              isAuthenticated: true
-            });
-          }
-          else {
-            model.set({
-              errors: response.errors,
-              errfor: response.errfor
-            });
-          }
-        },
-        error: function(model, xhr, options) {
-          var response = JSON.parse(xhr.responseText);
-          model.set({
-            errors: response.errors,
-            errfor: response.errfor
-          });
-        }
-      });
+      password: ''
     }
   });
 
@@ -60,18 +33,13 @@
       'click .btn-signup': 'signup'
     },
     initialize: function() {
+      this.model = new app.Signup();
       this.model.bind('change', this.render, this);
       this.render();
     },
     render: function() {
-      if (this.model.get('isAuthenticated')) {
-        location.href = '/account/';
-      }
-      else {
-        this.$el.html(this.template(this.model.toJSON()));
-        this.$el.find('[name="username"]').focus();
-      }
-      return this;
+      this.$el.html(this.template( this.model.attributes ));
+      this.$el.find('[name="username"]').focus();
     },
     preventSubmit: function(event) {
       event.preventDefault();
@@ -79,23 +47,26 @@
     signupOnEnter: function(event) {
       if (event.keyCode != 13) return;
       if ($(event.target).attr('name') != 'password') return;
-      this.signup(event);
+      event.preventDefault();
+      this.signup();
     },
-    signup: function(event) {
-      if (event) event.preventDefault();
-      this.model.set({
+    signup: function() {
+      this.$el.find('.btn-signup').attr('disabled', true);
+      
+      this.model.save({
         username: this.$el.find('[name="username"]').val(),
         email: this.$el.find('[name="email"]').val(),
         password: this.$el.find('[name="password"]').val()
+      },{
+        success: function(model, response, options) {
+          if (response.success) {
+            location.href = '/account/';
+          }
+          else {
+            model.set(response);
+          }
+        }
       });
-      this.$el.find('.btn-signup').attr('disabled', true);
-      this.model.signup();
-    }
-  });
-  
-  app.MainView = Backbone.View.extend({
-    initialize: function() {
-      app.signupView = new app.SignupView({ model: new app.Signup() });
     }
   });
 
@@ -105,7 +76,7 @@
  * BOOTUP
  **/
   $(document).ready(function() {
-    app.mainView = new app.MainView();
+    app.signupView = new app.SignupView();
   });
 
 

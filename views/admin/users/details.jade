@@ -24,10 +24,12 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
     div.control-group(class!='<%= errfor.isActive ? "error" : "" %>')
@@ -55,15 +57,16 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     div.control-group(class!='<%= errfor.newAdminId ? "error" : "" %>')
       label.control-label Admin:
       div.controls
         div.input-append
-          |<% if (roles.admin) { %>
+          |<% if (roles && roles.admin) { %>
           span.uneditable-input
-            |<%= roles.admin.name.first +' '+ roles.admin.name.last %>
+            |<%= roles.admin.name.full %>
           button.btn.btn-warning.btn-admin-unlink(type='button') Unlink
           button.btn.btn-admin-open(type='button') Open
           |<% } else { %>
@@ -75,9 +78,9 @@ block body
       label.control-label Account:
       div.controls
         div.input-append
-          |<% if (roles.account) { %>
+          |<% if (roles && roles.account) { %>
           span.uneditable-input
-            |<%= roles.account.name.first +' '+ roles.account.name.last %>
+            |<%= roles.account.name.full %>
           button.btn.btn-warning.btn-account-unlink(type='button') Unlink
           button.btn.btn-account-open(type='button') Open
           |<% } else { %>
@@ -91,10 +94,12 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     |<% if (success) { %>
     div.alert.alert-info
+      button.close(type='button', data-dismiss='alert') &times;
       | A new password has been set.
     |<% } %>
     div.control-group(class!='<%= errfor.newPassword ? "error" : "" %>')
@@ -115,6 +120,7 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     span.badge.badge-important

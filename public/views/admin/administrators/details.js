@@ -8,22 +8,44 @@
 /**
  * MODELS
  **/
-  app.Contact = Backbone.Model.extend({
+  app.Admin = Backbone.Model.extend({
+    idAttribute: "_id",
+    url: function() {
+      return '/admin/administrators/'+ this.id +'/';
+    }
+  });
+  
+  app.Delete = Backbone.Model.extend({
+    idAttribute: "_id",
+    defaults: {
+      success: false,
+      errors: [],
+      errfor: {}
+    },
+    url: function() {
+      return '/admin/administrators/'+ app.mainView.model.id +'/';
+    }
+  });
+  
+  app.Details = Backbone.Model.extend({
     idAttribute: "_id",
     defaults: {
       success: false,
       errors: [],
       errfor: {},
-      name: {}
+      first: '',
+      middle: '',
+      last: ''
     },
     url: function() {
-      return '/admin/administrators/'+ this.id +'/';
+      return '/admin/administrators/'+ app.mainView.model.id +'/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    update: function() {
-      this.save(undefined, {});
+    parse: function(response) {
+      if (response.admin) {
+        app.mainView.model.set(response.admin);
+        delete response.admin;
+      }
+      return response;
     }
   });
   
@@ -33,27 +55,19 @@
       success: false,
       errors: [],
       errfor: {},
-      user: {},
+      id: '',
+      name: '',
       newUsername: ''
     },
     url: function() {
-      return '/admin/administrators/'+ this.id +'/';
+      return '/admin/administrators/'+ app.mainView.model.id +'/user/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    userLink: function() {
-      this.save(undefined, {
-        url: this.url() +'user/'
-      });
-    },
-    userUnlink: function() {
-      this.destroy({
-        url: this.url() +'user/',
-        success: function(model, response, options) {
-          model.set(response);
-        }
-      });
+    parse: function(response) {
+      if (response.admin) {
+        app.mainView.model.set(response.admin);
+        delete response.admin;
+      }
+      return response;
     }
   });
   
@@ -64,18 +78,17 @@
       errors: [],
       errfor: {},
       groups: [],
-      groupList: [],
       newMembership: ''
     },
     url: function() {
-      return '/admin/administrators/'+ this.id +'/groups/';
+      return '/admin/administrators/'+ app.mainView.model.id +'/groups/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    saveGroups: function() {
-      var newGroups = _.map(this.get('groups'), function(group) { return group._id; });
-      this.save({newGroups: newGroups}, {});
+    parse: function(response) {
+      if (response.admin) {
+        app.mainView.model.set(response.admin);
+        delete response.admin;
+      }
+      return response;
     }
   });
   
@@ -89,35 +102,14 @@
       newPermission: ''
     },
     url: function() {
-      return '/admin/administrators/'+ this.id +'/permissions/';
+      return '/admin/administrators/'+ app.mainView.model.id +'/permissions/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    savePermissions: function() {
-      this.save(undefined, {});
-    }
-  });
-  
-  app.Delete = Backbone.Model.extend({
-    idAttribute: "_id",
-    defaults: {
-      success: false,
-      errors: [],
-      errfor: {}
-    },
-    url: function() {
-      return '/admin/administrators/'+ this.id +'/';
-    },
-    initialize: function(data) {
-      this.set(data);
-    },
-    delete: function() {
-      this.destroy({
-        success: function(model, response, options) {
-          model.set(response);
-        }
-      });
+    parse: function(response) {
+      if (response.admin) {
+        app.mainView.model.set(response.admin);
+        delete response.admin;
+      }
+      return response;
     }
   });
 
@@ -130,45 +122,81 @@
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
     initialize: function() {
+      this.model = app.mainView.model;
       this.model.on('change', this.render, this);
       this.render();
     },
     render: function() {
-      this.$el.html(this.template( this.model.toJSON() ));
+      this.$el.html(this.template( this.model.attributes ));
     }
   });
   
-  app.ContactView = Backbone.View.extend({
-    el: '#contact',
-    template: _.template( $('#tmpl-contact').html() ),
+  app.DetailsView = Backbone.View.extend({
+    el: '#details',
+    template: _.template( $('#tmpl-details').html() ),
     events: {
       'click .btn-update': 'update'
     },
-    update: function() {
-      this.model.set({
-        name: {
-          first: this.$el.find('[name="name.first"]').val(),
-          middle: this.$el.find('[name="name.middle"]').val(),
-          last: this.$el.find('[name="name.last"]').val(),
-          full: this.$el.find('[name="name.first"]').val() +' '+ this.$el.find('[name="name.last"]').val()
-        }
-      }, {silent: true});
+    initialize: function() {
+      this.model = new app.Details();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
       
-      this.model.update();
+      this.model.on('change', this.render, this);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        first: app.mainView.model.get('name').first,
+        middle: app.mainView.model.get('name').middle,
+        last: app.mainView.model.get('name').last
+      });
+    },
+    render: function() {
+      //render
+      this.$el.html(this.template( this.model.attributes ));
+      
+      //set input values
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      }
+    },
+    update: function() {
+      this.model.save({
+        first: this.$el.find('[name="first"]').val(),
+        middle: this.$el.find('[name="middle"]').val(),
+        last: this.$el.find('[name="last"]').val()
+      });
+    }
+  });
+  
+  app.DeleteView = Backbone.View.extend({
+    el: '#delete',
+    template: _.template( $('#tmpl-delete').html() ),
+    events: {
+      'click .btn-delete': 'delete',
     },
     initialize: function() {
+      this.model = new app.Delete({ _id: app.mainView.model.id });
       this.model.on('change', this.render, this);
       this.render();
     },
     render: function() {
-      var modelData = this.model.toJSON();
-      
-      //render
-      this.$el.html(this.template( modelData ));
-      
-      //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+      this.$el.html(this.template( this.model.attributes ));
+    },
+    delete: function() {
+      if (confirm('Are you sure?')) {
+        this.model.destroy({
+          success: function(model, response, options) {
+            if (response.success) {
+              location.href = '/admin/administrators/';
+            }
+            else {
+              app.deleteView.model.set(response);
+            }
+          }
+        });
       }
     }
   });
@@ -181,31 +209,49 @@
       'click .btn-user-link': 'userLink',
       'click .btn-user-unlink': 'userUnlink'
     },
-    userOpen: function() {
-      location.href = '/admin/users/'+ this.model.get('user')._id +'/';
-    },
-    userLink: function() {
-      this.model.set({ newUsername: $('[name="newUsername"]').val() }, {silent: true});
-      this.model.userLink();
-    },
-    userUnlink: function() {
-      if (confirm('Are you sure?')) {
-        this.model.userUnlink();
-      }
-    },
     initialize: function() {
+      this.model = new app.Login();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
+      
       this.model.on('change', this.render, this);
       this.render();
     },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        id: app.mainView.model.get('user').id,
+        name: app.mainView.model.get('user').name
+      });
+    },
     render: function() {
-      var modelData = this.model.toJSON();
-      
       //render
-      this.$el.html(this.template( modelData ));
+      this.$el.html(this.template( this.model.attributes ));
       
       //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      }
+    },
+    userOpen: function() {
+      location.href = '/admin/users/'+ this.model.get('id') +'/';
+    },
+    userLink: function() {
+      this.model.save({
+        newUsername: $('[name="newUsername"]').val()
+      });
+    },
+    userUnlink: function() {
+      if (confirm('Are you sure?')) {
+        this.model.destroy({
+          success: function(model, response, options) {
+            if (response.admin) {
+              app.mainView.model.set(response.admin);
+              delete response.admin;
+            }
+            app.loginView.model.set(response);
+          }
+        });
       }
     }
   });
@@ -217,6 +263,29 @@
       'click .btn-add': 'add',
       'click .btn-delete': 'delete',
       'click .btn-save': 'saveGroups'
+    },
+    initialize: function() {
+      this.model = new app.Groups();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
+      
+      this.model.on('change', this.render, this);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        groups: app.mainView.model.get('groups')
+      });
+    },
+    render: function() {
+      //render
+      this.$el.html(this.template( this.model.attributes ));
+      
+      //set input values
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      }
     },
     add: function(event) {
       //validate
@@ -240,7 +309,7 @@
       }
       
       //add item
-      this.model.get('groups').push({_id: newMembership, name: newMembershipName});
+      this.model.get('groups').push({ _id: newMembership, name: newMembershipName });
       
       //sort
       var sorted = this.model.get('groups');
@@ -260,24 +329,7 @@
       }
     },
     saveGroups: function() {
-      if (confirm('Are you sure?')) {
-        this.model.saveGroups();
-      }
-    },
-    initialize: function() {
-      this.model.on('change', this.render, this);
-      this.render();
-    },
-    render: function() {
-      var modelData = this.model.toJSON();
-      
-      //render
-      this.$el.html(this.template( modelData ));
-      
-      //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
-      }
+      this.model.save();
     }
   });
   
@@ -290,6 +342,29 @@
       'click .btn-deny': 'deny',
       'click .btn-delete': 'delete',
       'click .btn-set': 'savePermissions'
+    },
+    initialize: function() {
+      this.model = new app.Permissions();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
+      
+      this.model.on('change', this.render, this);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        permissions: app.mainView.model.get('permissions')
+      });
+    },
+    render: function() {
+      //render
+      this.$el.html(this.template( this.model.attributes ));
+      
+      //set input values
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      }
     },
     add: function(event) {
       //validate
@@ -312,7 +387,7 @@
       }
       
       //add item
-      this.model.get('permissions').push({name: newPermission, permit: true});
+      this.model.get('permissions').push({ name: newPermission, permit: true });
       
       //sort
       var sorted = this.model.get('permissions');
@@ -342,73 +417,25 @@
       }
     },
     savePermissions: function() {
-      if (confirm('Are you sure?')) {
-        this.model.savePermissions();
-      }
-    },
-    initialize: function() {
-      this.model.on('change', this.render, this);
-      this.render();
-    },
-    render: function() {
-      var modelData = this.model.toJSON();
-      
-      //render
-      this.$el.html(this.template( modelData ));
-      
-      //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
-      }
-    }
-  });
-  
-  app.DeleteView = Backbone.View.extend({
-    el: '#delete',
-    template: _.template( $('#tmpl-delete').html() ),
-    events: {
-      'click .btn-delete': 'delete',
-    },
-    delete: function() {
-      if (confirm('Are you sure?')) {
-        this.model.delete();
-      }
-    },
-    initialize: function() {
-      this.model.on('change', this.render, this);
-      this.render();
-    },
-    render: function() {
-      if (this.model.get('success')) {
-        location.href = '/admin/administrators/';
-      }
-      
-      //render
-      this.$el.html(this.template( this.model.toJSON() ));
+      this.model.save();
     }
   });
   
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
-      var groupList = JSON.parse($('#data-group-list').html());
-      var initData = JSON.parse($('#data-record').html());
-      this.model = new app.Contact({
-        _id: initData._id,
-        name: {
-          first: initData.name.first,
-          middle: initData.name.middle,
-          last: initData.name.last,
-          full: initData.name.full
-        }
-      });
+      app.mainView = this;
       
-      app.headerView = new app.HeaderView({ model: this.model });
-      app.contactView = new app.ContactView({ model: this.model });
-      app.loginView = new app.LoginView({ model: new app.Login({ _id: initData._id, user: initData.user }) });
-      app.groupsView = new app.GroupsView({ model: new app.Groups({ _id: initData._id, groups: initData.groups, groupList: groupList }) });
-      app.permissionsView = new app.PermissionsView({ model: new app.Permissions({ _id: initData._id, permissions: initData.permissions }) });
-      app.deleteView = new app.DeleteView({ model: new app.Delete({ _id: initData._id }) });
+      //setup model
+      this.model = new app.Admin( JSON.parse($('#data-record').html()) );
+      
+      //sub views
+      app.headerView = new app.HeaderView();
+      app.detailsView = new app.DetailsView();
+      app.deleteView = new app.DeleteView();
+      app.loginView = new app.LoginView();
+      app.groupsView = new app.GroupsView();
+      app.permissionsView = new app.PermissionsView();
     }
   });
 

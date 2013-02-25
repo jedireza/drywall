@@ -24,10 +24,12 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
     div.control-group(class!='<%= errfor.name ? "error" : "" %>')
@@ -43,10 +45,12 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
     div.control-group(class!='<%= errfor.newPermission ? "error" : "" %>')
@@ -87,6 +91,7 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     span.badge.badge-important

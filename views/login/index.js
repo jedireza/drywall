@@ -10,7 +10,6 @@ exports.init = function(req, res){
 };
 
 exports.login = function(req, res){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
@@ -34,6 +33,7 @@ exports.login = function(req, res){
       else {
         req.login(user, function(err) {
           if (err) return workflow.emit('exception', err);
+          
           workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           workflow.emit('response');
         });
@@ -41,6 +41,5 @@ exports.login = function(req, res){
     })(req, res);
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

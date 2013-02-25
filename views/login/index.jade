@@ -16,6 +16,7 @@ block body
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
       div.control-group(class!='<%= errfor.username ? "error" : "" %>')

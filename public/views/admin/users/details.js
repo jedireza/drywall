@@ -8,6 +8,25 @@
 /**
  * MODELS
  **/
+  app.User = Backbone.Model.extend({
+    idAttribute: "_id",
+    url: function() {
+      return '/admin/users/'+ this.id +'/';
+    }
+  });
+  
+  app.Delete = Backbone.Model.extend({
+    idAttribute: "_id",
+    defaults: {
+      success: false,
+      errors: [],
+      errfor: {}
+    },
+    url: function() {
+      return '/admin/users/'+ app.mainView.model.id +'/';
+    }
+  });
+  
   app.Identity = Backbone.Model.extend({
     idAttribute: "_id",
     defaults: {
@@ -19,13 +38,14 @@
       email: ''
     },
     url: function() {
-      return '/admin/users/'+ this.id +'/';
+      return '/admin/users/'+ app.mainView.model.id +'/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    update: function() {
-      this.save(undefined, {});
+    parse: function(response) {
+      if (response.user) {
+        app.mainView.model.set(response.user);
+        delete response.user;
+      }
+      return response;
     }
   });
   
@@ -40,36 +60,14 @@
       newAdminId: ''
     },
     url: function() {
-      return '/admin/users/'+ this.id +'/';
+      return '/admin/users/'+ app.mainView.model.id +'/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    adminLink: function() {
-      this.save(undefined, {
-        url: this.url() +'role-admin/'
-      });
-    },
-    adminUnlink: function() {
-      this.destroy({
-        url: this.url() +'role-admin/',
-        success: function(model, response, options) {
-          model.set(response);
-        }
-      });
-    },
-    accountLink: function() {
-      this.save(undefined, {
-        url: this.url() +'role-account/'
-      });
-    },
-    accountUnlink: function() {
-      this.destroy({
-        url: this.url() +'role-account/',
-        success: function(model, response, options) {
-          model.set(response);
-        }
-      });
+    parse: function(response) {
+      if (response.user) {
+        app.mainView.model.set(response.user);
+        delete response.user;
+      }
+      return response;
     }
   });
   
@@ -83,35 +81,14 @@
       confirm: ''
     },
     url: function() {
-      return '/admin/users/'+ this.id +'/password/';
+      return '/admin/users/'+ app.mainView.model.id +'/password/';
     },
-    initialize: function(data) {
-      this.set(data);
-    },
-    password: function() {
-      this.save(null, {});
-    }
-  });
-  
-  app.Delete = Backbone.Model.extend({
-    idAttribute: "_id",
-    defaults: {
-      success: false,
-      errors: [],
-      errfor: {}
-    },
-    url: function() {
-      return '/admin/users/'+ this.id +'/';
-    },
-    initialize: function(data) {
-      this.set(data);
-    },
-    delete: function() {
-      this.destroy({
-        success: function(model, response, options) {
-          model.set(response);
-        }
-      });
+    parse: function(response) {
+      if (response.user) {
+        app.mainView.model.set(response.user);
+        delete response.user;
+      }
+      return response;
     }
   });
 
@@ -124,11 +101,12 @@
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
     initialize: function() {
+      this.model = app.mainView.model;
       this.model.on('change', this.render, this);
       this.render();
     },
     render: function() {
-      this.$el.html(this.template( this.model.toJSON() ));
+      this.$el.html(this.template( this.model.attributes ));
     }
   });
   
@@ -138,29 +116,37 @@
     events: {
       'click .btn-update': 'update'
     },
-    update: function() {
-      this.model.set({
-        isActive: this.$el.find('[name="isActive"]').val(),
-        username: this.$el.find('[name="username"]').val(),
-        email: this.$el.find('[name="email"]').val()
-      }, {silent: true});
-      
-      this.model.update();
-    },
     initialize: function() {
+      this.model = new app.Identity();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
+      
       this.model.on('change', this.render, this);
       this.render();
     },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        isActive: app.mainView.model.get('isActive'),
+        username: app.mainView.model.get('username'),
+        email: app.mainView.model.get('email')
+      });
+    },
     render: function() {
-      var modelData = this.model.toJSON();
-      
       //render
-      this.$el.html(this.template( modelData ));
+      this.$el.html(this.template( this.model.attributes ));
       
       //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
       }
+    },
+    update: function() {
+      this.model.save({
+        isActive: this.$el.find('[name="isActive"]').val(),
+        username: this.$el.find('[name="username"]').val(),
+        email: this.$el.find('[name="email"]').val()
+      });
     }
   });
   
@@ -175,43 +161,75 @@
       'click .btn-account-link': 'accountLink',
       'click .btn-account-unlink': 'accountUnlink'
     },
+    initialize: function() {
+      this.model = new app.Roles();
+      this.syncUp();
+      app.mainView.model.bind('change', this.syncUp, this);
+      
+      this.model.on('change', this.render, this);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        roles: app.mainView.model.get('roles')
+      });
+    },
+    render: function() {
+      //render
+      this.$el.html(this.template( this.model.attributes ));
+      
+      //set input values
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      }
+    },
     adminOpen: function() {
       location.href = '/admin/administrators/'+ this.model.get('roles').admin._id +'/';
     },
     adminLink: function() {
-      this.model.set({ newAdminId: $('[name="newAdminId"]').val() }, {silent: true});
-      this.model.adminLink();
+      this.model.save({
+        newAdminId: $('[name="newAdminId"]').val()
+      },{
+        url: this.model.url() +'role-admin/'
+      });
     },
     adminUnlink: function() {
       if (confirm('Are you sure?')) {
-        this.model.adminUnlink();
+        this.model.destroy({
+          url: this.model.url() +'role-admin/',
+          success: function(model, response, options) {
+            if (response.user) {
+              app.mainView.model.set(response.user);
+              delete response.user;
+            }
+            app.rolesView.model.set(response);
+          }
+        });
       }
     },
     accountOpen: function() {
       location.href = '/admin/accounts/'+ this.model.get('roles').account._id +'/';
     },
     accountLink: function() {
-      this.model.set({ newAccountId: $('[name="newAccountId"]').val() }, {silent: true});
-      this.model.accountLink();
+      this.model.save({
+        newAccountId: $('[name="newAccountId"]').val()
+      },{
+        url: this.model.url() +'role-account/'
+      });
     },
     accountUnlink: function() {
       if (confirm('Are you sure?')) {
-        this.model.accountUnlink();
-      }
-    },
-    initialize: function() {
-      this.model.on('change', this.render, this);
-      this.render();
-    },
-    render: function() {
-      var modelData = this.model.toJSON();
-      
-      //render
-      this.$el.html(this.template( modelData ));
-      
-      //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+        this.model.destroy({
+          url: this.model.url() +'role-account/',
+          success: function(model, response, options) {
+            if (response.user) {
+              app.mainView.model.set(response.user);
+              delete response.user;
+            }
+            app.rolesView.model.set(response);
+          }
+        });
       }
     }
   });
@@ -222,28 +240,25 @@
     events: {
       'click .btn-password': 'password'
     },
-    password: function() {
-      this.model.set({
-        newPassword: this.$el.find('[name="newPassword"]').val(),
-        confirm: this.$el.find('[name="confirm"]').val()
-      }, {silent: true});
-      
-      this.model.password();
-    },
     initialize: function() {
+      this.model = new app.Password({ _id: app.mainView.model.id });
       this.model.on('change', this.render, this);
       this.render();
     },
     render: function() {
-      var modelData = this.model.toJSON();
-      
       //render
-      this.$el.html(this.template( modelData ));
+      this.$el.html(this.template( this.model.attributes ));
       
       //set input values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
       }
+    },
+    password: function() {
+      this.model.save({
+        newPassword: this.$el.find('[name="newPassword"]').val(),
+        confirm: this.$el.find('[name="confirm"]').val()
+      });
     }
   });
   
@@ -253,41 +268,44 @@
     events: {
       'click .btn-delete': 'delete',
     },
-    delete: function() {
-      if (confirm('Are you sure?')) {
-        this.model.delete();
-      }
-    },
     initialize: function() {
+      this.model = new app.Delete({ _id: app.mainView.model.id });
       this.model.on('change', this.render, this);
       this.render();
     },
     render: function() {
-      if (this.model.get('success')) {
-        location.href = '/admin/users/';
+      this.$el.html(this.template( this.model.attributes ));
+    },
+    delete: function() {
+      if (confirm('Are you sure?')) {
+        this.model.destroy({
+          success: function(model, response, options) {
+            if (response.success) {
+              location.href = '/admin/users/';
+            }
+            else {
+              app.deleteView.model.set(response);
+            }
+          }
+        });
       }
-      
-      //render
-      this.$el.html(this.template( this.model.toJSON() ));
     }
   });
   
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
-      var initData = JSON.parse($('#data-record').html());
-      this.model = new app.Identity({
-        _id: initData._id,
-        isActive: initData.isActive,
-        username: initData.username,
-        email: initData.email
-      });
+      app.mainView = this;
       
-      app.headerView = new app.HeaderView({ model: this.model });
-      app.identityView = new app.IdentityView({ model: this.model });
-      app.passwordView = new app.PasswordView({ model: new app.Password({ _id: initData._id }) });
-      app.rolesView = new app.RolesView({ model: new app.Roles({ _id: initData._id, roles: initData.roles }) });
-      app.deleteView = new app.DeleteView({ model: new app.Delete({ _id: initData._id }) });
+      //setup model
+      this.model = new app.User( JSON.parse($('#data-record').html()) );
+      
+      //sub views
+      app.headerView = new app.HeaderView();
+      app.identityView = new app.IdentityView();
+      app.passwordView = new app.PasswordView();
+      app.rolesView = new app.RolesView();
+      app.deleteView = new app.DeleteView();
     }
   });
 

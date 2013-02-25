@@ -9,11 +9,13 @@
  * MODELS
  **/
   app.Record = Backbone.Model.extend({
-    urlRoot: '/admin/admin-groups/',
     idAttribute: "_id",
     defaults: {
-      _id: null,
+      _id: undefined,
       name: ''
+    },
+    url: function() {
+      return '/admin/admin-groups/'+ (this.isNew() ? '' : this.id +'/');
     }
   });
   
@@ -21,12 +23,11 @@
     model: app.Record,
     url: '/admin/admin-groups/',
     parse: function(results) {
-      this.paging = {
+      app.pagingView.model.set({
         pages: results.pages,
         items: results.items
-      };
-      this.filters = results.filters;
-      
+      });
+      app.filterView.model.set(results.filters);
       return results.data;
     }
   });
@@ -65,7 +66,7 @@
       this.render();
     },
     render: function() {
-      this.$el.html( this.template(this.model.toJSON()) );
+      this.$el.html(this.template( this.model.attributes ));
     },
     preventSubmit: function(event) {
       event.preventDefault();
@@ -73,26 +74,24 @@
     addNewOnEnter: function(event) {
       if (event.keyCode != 13) return;
       event.preventDefault();
-      this.addNew(event);
+      this.addNew();
     },
     addNew: function() {
       if (this.$el.find('[name="name"]').val() == '') {
         alert('Please enter a name.');
       }
       else {
-        this.model.set({ name: this.$el.find('[name="name"]').val() });
-        this.model.save(undefined, {
+        this.model.save({
+          name: this.$el.find('[name="name"]').val()
+        },{
           success: function(model, response, options) {
             if (response.success) {
-              location.href = model.urlRoot + response.record._id +'/';
+              model.id = response.record._id;
+              location.href = model.url();
             }
             else {
-              response.errors.length > 0 ? alert(response.errors[0]) : alert(response.errfor.name);
+              alert(response.errors.join('\n'));
             }
-          },
-          error: function(model, xhr, options) {
-            var response = JSON.parse(xhr.responseText);
-            alert(response.errors);
           }
         });
       }
@@ -103,22 +102,12 @@
     el: '#results-table',
     template: _.template( $('#tmpl-results-table').html() ),
     initialize: function() {
-      this.$el.html(this.template());
-      app.resultsView = this;
-      
-      var results = JSON.parse( $('#data-results').html() );
-      this.collection = new app.RecordCollection( results.data );
+      this.collection = new app.RecordCollection( app.mainView.results.data );
       this.collection.on('reset', this.render, this);
-      
-      this.pagingView = new app.PagingView({
-        model: new app.Paging({ pages: results.pages, items: results.items })
-      });
-      this.filterView = new app.FilterView( {model: new app.Filter(results.filters)} );
-      
       this.render();
     },
     render: function() {
-      $('#results-rows').empty();
+      this.$el.html( this.template() );
       
       this.collection.each(function(record) {
         var view = new app.ResultsRowView({ model: record });
@@ -128,9 +117,6 @@
       if (this.collection.length == 0) {
         $('#results-rows').append( $('#tmpl-results-empty-row').html() );
       }
-      
-      this.pagingView.model.set(this.collection.paging);
-      this.filterView.model.set(this.collection.filters);
     }
   });
   
@@ -141,10 +127,10 @@
       'click .btn-details': 'viewDetails'
     },
     viewDetails: function() {
-      location.href = '/admin/admin-groups/'+ this.model.id +'/';
+      location.href = this.model.url();
     },
     render: function() {
-      this.$el.html( this.template(this.model.toJSON()) );
+      this.$el.html(this.template( this.model.attributes ));
       return this;
     }
   });
@@ -158,16 +144,16 @@
       'change select': 'filter'
     },
     initialize: function() {
+      this.model = new app.Filter( app.mainView.results.filters );
       this.model.bind('change', this.render, this);
       this.render();
     },
     render: function() {
-      var modelData = this.model.toJSON();
-      this.$el.html( this.template(modelData) );
+      this.$el.html(this.template( this.model.attributes ));
       
       //set field values
-      for(var key in modelData) {
-        this.$el.find('[name="'+ key +'"]').val(modelData[key]);
+      for(var key in this.model.attributes) {
+        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
       }
     },
     preventSubmit: function(event) {
@@ -175,12 +161,11 @@
     },
     filterOnEnter: function(event) {
       if (event.keyCode != 13) return;
-      this.filter(event);
+      this.filter();
     },
-    filter: function() {
+    filter: function() {  
       var query = $("#filters form").serialize();
-      app.resultsView.collection.fetch({data: query});
-      Backbone.history.navigate('q/'+ query, false); 
+      Backbone.history.navigate('q/'+ query, { trigger: true }); 
     }
   });
   
@@ -191,12 +176,13 @@
       'click .btn-page': 'goToPage'
     },
     initialize: function() {
+      this.model = new app.Paging({ pages: app.mainView.results.pages, items: app.mainView.results.items });
       this.model.bind('change', this.render, this);
       this.render();
     },
     render: function() {
       if (this.model.get('pages').total > 1) {
-        this.$el.html( this.template(this.model.toJSON()) );
+        this.$el.html(this.template( this.model.attributes ));
         
         if (!this.model.get('pages').hasPrev) {
           this.$el.find('.btn-prev').attr('disabled', 'disabled');
@@ -208,13 +194,10 @@
       else {
         this.$el.empty();
       }
-      
-      return this;
     },
     goToPage: function(event) {
       var query = $("#filters form").serialize() +"&page="+ $(event.target).data('page');
-      app.resultsView.collection.fetch({data: query});
-      Backbone.history.navigate('q/'+ query, false); 
+      Backbone.history.navigate('q/'+ query, { trigger: true }); 
       var body = $('body').scrollTop(0);
     }
   });
@@ -222,8 +205,16 @@
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
+      app.mainView = this;
+      
+      //setup data
+      this.results = JSON.parse( $('#data-results').html() );
+      
+      //sub views
       app.headerView = new app.HeaderView();
       app.resultsView = new app.ResultsView();
+      app.filterView = new app.FilterView();
+      app.pagingView = new app.PagingView();
     }
   });
 
@@ -237,23 +228,16 @@
       '': 'default',
       'q/:params': 'query'
     },
+    initialize: function() {
+      app.mainView = new app.MainView();
+    },
     default: function() {
-      if (!app.mainView) app.mainView = new app.MainView();
-      
-      if (!app.isFirstLoad) {
-        app.resultsView.collection.fetch();
-      }
-      
-      app.isFirstLoad = false;
+      if (!app.firstLoad) app.resultsView.collection.fetch();
+      app.firstLoad = false;
     },
     query: function(params) {
-      if (!app.mainView) app.mainView = new app.MainView();
-      
-      if (params) {
-        app.resultsView.collection.fetch({ data: params });
-      }
-      
-      app.isFirstLoad = false;
+      app.resultsView.collection.fetch({ data: params });
+      app.firstLoad = false;
     }
   });
 
@@ -263,7 +247,7 @@
  * BOOTUP
  **/
   $(document).ready(function() {
-    app.isFirstLoad = true;
+    app.firstLoad = true;
     app.router = new app.Router();
     Backbone.history.start();
   });

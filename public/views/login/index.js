@@ -14,36 +14,7 @@
       errors: [],
       errfor: {},
       username: '',
-      password: '',
-      isAuthenticated: false,
-      defaultReturnUrl: '/'
-    },
-    login: function() {
-      this.save(undefined, {
-        success: function(model, response, options) {
-          if (response.success) {
-            model.set({
-              errors: [],
-              errfor: {},
-              isAuthenticated: true,
-              defaultReturnUrl: response.defaultReturnUrl
-            });
-          }
-          else {
-            model.set({
-              errors: response.errors,
-              errfor: response.errfor
-            });
-          }
-        },
-        error: function(model, xhr, options) {
-          var response = JSON.parse(xhr.responseText);
-          model.set({
-            errors: response.errors,
-            errfor: response.errfor
-          });
-        }
-      });
+      password: ''
     }
   });
 
@@ -61,20 +32,13 @@
       'click .btn-login': 'login'
     },
     initialize: function() {
+      this.model = new app.Login();
       this.model.bind('change', this.render, this);
       this.render();
     },
     render: function() {
-      if (this.model.get('isAuthenticated')) {
-        var returnUrl = this.$el.find('[name="returnUrl"]').val();
-        if (returnUrl == '/') returnUrl = this.model.get('defaultReturnUrl');
-        location.href = returnUrl;
-      }
-      else {
-        this.$el.html(this.template(this.model.toJSON()));
-        this.$el.find('[name="username"]').focus();
-      }
-      return this;
+      this.$el.html(this.template( this.model.attributes ));
+      this.$el.find('[name="username"]').focus();
     },
     preventSubmit: function(event) {
       event.preventDefault();
@@ -82,22 +46,27 @@
     loginOnEnter: function(event) {
       if (event.keyCode != 13) return;
       if ($(event.target).attr('name') != 'password') return;
-      this.login(event);
+      event.preventDefault();
+      this.login();
     },
-    login: function(event) {
-      if (event) event.preventDefault();
-      this.model.set({
+    login: function() {
+      this.$el.find('.btn-login').attr('disabled', true);
+      
+      this.model.save({
         username: this.$el.find('[name="username"]').val(),
         password: this.$el.find('[name="password"]').val()
+      },{
+        success: function(model, response, options) {
+          if (response.success) {
+            var returnUrl = app.loginView.$el.find('[name="returnUrl"]').val();
+            if (returnUrl == '/') returnUrl = response.defaultReturnUrl;
+            location.href = returnUrl;
+          }
+          else {
+            model.set(response);
+          }
+        }
       });
-      this.$el.find('.btn-login').attr('disabled', true);
-      this.model.login();
-    }
-  });
-  
-  app.MainView = Backbone.View.extend({
-    initialize: function() {
-      app.loginView = new app.LoginView({ model: new app.Login() });
     }
   });
 
@@ -107,7 +76,7 @@
  * BOOTUP
  **/
   $(document).ready(function() {
-    app.mainView = new app.MainView();
+    app.loginView = new app.LoginView();
   });
 
 

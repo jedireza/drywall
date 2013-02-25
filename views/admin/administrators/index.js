@@ -1,16 +1,16 @@
 exports.find = function(req, res, next){
   //defaults
-  req.query.name = req.query.name ? req.query.name : '';
+  req.query.search = req.query.search ? req.query.search : '';
   req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
   req.query.page = req.query.page ? parseInt(req.query.page) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
   //filters
   var filters = {};
-  if (req.query.name) filters['name.full'] = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  if (req.query.search) filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
   
   //get results
-  res.app.db.models.Admin.pagedFind({
+  req.app.db.models.Admin.pagedFind({
     filters: filters,
     keys: 'name.full',
     limit: req.query.limit,
@@ -29,7 +29,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/administrators/index', { data: {results: JSON.stringify(results)} });
+      res.render('admin/administrators/index', { data: { results: JSON.stringify(results) } });
     }
   });
 };
@@ -37,62 +37,64 @@ exports.find = function(req, res, next){
 
 
 exports.read = function(req, res, next){
-  //create a workflow event emitter
-  var workflow = new req.app.utility.Workflow(req, res);
+  var outcome = {};
   
-  workflow.on('findAdmin', function() {
-    res.app.db.models.Admin.findOne({ _id: req.params.id }).populate('user', 'username').populate('groups', 'name').exec(function(err, administrator) {
-      if (err) {
-        res.send(500, 'Model findOne error. '+ err);
-        return;
-      }
+  var getAdminGroups = function(callback) {
+    req.app.db.models.AdminGroup.find({}, 'name').sort('name').exec(function(err, adminGroups) {
+      if (err) return callback(err, null);
       
-      if (req.header('x-requested-with') == 'XMLHttpRequest') {
-        res.send(administrator);
-      }
-      else {
-        workflow.outcome = {
-          data: {
-            record: JSON.stringify(administrator)
-          }
-        };
-        workflow.emit('getGroupList', administrator);
-      }
+      outcome.adminGroups = adminGroups;
+      return callback(null, 'done');
     });
-  });
+  };
   
-  workflow.on('getGroupList', function() {
-    res.app.db.models.AdminGroup.find({}, 'name').sort('name').exec(function(err, adminGroups) {
-      if (err) {
-        res.send(500, 'Model find error. '+ err);
-        return;
-      }
-      workflow.outcome.data.groupList = JSON.stringify(adminGroups);
-      res.render('admin/administrators/details', workflow.outcome);
+  var getRecord = function(callback) {
+    req.app.db.models.Admin.findById(req.params.id).populate('groups', 'name').exec(function(err, record) {
+      if (err) return callback(err, null);
+      
+      outcome.record = record;
+      return callback(null, 'done');
     });
-  });
+  };
   
-  //start the workflow
-  workflow.emit('findAdmin');
+  var asyncFinally = function(err, results) {
+    if (err) {
+      res.send(500, 'Model findOne error. '+ err);
+      return;
+    }
+    
+    if (req.header('x-requested-with') == 'XMLHttpRequest') {
+      res.send(outcome.record);
+    }
+    else {
+      res.render('admin/administrators/details', {
+        data: {
+          record: JSON.stringify(outcome.record),
+          adminGroups: outcome.adminGroups
+        }
+      });
+    }
+  };
+  
+  require('async').parallel([getAdminGroups, getRecord], asyncFinally);
 };
 
 
 
 exports.create = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.name) {
-      workflow.outcome.errfor.name = 'required';
-      return workflow.emit('response')
+    if (!req.body['name.full']) {
+      workflow.outcome.errors.push('Please enter a name.');
+      return workflow.emit('response');
     }
     
     workflow.emit('createAdministrator');
   });
   
   workflow.on('createAdministrator', function() {
-    var nameParts = req.body.name.trim().split(/\s/);
+    var nameParts = req.body['name.full'].trim().split(/\s/);
     var fieldsToSet = {
       name: {
         first: nameParts.shift(),
@@ -101,28 +103,31 @@ exports.create = function(req, res, next){
       }
     };
     fieldsToSet.name.full = fieldsToSet.name.first + (fieldsToSet.name.last ? ' '+ fieldsToSet.name.last : '');
+    fieldsToSet.search = [
+      fieldsToSet.name.first,
+      fieldsToSet.name.middle,
+      fieldsToSet.name.last
+    ];
     
-    res.app.db.models.Admin.create(fieldsToSet, function(err, administrator) {
+    req.app.db.models.Admin.create(fieldsToSet, function(err, admin) {
       if (err) return workflow.emit('exception', err);
       
-      workflow.outcome.record = administrator;
+      workflow.outcome.record = admin;
       return workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.update = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (req.body.name && !req.body.name.first) workflow.outcome.errfor['name.first'] = 'required';
-    if (req.body.name && !req.body.name.last) workflow.outcome.errfor['name.last'] = 'required';
+    if (!req.body.first) workflow.outcome.errfor.first = 'required';
+    if (!req.body.last) workflow.outcome.errfor.last = 'required';
     
     //return if we have errors already
     if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
@@ -133,38 +138,47 @@ exports.update = function(req, res, next){
   workflow.on('patchAdministrator', function() {
     var fieldsToSet = {
       name: {
-        first: req.body.name.first,
-        middle: req.body.name.middle,
-        last: req.body.name.last,
-        full: req.body.name.full
-      }
+        first: req.body.first,
+        middle: req.body.middle,
+        last: req.body.last,
+        full: req.body.first +' '+ req.body.last
+      },
+      search: [
+        req.body.first,
+        req.body.middle,
+        req.body.last
+      ]
     };
     
-    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, administrator) {
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
       if (err) return workflow.emit('exception', err);
-      return workflow.emit('response');
+      
+      admin.populate('groups', 'name', function(err, admin) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.admin = admin;
+        workflow.emit('response');
+      });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.groups = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
-      workflow.outcome.errors.push('You may not change the group memberships of administrators.');
+      workflow.outcome.errors.push('You may not change the group memberships of admins.');
       return workflow.emit('response');
     }
     
-    if (!req.body.newGroups) {
+    if (!req.body.groups) {
       workflow.outcome.errfor.groups = 'required';
-      return workflow.emit('response')
+      return workflow.emit('response');
     }
     
     workflow.emit('patchAdministrator');
@@ -172,34 +186,38 @@ exports.groups = function(req, res, next){
   
   workflow.on('patchAdministrator', function() {
     var fieldsToSet = {
-      groups: req.body.newGroups
+      groups: req.body.groups
     };
     
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
       if (err) return workflow.emit('exception', err);
-      return workflow.emit('response');
+      
+      admin.populate('groups', 'name', function(err, admin) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.admin = admin;
+        workflow.emit('response');
+      });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.permissions = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
-      workflow.outcome.errors.push('You may not change the permissions of administrators.');
+      workflow.outcome.errors.push('You may not change the permissions of admins.');
       return workflow.emit('response');
     }
     
     if (!req.body.permissions) {
       workflow.outcome.errfor.permissions = 'required';
-      return workflow.emit('response')
+      return workflow.emit('response');
     }
     
     workflow.emit('patchAdministrator');
@@ -212,23 +230,27 @@ exports.permissions = function(req, res, next){
     
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
       if (err) return workflow.emit('exception', err);
-      return workflow.emit('response');
+      
+      admin.populate('groups', 'name', function(err, admin) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.admin = admin;
+        workflow.emit('response');
+      });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.linkUser = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
-      workflow.outcome.errors.push('You may not link administrators to users.');
+      workflow.outcome.errors.push('You may not link admins to users.');
       return workflow.emit('response');
     }
     
@@ -241,7 +263,7 @@ exports.linkUser = function(req, res, next){
   });
   
   workflow.on('verifyUser', function(callback) {
-    res.app.db.models.User.findOne({ username: req.body.newUsername }).exec(function(err, user) {
+    req.app.db.models.User.findOne({ username: req.body.newUsername }, 'username').exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -249,7 +271,7 @@ exports.linkUser = function(req, res, next){
         return workflow.emit('response');
       }
       else if (user.roles && user.roles.admin && user.roles.admin != req.params.id) {
-        workflow.outcome.errors.push('User is already linked to a different administrator.');
+        workflow.outcome.errors.push('User is already linked to a different admin.');
         return workflow.emit('response');
       }
       
@@ -259,47 +281,49 @@ exports.linkUser = function(req, res, next){
   });
   
   workflow.on('duplicateLinkCheck', function(callback) {
-    res.app.db.models.Admin.findOne({ user: workflow.user._id, _id: {$ne: req.params.id} }).exec(function(err, administrator) {
+    req.app.db.models.Admin.findOne({ 'user.id': workflow.user._id, _id: { $ne: req.params.id } }).exec(function(err, admin) {
       if (err) return workflow.emit('exception', err);
       
-      if (administrator) {
-        workflow.outcome.errors.push('Another administrator is already linked to that user.');
+      if (admin) {
+        workflow.outcome.errors.push('Another admin is already linked to that user.');
         return workflow.emit('response');
       }
       
+      workflow.emit('patchUser');
+    });
+  });
+  
+  workflow.on('patchUser', function() {
+    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.admin': req.params.id }).exec(function(err, user) {
+      if (err) return workflow.emit('exception', err);
       workflow.emit('patchAdministrator');
     });
   });
   
   workflow.on('patchAdministrator', function(callback) {
-    res.app.db.models.Admin.findByIdAndUpdate(req.params.id, { user: workflow.user._id }).exec(function(err, administrator) {
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, admin) {
       if (err) return workflow.emit('exception', err);
-      workflow.emit('patchUser')
+      
+      admin.populate('groups', 'name', function(err, admin) {
+        if (err) return workflow.emit('exception', err);
+        
+        workflow.outcome.admin = admin;
+        workflow.emit('response');
+      });
     });
   });
   
-  workflow.on('patchUser', function() {
-    workflow.user.roles.admin = req.params.id;
-    workflow.user.save(function(err, user) {
-      if (err) return workflow.emit('exception', err);
-      workflow.outcome.user = user;
-      workflow.emit('response');
-    });
-  });
-  
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.unlinkUser = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
-      workflow.outcome.errors.push('You may not unlink users from administrators.');
+      workflow.outcome.errors.push('You may not unlink users from admins.');
       return workflow.emit('response');
     }
     
@@ -312,26 +336,31 @@ exports.unlinkUser = function(req, res, next){
   });
   
   workflow.on('patchAdministrator', function() {
-    res.app.db.models.Admin.findOne({ _id: req.params.id }).exec(function(err, administrator) {
+    req.app.db.models.Admin.findById(req.params.id).exec(function(err, admin) {
       if (err) return workflow.emit('exception', err);
       
-      if (!administrator) {
+      if (!admin) {
         workflow.outcome.errors.push('Administrator was not found.');
         return workflow.emit('response');
       }
       
-      var userId = administrator.user;
-      administrator.user = undefined;
-      administrator.save(function(err, administrator) {
+      var userId = admin.user.id;
+      admin.user = { id: undefined, name: ''};
+      admin.save(function(err, admin) {
         if (err) return workflow.emit('exception', err);
-        workflow.outcome.user = {};
-        workflow.emit('patchUser', userId);
+        
+        admin.populate('groups', 'name', function(err, admin) {
+          if (err) return workflow.emit('exception', err);
+          
+          workflow.outcome.admin = admin;
+          workflow.emit('patchUser', userId);
+        });
       });
     });
   });
   
   workflow.on('patchUser', function(id) {
-    res.app.db.models.User.findOne({ _id: id }).exec(function(err, user) {
+    req.app.db.models.User.findById(id).exec(function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       if (!user) {
@@ -342,25 +371,27 @@ exports.unlinkUser = function(req, res, next){
       user.roles.admin = undefined;
       user.save(function(err, user) {
         if (err) return workflow.emit('exception', err);
-        console.log(user);
         workflow.emit('response');
       });
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };
 
 
 
 exports.delete = function(req, res, next){
-  //create a workflow event emitter
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
-      workflow.outcome.errors.push('You may not delete administrators.');
+      workflow.outcome.errors.push('You may not delete admins.');
+      return workflow.emit('response');
+    }
+    
+    if (req.user.roles.admin._id == req.params.id) {
+      workflow.outcome.errors.push('You may not delete your own admin record.');
       return workflow.emit('response');
     }
     
@@ -368,12 +399,11 @@ exports.delete = function(req, res, next){
   });
   
   workflow.on('deleteAdministrator', function(err) {
-    req.app.db.models.Admin.findByIdAndRemove(req.params.id, function(err, administrator) {
+    req.app.db.models.Admin.findByIdAndRemove(req.params.id, function(err, admin) {
         if (err) return workflow.emit('exception', err);
         workflow.emit('response');
     });
   });
   
-  //start the workflow
   workflow.emit('validate');
 };

@@ -9,7 +9,7 @@ block feet
 
 block body
   #header
-  #contact.form-horizontal
+  #details.form-horizontal
   #login.form-horizontal
   #groups.form-horizontal
   #permissions.form-horizontal
@@ -21,32 +21,34 @@ block body
         a(href='/admin/administrators/') Administrators
         |  / <%= name.full %>
   
-  script(type='text/template', id='tmpl-contact')
+  script(type='text/template', id='tmpl-details')
     legend Contact Info
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
-    div.control-group(class!='<%= errfor["name.first"] ? "error" : "" %>')
+    div.control-group(class!='<%= errfor.first ? "error" : "" %>')
       label.control-label First Name:
       div.controls
-        input(type='text', name='name.first', value!='<%= name.first %>')
-        span.help-inline <%= errfor['name.first'] %>
-    div.control-group(class!='<%= errfor["name.middle"] ? "error" : "" %>')
+        input(type='text', name='first', value!='<%= first %>')
+        span.help-inline <%= errfor.first %>
+    div.control-group(class!='<%= errfor.middle ? "error" : "" %>')
       label.control-label Middle Name:
       div.controls
-        input(type='text', name='name.middle', value!='<%= name.middle %>')
-        span.help-inline <%= errfor['name.middle'] %>
-    div.control-group(class!='<%= errfor["name.last"] ? "error" : "" %>')
+        input(type='text', name='middle', value!='<%= middle %>')
+        span.help-inline <%= errfor['middle'] %>
+    div.control-group(class!='<%= errfor.last ? "error" : "" %>')
       label.control-label Last Name:
       div.controls
-        input(type='text', name='name.last', value!='<%= name.last %>')
-        span.help-inline <%= errfor['name.last'] %>
+        input(type='text', name='last', value!='<%= last %>')
+        span.help-inline <%= errfor.last %>
     div.form-actions
       button.btn.btn-primary.btn-update(type='button') Update
   
@@ -55,15 +57,16 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     div.control-group(class!='<%= errfor.newUsername ? "error" : "" %>')
       label.control-label Username:
       div.controls
         div.input-append
-          |<% if (user.username) { %>
+          |<% if (name) { %>
           span.uneditable-input
-            |<%= user.username %>
+            |<%= name %>
           button.btn.btn-warning.btn-user-unlink(type='button') Unlink
           button.btn.btn-user-open(type='button') Open
           |<% } else { %>
@@ -77,20 +80,20 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
     div.control-group(class!='<%= errfor.newMembership ? "error" : "" %>')
       label.control-label Add Membership:
       div.controls
         select(name='newMembership')
-          |<% _.each(groupList, function(group) { %>
-          option(value!='<%= group._id %>')
-            |<%= group.name %>
-          |<% }); %>
+          for group in data.adminGroups
+            option(value='#{group._id}') #{group.name}
         | 
         button.btn.btn-success.btn-add(type='button') Add
         span.help-inline <%= errfor.newUsername %>
@@ -118,10 +121,12 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info
+        button.close(type='button', data-dismiss='alert') &times;
         | Changes have been saved.
       |<% } %>
     div.control-group(class!='<%= errfor.newPermission ? "error" : "" %>')
@@ -162,6 +167,7 @@ block body
     div.alerts
       |<% _.each(errors, function(err) { %>
       div.alert.alert-error
+        button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
     span.badge.badge-important
@@ -173,4 +179,3 @@ block body
       button.btn.btn-danger.btn-delete(type='button') Delete
   
   script(type='text/template', id='data-record') !{data.record}
-  script(type='text/template', id='data-group-list') !{data.groupList}
