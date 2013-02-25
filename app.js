@@ -36,12 +36,12 @@ app.configure(function(){
   app.set('strict routing', true);
   app.set('project-name', 'Drywall.js');
   app.set('company-name', 'Acme, Inc.');
-  app.set('admin-email', 'complexodus@gmail.com');
+  app.set('admin-email', 'your@email.addy');
   app.set('email-from-name', app.get('project-name')+ ' Website');
-  app.set('email-from-address', 'complexodus@gmail.com');
+  app.set('email-from-address', 'your@email.addy');
   app.set('email-credentials', {
-    user: 'complexodus@gmail.com',
-    password: 'h3r0kukn0w5',
+    user: 'your@email.addy',
+    password: 'bl4rg!',
     host: 'smtp.gmail.com',
     ssl: true
   });
