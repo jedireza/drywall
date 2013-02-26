@@ -2,3 +2,14 @@
   color: #525252 !important;
   position: relative;
 }
+
+
+.thumbnail-open {
+}
+.thumbnail-open img {
+  position: absolute;
+  z-index: 9990;
+  left: 0px;
+  width: 100%;
+  height: auto;
+}
