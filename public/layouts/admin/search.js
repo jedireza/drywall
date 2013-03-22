@@ -109,7 +109,7 @@
         return;
       }
       
-      this.collection.fetch({ data: {q: query} });
+      this.collection.fetch({ data: {q: query}, reset: true });
     },
     navigateResults: function(event) {
       //navigable results

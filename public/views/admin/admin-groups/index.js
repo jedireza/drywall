@@ -232,11 +232,11 @@
       app.mainView = new app.MainView();
     },
     default: function() {
-      if (!app.firstLoad) app.resultsView.collection.fetch();
+      if (!app.firstLoad) app.resultsView.collection.fetch({ reset: true });
       app.firstLoad = false;
     },
     query: function(params) {
-      app.resultsView.collection.fetch({ data: params });
+      app.resultsView.collection.fetch({ data: params, reset: true });
       app.firstLoad = false;
     }
   });
