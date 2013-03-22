@@ -22,7 +22,7 @@ exports.find = function(req, res, next){
       return;
     }
     
-    if (req.header('x-requested-with') == 'XMLHttpRequest') {
+    if (req.xhr) {
       res.header("Cache-Control", "no-cache, no-store, must-revalidate");
       results.filters = req.query;
       res.send(results);
@@ -63,7 +63,7 @@ exports.read = function(req, res, next){
       return;
     }
     
-    if (req.header('x-requested-with') == 'XMLHttpRequest') {
+    if (req.xhr) {
       res.send(outcome.record);
     }
     else {
