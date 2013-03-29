@@ -45,7 +45,6 @@ exports = module.exports = function(app) {
   app.put('/admin/users/:id/', require('./views/admin/users/index').update);
   app.put('/admin/users/:id/password/', require('./views/admin/users/index').password);
   app.put('/admin/users/:id/role-admin/', require('./views/admin/users/index').linkAdmin);
-  app.put('/admin/users/:id/role-admin/', require('./views/admin/users/index').linkAdmin);
   app.delete('/admin/users/:id/role-admin/', require('./views/admin/users/index').unlinkAdmin);
   app.put('/admin/users/:id/role-account/', require('./views/admin/users/index').linkAccount);
   app.delete('/admin/users/:id/role-account/', require('./views/admin/users/index').unlinkAccount);
@@ -102,4 +101,7 @@ exports = module.exports = function(app) {
   app.all('/account*', ensureAuthenticated);
   app.all('/account*', ensureAccount);
   app.get('/account/', require('./views/account/index').init);
+  
+  //route not found
+  app.all('*', require('./views/http/index').http404);
 }

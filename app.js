@@ -61,6 +61,9 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   
+  //error handler
+  app.use(require('./views/http/index').http500);
+  
   //locals
   app.locals.projectName = app.get('project-name');
   app.locals.copyrightYear = new Date().getFullYear();
