@@ -37,7 +37,7 @@ Note: The apps on Heroku and Nodejitsu have been modified so you cannot change t
 Screen Shots & Video
 ------------
 
-See the project page: http://jedireza.github.com/drywall/
+See the project page: http://jedireza.github.io/drywall/
 
 Installation
 ------------
