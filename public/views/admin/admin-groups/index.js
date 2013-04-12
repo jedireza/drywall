@@ -9,7 +9,7 @@
  * MODELS
  **/
   app.Record = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       _id: undefined,
       name: ''
@@ -164,7 +164,7 @@
       this.filter();
     },
     filter: function() {  
-      var query = $("#filters form").serialize();
+      var query = $('#filters form').serialize();
       Backbone.history.navigate('q/'+ query, { trigger: true }); 
     }
   });
@@ -196,7 +196,7 @@
       }
     },
     goToPage: function(event) {
-      var query = $("#filters form").serialize() +"&page="+ $(event.target).data('page');
+      var query = $('#filters form').serialize() +'&page='+ $(event.target).data('page');
       Backbone.history.navigate('q/'+ query, { trigger: true }); 
       var body = $('body').scrollTop(0);
     }

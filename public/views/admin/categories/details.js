@@ -9,14 +9,14 @@
  * MODELS
  **/
   app.Category = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     url: function() {
       return '/admin/categories/'+ this.id +'/';
     }
   });
   
   app.Delete = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -28,7 +28,7 @@
   });
   
   app.Details = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],

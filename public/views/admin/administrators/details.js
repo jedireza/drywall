@@ -9,14 +9,14 @@
  * MODELS
  **/
   app.Admin = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     url: function() {
       return '/admin/administrators/'+ this.id +'/';
     }
   });
   
   app.Delete = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -28,7 +28,7 @@
   });
   
   app.Details = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -50,7 +50,7 @@
   });
   
   app.Login = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -72,7 +72,7 @@
   });
   
   app.Groups = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -93,7 +93,7 @@
   });
   
   app.Permissions = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],

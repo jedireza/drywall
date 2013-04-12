@@ -9,14 +9,14 @@
  * MODELS
  **/
   app.Account = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     url: function() {
       return '/admin/accounts/'+ this.id +'/';
     }
   });
   
   app.Delete = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -28,7 +28,7 @@
   });
   
   app.Details = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -53,7 +53,7 @@
   });
   
   app.Login = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -75,7 +75,7 @@
   });
   
   app.Note = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],
@@ -99,7 +99,7 @@
   });
   
   app.Status = Backbone.Model.extend({
-    idAttribute: "_id",
+    idAttribute: '_id',
     defaults: {
       success: false,
       errors: [],

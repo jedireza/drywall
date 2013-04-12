@@ -23,7 +23,7 @@ exports.find = function(req, res, next){
     }
     
     if (req.xhr) {
-      res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
       results.filters = req.query;
       res.send(results);
     }
