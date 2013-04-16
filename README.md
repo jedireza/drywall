@@ -31,7 +31,6 @@ https://drywall.herokuapp.com/
 https://drywall.nodejitsu.com/
  * username: root
  * password: j1ts00t
-(the nodejitsu site is currently down as we wait to hear back for free project hosting)
 
 Note: The apps on Heroku and Nodejitsu have been modified so you cannot change the root user, the root users's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
 
