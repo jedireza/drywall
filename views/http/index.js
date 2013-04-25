@@ -14,6 +14,7 @@ exports.http500 = function(err, req, res, next){
     res.send({ error: 'Something went wrong.' });
   }
   else {
+    console.log(err.stack);
     res.render('http/500');
   }
 };
