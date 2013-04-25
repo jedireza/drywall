@@ -11,7 +11,7 @@ exports.sendMessage = function(req, res){
     if (!req.body.message) workflow.outcome.errfor.message = 'required';
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) {
+    if (workflow.hasErrors()) {
       workflow.outcome.errors.push('missing required info');
       return workflow.emit('response');
     }

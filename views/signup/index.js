@@ -34,7 +34,7 @@ exports.signup = function(req, res){
     if (!req.body.password) workflow.outcome.errfor.password = 'required';
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('duplicateUsernameCheck');
   });
@@ -241,7 +241,7 @@ exports.signupSocial = function(req, res){
     }
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('duplicateUsernameCheck');
   });

@@ -158,7 +158,7 @@ exports.update = function(req, res, next){
     if (!req.body.last) workflow.outcome.errfor.last = 'required';
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('patchAccount');
   });
@@ -363,7 +363,7 @@ exports.newStatus = function(req, res, next){
     if (!req.body.id) workflow.outcome.errors.push('Please choose a status.');
     
     //return if we have errors already
-    if (workflow.outcome.errors.length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('addStatus');
   });

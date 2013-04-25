@@ -153,7 +153,7 @@ exports.update = function(req, res, next){
     if (!req.body.last) workflow.outcome.errfor.last = 'required';
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('patchAccount');
   });
@@ -211,7 +211,7 @@ exports.identity = function(req, res, next){
     }
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0) return workflow.emit('response');
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('duplicateUsernameCheck');
   });
@@ -280,9 +280,7 @@ exports.password = function(req, res, next){
     }
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0 || workflow.outcome.errors.length != 0) {
-      return workflow.emit('response');
-    }
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('patchUser');
   });

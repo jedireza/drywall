@@ -17,9 +17,7 @@ exports.set = function(req, res){
     if (req.body.password != req.body.confirm) workflow.outcome.errors.push('Passwords do not match.');
     
     //return if we have errors already
-    if (Object.keys(workflow.outcome.errfor).length != 0 || workflow.outcome.errors.length != 0) {
-      return workflow.emit('response');
-    }
+    if (workflow.hasErrors()) return workflow.emit('response');
     
     workflow.emit('patchUser');
   });

@@ -7,16 +7,20 @@ exports = module.exports = function(req, res) {
     errfor: {}
   };
   
+  workflow.hasErrors = function() {
+    if (Object.keys(workflow.outcome.errfor).length != 0 || workflow.outcome.errors.length != 0) {
+      return true;
+    }
+    return false;
+  };
+  
   workflow.on('exception', function(err) {
     workflow.outcome.errors.push('Exception: '+ err);
     return workflow.emit('response');
   });
   
   workflow.on('response', function() {
-    if (workflow.outcome.errors.length == 0 && Object.keys(workflow.outcome.errfor).length == 0) {
-      workflow.outcome.success = true;
-    }
-    
+    workflow.outcome.success = !workflow.hasErrors();
     res.send(workflow.outcome);
   });
   
