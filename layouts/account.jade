@@ -6,6 +6,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='/vendor/font-awesome/css/font-awesome.min.css')
     link(rel='stylesheet', href='/layouts/utility.css')
     link(rel='stylesheet', href='/layouts/default.css')
     block neck
@@ -22,6 +23,7 @@ html
           div.nav-collapse
             ul.nav
               li: a(href='/account/') My Account
+              li: a(href='/account/settings/') Settings
             ul.nav.pull-right
               li: a(href='/logout/')
                 i.icon-user.icon-white
