@@ -119,6 +119,23 @@ exports = module.exports = function(app, passport) {
   app.all('/account*', ensureAccount);
   app.get('/account/', require('./views/account/index').init);
   
+  //account > settings
+  app.get('/account/settings/', require('./views/account/settings/index').init);
+  app.put('/account/settings/', require('./views/account/settings/index').update);
+  app.put('/account/settings/identity/', require('./views/account/settings/index').identity);
+  app.put('/account/settings/password/', require('./views/account/settings/index').password);
+  
+  //account > settings > social
+  app.get('/account/settings/twitter/', passport.authenticate('twitter', { callbackURL: '/account/settings/twitter/callback/' }));
+  app.get('/account/settings/twitter/callback/', require('./views/account/settings/index').connectTwitter);
+  app.get('/account/settings/twitter/disconnect/', require('./views/account/settings/index').disconnectTwitter);
+  app.get('/account/settings/github/', passport.authenticate('github', { callbackURL: '/account/settings/github/callback/' }));
+  app.get('/account/settings/github/callback/', require('./views/account/settings/index').connectGitHub);
+  app.get('/account/settings/github/disconnect/', require('./views/account/settings/index').disconnectGitHub);
+  app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }));
+  app.get('/account/settings/facebook/callback/', require('./views/account/settings/index').connectFacebook);
+  app.get('/account/settings/facebook/disconnect/', require('./views/account/settings/index').disconnectFacebook);
+  
   //route not found
   app.all('*', require('./views/http/index').http404);
 }
