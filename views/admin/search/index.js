@@ -7,7 +7,7 @@ exports.find = function(req, res, next){
   var outcome = {};
   
   var searchUsers = function(callback) {
-    req.app.db.models.User.find({username: regexQuery}, 'username').sort('username').limit(10).lean().exec(function(err, results) {
+    req.app.db.models.User.find({search: regexQuery}, 'username').sort('username').limit(10).lean().exec(function(err, results) {
       if (err) return callback(err, null);
       outcome.users = results;
       callback(null, 'done');

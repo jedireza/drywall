@@ -92,7 +92,13 @@ exports.create = function(req, res, next){
   });
   
   workflow.on('createUser', function() {
-    req.app.db.models.User.create({ username: req.body.username }, function(err, user) {
+    var fieldsToSet = {
+      username: req.body.username,
+      search: [
+        req.body.username
+      ]
+    };
+    req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
       
       workflow.outcome.record = user;
@@ -162,7 +168,11 @@ exports.update = function(req, res, next){
     var fieldsToSet = {
       isActive: req.body.isActive,
       username: req.body.username,
-      email: req.body.email
+      email: req.body.email,
+      search: [
+        req.body.username,
+        req.body.email
+      ]
     };
     
     req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, user) {
