@@ -24,10 +24,7 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) {
-      res.send(500, 'Model pagedFind error. '+ err);
-      return;
-    }
+    if (err) return next(err);
     
     if (req.xhr) {
       res.header("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -45,10 +42,7 @@ exports.find = function(req, res, next){
 
 exports.read = function(req, res, next){
   req.app.db.models.User.findById(req.params.id).populate('roles.admin', 'name.full').populate('roles.account', 'name.full').exec(function(err, user) {
-    if (err) {
-      res.send(500, 'Model findOne error. '+ err);
-      return;
-    }
+    if (err) return next(err);
     
     if (req.xhr) {
       res.send(user);

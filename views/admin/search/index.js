@@ -26,15 +26,12 @@ exports.find = function(req, res, next){
     req.app.db.models.Admin.find({search: regexQuery}, 'name.full').sort('name.full').limit(10).lean().exec(function(err, results) {
       if (err) callback(err, null);
       outcome.administrators = results;
-      return callback(null, 'done');
+      return callback(new Error('blowed up'), 'done');
     });
   };
   
   var asyncFinally = function(err, results) {
-    if (err) {
-      res.send(500, 'Exception: '+ err);
-      return;
-    }
+    if (err) return next(err);
     
     res.send(outcome);
   };

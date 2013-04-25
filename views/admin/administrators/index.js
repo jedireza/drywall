@@ -17,10 +17,7 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) {
-      res.send(500, 'Model pagedFind error. '+ err);
-      return;
-    }
+    if (err) return next(err);
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -58,10 +55,7 @@ exports.read = function(req, res, next){
   };
   
   var asyncFinally = function(err, results) {
-    if (err) {
-      res.send(500, 'Model findOne error. '+ err);
-      return;
-    }
+    if (err) return next(err);
     
     if (req.xhr) {
       res.send(outcome.record);
