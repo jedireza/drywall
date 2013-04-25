@@ -23,9 +23,6 @@ app.db.once('open', function () {
 //config data models
 require('./models')(app, mongoose);
 
-//config passport
-require('./passport')(app, passport);
-
 //config all
 app.configure(function(){
   //settings
@@ -37,6 +34,8 @@ app.configure(function(){
   app.set('project-name', 'Drywall.js');
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
+  
+  //email (smtp) settings
   app.set('email-from-name', app.get('project-name')+ ' Website');
   app.set('email-from-address', 'your@email.addy');
   app.set('email-credentials', {
@@ -46,6 +45,18 @@ app.configure(function(){
     ssl: true
   });
   
+  //twitter settings
+  app.set('twitter-oauth-key', '');
+  app.set('twitter-oauth-secret', '');
+  
+  //github settings
+  app.set('github-oauth-key', '');
+  app.set('github-oauth-secret', '');
+  
+  //facebook settings
+  app.set('facebook-oauth-key', '');
+  app.set('facebook-oauth-secret', '');
+  
   //middleware
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.logger('dev'));
@@ -53,7 +64,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
-  app.use(express.session({ 
+  app.use(express.session({
     secret: 'Sup3rS3cr3tK3y',
     store: new mongoStore({ url: app.get('mongodb-uri') })
   }));
@@ -75,8 +86,11 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+//config passport
+require('./passport')(app, passport);
+
 //route requests
-require('./routes')(app);
+require('./routes')(app, passport);
 
 //utilities
 require('./utilities')(app);

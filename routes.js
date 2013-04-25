@@ -12,7 +12,7 @@ function ensureAccount(req, res, next) {
   res.redirect('/');
 }
 
-exports = module.exports = function(app) {
+exports = module.exports = function(app, passport) {
   //front end
   app.get('/', require('./views/index').init);
   app.get('/about/', require('./views/about/index').init);
@@ -23,6 +23,15 @@ exports = module.exports = function(app) {
   app.get('/signup/', require('./views/signup/index').init);
   app.post('/signup/', require('./views/signup/index').signup);
   
+  //social sign up
+  app.post('/signup/social/', require('./views/signup/index').signupSocial);
+  app.get('/signup/twitter/', passport.authenticate('twitter', { callbackURL: '/signup/twitter/callback/' }));
+  app.get('/signup/twitter/callback/', require('./views/signup/index').signupTwitter);
+  app.get('/signup/github/', passport.authenticate('github', { callbackURL: '/signup/github/callback/' }));
+  app.get('/signup/github/callback/', require('./views/signup/index').signupGitHub);
+  app.get('/signup/facebook/', passport.authenticate('facebook', { callbackURL: '/signup/facebook/callback/' }));
+  app.get('/signup/facebook/callback/', require('./views/signup/index').signupFacebook);
+  
   //login/out
   app.get('/login/', require('./views/login/index').init);
   app.post('/login/', require('./views/login/index').login);
@@ -32,6 +41,14 @@ exports = module.exports = function(app) {
   app.get('/login/reset/:token/', require('./views/login/reset/index').init);
   app.put('/login/reset/:token/', require('./views/login/reset/index').set);
   app.get('/logout/', require('./views/logout/index').init);
+  
+  //social login
+  app.get('/login/twitter/', passport.authenticate('twitter', { callbackURL: '/login/twitter/callback/' }));
+  app.get('/login/twitter/callback/', require('./views/login/index').loginTwitter);
+  app.get('/login/github/', passport.authenticate('github', { callbackURL: '/login/github/callback/' }));
+  app.get('/login/github/callback/', require('./views/login/index').loginGitHub);
+  app.get('/login/facebook/', passport.authenticate('facebook', { callbackURL: '/login/facebook/callback/' }));
+  app.get('/login/facebook/callback/', require('./views/login/index').loginFacebook);
   
   //admin
   app.all('/admin*', ensureAuthenticated);

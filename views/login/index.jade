@@ -11,6 +11,31 @@ block body
     h1 Please Login
   #login
   
+  if oauthTwitter || oauthGitHub || oauthFacebook
+    div.form-horizontal
+      h2 Or Login With...
+      if oauthMessage
+        div.alerts
+          div.alert.alert-info
+            button.close(type='button', data-dismiss='alert') &times;
+            |#{oauthMessage} 
+            b
+              a(href='/signup/') Sign Up Here
+      div.form-actions
+        div.btn-group
+          if oauthTwitter
+            a.btn.btn-info(href='/login/twitter/')
+              i.icon-twitter.icon-large
+              |  Twitter
+          if oauthGitHub
+            a.btn.btn-info(href='/login/github/')
+              i.icon-github.icon-large
+              |  GitHub
+          if oauthFacebook
+            a.btn.btn-info(href='/login/facebook/')
+              i.icon-facebook-sign.icon-large
+              |  Facebook
+  
   script(type='text/template', id='tmpl-login')
     form.form-horizontal
       div.alerts

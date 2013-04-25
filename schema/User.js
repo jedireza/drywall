@@ -9,7 +9,10 @@ exports = module.exports = function(app, mongoose) {
     },
     isActive: String,
     timeCreated: { type: Date, default: Date.now },
-    resetPasswordToken: String
+    resetPasswordToken: String,
+    twitter: {},
+    github: {},
+    facebook: {}
   });
   userSchema.methods.canPlayRoleOf = function(role) {
     if (role == "admin" && this.roles.admin) return true;
@@ -30,6 +33,9 @@ exports = module.exports = function(app, mongoose) {
   userSchema.index({ email: 1 });
   userSchema.index({ timeCreated: 1 });
   userSchema.index({ resetPasswordToken: 1 });
+  userSchema.index({ 'twitter.id': 1 });
+  userSchema.index({ 'github.id': 1 });
+  userSchema.index({ 'facebook.id': 1 });
   userSchema.set('autoIndex', (app.get('env') == 'development'));
   app.db.model('User', userSchema);
 }

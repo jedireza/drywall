@@ -4,10 +4,17 @@ exports.init = function(req, res){
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
-    if (!req.query.returnUrl) req.query.returnUrl = '/';
-    res.render('login/index', { returnUrl: req.query.returnUrl });
+    res.render('login/index', {
+      returnUrl: req.query.returnUrl || '/',
+      oauthMessage: '',
+      oauthTwitter: !!req.app.get('twitter-oauth-key'),
+      oauthGitHub: !!req.app.get('github-oauth-key'),
+      oauthFacebook: !!req.app.get('facebook-oauth-key')
+    });
   }
 };
+
+
 
 exports.login = function(req, res){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -42,4 +49,91 @@ exports.login = function(req, res){
   });
   
   workflow.emit('validate');
+};
+
+
+
+exports.loginTwitter = function(req, res, next){
+  req._passport.instance.authenticate('twitter', function(err, user, info) {
+    if (!info || !info.profile) return res.redirect('/login/');
+    
+    req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
+      if (err) return next(err);
+      
+      if (!user) {
+        res.render('login/index', {
+          returnUrl: req.query.returnUrl || '/',
+          oauthMessage: 'No users found linked to your Twitter account. You may need to create an account first.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+      else {
+        req.login(user, function(err) {
+          if (err) return next(err);
+          
+          res.redirect(user.defaultReturnUrl());
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+
+
+exports.loginGitHub = function(req, res, next){
+  req._passport.instance.authenticate('github', function(err, user, info) {
+    if (!info || !info.profile) return res.redirect('/login/');
+    
+    req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
+      if (err) return next(err);
+      
+      if (!user) {
+        res.render('login/index', {
+          returnUrl: req.query.returnUrl || '/',
+          oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+      else {
+        req.login(user, function(err) {
+          if (err) return next(err);
+          
+          res.redirect(user.defaultReturnUrl());
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+
+
+exports.loginFacebook = function(req, res, next){
+  req._passport.instance.authenticate('facebook', { callbackURL: '/login/facebook/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) return res.redirect('/login/');
+    
+    req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
+      if (err) return next(err);
+      
+      if (!user) {
+        res.render('login/index', {
+          returnUrl: req.query.returnUrl || '/',
+          oauthMessage: 'No users found linked to your Facebook account. You may need to create an account first.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+      else {
+        req.login(user, function(err) {
+          if (err) return next(err);
+          
+          res.redirect(user.defaultReturnUrl());
+        });
+      }
+    });
+  })(req, res, next);
 };
