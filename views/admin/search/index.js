@@ -26,7 +26,7 @@ exports.find = function(req, res, next){
     req.app.db.models.Admin.find({search: regexQuery}, 'name.full').sort('name.full').limit(10).lean().exec(function(err, results) {
       if (err) callback(err, null);
       outcome.administrators = results;
-      return callback(new Error('blowed up'), 'done');
+      return callback(null, 'done');
     });
   };
   
