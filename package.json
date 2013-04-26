@@ -14,6 +14,7 @@
     "emailjs": "~0.3.4",
     "passport": "~0.1.16",
     "passport-local": "~0.1.6",
+    "passport-oauth": "~0.1.15",
     "passport-twitter": "~0.1.4",
     "passport-facebook": "~0.1.5",
     "passport-github": "~0.1.4"
