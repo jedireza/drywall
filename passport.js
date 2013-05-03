@@ -54,7 +54,8 @@ exports = module.exports = function(app, passport) {
   if (app.get('github-oauth-key')) {
     passport.use(new GitHubStrategy({
         clientID: app.get('github-oauth-key'),
-        clientSecret: app.get('github-oauth-secret')
+        clientSecret: app.get('github-oauth-secret'),
+        customHeaders: { "User-Agent": app.get('project-name') }
       },
       function(accessToken, refreshToken, profile, done) {
         //hand off to caller
