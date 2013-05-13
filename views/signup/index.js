@@ -95,7 +95,7 @@ exports.signup = function(req, res){
         workflow.user.username
       ]
     };
-    req.app.db.models.Account.create({}, function(err, account) {
+    req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) return workflow.emit('exception', err);
       
       //update user with account
