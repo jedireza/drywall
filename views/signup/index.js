@@ -86,8 +86,8 @@ exports.signup = function(req, res){
   
   workflow.on('createAccount', function() {
     var fieldsToSet = {
-       'name.full': workflow.user.username,
-       user: {
+      'name.full': workflow.user.username,
+      user: {
         id: workflow.user._id,
         name: workflow.user.username
       },
