@@ -27,7 +27,8 @@ exports = module.exports = function(app, mongoose) {
     return returnUrl;
   };
   userSchema.statics.encryptPassword = function(password) {
-    return require('crypto').createHash('sha512').update(password).digest('hex');
+    return require('crypto').createHmac(
+      'sha512', app.get('local-password-key')).update(password).digest('hex');
   };
   userSchema.plugin(require('./plugins/pagedFind'));
   userSchema.index({ username: 1 }, {unique: true});

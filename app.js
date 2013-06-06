@@ -56,6 +56,9 @@ app.configure(function(){
   //facebook settings
   app.set('facebook-oauth-key', '');
   app.set('facebook-oauth-secret', '');
+
+  //local login settings
+  app.set('local-password-key', 'another secret key')
   
   //middleware
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
