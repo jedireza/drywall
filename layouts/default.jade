@@ -28,14 +28,13 @@ html
                 li: a(href='/signup/') Sign Up
               li: a(href='/contact/') Contact
             ul.nav.pull-right
-              if user
-                li: a(href='/account/')
-                  i.icon-user
-                  |  My Account
-              else
-                li: a(href='/login/')
-                  i.icon-user
-                  |  Login
+              li: a(href='/login/')
+                if user
+                    i.icon-user
+                    |  My Account
+                else
+                    i.icon-user
+                    |  Login
 
 
     div.page
