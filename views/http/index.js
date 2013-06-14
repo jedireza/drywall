@@ -1,10 +1,10 @@
 exports.http404 = function(req, res){
   res.status(404);
   if (req.xhr) {
-    res.send({ error: 'Resource not found.' });
+    res.send({ error: 'Resource not found.'});
   }
   else {
-    res.render('http/404');
+    res.render('http/404', { user: req.user });
   }
 };
 
@@ -15,6 +15,6 @@ exports.http500 = function(err, req, res, next){
   }
   else {
     console.log(err.stack);
-    res.render('http/500');
+    res.render('http/500', { user: req.user });
   }
 };

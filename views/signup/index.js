@@ -1,6 +1,6 @@
 exports.init = function(req, res){
   //are we logged in?
-  if (req.isAuthenticated()) { 
+  if (req.isAuthenticated()) {
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
@@ -8,7 +8,8 @@ exports.init = function(req, res){
       oauthMessage: '',
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
-      oauthFacebook: !!req.app.get('facebook-oauth-key')
+      oauthFacebook: !!req.app.get('facebook-oauth-key'),
+      user: req.user
     });
   }
 };
@@ -17,7 +18,7 @@ exports.init = function(req, res){
 
 exports.signup = function(req, res){
   var workflow = new req.app.utility.Workflow(req, res);
-  
+
   workflow.on('validate', function() {
     if (!req.body.username) {
       workflow.outcome.errfor.username = 'required';
@@ -32,39 +33,39 @@ exports.signup = function(req, res){
       workflow.outcome.errfor.email = 'invalid email format';
     }
     if (!req.body.password) workflow.outcome.errfor.password = 'required';
-    
+
     //return if we have errors already
     if (workflow.hasErrors()) return workflow.emit('response');
-    
+
     workflow.emit('duplicateUsernameCheck');
   });
-  
+
   workflow.on('duplicateUsernameCheck', function() {
     req.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       if (user) {
         workflow.outcome.errfor.username = 'username already taken';
         return workflow.emit('response');
       }
-      
+
       workflow.emit('duplicateEmailCheck');
     });
   });
-  
+
   workflow.on('duplicateEmailCheck', function() {
     req.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       if (user) {
         workflow.outcome.errfor.email = 'email already registered';
         return workflow.emit('response');
       }
-      
+
       workflow.emit('createUser');
     });
   });
-  
+
   workflow.on('createUser', function() {
     var fieldsToSet = {
       isActive: 'yes',
@@ -78,12 +79,12 @@ exports.signup = function(req, res){
     };
     req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       workflow.user = user;
       workflow.emit('createAccount');
     });
   });
-  
+
   workflow.on('createAccount', function() {
     var fieldsToSet = {
       'name.full': workflow.user.username,
@@ -97,7 +98,7 @@ exports.signup = function(req, res){
     };
     req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) return workflow.emit('exception', err);
-      
+
       //update user with account
       workflow.user.roles.account = account._id;
       workflow.user.save(function(err, user) {
@@ -106,7 +107,7 @@ exports.signup = function(req, res){
       });
     });
   });
-  
+
   workflow.on('sendWelcomeEmail', function() {
     req.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
@@ -129,11 +130,11 @@ exports.signup = function(req, res){
       }
     });
   });
-  
+
   workflow.on('logUserIn', function() {
     req._passport.instance.authenticate('local', function(err, user, info) {
       if (err) return workflow.emit('exception', err);
-      
+
       if (!user) {
         workflow.outcome.errors.push('Login failed. That is strange.');
         return workflow.emit('response');
@@ -141,14 +142,14 @@ exports.signup = function(req, res){
       else {
         req.login(user, function(err) {
           if (err) return workflow.emit('exception', err);
-          
+
           workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           workflow.emit('response');
         });
       }
     })(req, res);
   });
-  
+
   workflow.emit('validate');
 };
 
@@ -157,10 +158,10 @@ exports.signup = function(req, res){
 exports.signupTwitter = function(req, res, next) {
   req._passport.instance.authenticate('twitter', function(err, user, info) {
     if (!info || !info.profile) return res.redirect('/signup/');
-    
+
     req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
       if (err) return next(err);
-      
+
       if (!user) {
         req.session.socialProfile = info.profile;
         res.render('signup/social', { email: '' });
@@ -182,10 +183,10 @@ exports.signupTwitter = function(req, res, next) {
 exports.signupGitHub = function(req, res, next) {
   req._passport.instance.authenticate('github', function(err, user, info) {
     if (!info || !info.profile) return res.redirect('/signup/');
-    
+
     req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
       if (err) return next(err);
-      
+
       if (!user) {
         req.session.socialProfile = info.profile;
         res.render('signup/social', { email: info.profile.emails[0].value || '' });
@@ -207,10 +208,10 @@ exports.signupGitHub = function(req, res, next) {
 exports.signupFacebook = function(req, res, next) {
   req._passport.instance.authenticate('facebook', { callbackURL: '/signup/facebook/callback/' }, function(err, user, info) {
     if (!info || !info.profile) return res.redirect('/signup/');
-    
+
     req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
       if (err) return next(err);
-      
+
       if (!user) {
         req.session.socialProfile = info.profile;
         res.render('signup/social', { email: info.profile.emails[0].value || '' });
@@ -231,7 +232,7 @@ exports.signupFacebook = function(req, res, next) {
 
 exports.signupSocial = function(req, res){
   var workflow = new req.app.utility.Workflow(req, res);
-  
+
   workflow.on('validate', function() {
     if (!req.body.email) {
       workflow.outcome.errfor.email = 'required';
@@ -239,46 +240,46 @@ exports.signupSocial = function(req, res){
     else if (!/^[a-zA-Z0-9\-\_\.\+]+@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+$/.test(req.body.email)) {
       workflow.outcome.errfor.email = 'invalid email format';
     }
-    
+
     //return if we have errors already
     if (workflow.hasErrors()) return workflow.emit('response');
-    
+
     workflow.emit('duplicateUsernameCheck');
   });
-  
+
   workflow.on('duplicateUsernameCheck', function() {
     workflow.username = req.session.socialProfile.username;
     if (!/^[a-zA-Z0-9\-\_]+$/.test(workflow.username)) {
       workflow.username = workflow.username.replace(/[^a-zA-Z0-9\-\_]/g, '');
     }
-    
+
     req.app.db.models.User.findOne({ username: workflow.username }, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       if (user) {
         workflow.username = workflow.username + req.session.socialProfile.id;
       }
       else {
         workflow.username = workflow.username;
       }
-      
+
       workflow.emit('duplicateEmailCheck');
     });
   });
-  
+
   workflow.on('duplicateEmailCheck', function() {
     req.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       if (user) {
         workflow.outcome.errfor.email = 'email already registered';
         return workflow.emit('response');
       }
-      
+
       workflow.emit('createUser');
     });
   });
-  
+
   workflow.on('createUser', function() {
     var fieldsToSet = {
       isActive: 'yes',
@@ -290,15 +291,15 @@ exports.signupSocial = function(req, res){
       ]
     };
     fieldsToSet[req.session.socialProfile.provider] = req.session.socialProfile._json;
-    
+
     req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) return workflow.emit('exception', err);
-      
+
       workflow.user = user;
       workflow.emit('createAccount');
     });
   });
-  
+
   workflow.on('createAccount', function() {
     var nameParts = req.session.socialProfile.displayName.split(' ');
     var fieldsToSet = {
@@ -316,7 +317,7 @@ exports.signupSocial = function(req, res){
     };
     req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) return workflow.emit('exception', err);
-      
+
       //update user with account
       workflow.user.roles.account = account._id;
       workflow.user.save(function(err, user) {
@@ -325,7 +326,7 @@ exports.signupSocial = function(req, res){
       });
     });
   });
-  
+
   workflow.on('sendWelcomeEmail', function() {
     req.app.utility.email(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
@@ -348,16 +349,16 @@ exports.signupSocial = function(req, res){
       }
     });
   });
-  
+
   workflow.on('logUserIn', function() {
     req.login(workflow.user, function(err) {
       if (err) return workflow.emit('exception', err);
-      
+
       delete req.session.socialProfile;
       workflow.outcome.defaultReturnUrl = workflow.user.defaultReturnUrl();
       workflow.emit('response');
     });
   });
-  
+
   workflow.emit('validate');
 };
