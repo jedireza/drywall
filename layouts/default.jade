@@ -24,17 +24,23 @@ html
             ul.nav
               li: a(href='/') Home
               li: a(href='/about/') About
-              li: a(href='/signup/') Sign Up
+              if !user
+                li: a(href='/signup/') Sign Up
               li: a(href='/contact/') Contact
             ul.nav.pull-right
               li: a(href='/login/')
-                i.icon-user
-                |  Login
-    
+                if user
+                    i.icon-user
+                    |  My Account
+                else
+                    i.icon-user
+                    |  Login
+
+
     div.page
       div.container
         block body
-    
+
     div.footer
       div.container
         div.inner
@@ -43,17 +49,18 @@ html
           ul.links
             li: a(href='/') Home
             li: a(href='/about/') About
-            li: a(href='/signup/') Sign Up
+            if !user
+              li: a(href='/signup/') Sign Up
             li: a(href='/contact/') Contact
           div.clearfix
-    
+
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
-    
+
     script(src='/vendor/jquery/jquery-1.9.1.min.js')
     script(src='/vendor/underscore/underscore-min.js')
     script(src='/vendor/backbone/backbone-min.js')
     script(src='/vendor/bootstrap/js/bootstrap.min.js')
     script(src='/layouts/utility.js')
-    
+
     block feet
