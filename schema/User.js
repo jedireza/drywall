@@ -28,7 +28,6 @@ exports = module.exports = function(app, mongoose) {
   };
   userSchema.statics.encryptPassword = function(password) {
     if(app.get("strong-slow-crypto")){
-      console.log("STORNG!!!");
       //inline require because bcrypt install requires separate tools to be installed (openSSL, node-gyp)
       var bcrypt = require('bcrypt');
       var salt = bcrypt.genSaltSync(10);
