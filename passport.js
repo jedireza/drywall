@@ -22,8 +22,7 @@ exports = module.exports = function(app, passport) {
         if (!user) return done(null, false, { message: 'Unknown user' });
         
         //validate password
-        var encryptedPassword = app.db.models.User.encryptPassword(password);
-        if (user.password != encryptedPassword) {
+        if (!app.db.models.User.isCorrectPassword(password,user.password)) {
           return done(null, false, { message: 'Invalid password' });
         }
         

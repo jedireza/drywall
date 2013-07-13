@@ -27,7 +27,21 @@ exports = module.exports = function(app, mongoose) {
     return returnUrl;
   };
   userSchema.statics.encryptPassword = function(password) {
-    return require('crypto').createHmac('sha512', app.get('crypto-key')).update(password).digest('hex');
+    if(app.get("strong-slow-crypto")){
+      //inline require because bcrypt install requires separate tools to be installed (openSSL, node-gyp)
+      var bcrypt = require('bcrypt');
+      var salt = bcrypt.genSaltSync(10);
+      return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    }else{
+      return require('crypto').createHmac('sha512',app.get('crypto-key')).update(password).digest('hex'); //sha512
+    }
+  };
+  userSchema.statics.isCorrectPassword = function(password, hashInDb) {
+    if(app.get("strong-slow-crypto")){
+      return require('bcrypt').compareSync(password, hashInDb);
+    }else{
+      return this.encryptPassword(password) === hashInDb;
+    }
   };
   userSchema.plugin(require('./plugins/pagedFind'));
   userSchema.index({ username: 1 }, {unique: true});

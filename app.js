@@ -34,7 +34,10 @@ app.configure(function(){
   app.set('project-name', 'Drywall.js');
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
-  app.set('crypto-key', 'k3yb0ardc4t');
+  
+  app.set('strong-slow-crypto', false); //uses bcrypt and per-user salts
+  app.set('crypto-key', 'k3yb0ardc4t'); //not used when strong-slow-crypto = true
+
   
   //email (smtp) settings
   app.set('email-from-name', app.get('project-name')+ ' Website');
