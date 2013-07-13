@@ -17,6 +17,7 @@
     "passport-oauth": "~0.1.15",
     "passport-twitter": "~0.1.5",
     "passport-facebook": "~0.1.5",
-    "passport-github": "~0.1.4"
+    "passport-github": "~0.1.4",
+    "bcrypt":"~0.7.6"
   }
 }
