@@ -56,7 +56,7 @@
       },{
         success: function(model, response, options) {
           if (response.success) {
-            location.href = '/account/';
+            location.href = response.href;
           }
           else {
             model.set(response);

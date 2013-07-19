@@ -6,6 +6,7 @@ exports.init = function(req, res){
   else {
     res.render('login/index', {
       returnUrl: req.query.returnUrl || '/',
+      inactiveMessage: '',
       oauthMessage: '',
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
@@ -63,11 +64,26 @@ exports.loginTwitter = function(req, res, next){
       if (!user) {
         res.render('login/index', {
           returnUrl: req.query.returnUrl || '/',
+          inactiveMessage: '',
           oauthMessage: 'No users found linked to your Twitter account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
+      }
+      else if ('no' === user.isActive) {
+          var message = 'Your account is not active.';
+          if (user.verifyEmailToken) {
+            message += ' Make sure you have verified your email address.';
+          }
+          res.render('login/index', {
+            returnUrl: req.query.returnUrl || '/',
+            inactiveMessage: message,
+            oauthMessage: '',
+            oauthTwitter: !!req.app.get('twitter-oauth-key'),
+            oauthGitHub: !!req.app.get('github-oauth-key'),
+            oauthFacebook: !!req.app.get('facebook-oauth-key')
+          });
       }
       else {
         req.login(user, function(err) {
@@ -92,7 +108,22 @@ exports.loginGitHub = function(req, res, next){
       if (!user) {
         res.render('login/index', {
           returnUrl: req.query.returnUrl || '/',
+          inactiveMessage: '',
           oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+      else if ('no' === user.isActive) {
+        var message = 'Your account is not active.';
+        if (user.verifyEmailToken) {
+          message += ' Make sure you have verified your email address.';
+        }
+        res.render('login/index', {
+          returnUrl: req.query.returnUrl || '/',
+          inactiveMessage: message,
+          oauthMessage: '',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
@@ -121,11 +152,26 @@ exports.loginFacebook = function(req, res, next){
       if (!user) {
         res.render('login/index', {
           returnUrl: req.query.returnUrl || '/',
+          inactiveMessage: '',
           oauthMessage: 'No users found linked to your Facebook account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
+      }
+      else if ('no' === user.isActive) {
+          var message = 'Your account is not active.';
+          if (user.verifyEmailToken) {
+            message += ' Make sure you have verified your email address.';
+          }
+          res.render('login/index', {
+            returnUrl: req.query.returnUrl || '/',
+            inactiveMessage: message,
+            oauthMessage: '',
+            oauthTwitter: !!req.app.get('twitter-oauth-key'),
+            oauthGitHub: !!req.app.get('github-oauth-key'),
+            oauthFacebook: !!req.app.get('facebook-oauth-key')
+          });
       }
       else {
         req.login(user, function(err) {
