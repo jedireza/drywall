@@ -45,6 +45,9 @@ app.configure(function(){
     host: 'smtp.gmail.com',
     ssl: true
   });
+
+  // Require email verification?
+  app.set('verify-email', false);
   
   //twitter settings
   app.set('twitter-oauth-key', '');

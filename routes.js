@@ -22,7 +22,10 @@ exports = module.exports = function(app, passport) {
   //sign up
   app.get('/signup/', require('./views/signup/index').init);
   app.post('/signup/', require('./views/signup/index').signup);
-  
+  app.get('/signup/verify/confirm/', require('./views/signup/verify/index').initConfirm);
+  app.get('/signup/verify/:token/', require('./views/signup/verify/index').init);
+  app.put('/signup/verify/:token/', require('./views/signup/verify/index').verify);
+
   //social sign up
   app.post('/signup/social/', require('./views/signup/index').signupSocial);
   app.get('/signup/twitter/', passport.authenticate('twitter', { callbackURL: '/signup/twitter/callback/' }));
