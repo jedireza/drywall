@@ -81,7 +81,7 @@
       this.addNew();
     },
     addNew: function() {
-      if (this.$el.find('[name="username"]').val() == '') {
+      if (this.$el.find('[name="username"]').val() === '') {
         alert('Please enter a username.');
       }
       else {
@@ -118,7 +118,7 @@
         $('#results-rows').append( view.render().$el );
       }, this);
       
-      if (this.collection.length == 0) {
+      if (this.collection.length === 0) {
         $('#results-rows').append( $('#tmpl-results-empty-row').html() );
       }
     }

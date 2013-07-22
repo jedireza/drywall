@@ -1,3 +1,7 @@
+/*!
+ * Drywall Core Layout Javascript
+ */
+
 //register ajax start|stop handlers
 jQuery(document).ajaxStart(function(){
   $('.ajax-spinner').show();

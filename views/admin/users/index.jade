@@ -4,7 +4,7 @@ block head
   title Manage Users
 
 block feet
-  script(src='/views/admin/users/index.js')
+  script(src='/views/admin/users/index.min.js?#{cacheBreaker}')
 
 block body
   #header
@@ -25,22 +25,22 @@ block body
       div.row
         div.span3
           label Username Search
-          input.stretch(name='username', type='text')
+          input.input-block-level(name='username', type='text')
         div.span3
           label Can Play Role
-          select.stretch(name='roles')
+          select.input-block-level(name='roles')
             option(value='') any
             option(value='admin') admin
             option(value='account') account
         div.span2
           label Is Active
-          select.stretch(name='isActive')
+          select.input-block-level(name='isActive')
             option(value='') either
             option(value='yes') yes
             option(value='no') no
         div.span2
           label Sort By
-          select.stretch(name='sort')
+          select.input-block-level(name='sort')
             option(value='_id') id &#9650;
             option(value='-_id') id &#9660;
             option(value='username') username &#9650;
@@ -49,7 +49,7 @@ block body
             option(value='-email') email &#9660;
         div.span2
           label Limit
-          select.stretch(name='limit')
+          select.input-block-level(name='limit')
             option(value='10') 10 items
             option(value='20', selected='selected') 20 items
             option(value='50') 50 items
@@ -84,6 +84,6 @@ block body
       span.btn-group.pull-right
         button.btn.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
         button.btn.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
-      div.clear
+      div.clearfix
   
   script(type='text/template', id='data-results') !{data.results}

@@ -67,8 +67,8 @@
       
       //handle enter
       if (event.keyCode == 13) {
-        if (this.selectedResult != undefined) {
-          var url = this.$el.find('li.active a').attr('href')
+        if (this.selectedResult !== undefined) {
+          var url = this.$el.find('li.active a').attr('href');
           if (url) location.href = url;
         }
         return false;
@@ -81,7 +81,7 @@
       }
       
       //ignore non-alphanumeric, except backspace
-      if (!/[a-zA-Z0-9-_ ]/.test(String.fromCharCode(event.keyCode)) && event.keyCode != 8) {
+      if (!/[a-zA-Z0-9\-_ ]/.test(String.fromCharCode(event.keyCode)) && event.keyCode != 8) {
         return;
       }
       
@@ -119,12 +119,12 @@
       var movingUp = (event.keyCode == 38);
       var movingDown = (event.keyCode == 40);
       
-      if (this.selectedResult == undefined && this.$el.find('li a').get(0)) {
+      if (this.selectedResult === undefined && this.$el.find('li a').get(0)) {
         this.selectedResult = -1;
       }
       
       //moving up
-      if (movingUp && this.selectedResult == 0) {
+      if (movingUp && this.selectedResult === 0) {
         this.selectedResult = arrLinkResults.length - 1;
       }
       else if (movingUp) {
@@ -140,13 +140,13 @@
       }
       
       if (this.selectedResult > arrLinkResults.length) this.selectedResult = 0;
-      if (arrLinkResults.length == 0) this.selectedResult = undefined;
+      if (arrLinkResults.length === 0) this.selectedResult = undefined;
       
       //select the result
       this.selectResult();
     },
     selectResult: function() {
-      if (this.selectedResult != undefined) {
+      if (this.selectedResult !== undefined) {
         this.$el.find('li a').closest('li').attr('class', '');
         this.$el.find('li a:eq('+ this.selectedResult +')').closest('li').attr('class', 'active');
       }
@@ -164,7 +164,7 @@
       this.render();
     },
     render: function() {
-      if (this.$el.find('.search-query').val() == '') {
+      if (this.$el.find('.search-query').val() === '') {
         this.$el.find('.dropdown').removeClass('open');
       }
       else {
@@ -178,7 +178,7 @@
         $('#_search-results-rows').append( view.render().$el );
       }, this);
       
-      if (this.collection.length == 0) {
+      if (this.collection.length === 0) {
         $('#_search-results-rows').append( $('#tmpl-_search-results-empty-row').html() );
       }
     }

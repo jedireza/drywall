@@ -4,10 +4,10 @@ block head
   title Manage Categories
 
 block neck
-  link(rel='stylesheet', href='/views/admin/categories/index.css')
+  link(rel='stylesheet', href='/views/admin/categories/index.min.css?#{cacheBreaker}')
 
 block feet
-  script(src='/views/admin/categories/index.js')
+  script(src='/views/admin/categories/index.min.js?#{cacheBreaker}')
 
 block body
   #header
@@ -29,20 +29,20 @@ block body
       div.row
         div.span3
           label Pivot Search
-          input.stretch(name='pivot', type='text')
+          input.input-block-level(name='pivot', type='text')
         div.span3
           label Name Search
-          input.stretch(name='name', type='text')
+          input.input-block-level(name='name', type='text')
         div.span3
           label Sort By
-          select.stretch(name='sort')
+          select.input-block-level(name='sort')
             option(value='_id') id &#9650;
             option(value='-_id') id &#9660;
             option(value='name') name &#9650;
             option(value='-name') name &#9660;
         div.span3
           label Limit
-          select.stretch(name='limit')
+          select.input-block-level(name='limit')
             option(value='10') 10 items
             option(value='20', selected='selected') 20 items
             option(value='50') 50 items
@@ -75,6 +75,6 @@ block body
       span.btn-group.pull-right
         button.btn.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
         button.btn.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
-      div.clear
+      div.clearfix
   
   script(type='text/template', id='data-results') !{data.results}

@@ -1,17 +1,15 @@
+@import "../less/trailmix.less";
+
 /* compensate for navbar */
 body {
-  padding-top: 60px;
-  padding-bottom: 40px;
-}
+  padding: 60px 0 40px 0;
+} 
 @media (max-width: 980px) {
   body {
-    padding-top: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 0px;
   }
   .container {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px 0 20px;
   }
 }
 
@@ -29,31 +27,27 @@ legend {
 /* customize nav bar */
 .navbar .navbar-inner {
   border: 0;
-  -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-  -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-  box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  .box-shadow(0 2px 10px rgba(0,0,0,.25));
 }
 .navbar .brand {
   position: relative;
   width: 160px;
 }
 .navbar .brand img {
+  position: absolute;
   top: 10px;
   left: 30px;
-  position: absolute;
 }
 .navbar .nav > li > a {
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: bold;
   padding: 20px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 @media (max-width: 980px) {
   .navbar-fixed-top, .navbar-fixed-bottom {
     position: relative;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
+    margin: 0;
   }
   .navbar .brand {
     position: static;
@@ -80,41 +74,65 @@ legend {
 }
 
 /* tables */
-table.table thead th {
+.table thead th {
   background-color: #ddd;
 }
 
 /* footer */
 .footer {
-    color: #999;
-    margin-top: 50px;
+  margin-top: 50px;
+  color: #999;
 }
 .footer .container {
-    border-top: 1px solid #ccc;
-    
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+  border-top: 1px solid #ccc;
+  .border-radius(4px);
 }
 .footer .container .inner {
-    padding: 20px;
+  padding: 20px;
 }
 .footer a,
 .footer a:visited {
-    color: #999;
+  color: #999;
 }
-.footer ul.links {
-    margin: 0px;
+.footer .links {
+  margin: 0;
 }
-.footer ul.links li {
-    list-style: none;
-    display: inline-block;
-    padding-right: 10px;
-    margin-right: 10px;
-    border-right: 1px dotted #999;
+.footer .links li {
+  display: inline-block;
+  padding-right: 10px;
+  margin-right: 10px;
+  list-style: none;
+  border-right: 1px dotted #999;
 }
-.footer ul.links li:last-child {
-    padding-right: 0px;
-    margin-right: 0px;
-    border: none;
+.footer .links li:last-child {
+  padding-right: 0;
+  margin-right: 0;
+  border: none;
+}
+
+/* utility styles */
+.stretch {
+  width: 100%;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.wrap {
+  white-space: normal;
+}
+
+.ajax-spinner {
+  position: absolute;
+  z-index: 999;
+  display: none;
+  padding: 5px;
+  font-size: inherit;
+  line-height: 11px;
+  background-color: #ccc;
+  .border-radius(4px);
+}​
+.ajax-spinner img {
+  width: inherit;
+  height: inherit;
+  margin: 0;
 }

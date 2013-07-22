@@ -4,7 +4,7 @@ block head
   title Manage Accounts
 
 block feet
-  script(src='/views/admin/accounts/index.js')
+  script(src='/views/admin/accounts/index.min.js?#{cacheBreaker}')
 
 block body
   #header
@@ -25,16 +25,16 @@ block body
       div.row
         div.span3
           label Search
-          input.stretch(name='search', type='text')
+          input.input-block-level(name='search', type='text')
         div.span3
           label Status
-          select.stretch(name='status')
+          select.input-block-level(name='status')
             option(value='') -- any --
             for status in data.statuses
               option(value='#{status._id}') #{status.name}
         div.span3
           label Sort By
-          select.stretch(name='sort')
+          select.input-block-level(name='sort')
             option(value='_id') id &#9650;
             option(value='-_id') id &#9660;
             option(value='name') name &#9650;
@@ -43,7 +43,7 @@ block body
             option(value='-company') company &#9660;
         div.span3
           label Limit
-          select.stretch(name='limit')
+          select.input-block-level(name='limit')
             option(value='10') 10 items
             option(value='20', selected='selected') 20 items
             option(value='50') 50 items
@@ -82,6 +82,6 @@ block body
       span.btn-group.pull-right
         button.btn.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
         button.btn.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
-      div.clear
+      div.clearfix
   
   script(type='text/template', id='data-results') !{data.results}

@@ -4,10 +4,10 @@ block head
   title Accounts / Details
 
 block neck
-  link(rel='stylesheet', href='/views/admin/accounts/details.css')
+  link(rel='stylesheet', href='/views/admin/accounts/details.min.css?#{cacheBreaker}')
 
 block feet
-  script(src='/views/admin/accounts/details.js')
+  script(src='/views/admin/accounts/details.min.js?#{cacheBreaker}')
 
 block body
   #header
@@ -16,10 +16,10 @@ block body
       #details.form-horizontal
       #login.form-horizontal
     div.span4
-      #status-new
-      #status-collection
-      #notes-new
-      #notes-collection
+      #status-new.status-new
+      #status-collection.status-collection
+      #notes-new.notes-new
+      #notes-collection.notes-collection
   #delete.form-horizontal
   
   script(type='text/template', id='tmpl-header')
@@ -115,7 +115,7 @@ block body
           button.btn.btn-block.btn-add Change
   
   script(type='text/template', id='tmpl-status-collection')
-    #status-items
+    #status-items.status-items
   
   script(type='text/template', id='tmpl-status-item')
     div.pull-right.muted.badge.author
@@ -137,7 +137,7 @@ block body
     button.btn.btn-block.btn-add Add New Note
   
   script(type='text/template', id='tmpl-notes-collection')
-    #notes-items
+    #notes-items.notes-items
   
   script(type='text/template', id='tmpl-notes-item')
     div <%= data %>

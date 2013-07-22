@@ -287,12 +287,12 @@
     },
     validates: function() {
       var errors = [];
-      if (this.$el.find('[name="data"]').val() == '') {
+      if (this.$el.find('[name="data"]').val() === '') {
         errors.push('Please enter some notes.');
       }
       
       if (errors.length > 0) {
-        this.model.set({ errors: errors })
+        this.model.set({ errors: errors });
         return false;
       }
       return true;
@@ -328,7 +328,7 @@
         $('#notes-items').prepend( view.render().$el );
       }, this);
       
-      if (this.collection.length == 0) {
+      if (this.collection.length === 0) {
         $('#notes-items').append( $('#tmpl-notes-none').html() );
       }
     }
@@ -381,7 +381,7 @@
     },
     validates: function() {
       var errors = [];
-      if (this.$el.find('[name="status"]').val() == '') {
+      if (this.$el.find('[name="status"]').val() === '') {
         errors.push('Please choose a status.');
       }
       if (this.$el.find('[name="status"]').val() == app.mainView.model.get('status').id) {
@@ -389,7 +389,7 @@
       }
       
       if (errors.length > 0) {
-        this.model.set({ errors: errors })
+        this.model.set({ errors: errors });
         return false;
       }
       return true;

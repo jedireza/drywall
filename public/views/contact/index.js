@@ -17,7 +17,7 @@
       name: '',
       email: '',
       phone: '',
-      message: '',
+      message: ''
     }
   });
 

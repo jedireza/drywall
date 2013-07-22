@@ -4,11 +4,7 @@ html
     block head
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap-responsive.min.css')
-    link(rel='stylesheet', href='/vendor/font-awesome/css/font-awesome.min.css')
-    link(rel='stylesheet', href='/layouts/utility.css')
-    link(rel='stylesheet', href='/layouts/default.css')
+    link(rel='stylesheet', href='/layouts/core.min.css?#{cacheBreaker}')
     block neck
   body
     div.navbar.navbar-fixed-top
@@ -50,10 +46,6 @@ html
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
     
-    script(src='/vendor/jquery/jquery-1.9.1.min.js')
-    script(src='/vendor/underscore/underscore-min.js')
-    script(src='/vendor/backbone/backbone-min.js')
-    script(src='/vendor/bootstrap/js/bootstrap.min.js')
-    script(src='/layouts/utility.js')
+    script(src='/layouts/core.min.js?#{cacheBreaker}')
     
     block feet

@@ -2,10 +2,10 @@ extends ../../../layouts/admin
 
 block head
   title Administrators / Details
-  link(rel='stylesheet', href='/views/admin/administrators/details.css')
+  link(rel='stylesheet', href='/views/admin/administrators/details.min.css?#{cacheBreaker}')
   
 block feet
-  script(src='/views/admin/administrators/details.js')
+  script(src='/views/admin/administrators/details.min.js?#{cacheBreaker}')
 
 block body
   #header

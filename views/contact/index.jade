@@ -2,10 +2,10 @@ extends ../../layouts/default
 
 block head
   title Contact Us
-  link(rel='stylesheet', href='/views/contact/index.css')
+  link(rel='stylesheet', href='/views/contact/index.min.css?#{cacheBreaker}')
 
 block feet
-  script(src='/views/contact/index.js')
+  script(src='/views/contact/index.min.js?#{cacheBreaker}')
 
 block body
   div.page-header
@@ -37,19 +37,19 @@ block body
       div.control-group(class!='<%= errfor.name ? "error" : "" %>')
         label.control-label Name:
         div.controls
-          input.stretch(type='text', name='name', value!='<%= name %>')
+          input.input-block-level(type='text', name='name', value!='<%= name %>')
       div.control-group(class!='<%= errfor.email ? "error" : "" %>')
         label.control-label Email:
         div.controls
-          input.stretch(type='text', name='email', value!='<%= email %>')
+          input.input-block-level(type='text', name='email', value!='<%= email %>')
       div.control-group(class!='<%= errfor.phone ? "error" : "" %>')
         label.control-label Phone:
         div.controls
-          input.stretch(type='text', name='phone', value!='<%= phone %>')
+          input.input-block-level(type='text', name='phone', value!='<%= phone %>')
       div.control-group(class!='<%= errfor.message ? "error" : "" %>')
         label.control-label Message:
         div.controls
-          textarea.stretch(name='message', rows='7') <%= message %>
+          textarea.input-block-level(name='message', rows='7') <%= message %>
       div.btn-float
         button.btn.btn-primary.btn-contact(type='button') Send Message
       |<% } %>

@@ -2,10 +2,10 @@ extends ../../../layouts/admin
 
 block head
   title Admin Groups / Details
-  link(rel='stylesheet', href='/views/admin/admin-groups/details.css')
+  link(rel='stylesheet', href='/views/admin/admin-groups/details.min.css?#{cacheBreaker}')
 
 block feet
-  script(src='/views/admin/admin-groups/details.js')
+  script(src='/views/admin/admin-groups/details.min.js?#{cacheBreaker}')
 
 block body
   #header

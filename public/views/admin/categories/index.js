@@ -79,10 +79,10 @@
       this.addNew();
     },
     addNew: function() {
-      if (this.$el.find('[name="pivot"]').val() == '') {
+      if (this.$el.find('[name="pivot"]').val() === '') {
         alert('Please enter a pivot.');
       }
-      else if (this.$el.find('[name="name"]').val() == '') {
+      else if (this.$el.find('[name="name"]').val() === '') {
         alert('Please enter a name.');
       }
       else {
@@ -121,7 +121,7 @@
         $('#results-rows').append( view.render().$el );
       }, this);
       
-      if (this.collection.length == 0) {
+      if (this.collection.length === 0) {
         $('#results-rows').append( $('#tmpl-results-empty-row').html() );
       }
     }
