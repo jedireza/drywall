@@ -22,8 +22,8 @@ exports = module.exports = function(app, mongoose) {
         time: { type: Date, default: Date.now }
       }
     },
-    statusLog: [mongoose.modelSchemas['StatusLog']],
-    notes: [mongoose.modelSchemas['Note']],
+    statusLog: [mongoose.modelSchemas.StatusLog],
+    notes: [mongoose.modelSchemas.Note],
     userCreated: {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' },

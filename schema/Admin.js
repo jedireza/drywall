@@ -30,9 +30,9 @@ exports = module.exports = function(app, mongoose) {
     }
     
     //check admin permissions
-    for (var i = 0 ; i < this.permissions.length ; i++) {
-      if (this.permissions[i].name == something) {
-        if (this.permissions[i].permit) return true;
+    for (var k = 0 ; k < this.permissions.length ; k++) {
+      if (this.permissions[k].name == something) {
+        if (this.permissions[k].permit) return true;
         return false;
       }
     }
