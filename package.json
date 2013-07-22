@@ -18,5 +18,12 @@
     "passport-twitter": "~0.1.5",
     "passport-facebook": "~0.1.5",
     "passport-github": "~0.1.4"
+  },
+  "devDependencies": {
+    "uglify-js": "~2.3.6",
+    "jshint": "~2.1.4",
+    "recess": "~1.1.9",
+    "watchr": "~2.4.3",
+    "findit": "~0.1.2"
   }
 }
