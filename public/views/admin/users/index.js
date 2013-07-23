@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Record = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -50,12 +47,7 @@
       items: {}
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -76,7 +68,7 @@
       event.preventDefault();
     },
     addNewOnEnter: function(event) {
-      if (event.keyCode != 13) return;
+      if (event.keyCode !== 13) { return; }
       event.preventDefault();
       this.addNew();
     },
@@ -88,7 +80,7 @@
         this.model.save({
           username: this.$el.find('[name="username"]').val()
         },{
-          success: function(model, response, options) {
+          success: function(model, response) {
             if (response.success) {
               model.id = response.record._id;
               location.href = model.url();
@@ -155,16 +147,17 @@
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
       
-      //set field values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     preventSubmit: function(event) {
       event.preventDefault();
     },
     filterOnEnter: function(event) {
-      if (event.keyCode != 13) return;
+      if (event.keyCode !== 13) { return; }
       this.filter();
     },
     filter: function() {  
@@ -191,6 +184,7 @@
         if (!this.model.get('pages').hasPrev) {
           this.$el.find('.btn-prev').attr('disabled', 'disabled');
         }
+        
         if (!this.model.get('pages').hasNext) {
           this.$el.find('.btn-next').attr('disabled', 'disabled');
         }
@@ -202,7 +196,7 @@
     goToPage: function(event) {
       var query = $('#filters form').serialize() +'&page='+ $(event.target).data('page');
       Backbone.history.navigate('q/'+ query, { trigger: true }); 
-      var body = $('body').scrollTop(0);
+      $('body').scrollTop(0);
     }
   });
   
@@ -210,23 +204,15 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      
-      //setup data
       this.results = JSON.parse( $('#data-results').html() );
       
-      //sub views
       app.headerView = new app.HeaderView();
       app.resultsView = new app.ResultsView();
       app.filterView = new app.FilterView();
       app.pagingView = new app.PagingView();
     }
   });
-
-
-
-/**
- * ROUTER
- **/
+  
   app.Router = Backbone.Router.extend({
     routes: {
       '': 'default',
@@ -236,7 +222,10 @@
       app.mainView = new app.MainView();
     },
     default: function() {
-      if (!app.firstLoad) app.resultsView.collection.fetch({ reset: true });
+      if (!app.firstLoad) {
+        app.resultsView.collection.fetch({ reset: true });
+      }
+      
       app.firstLoad = false;
     },
     query: function(params) {
@@ -244,16 +233,10 @@
       app.firstLoad = false;
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.firstLoad = true;
     app.router = new app.Router();
     Backbone.history.start();
   });
-
-
+}());

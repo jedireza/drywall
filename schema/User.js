@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(app, mongoose) {
   var userSchema = new mongoose.Schema({
     username: { type: String, unique: true },
@@ -16,14 +18,26 @@ exports = module.exports = function(app, mongoose) {
     search: [String]
   });
   userSchema.methods.canPlayRoleOf = function(role) {
-    if (role == "admin" && this.roles.admin) return true;
-    if (role == "account" && this.roles.account) return true;
+    if (role === "admin" && this.roles.admin) {
+      return true;
+    }
+    
+    if (role === "account" && this.roles.account) {
+      return true;
+    }
+    
     return false;
   };
   userSchema.methods.defaultReturnUrl = function() {
     var returnUrl = '/';
-    if (this.canPlayRoleOf('account')) returnUrl = '/account/';
-    if (this.canPlayRoleOf('admin')) returnUrl = '/admin/';
+    if (this.canPlayRoleOf('account')) {
+      returnUrl = '/account/';
+    }
+    
+    if (this.canPlayRoleOf('admin')) {
+      returnUrl = '/admin/';
+    }
+    
     return returnUrl;
   };
   userSchema.statics.encryptPassword = function(password) {
@@ -38,6 +52,6 @@ exports = module.exports = function(app, mongoose) {
   userSchema.index({ 'github.id': 1 });
   userSchema.index({ 'facebook.id': 1 });
   userSchema.index({ search: 1 });
-  userSchema.set('autoIndex', (app.get('env') == 'development'));
+  userSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('User', userSchema);
-}
+};

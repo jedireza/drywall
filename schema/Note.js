@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(app, mongoose) {
   var noteSchema = new mongoose.Schema({
     data: { type: String, default: '' },
@@ -8,4 +10,4 @@ exports = module.exports = function(app, mongoose) {
     }
   });
   app.db.model('Note', noteSchema);
-}
+};

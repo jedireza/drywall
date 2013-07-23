@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(req, res, options) {
   /* options = {
     from: String, 
@@ -38,10 +40,14 @@ exports = module.exports = function(req, res, options) {
   };
   
   var renderers = [];
-  if (options.textPath) renderers.push(renderText);
-  if (options.htmlPath) renderers.push(renderHtml);
+  if (options.textPath) {
+    renderers.push(renderText);
+  }
   
-  //render templates
+  if (options.htmlPath) {
+    renderers.push(renderHtml);
+  }
+  
   require('async').parallel(
     renderers,
     function(err, results){
@@ -50,22 +56,18 @@ exports = module.exports = function(req, res, options) {
         return;
       }
       
-      //build attachements
       var attachements = [];
       
-      //html alternative
       if (options.html) {
         attachements.push({ data: options.html, alternative: true });
       }
       
-      //other attachments
       if (options.attachments) {
         for (var i = 0 ; i < options.attachments.length ; i++) {
           attachements.push(options.attachments[i]);
         }
       }
       
-      //send email
       var emailjs = require('emailjs/email');
       var emailer = emailjs.server.connect( req.app.get('email-credentials') );
       emailer.send({
@@ -88,4 +90,4 @@ exports = module.exports = function(req, res, options) {
       });
     }
   );
-}
+};

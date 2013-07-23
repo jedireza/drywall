@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Forgot = Backbone.Model.extend({
     url: '/login/forgot/',
     defaults: {
@@ -17,12 +14,7 @@
       email: '',
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.ForgotView = Backbone.View.extend({
     el: '#forgot',
     template: _.template( $('#tmpl-forgot').html() ),
@@ -45,7 +37,7 @@
       event.preventDefault();
     },
     forgotOnEnter: function(event) {
-      if (event.keyCode != 13) return;
+      if (event.keyCode !== 13) { return; }
       event.preventDefault();
       this.forgot();
     },
@@ -57,14 +49,8 @@
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.forgotView = new app.ForgotView();
   });
-
-
+}());

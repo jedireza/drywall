@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Reset = Backbone.Model.extend({
     defaults: {
       success: false,
@@ -21,12 +18,7 @@
       return '/login/reset/'+ this.id +'/';
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.ResetView = Backbone.View.extend({
     el: '#reset',
     template: _.template( $('#tmpl-reset').html() ),
@@ -48,7 +40,7 @@
       event.preventDefault();
     },
     resetOnEnter: function(event) {
-      if (event.keyCode != 13) return;
+      if (event.keyCode !== 13) { return; }
       event.preventDefault();
       this.reset();
     },
@@ -61,12 +53,7 @@
       });
     }
   });
-
-
-
-/**
- * ROUTER
- **/
+  
   app.Router = Backbone.Router.extend({
     routes: {
       'login/reset/': 'start',
@@ -76,15 +63,9 @@
       app.resetView = new app.ResetView({ model: new app.Reset({ id: token }) });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.router = new app.Router();
     Backbone.history.start({ pushState: true });
   });
-
-
+}());

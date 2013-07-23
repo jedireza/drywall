@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(app, mongoose) {
   var adminSchema = new mongoose.Schema({
     user: {
@@ -23,16 +25,21 @@ exports = module.exports = function(app, mongoose) {
     var groupHasPermission = false;
     for (var i = 0 ; i < this.groups.length ; i++) {
       for (var j = 0 ; j < this.groups[i].permissions.length ; j++) {
-        if (this.groups[i].permissions[j].name == something) {
-          if (this.groups[i].permissions[j].permit) groupHasPermission = true;
+        if (this.groups[i].permissions[j].name === something) {
+          if (this.groups[i].permissions[j].permit) {
+            groupHasPermission = true;
+          }
         }
       }
     }
     
     //check admin permissions
     for (var k = 0 ; k < this.permissions.length ; k++) {
-      if (this.permissions[k].name == something) {
-        if (this.permissions[k].permit) return true;
+      if (this.permissions[k].name === something) {
+        if (this.permissions[k].permit) {
+          return true;
+        }
+        
         return false;
       }
     }
@@ -41,7 +48,7 @@ exports = module.exports = function(app, mongoose) {
   };
   adminSchema.methods.isMemberOf = function(group) {
     for (var i = 0 ; i < this.groups.length ; i++) {
-      if (this.groups[i]._id == group) {
+      if (this.groups[i]._id === group) {
         return true;
       }
     }
@@ -51,6 +58,6 @@ exports = module.exports = function(app, mongoose) {
   adminSchema.plugin(require('./plugins/pagedFind'));
   adminSchema.index({ 'user.id': 1 });
   adminSchema.index({ search: 1 });
-  adminSchema.set('autoIndex', (app.get('env') == 'development'));
+  adminSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('Admin', adminSchema);
-}
+};

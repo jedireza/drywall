@@ -1,15 +1,16 @@
+'use strict';
+
 exports.find = function(req, res, next){
-  //defaults
   req.query.search = req.query.search ? req.query.search : '';
-  req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+  req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
+  req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  //filters
   var filters = {};
-  if (req.query.search) filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
+  if (req.query.search) {
+    filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
+  }
   
-  //get results
   req.app.db.models.Admin.pagedFind({
     filters: filters,
     keys: 'name.full',
@@ -17,7 +18,9 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -31,14 +34,14 @@ exports.find = function(req, res, next){
   });
 };
 
-
-
 exports.read = function(req, res, next){
   var outcome = {};
   
   var getAdminGroups = function(callback) {
     req.app.db.models.AdminGroup.find({}, 'name').sort('name').exec(function(err, adminGroups) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.adminGroups = adminGroups;
       return callback(null, 'done');
@@ -47,7 +50,9 @@ exports.read = function(req, res, next){
   
   var getRecord = function(callback) {
     req.app.db.models.Admin.findById(req.params.id).populate('groups', 'name').exec(function(err, record) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.record = record;
       return callback(null, 'done');
@@ -55,7 +60,9 @@ exports.read = function(req, res, next){
   };
   
   var asyncFinally = function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.send(outcome.record);
@@ -72,8 +79,6 @@ exports.read = function(req, res, next){
   
   require('async').parallel([getAdminGroups, getRecord], asyncFinally);
 };
-
-
 
 exports.create = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -93,7 +98,7 @@ exports.create = function(req, res, next){
       name: {
         first: nameParts.shift(),
         middle: (nameParts.length > 1 ? nameParts.shift() : ''),
-        last: (nameParts.length == 0 ? '' : nameParts.join(' ')),
+        last: (nameParts.length === 0 ? '' : nameParts.join(' ')),
       }
     };
     fieldsToSet.name.full = fieldsToSet.name.first + (fieldsToSet.name.last ? ' '+ fieldsToSet.name.last : '');
@@ -104,7 +109,9 @@ exports.create = function(req, res, next){
     ];
     
     req.app.db.models.Admin.create(fieldsToSet, function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.record = admin;
       return workflow.emit('response');
@@ -114,17 +121,21 @@ exports.create = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.update = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.first) workflow.outcome.errfor.first = 'required';
-    if (!req.body.last) workflow.outcome.errfor.last = 'required';
+    if (!req.body.first) {
+      workflow.outcome.errfor.first = 'required';
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (!req.body.last) {
+      workflow.outcome.errfor.last = 'required';
+    }
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('patchAdministrator');
   });
@@ -145,10 +156,14 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       admin.populate('groups', 'name', function(err, admin) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.admin = admin;
         workflow.emit('response');
@@ -158,8 +173,6 @@ exports.update = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.groups = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -184,10 +197,14 @@ exports.groups = function(req, res, next){
     };
     
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       admin.populate('groups', 'name', function(err, admin) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.admin = admin;
         workflow.emit('response');
@@ -197,8 +214,6 @@ exports.groups = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.permissions = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -223,10 +238,14 @@ exports.permissions = function(req, res, next){
     };
     
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       admin.populate('groups', 'name', function(err, admin) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.admin = admin;
         workflow.emit('response');
@@ -236,8 +255,6 @@ exports.permissions = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.linkUser = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -258,13 +275,15 @@ exports.linkUser = function(req, res, next){
   
   workflow.on('verifyUser', function(callback) {
     req.app.db.models.User.findOne({ username: req.body.newUsername }, 'username').exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('User not found.');
         return workflow.emit('response');
       }
-      else if (user.roles && user.roles.admin && user.roles.admin != req.params.id) {
+      else if (user.roles && user.roles.admin && user.roles.admin !== req.params.id) {
         workflow.outcome.errors.push('User is already linked to a different admin.');
         return workflow.emit('response');
       }
@@ -276,7 +295,9 @@ exports.linkUser = function(req, res, next){
   
   workflow.on('duplicateLinkCheck', function(callback) {
     req.app.db.models.Admin.findOne({ 'user.id': workflow.user._id, _id: { $ne: req.params.id } }).exec(function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (admin) {
         workflow.outcome.errors.push('Another admin is already linked to that user.');
@@ -289,17 +310,23 @@ exports.linkUser = function(req, res, next){
   
   workflow.on('patchUser', function() {
     req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.admin': req.params.id }).exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       workflow.emit('patchAdministrator');
     });
   });
   
   workflow.on('patchAdministrator', function(callback) {
     req.app.db.models.Admin.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       admin.populate('groups', 'name', function(err, admin) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.admin = admin;
         workflow.emit('response');
@@ -310,8 +337,6 @@ exports.linkUser = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.unlinkUser = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
   
@@ -321,7 +346,7 @@ exports.unlinkUser = function(req, res, next){
       return workflow.emit('response');
     }
     
-    if (req.user.roles.admin._id == req.params.id) {
+    if (req.user.roles.admin._id === req.params.id) {
       workflow.outcome.errors.push('You may not unlink yourself from admin.');
       return workflow.emit('response');
     }
@@ -331,7 +356,9 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.on('patchAdministrator', function() {
     req.app.db.models.Admin.findById(req.params.id).exec(function(err, admin) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!admin) {
         workflow.outcome.errors.push('Administrator was not found.');
@@ -341,10 +368,14 @@ exports.unlinkUser = function(req, res, next){
       var userId = admin.user.id;
       admin.user = { id: undefined, name: ''};
       admin.save(function(err, admin) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         admin.populate('groups', 'name', function(err, admin) {
-          if (err) return workflow.emit('exception', err);
+          if (err) {
+            return workflow.emit('exception', err);
+          }
           
           workflow.outcome.admin = admin;
           workflow.emit('patchUser', userId);
@@ -355,7 +386,9 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.on('patchUser', function(id) {
     req.app.db.models.User.findById(id).exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('User was not found.');
@@ -364,7 +397,10 @@ exports.unlinkUser = function(req, res, next){
       
       user.roles.admin = undefined;
       user.save(function(err, user) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
         workflow.emit('response');
       });
     });
@@ -372,8 +408,6 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.delete = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -384,7 +418,7 @@ exports.delete = function(req, res, next){
       return workflow.emit('response');
     }
     
-    if (req.user.roles.admin._id == req.params.id) {
+    if (req.user.roles.admin._id === req.params.id) {
       workflow.outcome.errors.push('You may not delete your own admin record.');
       return workflow.emit('response');
     }
@@ -394,8 +428,11 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteAdministrator', function(err) {
     req.app.db.models.Admin.findByIdAndRemove(req.params.id, function(err, admin) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.emit('response');
     });
   });
   

@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Account = Backbone.Model.extend({
     idAttribute: '_id',
     url: '/account/settings/'
@@ -37,6 +34,7 @@
         app.mainView.account.set(response.account);
         delete response.account;
       }
+      
       return response;
     }
   });
@@ -56,6 +54,7 @@
         app.mainView.user.set(response.user);
         delete response.user;
       }
+      
       return response;
     }
   });
@@ -75,15 +74,11 @@
         app.mainView.user.set(response.user);
         delete response.user;
       }
+      
       return response;
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details').html() ),
@@ -110,12 +105,12 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     update: function() {
@@ -152,12 +147,12 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     update: function() {
@@ -180,12 +175,12 @@
       this.render();
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     password: function() {
@@ -200,25 +195,16 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      
-      //setup model
       this.account = new app.Account( JSON.parse($('#data-account').html()) );
       this.user = new app.User( JSON.parse($('#data-user').html()) );
       
-      //sub views
       app.detailsView = new app.DetailsView();
       app.identityView = new app.IdentityView();
       app.passwordView = new app.PasswordView();
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });
-
-
+}());

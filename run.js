@@ -2,9 +2,6 @@
 
 //dependencies
 var watchr = require('watchr'),
-    jshint = require('jshint'),
-    uglifyjs = require('uglify-js'),
-    recess = require('recess'),
     path = require('path'),
     findit = require('findit'),
     fs = require('fs'),
@@ -47,7 +44,7 @@ if (process.argv.length > 2) {
     var filterToBuild = function(filePath, stat) {
       var isLESS = /\.less/.test(filePath);
       var isJS = /\.js/.test(filePath) && !/\.min\.js/.test(filePath);
-      if (isLESS || isJS) build(filePath);
+      if (isLESS || isJS) { build(filePath); }
     };
     findit.find('public/layouts').on('file', filterToBuild);
     findit.find('public/views').on('file', filterToBuild);
@@ -83,7 +80,7 @@ else {
     ],
     ignoreCustomPatterns: /\.min\.js|\.min\.css/i,
     listener: function(changeType, filePath, fileCurrentStat, filePreviousStat){
-      if ('delete' === changeType) return;
+      if ('delete' === changeType) { return; }
       console.log('RUN {*} Change detected: '+ filePath);
       build(filePath);
     }
@@ -103,7 +100,7 @@ else {
       'views/'
     ],
     listener: function(changeType, filePath, fileCurrentStat, filePreviousStat) {
-      if ('delete' === changeType) return;
+      if ('delete' === changeType) { return; }
       console.log('RUN {*} Change detected: '+ filePath);
       
       //kill the app when script files change
@@ -125,7 +122,7 @@ var build = function(filePath) {
   }
   
   //add dependencies for core styles
-  var dependencies = undefined;
+  var dependencies;
   if (/public\/layouts\/core\.less/.test(filePath)) {
     dependencies = [
       'public/less/bootstrap-build.less',
@@ -164,13 +161,13 @@ var lintLESS = function(filePath, cb) {
   lesscmd.stderr.on('data', function(d) { process.stderr.write(d); });
   lesscmd.on('close', function (code) {
     console.log('RUN [✔] Linted: '+ filePath);
-    if (cb) cb();
+    if (cb) { cb(); }
   });
 };
 
 //a function that compiles less files
 var compileLESS = function(filePath, dependencyPaths) {
-  if (!dependencyPaths) dependencyPaths = [];
+  if (!dependencyPaths) { dependencyPaths = []; }
   var args = ['--compress'];
   args = args.concat(dependencyPaths, filePath);
   
@@ -200,7 +197,7 @@ var lintJS = function(filePath, cb) {
   hintcmd.stderr.on('data', function(d) { process.stderr.write(d); });
   hintcmd.on('close', function (code) {
     console.log('RUN [✔] Linted: '+ filePath);
-    if (cb) cb();
+    if (cb) { cb(); }
   });
 };
 

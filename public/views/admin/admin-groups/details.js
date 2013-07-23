@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.AdminGroup = Backbone.Model.extend({
     idAttribute: '_id',
     url: function() {
@@ -43,6 +40,7 @@
         app.mainView.model.set(response.adminGroup);
         delete response.adminGroup;
       }
+      
       return response;
     }
   });
@@ -64,15 +62,11 @@
         app.mainView.model.set(response.adminGroup);
         delete response.adminGroup;
       }
+      
       return response;
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -85,7 +79,6 @@
       this.$el.html(this.template( this.model.attributes ));
     }
   });
-  
   
   app.DetailsView = Backbone.View.extend({
     el: '#details',
@@ -108,12 +101,12 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     update: function() {
@@ -140,7 +133,7 @@
     delete: function() {
       if (confirm('Are you sure?')) {
         this.model.destroy({
-          success: function(model, response, options) {
+          success: function(model, response) {
             if (response.success) {
               location.href = '/admin/admin-groups/';
             }
@@ -178,16 +171,15 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
-    add: function(event) {
-      //validate
+    add: function() {
       var newPermission = this.$el.find('[name="newPermission"]').val().trim();
       if (!newPermission) {
         alert('Please enter a name.');
@@ -196,27 +188,25 @@
       else {
         var alreadyAdded = false;
         _.each(this.model.get('permissions'), function(permission) {
-          if (newPermission == permission.name) {
+          if (newPermission === permission.name) {
             alreadyAdded = true;
           }
         });
+        
         if (alreadyAdded) {
           alert('That name already exists.');
           return;
         }
       }
       
-      //add item
       this.model.get('permissions').push({ name: newPermission, permit: true });
       
-      //sort
       var sorted = this.model.get('permissions');
       sorted.sort(function(a, b) {
         return a.name.toLowerCase() > b.name.toLowerCase();
       });
       this.model.set('permissions', sorted);
       
-      //re-render
       this.render();
     },
     allow: function(event) {
@@ -245,25 +235,16 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      
-      //setup model
       this.model = new app.AdminGroup( JSON.parse($('#data-record').html()) );
       
-      //sub views
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
       app.deleteView = new app.DeleteView();
       app.permissionsView = new app.PermissionsView();
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });
-
-
+}());

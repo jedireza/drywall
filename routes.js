@@ -1,14 +1,24 @@
+'use strict';
+
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) return next();
+  if (req.isAuthenticated()) {
+    return next();
+  }
   res.set('X-Auth-Required', 'true');
   res.redirect('/login/?returnUrl='+ encodeURIComponent(req.originalUrl));
 }
+
 function ensureAdmin(req, res, next) {
-  if (req.user.canPlayRoleOf('admin')) return next();
+  if (req.user.canPlayRoleOf('admin')) {
+    return next();
+  }
   res.redirect('/');
 }
+
 function ensureAccount(req, res, next) {
-  if (req.user.canPlayRoleOf('account')) return next();
+  if (req.user.canPlayRoleOf('account')) {
+    return next();
+  }
   res.redirect('/');
 }
 
@@ -138,4 +148,4 @@ exports = module.exports = function(app, passport) {
   
   //route not found
   app.all('*', require('./views/http/index').http404);
-}
+};

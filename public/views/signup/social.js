@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Signup = Backbone.Model.extend({
     url: '/signup/social/',
     defaults: {
@@ -16,12 +13,7 @@
       email: ''
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.SignupView = Backbone.View.extend({
     el: '#signup',
     template: _.template( $('#tmpl-signup').html() ),
@@ -44,7 +36,7 @@
       event.preventDefault();
     },
     signupOnEnter: function(event) {
-      if (event.keyCode != 13) return;
+      if (event.keyCode !== 13) { return; }
       event.preventDefault();
       this.signup();
     },
@@ -54,7 +46,7 @@
       this.model.save({
         email: this.$el.find('[name="email"]').val()
       },{
-        success: function(model, response, options) {
+        success: function(model, response) {
           if (response.success) {
             location.href = '/account/';
           }
@@ -65,14 +57,8 @@
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.signupView = new app.SignupView();
   });
-
-
+}());

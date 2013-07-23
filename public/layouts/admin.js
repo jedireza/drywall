@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app._SearchResult = Backbone.Model.extend({
     defaults: {
       _id: undefined,
@@ -23,17 +20,26 @@
     parse: function(response) {
       var outcome = [];
       
-      if (response.users.length) outcome.push({name: 'Users', type: 'header'});
+      if (response.users.length) {
+        outcome.push({name: 'Users', type: 'header'});
+      }
+      
       _.each(response.users, function(user) {
         outcome.push({name: user.username, url: '/admin/users/'+ user._id +'/'});
       });
       
-      if (response.accounts.length) outcome.push({name: 'Accounts', type: 'header'});
+      if (response.accounts.length) {
+        outcome.push({name: 'Accounts', type: 'header'});
+      }
+      
       _.each(response.accounts, function(account) {
         outcome.push({name: account.name.full, url: '/admin/accounts/'+ account._id +'/'});
       });
       
-      if (response.administrators.length) outcome.push({name: 'Administrators', type: 'header'});
+      if (response.administrators.length) {
+        outcome.push({name: 'Administrators', type: 'header'});
+      }
+      
       _.each(response.administrators, function(administrator) {
         outcome.push({name: administrator.name.full, url: '/admin/administrators/'+ administrator._id +'/'});
       });
@@ -41,12 +47,7 @@
       return outcome;
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app._SearchView = Backbone.View.extend({
     el: '#_search',
     template: _.template( $('#tmpl-_search').html() ),
@@ -59,29 +60,31 @@
     startKeyBuffer: function(event) {
       app._searchView.timeLastKeyPressed = (new Date());
       
-      //handle esc
-      if (event.keyCode == 27) {
+      //esc key
+      if (event.keyCode === 27) {
         this.clearResults();
         return;
       }
       
-      //handle enter
-      if (event.keyCode == 13) {
+      //enter key
+      if (event.keyCode === 13) {
         if (this.selectedResult !== undefined) {
           var url = this.$el.find('li.active a').attr('href');
-          if (url) location.href = url;
+          if (url) {
+            location.href = url;
+          }
         }
         return false;
       }
       
-      //handle up and down
-      if (event.keyCode == 38 || event.keyCode == 40) {
+      //up and down keys
+      if (event.keyCode === 38 || event.keyCode === 40) {
         this.navigateResults(event);
         return false;
       }
       
       //ignore non-alphanumeric, except backspace
-      if (!/[a-zA-Z0-9\-_ ]/.test(String.fromCharCode(event.keyCode)) && event.keyCode != 8) {
+      if (!/[a-zA-Z0-9\-_ ]/.test(String.fromCharCode(event.keyCode)) && event.keyCode !== 8) {
         return;
       }
       
@@ -93,12 +96,10 @@
         app._searchView.runSearch();
       }
       else {
-        //cancel the last timeout?
         if (app._searchView.lastTimeoutID) {
           clearTimeout(app._searchView.lastTimeoutID);
         }
         
-        //call back in 100 milliseconds
         app._searchView.lastTimeoutID = setTimeout(app._searchView.keyBuffer, 50);
       }
     },
@@ -112,18 +113,15 @@
       this.collection.fetch({ data: {q: query}, reset: true });
     },
     navigateResults: function(event) {
-      //navigable results
       var arrLinkResults = this.$el.find('li a').get();
       
-      //up or down
-      var movingUp = (event.keyCode == 38);
-      var movingDown = (event.keyCode == 40);
+      var movingUp = (event.keyCode === 38);
+      var movingDown = (event.keyCode === 40);
       
       if (this.selectedResult === undefined && this.$el.find('li a').get(0)) {
         this.selectedResult = -1;
       }
       
-      //moving up
       if (movingUp && this.selectedResult === 0) {
         this.selectedResult = arrLinkResults.length - 1;
       }
@@ -131,18 +129,21 @@
         this.selectedResult -= 1;
       }
       
-      //moving down
-      if (movingDown && this.selectedResult == (arrLinkResults.length - 1)) {
+      if (movingDown && this.selectedResult === (arrLinkResults.length - 1)) {
         this.selectedResult = 0;
       }
       else if (movingDown) {
         this.selectedResult += 1;
       }
       
-      if (this.selectedResult > arrLinkResults.length) this.selectedResult = 0;
-      if (arrLinkResults.length === 0) this.selectedResult = undefined;
+      if (this.selectedResult > arrLinkResults.length) {
+        this.selectedResult = 0;
+      }
       
-      //select the result
+      if (arrLinkResults.length === 0) {
+        this.selectedResult = undefined;
+      }
+      
       this.selectResult();
     },
     selectResult: function() {
@@ -195,20 +196,15 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      if (this.model.get('type') == 'header') {
+      if (this.model.get('type') === 'header') {
         this.$el.addClass('nav-header');
       }
+      
       return this;
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app._searchView = new app._SearchView();
   });
-
-
+}());

@@ -1,14 +1,29 @@
+'use strict';
+
 module.exports = exports = function pagedFindPlugin (schema) {
   schema.statics.pagedFind = function(options, cb) {
     var thisSchema = this;
     
-    if (!options.filters) options.filters = {};
-    if (!options.keys) options.keys = '';
-    if (!options.limit) options.limit = 20;
-    if (!options.page) options.page = 1;
-    if (!options.sort) options.sort = {};
+    if (!options.filters) {
+      options.filters = {};
+    }
     
-    //simple output object
+    if (!options.keys) {
+      options.keys = '';
+    }
+    
+    if (!options.limit) {
+      options.limit = 20;
+    }
+    
+    if (!options.page) {
+      options.page = 1;
+    }
+    
+    if (!options.sort) {
+      options.sort = {};
+    }
+    
     var output = {
       data: null,
       pages: { 
@@ -26,7 +41,6 @@ module.exports = exports = function pagedFindPlugin (schema) {
       }
     };
     
-    //count results
     var countResults = function(callback) {
       thisSchema.count(options.filters, function(err, count) {
         output.items.total = count;
@@ -34,7 +48,6 @@ module.exports = exports = function pagedFindPlugin (schema) {
       });
     };
     
-    //get results
     var getResults = function(callback) {
       var query = thisSchema.find(options.filters, options.keys);
       query.skip((options.page - 1) * options.limit);
@@ -46,13 +59,14 @@ module.exports = exports = function pagedFindPlugin (schema) {
       });
     };
     
-    //process
     require('async').parallel([
       countResults, 
       getResults
     ],
     function(err, results){
-      if (err) cb(err, null);
+      if (err) {
+        cb(err, null);
+      }
       
       //final paging math
       output.pages.total = Math.ceil(output.items.total / options.limit);
@@ -60,7 +74,9 @@ module.exports = exports = function pagedFindPlugin (schema) {
       output.pages.hasNext = (output.pages.next !== 0);
       output.pages.prev = output.pages.current - 1;
       output.pages.hasPrev = (output.pages.prev !== 0);
-      if (output.items.end > output.items.total) output.items.end = output.items.total;
+      if (output.items.end > output.items.total) {
+        output.items.end = output.items.total;
+      }
       
       cb(null, output);
     });

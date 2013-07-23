@@ -1,9 +1,13 @@
+'use strict';
+
 exports.find = function(req, res, next){
   var outcome = {};
   
   var getStatusOptions = function(callback) {
     req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.statuses = statuses;
       return callback(null, 'done');
@@ -11,19 +15,21 @@ exports.find = function(req, res, next){
   };
   
   var getResults = function(callback) {
-    //defaults
     req.query.search = req.query.search ? req.query.search : '';
     req.query.status = req.query.status ? req.query.status : '';
-    req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-    req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+    req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
+    req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
     req.query.sort = req.query.sort ? req.query.sort : '_id';
     
-    //filters
     var filters = {};
-    if (req.query.search) filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
-    if (req.query.status) filters['status.id'] = req.query.status;
+    if (req.query.search) {
+      filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
+    }
     
-    //get results
+    if (req.query.status) {
+      filters['status.id'] = req.query.status;
+    }
+    
     req.app.db.models.Account.pagedFind({
       filters: filters,
       keys: 'name company phone zip userCreated status',
@@ -31,7 +37,9 @@ exports.find = function(req, res, next){
       page: req.query.page,
       sort: req.query.sort
     }, function(err, results) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.results = results;
       return callback(null, 'done');
@@ -39,7 +47,9 @@ exports.find = function(req, res, next){
   };
   
   var asyncFinally = function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -60,14 +70,14 @@ exports.find = function(req, res, next){
   require('async').parallel([getStatusOptions, getResults], asyncFinally);
 };
 
-
-
 exports.read = function(req, res, next){
   var outcome = {};
   
   var getStatusOptions = function(callback) {
     req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.statuses = statuses;
       return callback(null, 'done');
@@ -76,7 +86,9 @@ exports.read = function(req, res, next){
   
   var getRecord = function(callback) {
     req.app.db.models.Account.findById(req.params.id).exec(function(err, record) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
       
       outcome.record = record;
       return callback(null, 'done');
@@ -84,7 +96,9 @@ exports.read = function(req, res, next){
   };
   
   var asyncFinally = function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.send(outcome.record);
@@ -101,8 +115,6 @@ exports.read = function(req, res, next){
   
   require('async').parallel([getStatusOptions, getRecord], asyncFinally);
 };
-
-
 
 exports.create = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -122,7 +134,7 @@ exports.create = function(req, res, next){
       name: {
         first: nameParts.shift(),
         middle: (nameParts.length > 1 ? nameParts.shift() : ''),
-        last: (nameParts.length == 0 ? '' : nameParts.join(' ')),
+        last: (nameParts.length === 0 ? '' : nameParts.join(' ')),
       },
       userCreated: {
         id: req.user._id,
@@ -138,7 +150,9 @@ exports.create = function(req, res, next){
     ];
     
     req.app.db.models.Account.create(fieldsToSet, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.record = account;
       return workflow.emit('response');
@@ -148,17 +162,21 @@ exports.create = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.update = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.first) workflow.outcome.errfor.first = 'required';
-    if (!req.body.last) workflow.outcome.errfor.last = 'required';
+    if (!req.body.first) {
+      workflow.outcome.errfor.first = 'required';
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (!req.body.last) {
+      workflow.outcome.errfor.last = 'required';
+    }
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('patchAccount');
   });
@@ -185,7 +203,9 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       return workflow.emit('response');
@@ -194,8 +214,6 @@ exports.update = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.linkUser = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -216,13 +234,15 @@ exports.linkUser = function(req, res, next){
   
   workflow.on('verifyUser', function(callback) {
     req.app.db.models.User.findOne({ username: req.body.newUsername }).exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('User not found.');
         return workflow.emit('response');
       }
-      else if (user.roles && user.roles.account && user.roles.account != req.params.id) {
+      else if (user.roles && user.roles.account && user.roles.account !== req.params.id) {
         workflow.outcome.errors.push('User is already linked to a different account.');
         return workflow.emit('response');
       }
@@ -234,7 +254,9 @@ exports.linkUser = function(req, res, next){
   
   workflow.on('duplicateLinkCheck', function(callback) {
     req.app.db.models.Account.findOne({ 'user.id': workflow.user._id, _id: {$ne: req.params.id} }).exec(function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (account) {
         workflow.outcome.errors.push('Another account is already linked to that user.');
@@ -245,17 +267,21 @@ exports.linkUser = function(req, res, next){
     });
   });
   
-  
   workflow.on('patchUser', function() {
     req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.account': req.params.id }).exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
       workflow.emit('patchAccount');
     });
   });
   
   workflow.on('patchAccount', function(callback) {
     req.app.db.models.Account.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       workflow.emit('response');
@@ -264,8 +290,6 @@ exports.linkUser = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.unlinkUser = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -281,7 +305,9 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.on('patchAccount', function() {
     req.app.db.models.Account.findById(req.params.id).exec(function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!account) {
         workflow.outcome.errors.push('Account was not found.');
@@ -291,7 +317,9 @@ exports.unlinkUser = function(req, res, next){
       var userId = account.user.id;
       account.user = { id: undefined, name: '' };
       account.save(function(err, account) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.account = account;
         workflow.emit('patchUser', userId);
@@ -301,7 +329,9 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.on('patchUser', function(id) {
     req.app.db.models.User.findById(id).exec(function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('User was not found.');
@@ -310,7 +340,10 @@ exports.unlinkUser = function(req, res, next){
       
       user.roles.account = undefined;
       user.save(function(err, user) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
         workflow.emit('response');
       });
     });
@@ -318,8 +351,6 @@ exports.unlinkUser = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.newNote = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -344,7 +375,9 @@ exports.newNote = function(req, res, next){
     };
     
     req.app.db.models.Account.findByIdAndUpdate(req.params.id, { $push: { notes: noteToAdd } }, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       return workflow.emit('response');
@@ -354,16 +387,17 @@ exports.newNote = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.newStatus = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.id) workflow.outcome.errors.push('Please choose a status.');
+    if (!req.body.id) {
+      workflow.outcome.errors.push('Please choose a status.');
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('addStatus');
   });
@@ -380,7 +414,9 @@ exports.newStatus = function(req, res, next){
     };
     
     req.app.db.models.Account.findByIdAndUpdate(req.params.id, { status: statusToAdd, $push: { statusLog: statusToAdd } }, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       return workflow.emit('response');
@@ -389,8 +425,6 @@ exports.newStatus = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.delete = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -406,7 +440,9 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteAccount', function(err) {
     req.app.db.models.Account.findByIdAndRemove(req.params.id, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       workflow.emit('response');

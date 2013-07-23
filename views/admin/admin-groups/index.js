@@ -1,15 +1,16 @@
+'use strict';
+
 exports.find = function(req, res, next){
-  //defaults
   req.query.name = req.query.name ? req.query.name : '';
-  req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+  req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
+  req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  //filters
   var filters = {};
-  if (req.query.name) filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  if (req.query.name) {
+    filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  }
   
-  //get results
   req.app.db.models.AdminGroup.pagedFind({
     filters: filters,
     keys: 'name',
@@ -17,7 +18,9 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -31,11 +34,11 @@ exports.find = function(req, res, next){
   });
 };
 
-
-
 exports.read = function(req, res, next){
   req.app.db.models.AdminGroup.findById(req.params.id).exec(function(err, adminGroup) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.send(adminGroup);
@@ -45,8 +48,6 @@ exports.read = function(req, res, next){
     }
   });
 };
-
-
 
 exports.create = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -67,7 +68,9 @@ exports.create = function(req, res, next){
   
   workflow.on('duplicateAdminGroupCheck', function() {
     req.app.db.models.AdminGroup.findById(req.app.utility.slugify(req.body.name)).exec(function(err, adminGroup) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (adminGroup) {
         workflow.outcome.errors.push('That group already exists.');
@@ -85,7 +88,9 @@ exports.create = function(req, res, next){
     };
     
     req.app.db.models.AdminGroup.create(fieldsToSet, function(err, adminGroup) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.record = adminGroup;
       return workflow.emit('response');
@@ -94,8 +99,6 @@ exports.create = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.update = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -120,7 +123,9 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.adminGroup = adminGroup;
       return workflow.emit('response');
@@ -129,8 +134,6 @@ exports.update = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.permissions = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -155,7 +158,9 @@ exports.permissions = function(req, res, next){
     };
     
     req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.adminGroup = adminGroup;
       return workflow.emit('response');
@@ -164,8 +169,6 @@ exports.permissions = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.delete = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -181,8 +184,11 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteAdminGroup', function(err) {
     req.app.db.models.AdminGroup.findByIdAndRemove(req.params.id, function(err, adminGroup) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.emit('response');
     });
   });
   

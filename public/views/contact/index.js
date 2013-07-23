@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Contact = Backbone.Model.extend({
     url: '/contact/',
     defaults: {
@@ -20,12 +17,7 @@
       message: ''
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.ContactView = Backbone.View.extend({
     el: '#contact',
     template: _.template( $('#tmpl-contact').html() ),
@@ -55,14 +47,8 @@
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.contactView = new app.ContactView();
   });
-
-
+}());

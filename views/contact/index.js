@@ -1,16 +1,29 @@
+'use strict';
+
 exports.init = function(req, res){
   res.render('contact/index');
 };
+
 exports.sendMessage = function(req, res){
   var workflow = new req.app.utility.Workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.name) workflow.outcome.errfor.name = 'required';
-    if (!req.body.email) workflow.outcome.errfor.email = 'required';
-    if (!req.body.phone) workflow.outcome.errfor.phone = 'required';
-    if (!req.body.message) workflow.outcome.errfor.message = 'required';
+    if (!req.body.name) {
+      workflow.outcome.errfor.name = 'required';
+    }
     
-    //return if we have errors already
+    if (!req.body.email) {
+      workflow.outcome.errfor.email = 'required';
+    }
+    
+    if (!req.body.phone) {
+      workflow.outcome.errfor.phone = 'required';
+    }
+    
+    if (!req.body.message) {
+      workflow.outcome.errfor.message = 'required';
+    }
+    
     if (workflow.hasErrors()) {
       workflow.outcome.errors.push('missing required info');
       return workflow.emit('response');

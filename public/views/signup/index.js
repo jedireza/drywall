@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Signup = Backbone.Model.extend({
     url: '/signup/',
     defaults: {
@@ -18,12 +15,7 @@
       password: ''
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.SignupView = Backbone.View.extend({
     el: '#signup',
     template: _.template( $('#tmpl-signup').html() ),
@@ -45,8 +37,8 @@
       event.preventDefault();
     },
     signupOnEnter: function(event) {
-      if (event.keyCode != 13) return;
-      if ($(event.target).attr('name') != 'password') return;
+      if (event.keyCode !== 13) { return; }
+      if ($(event.target).attr('name') !== 'password') { return; }
       event.preventDefault();
       this.signup();
     },
@@ -58,7 +50,7 @@
         email: this.$el.find('[name="email"]').val(),
         password: this.$el.find('[name="password"]').val()
       },{
-        success: function(model, response, options) {
+        success: function(model, response) {
           if (response.success) {
             location.href = '/account/';
           }
@@ -69,14 +61,8 @@
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.signupView = new app.SignupView();
   });
-
-
+}());

@@ -1,17 +1,20 @@
+'use strict';
+
 exports.find = function(req, res, next){
-  //defaults
   req.query.pivot = req.query.pivot ? req.query.pivot : '';
   req.query.name = req.query.name ? req.query.name : '';
-  req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+  req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
+  req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  //filters
   var filters = {};
-  if (req.query.pivot) filters.pivot = new RegExp('^.*?'+ req.query.pivot +'.*$', 'i');
-  if (req.query.name) filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  if (req.query.pivot) {
+    filters.pivot = new RegExp('^.*?'+ req.query.pivot +'.*$', 'i');
+  }
+  if (req.query.name) {
+    filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  }
   
-  //get results
   req.app.db.models.Category.pagedFind({
     filters: filters,
     keys: 'pivot name',
@@ -19,7 +22,9 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -33,11 +38,11 @@ exports.find = function(req, res, next){
   });
 };
 
-
-
 exports.read = function(req, res, next){
   req.app.db.models.Category.findById(req.params.id).exec(function(err, category) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.send(category);
@@ -47,8 +52,6 @@ exports.read = function(req, res, next){
     }
   });
 };
-
-
 
 exports.create = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -63,6 +66,7 @@ exports.create = function(req, res, next){
       workflow.outcome.errors.push('A name is required.');
       return workflow.emit('response');
     }
+    
     if (!req.body.name) {
       workflow.outcome.errors.push('A name is required.');
       return workflow.emit('response');
@@ -73,7 +77,9 @@ exports.create = function(req, res, next){
   
   workflow.on('duplicateCategoryCheck', function() {
     req.app.db.models.Category.findById(req.app.utility.slugify(req.body.pivot +' '+ req.body.name)).exec(function(err, category) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (category) {
         workflow.outcome.errors.push('That category+pivot is already taken.');
@@ -92,7 +98,9 @@ exports.create = function(req, res, next){
     };
     
     req.app.db.models.Category.create(fieldsToSet, function(err, category) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.record = category;
       return workflow.emit('response');
@@ -101,8 +109,6 @@ exports.create = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.update = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -117,6 +123,7 @@ exports.update = function(req, res, next){
       workflow.outcome.errfor.pivot = 'pivot';
       return workflow.emit('response');
     }
+    
     if (!req.body.name) {
       workflow.outcome.errfor.name = 'required';
       return workflow.emit('response');
@@ -132,7 +139,9 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.Category.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, category) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.category = category;
       return workflow.emit('response');
@@ -141,8 +150,6 @@ exports.update = function(req, res, next){
   
   workflow.emit('validate');
 };
-
-
 
 exports.delete = function(req, res, next){
   var workflow = new req.app.utility.Workflow(req, res);
@@ -158,8 +165,10 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteCategory', function(err) {
     req.app.db.models.Category.findByIdAndRemove(req.params.id, function(err, category) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      workflow.emit('response');
     });
   });
   

@@ -1,25 +1,25 @@
-/*!
- * Drywall Core Layout Javascript
- */
+/* global app:true */
+/* exported app */
 
-//register ajax start|stop handlers
-jQuery(document).ajaxStart(function(){
-  $('.ajax-spinner').show();
-});
-jQuery(document).ajaxStop(function(){
-  $('.ajax-spinner').hide();
-});
+var app; //the main declaration
 
-//globally when ready
-$(document).ready(function() {
-  //active tabs and navigation
-  $('.nav [href="'+ window.location.pathname +'"]').closest('li').toggleClass('active');
+(function() {
+  'use strict';
   
-  //ajax spinner follows mouse
-  $(document).bind('mousemove', function(e) {
-    $('.ajax-spinner').css({
-      left: e.pageX + 15,
-      top: e.pageY
+  $(document).ready(function() {
+    //active (selected) navigation elements
+    $('.nav [href="'+ window.location.pathname +'"]').closest('li').toggleClass('active');
+    
+    //register global ajax handlers
+    $(document).ajaxStart(function(){ $('.ajax-spinner').show(); });
+    $(document).ajaxStop(function(){  $('.ajax-spinner').hide(); });
+    
+    //ajax spinner follows mouse
+    $(document).bind('mousemove', function(e) {
+      $('.ajax-spinner').css({
+        left: e.pageX + 15,
+        top: e.pageY
+      });
     });
   });
-});
+}());

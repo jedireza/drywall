@@ -1,3 +1,5 @@
+'use strict';
+
 //dependencies
 var express = require('express'),
     mongoStore = require('connect-mongo')(express),
