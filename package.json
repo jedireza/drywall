@@ -3,7 +3,8 @@
   "version": "0.4.4",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app.js",
+    "postinstall": "node run.js build"
   },
   "dependencies": {
     "async": "~0.1.22",
