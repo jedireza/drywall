@@ -20,9 +20,7 @@
     "passport-facebook": "~0.1.5",
     "passport-github": "~0.1.4",
     "recess": "~1.1.9",
-    "uglify-js": "~2.3.6"
-  },
-  "devDependencies": {
+    "uglify-js": "~2.3.6",
     "findit": "~0.1.2",
     "watchr": "~2.4.3"
   }
