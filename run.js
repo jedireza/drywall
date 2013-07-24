@@ -31,7 +31,7 @@ var app = {
       else {
         app.restartLog = [];
       }
-    }, 250);
+    }, 1000);
   }
 };
 
