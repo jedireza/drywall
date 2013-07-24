@@ -10,18 +10,18 @@
     "connect-mongo": "~0.2.0",
     "emailjs": "~0.3.4",
     "express": "~3.0.0",
+    "findit": "~0.1.2",
     "jade": "~0.27.7",
     "jshint": "~2.1.4",
     "mongoose": "~3.6.7",
     "passport": "~0.1.16",
     "passport-local": "~0.1.6",
     "passport-oauth": "~0.1.15",
-    "passport-twitter": "~0.1.5",
     "passport-facebook": "~0.1.5",
     "passport-github": "~0.1.4",
+    "passport-twitter": "~0.1.5",
     "recess": "~1.1.9",
     "uglify-js": "~2.3.6",
-    "findit": "~0.1.2",
     "watchr": "~2.4.3"
   }
 }
