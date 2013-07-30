@@ -42,7 +42,7 @@ Installation
  1. Clone the repository (or download/unzip) into a directory.
  2. Run `$ npm install`
  3. Configure `/app.js` with mongodb and email credentials.
- 4. Run app via `$ node app`
+ 4. Run app via `$ ./run.js`
 
 Setup
 ------------
