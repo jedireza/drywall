@@ -44,6 +44,8 @@
     },
     signup: function() {
       this.$el.find('.btn-signup').attr('disabled', true);
+      this.model.attributes.errors = [];
+      this.model.attributes.errfor = {};
       
       this.model.save({
         username: this.$el.find('[name="username"]').val(),

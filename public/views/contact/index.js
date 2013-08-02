@@ -38,6 +38,8 @@
     },
     contact: function() {
       this.$el.find('.btn-contact').attr('disabled', true);
+	  this.model.attributes.errors = [];
+	  this.model.attributes.errfor = {};
       
       this.model.save({
         name: this.$el.find('[name="name"]').val(),
