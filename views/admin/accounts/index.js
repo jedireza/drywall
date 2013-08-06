@@ -117,7 +117,7 @@ exports.read = function(req, res, next){
 };
 
 exports.create = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body['name.full']) {
@@ -163,7 +163,7 @@ exports.create = function(req, res, next){
 };
 
 exports.update = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.first) {
@@ -216,7 +216,7 @@ exports.update = function(req, res, next){
 };
 
 exports.linkUser = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -292,7 +292,7 @@ exports.linkUser = function(req, res, next){
 };
 
 exports.unlinkUser = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -353,7 +353,7 @@ exports.unlinkUser = function(req, res, next){
 };
 
 exports.newNote = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.data) {
@@ -388,7 +388,7 @@ exports.newNote = function(req, res, next){
 };
 
 exports.newStatus = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.id) {
@@ -427,7 +427,7 @@ exports.newStatus = function(req, res, next){
 };
 
 exports.delete = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {

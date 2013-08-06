@@ -15,7 +15,7 @@ exports.init = function(req, res){
 };
 
 exports.signup = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.username) {
@@ -123,7 +123,7 @@ exports.signup = function(req, res){
   });
   
   workflow.on('sendWelcomeEmail', function() {
-    req.app.utility.email(req, res, {
+    req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',
@@ -255,7 +255,7 @@ exports.signupFacebook = function(req, res, next) {
 };
 
 exports.signupSocial = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.email) {
@@ -364,7 +364,7 @@ exports.signupSocial = function(req, res){
   });
   
   workflow.on('sendWelcomeEmail', function() {
-    req.app.utility.email(req, res, {
+    req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',

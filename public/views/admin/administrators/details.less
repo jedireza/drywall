@@ -1,26 +1,26 @@
-@import "../../../less/trailmix.less";
-
-.groups div .input-append .uneditable-input,
-.permissions div .input-append .uneditable-input {
-  .border-radius(0);
+.groups .input-group input[disabled],
+.permissions .input-group input[disabled] {
+  border-radius: 0;
+  border-bottom: none;
 }
-.groups div .input-append .btn-delete,
-.permissions div .input-append .btn-delete {
-  .border-radius(0);
+.groups .input-group .btn,
+.permissions .input-group .btn {
+  border-radius: 0;
 }
-.groups div:first-of-type .input-append .uneditable-input,
-.permissions div:first-of-type .input-append .uneditable-input {
-  .border-top-left-radius(4px);
+.groups .input-group:first-of-type input[disabled],
+.permissions .input-group:first-of-type input[disabled] {
+  border-top-left-radius: 4px;
 }
-.groups div:first-of-type .input-append .btn-delete,
-.permissions div:first-of-type .input-append .btn-delete {
-  .border-top-right-radius(4px);
+.groups .input-group:first-of-type .btn-delete,
+.permissions .input-group:first-of-type .btn-delete {
+  border-top-right-radius: 4px;
 }
-.groups div:last-of-type .input-append .uneditable-input,
-.permissions div:last-of-type .input-append .uneditable-input {
-  .border-bottom-left-radius(4px);
+.groups .input-group:last-of-type input[disabled],
+.permissions .input-group:last-of-type input[disabled] {
+  border-bottom-left-radius: 4px;
+  border-bottom: 1px solid #ccc;
 }
-.groups div:last-of-type .input-append .btn-delete,
-.permissions div:last-of-type .input-append .btn-delete {
-  .border-bottom-right-radius(4px);
+.groups .input-group:last-of-type .btn-delete,
+.permissions .input-group:last-of-type .btn-delete {
+  border-bottom-right-radius: 4px;
 }

@@ -1,54 +1,52 @@
-@import "../../../less/trailmix.less";
+@import "../../../vendor/bootstrap/less/mixins.less";
 
-/* status */
-.status-new legend {
-}
-.status-collection .status-items {
-  margin-bottom: 10;
+.status-items {
   overflow: scroll;
-}
-.status-collection .status-items .status {
-  padding: 10px 5px;
-  font-size: 12px;
-  border-bottom: 1px solid #ccc;
-  .force-wrap();
-}
-.status-collection .status-items .status .author {
-  font-weight: normal;
-  color: #999;
-  text-shadow: none;
-  background-color: transparent;
-  border: 1px solid #ccc;
-}
-.status-collection .status-items .status:nth-child(even) {
-  background-color: #f5f5f5;
+  
+  .status {
+    padding: 10px 5px;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+    
+    .author {
+      font-weight: normal;
+      color: #999;
+      text-shadow: none;
+      background-color: transparent;
+      border: 1px solid #ccc;
+    }
+  }
+  .status:nth-child(even) {
+    background-color: #f5f5f5;
+  }
 }
 
-/* notes */
-.notes-new legend {
+.notes-new {
+  textarea {
+    margin-bottom: 0;
+    border-bottom: none;
+    .border-bottom-radius(0);
+  }
+  .btn {
+    .border-top-radius(0);
+  }
 }
-.notes-new textarea {
-  margin-bottom: 0;
-  border-bottom: none;
-  .border-bottom-radius(0);
-}
-.notes-new .btn {
-  .border-top-radius(0);
-}
-.notes-collection .notes-items {}
-.notes-collection .notes-items .note {
-  padding: 10px 5px;
-  font-size: 12px;
-  border-bottom: 1px solid #ccc;
-  .force-wrap();
-}
-.notes-collection .notes-items .note .author {
-  font-weight: normal;
-  color: #999;
-  text-shadow: none;
-  background-color: transparent;
-  border: 1px solid #ccc;
-}
-.notes-collection .notes-items .note:nth-child(even) {
-  background-color: #f5f5f5;
+
+.notes-items {
+  .note {
+    padding: 10px 5px;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+    
+    .author {
+      font-weight: normal;
+      color: #999;
+      text-shadow: none;
+      background-color: transparent;
+      border: 1px solid #ccc;
+    }
+  }
+  .note:nth-child(even) {
+    background-color: #f5f5f5;
+  }
 }

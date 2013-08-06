@@ -3,61 +3,66 @@ extends ../../layouts/default
 block head
   title Sign Up
 
+block neck
+  link(rel='stylesheet', href='/views/signup/index.min.css?#{cacheBreaker}')
+
 block feet
   script(src='/views/signup/index.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Sign Up
-  #signup
-  
-  if oauthTwitter || oauthGitHub || oauthFacebook
-    div.form-horizontal
-      h2 Or Sign Up With...
-      if oauthMessage
-        div.alerts
-          div.alert.alert-info
-            button.close(type='button', data-dismiss='alert') &times;
-            |#{oauthMessage} 
-            b
-              a(href='/login/') Login Here
-      div.form-actions
-        div.btn-group
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Sign Up 
+      div#signup
+      if oauthTwitter || oauthGitHub || oauthFacebook
+        hr
+        p Or sign up using...
+        if oauthMessage
+          div.alerts
+            div.alert.alert-info
+              button.close(type='button', data-dismiss='alert') &times;
+              |#{oauthMessage} 
+              b
+                a(href='/login/') Login Here
+        div.btn-group.btn-group-justified
           if oauthTwitter
-            a.btn.btn-info(href='/signup/twitter/')
+            a.btn.btn-default(href='/signup/twitter/')
               i.icon-twitter.icon-large
               |  Twitter
           if oauthGitHub
-            a.btn.btn-info(href='/signup/github/')
+            a.btn.btn-default(href='/signup/github/')
               i.icon-github.icon-large
               |  GitHub
           if oauthFacebook
-            a.btn.btn-info(href='/signup/facebook/')
+            a.btn.btn-default(href='/signup/facebook/')
               i.icon-facebook-sign.icon-large
               |  Facebook
+    div.col-sm-6.marketing
+      div.page-header
+        h1 Campy Benefits
+      p.lead Really, you will love it inside. It's super great!
+      i.icon-thumbs-up-alt.super-awesome
   
   script(type='text/template', id='tmpl-signup')
-    form.form-horizontal
+    form
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
-      div.control-group(class!='<%= errfor.username ? "error" : "" %>')
+      div.form-group(class!='<%= errfor.username ? "has-error" : "" %>')
         label.control-label Pick a Username:
-        div.controls
-          input(type='text', name='username', value!='<%= username %>')
-          span.help-inline <%= errfor.username %>
-      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+        input.form-control(type='text', name='username', value!='<%= username %>')
+        span.help-block <%= errfor.username %>
+      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
         label.control-label Enter Your Email:
-        div.controls
-          input(type='text', name='email', value!='<%= email %>')
-          span.help-inline <%= errfor.email %>
-      div.control-group(class!='<%= errfor.password ? "error" : "" %>')
+        input.form-control(type='text', name='email', value!='<%= email %>')
+        span.help-block <%= errfor.email %>
+      div.form-group(class!='<%= errfor.password ? "has-error" : "" %>')
         label.control-label Create a Password:
-        div.controls
-          input(type='password', name='password', value!='<%= password %>')
-          span.help-inline <%= errfor.password %>
-      div.form-actions
+        input.form-control(type='password', name='password', value!='<%= password %>')
+        span.help-block <%= errfor.password %>
+      div.form-group
         button.btn.btn-primary.btn-signup(type='button') Create My Account

@@ -1,32 +1,34 @@
 extends ../layouts/default
 
 block head
-  title Drywall.js is Running
+  title Drywall is Running
 
 block neck
   link(rel='stylesheet', href='/views/index.min.css?#{cacheBreaker}')
 
 block body
-  div.hero-unit
-    h1 #{projectName}
+  div.jumbotron
+    h1 Success
     p.lead
       | Your Node.js website and user system is running. May the force be with you.
       div
-        a.btn.btn-large(href='/signup/') Create an Account
+        a.btn.btn-primary.btn-large(href='/signup/') Create an Account
+        |  or 
+        a.btn.btn-default.btn-large(href='/login/forgot/') Reset Your Password
       div.clearfix
   div.row
-    div.span4
-      h3 About Us
-      p
-        | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-      a.btn(href='/about/') Learn More
-    div.span4
-      h3 Sign Up
-      p
-        | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-      a.btn(href='/signup/') Learn More
-    div.span4
-      h3 Contact Us
-      p
-        | At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-      a.btn(href='/contact/') Learn More
+    div.col-sm-4
+      div.panel
+        h3 About Us
+        p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+        a.btn.btn-default.btn-block(href='/about/') Learn More
+    div.col-sm-4
+      div.panel
+        h3 Sign Up
+        p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+        a.btn.btn-default.btn-block(href='/signup/') Learn More
+    div.col-sm-4
+      div.panel
+        h3 Contact Us
+        p At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+        a.btn.btn-default.btn-block(href='/contact/') Learn More

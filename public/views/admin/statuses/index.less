@@ -1,6 +1,22 @@
-@import "../../../less/trailmix.less";
+@import "../../../vendor/bootstrap/less/mixins.less";
+@import "../../../less/bootstrap-vars.less";
 
-.input-append input:nth-child(2) {
-  border-left: none;
-  .border-left-radius(0)
+.input-group {
+  margin-bottom: 20px;
+  
+  input {
+    width: 100px !important;
+    
+    @media screen and (min-width: @grid-float-breakpoint) {
+      width: 160px !important;
+    }
+  }
+  
+  input:nth-child(2) {
+    border-left: none;
+  }
+  
+  .btn {
+    .border-left-radius(0)
+  }
 }

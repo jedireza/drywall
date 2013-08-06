@@ -16,7 +16,7 @@ exports.init = function(req, res){
 };
 
 exports.login = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.username) {

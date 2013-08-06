@@ -62,7 +62,7 @@ exports.read = function(req, res, next){
 };
 
 exports.create = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.username) {
@@ -114,7 +114,7 @@ exports.create = function(req, res, next){
 };
 
 exports.update = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.isActive) {
@@ -203,7 +203,7 @@ exports.update = function(req, res, next){
 };
 
 exports.password = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.newPassword) {
@@ -252,7 +252,7 @@ exports.password = function(req, res, next){
 };
 
 exports.linkAdmin = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -343,7 +343,7 @@ exports.linkAdmin = function(req, res, next){
 };
 
 exports.unlinkAdmin = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -415,7 +415,7 @@ exports.unlinkAdmin = function(req, res, next){
 };
 
 exports.linkAccount = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -506,7 +506,7 @@ exports.linkAccount = function(req, res, next){
 };
 
 exports.unlinkAccount = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -573,7 +573,7 @@ exports.unlinkAccount = function(req, res, next){
 };
 
 exports.delete = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {

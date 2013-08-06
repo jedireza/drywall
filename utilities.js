@@ -2,7 +2,7 @@
 
 exports = module.exports = function(app) {
   app.utility = {};
-  app.utility.email = require('./utilities/email');
+  app.utility.sendmail = require('./utilities/sendmail');
   app.utility.slugify = require('./utilities/slugify');
-  app.utility.Workflow = require('./utilities/workflow');
+  app.utility.workflow = require('./utilities/workflow');
 };

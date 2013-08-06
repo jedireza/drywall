@@ -2,29 +2,31 @@ extends ../../layouts/default
 
 block head
   title Contact Us
+
+block neck
   link(rel='stylesheet', href='/views/contact/index.min.css?#{cacheBreaker}')
 
 block feet
   script(src='/views/contact/index.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Contact Us
   div.row
-    div.span8
-      iframe(
-        width='100%', height='390', frameborder='0', 
-        scrolling='no', marginheight='0', marginwidth='0', 
-        src='https://maps.google.com/?ie=UTF8&amp;ll=37.0625,-95.677068&amp;spn=50.157795,67.5&amp;t=m&amp;z=4&amp;output=embed'
-      )
-    div.span4
-      #contact
+    div.col-sm-6
+      div.page-header
+        h1 Send A Message
+      div#contact
+    div.col-sm-6.special
+      div.page-header
+        h1 Contact Us
+      p.lead Freddy can't wait to hear from you.
+      i.icon-reply-all.super-awesome
+      address 1428 Elm Street &bull; San Francisco, CA 94122
   
   script(type='text/template', id='tmpl-contact')
     form
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-danger
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -34,22 +36,18 @@ block body
           | We have received your message. Thank you.
         |<% } %>
       |<% if (!success) { %>
-      div.control-group(class!='<%= errfor.name ? "error" : "" %>')
-        label.control-label Name:
-        div.controls
-          input.input-block-level(type='text', name='name', value!='<%= name %>')
-      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
-        label.control-label Email:
-        div.controls
-          input.input-block-level(type='text', name='email', value!='<%= email %>')
-      div.control-group(class!='<%= errfor.phone ? "error" : "" %>')
-        label.control-label Phone:
-        div.controls
-          input.input-block-level(type='text', name='phone', value!='<%= phone %>')
-      div.control-group(class!='<%= errfor.message ? "error" : "" %>')
+      div.form-group(class!='<%= errfor.name ? "has-error" : "" %>')
+        label.control-label Your Name:
+        input.form-control(type='text', name='name', value!='<%= name %>')
+        span.help-block <%= errfor.name %>
+      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        label.control-label Your Email:
+        input.form-control(type='text', name='email', value!='<%= email %>')
+        span.help-block <%= errfor.email %>
+      div.form-group(class!='<%= errfor.message ? "has-error" : "" %>')
         label.control-label Message:
-        div.controls
-          textarea.input-block-level(name='message', rows='7') <%= message %>
-      div.btn-float
+        textarea.form-control(name='message', rows='5') <%= message %>
+        span.help-block <%= errfor.message %>
+      div.form-group
         button.btn.btn-primary.btn-contact(type='button') Send Message
       |<% } %>

@@ -7,24 +7,25 @@ block feet
   script(src='/views/signup/social.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Complete Sign Up
-  #signup
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Complete Sign Up
+      div#signup
   
   script(type='text/template', id='tmpl-signup')
-    form.form-horizontal
+    form
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
-      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
         label.control-label Enter Your Email:
-        div.controls
-          input(type='text', name='email', value!='<%= email %>')
-          span.help-inline <%= errfor.email %>
-      div.form-actions
+        input.form-control(type='text', name='email', value!='<%= email %>')
+        span.help-block <%= errfor.email %>
+      div.form-group
         button.btn.btn-primary.btn-signup(type='button') Create My Account
   
   script(type='text/template', id='data-email') !{email}

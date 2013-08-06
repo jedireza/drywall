@@ -7,9 +7,11 @@ block feet
   script(src='/views/admin/statuses/details.min.js?#{cacheBreaker}')
 
 block body
-  #header
-  #details.form-horizontal
-  #delete.form-horizontal
+  div.row
+    div.col-12
+      div#header
+      div#details
+      div#delete
   
   script(type='text/template', id='tmpl-header')
     div.page-header
@@ -18,45 +20,45 @@ block body
         |  / <%= name %>
   
   script(type='text/template', id='tmpl-details')
-    legend Details
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.pivot ? "error" : "" %>')
-      label.control-label Pivot:
-      div.controls
-        input(type='text', name='pivot', value!='<%= pivot %>')
-        span.help-inline <%= errfor.pivot %>
-    div.control-group(class!='<%= errfor.name ? "error" : "" %>')
-      label.control-label Name:
-      div.controls
-        input(type='text', name='name', value!='<%= name %>')
-        span.help-inline <%= errfor.name %>
-    div.form-actions
-      button.btn.btn-primary.btn-update(type='button') Update
+    fieldset
+      legend Details
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.control-group(class!='<%= errfor.pivot ? "has-error" : "" %>')
+        label.control-label Pivot:
+        input.form-control(type='text', name='pivot', value!='<%= pivot %>')
+        span.help-block <%= errfor.pivot %>
+      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+        label.control-label Name:
+        input.form-control(type='text', name='name', value!='<%= name %>')
+        span.help-block <%= errfor.name %>
+      div.control-group
+        button.btn.btn-primary.btn-update(type='button') Update
   
   script(type='text/template', id='tmpl-delete')
-    legend Danger Zone
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-    span.badge.badge-important
-      | If you do this, it cannot be undone.
-    | 
-    span.muted
-      | You may also create orphaned document relationships too.
-    div.form-actions
-      button.btn.btn-danger.btn-delete(type='button') Delete
+    fieldset
+      legend Danger Zone
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+      div.control-group
+        span.help-block
+          span.label.label-danger If you do this, it cannot be undone.
+          | 
+          span.text-muted You may also create orphaned document relationships too.
+      div.control-group
+        button.btn.btn-danger.btn-delete(type='button') Delete
   
   script(type='text/template', id='data-record') !{data.record}

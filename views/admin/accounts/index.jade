@@ -3,47 +3,52 @@ extends ../../../layouts/admin
 block head
   title Manage Accounts
 
+block neck
+  link(rel='stylesheet', href='/views/admin/accounts/index.min.css?#{cacheBreaker}')
+
 block feet
   script(src='/views/admin/accounts/index.min.js?#{cacheBreaker}')
 
 block body
-  #header
-  #filters
-  #results-table
-  #results-paging
+  div.row
+    div.col-12
+      div#header
+      div#filters
+      div#results-table
+      div#results-paging
   
   script(type='text/template', id='tmpl-header')
     div.page-header
       form.form-inline.pull-right
-        div.input-append
-          input(name='name', type='text', placeholder='enter a name', value!='<%= name.full %>')
+        div.input-group
+          input.form-control(name='name', type='text', placeholder='enter a name', value!='<%= name.full %>')
           button.btn.btn-info.btn-add(type='button') Add New
       h1 Accounts
   
   script(type='text/template', id='tmpl-filters')
     form.filters
       div.row
-        div.span3
+        div.col-sm-3
           label Search
-          input.input-block-level(name='search', type='text')
-        div.span3
+          input.form-control(name='search', type='text')
+        div.col-sm-3
           label Status
-          select.input-block-level(name='status')
+          select.form-control(name='status')
             option(value='') -- any --
             for status in data.statuses
               option(value='#{status._id}') #{status.name}
-        div.span3
+        div.col-sm-3
           label Sort By
-          select.input-block-level(name='sort')
+          select.form-control(name='sort')
             option(value='_id') id &#9650;
             option(value='-_id') id &#9660;
             option(value='name') name &#9650;
             option(value='-name') name &#9660;
             option(value='company') company &#9650;
             option(value='-company') company &#9660;
-        div.span3
+        div.col-sm-3
           label Limit
-          select.input-block-level(name='limit')
+          select.form-control(name='limit')
             option(value='10') 10 items
             option(value='20', selected='selected') 20 items
             option(value='50') 50 items
@@ -63,7 +68,7 @@ block body
   
   script(type='text/template', id='tmpl-results-row')
     td
-      input.btn.btn-details(type='button', value='Edit')
+      input.btn.btn-default.btn-small.btn-details(type='button', value='Edit')
     td.stretch
       span.badge.badge-clear.timeago.pull-right(data-age='y') <%= userCreated.time %>
       |<%= name.full %>
@@ -80,8 +85,8 @@ block body
     div.well
       span Page <%= pages.current %> of <%= pages.total %> | Results <%= items.begin %> - <%= items.end %> of <%= items.total %>
       span.btn-group.pull-right
-        button.btn.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
-        button.btn.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
+        button.btn.btn-default.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
+        button.btn.btn-default.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
       div.clearfix
   
   script(type='text/template', id='data-results') !{data.results}

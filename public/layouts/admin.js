@@ -52,7 +52,7 @@
     el: '#_search',
     template: _.template( $('#tmpl-_search').html() ),
     events: {
-      'keydown .search-query': 'startKeyBuffer'
+      'keydown .form-control': 'startKeyBuffer'
     },
     timeLastKeyPressed: undefined,
     lastTimeoutID: undefined,
@@ -61,13 +61,13 @@
       app._searchView.timeLastKeyPressed = (new Date());
       
       //esc key
-      if (event.keyCode === 27) {
+      if (parseInt(event.keyCode, null) === 27) {
         this.clearResults();
         return;
       }
       
       //enter key
-      if (event.keyCode === 13) {
+      if (parseInt(event.keyCode, null) === 13) {
         if (this.selectedResult !== undefined) {
           var url = this.$el.find('li.active a').attr('href');
           if (url) {
@@ -78,13 +78,13 @@
       }
       
       //up and down keys
-      if (event.keyCode === 38 || event.keyCode === 40) {
+      if (parseInt(event.keyCode, null) === 38 || parseInt(event.keyCode, null) === 40) {
         this.navigateResults(event);
         return false;
       }
       
       //ignore non-alphanumeric, except backspace
-      if (!/[a-zA-Z0-9\-_ ]/.test(String.fromCharCode(event.keyCode)) && event.keyCode !== 8) {
+      if (!/[a-zA-Z0-9\-_ ]/.test(String.fromCharCode(parseInt(event.keyCode, null))) && parseInt(event.keyCode, null) !== 8) {
         return;
       }
       
@@ -104,7 +104,7 @@
       }
     },
     runSearch: function() {
-      var query = this.$el.find('.search-query').val();
+      var query = this.$el.find('.form-control').val();
       if (!query) {
         this.clearResults();
         return;
@@ -115,8 +115,8 @@
     navigateResults: function(event) {
       var arrLinkResults = this.$el.find('li a').get();
       
-      var movingUp = (event.keyCode === 38);
-      var movingDown = (event.keyCode === 40);
+      var movingUp = (parseInt(event.keyCode, null) === 38);
+      var movingDown = (parseInt(event.keyCode, null) === 40);
       
       if (this.selectedResult === undefined && this.$el.find('li a').get(0)) {
         this.selectedResult = -1;
@@ -153,7 +153,7 @@
       }
     },
     clearResults: function() {
-      this.$el.find('.search-query').val('');
+      this.$el.find('.form-control').val('');
       this.$el.find('.dropdown').removeClass('open');
       this.$el.find('#_search-results-rows').html('');
       this.selectedResult = undefined;
@@ -165,7 +165,7 @@
       this.render();
     },
     render: function() {
-      if (this.$el.find('.search-query').val() === '') {
+      if (this.$el.find('.form-control').val() === '') {
         this.$el.find('.dropdown').removeClass('open');
       }
       else {
@@ -197,7 +197,7 @@
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
       if (this.model.get('type') === 'header') {
-        this.$el.addClass('nav-header');
+        this.$el.addClass('dropdown-header');
       }
       
       return this;

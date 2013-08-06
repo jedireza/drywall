@@ -10,17 +10,21 @@ block feet
   script(src='/views/admin/accounts/details.min.js?#{cacheBreaker}')
 
 block body
-  #header
   div.row
-    div.span8
-      #details.form-horizontal
-      #login.form-horizontal
-    div.span4
-      #status-new.status-new
-      #status-collection.status-collection
-      #notes-new.notes-new
-      #notes-collection.notes-collection
-  #delete.form-horizontal
+    div.col-12
+      div#header
+  div.row
+    div.col-sm-8
+      div#details
+      div#login
+      div#delete
+    div.col-sm-4
+      fieldset
+        div#status-new.status-new
+        div#status-collection
+      fieldset
+        div#notes-new.notes-new
+        div#notes-collection
   
   script(type='text/template', id='tmpl-header')
     div.page-header
@@ -29,72 +33,69 @@ block body
         |  / <%= name.full %>
   
   script(type='text/template', id='tmpl-details')
-    legend Contact Info
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.first ? "error" : "" %>')
-      label.control-label First Name:
-      div.controls
-        input(type='text', name='first', value!='<%= first %>')
-        span.help-inline <%= errfor.first %>
-    div.control-group(class!='<%= errfor.middle ? "error" : "" %>')
-      label.control-label Middle Name:
-      div.controls
-        input(type='text', name='middle', value!='<%= middle %>')
-        span.help-inline <%= errfor.middle %>
-    div.control-group(class!='<%= errfor.last ? "error" : "" %>')
-      label.control-label Last Name:
-      div.controls
-        input(type='text', name='last', value!='<%= last %>')
-        span.help-inline <%= errfor['last'] %>
-    div.control-group(class!='<%= errfor.company ? "error" : "" %>')
-      label.control-label Company Name:
-      div.controls
-        input(type='text', name='company', value!='<%= company %>')
-        span.help-inline <%= errfor.company %>
-    div.control-group(class!='<%= errfor.phone ? "error" : "" %>')
-      label.control-label Phone:
-      div.controls
-        input(type='text', name='phone', value!='<%= phone %>')
-        span.help-inline <%= errfor.phone %>
-    div.control-group(class!='<%= errfor.zip ? "error" : "" %>')
-      label.control-label Zip:
-      div.controls
-        input(type='text', name='zip', value!='<%= zip %>')
-        span.help-inline <%= errfor.zip %>
-    div.form-actions
-      button.btn.btn-primary.btn-update(type='button') Update
+    fieldset
+      legend Contact Info
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.control-group(class!='<%= errfor.first ? "has-error" : "" %>')
+        label.control-label First Name:
+        input.form-control(type='text', name='first', value!='<%= first %>')
+        span.help-block <%= errfor.first %>
+      div.control-group(class!='<%= errfor.middle ? "has-error" : "" %>')
+        label.control-label Middle Name:
+        input.form-control(type='text', name='middle', value!='<%= middle %>')
+        span.help-block <%= errfor.middle %>
+      div.control-group(class!='<%= errfor.last ? "has-error" : "" %>')
+        label.control-label Last Name:
+        input.form-control(type='text', name='last', value!='<%= last %>')
+        span.help-block <%= errfor['last'] %>
+      div.control-group(class!='<%= errfor.company ? "has-error" : "" %>')
+        label.control-label Company Name:
+        input.form-control(type='text', name='company', value!='<%= company %>')
+        span.help-block <%= errfor.company %>
+      div.control-group(class!='<%= errfor.phone ? "has-error" : "" %>')
+        label.control-label Phone:
+        input.form-control(type='text', name='phone', value!='<%= phone %>')
+        span.help-block <%= errfor.phone %>
+      div.control-group(class!='<%= errfor.zip ? "has-error" : "" %>')
+        label.control-label Zip:
+        input.form-control(type='text', name='zip', value!='<%= zip %>')
+        span.help-block <%= errfor.zip %>
+      div.control-group
+        button.btn.btn-primary.btn-update(type='button') Update
   
   script(type='text/template', id='tmpl-login')
-    legend Login
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-    div.control-group(class!='<%= errfor.newUsername ? "error" : "" %>')
-      label.control-label Username:
-      div.controls
-        div.input-append
+    fieldset
+      legend Login
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+      div.control-group(class!='<%= errfor.newUsername ? "has-error" : "" %>')
+        label.control-label Username:
+        div.input-group
           |<% if (name) { %>
-          span.uneditable-input
-            |<%= name %>
-          button.btn.btn-warning.btn-user-unlink(type='button') Unlink
-          button.btn.btn-user-open(type='button') Open
+          input.form-control(disabled=true, value!='<%= name %>')
+          div.input-group-btn
+            div.btn-group
+              button.btn.btn-warning.btn-user-unlink(type='button') Unlink
+              button.btn.btn-default.btn-user-open(type='button') Open
           |<% } else { %>
-          input(name='newUsername', type='text', placeholder='enter a username')
-          button.btn.btn-success.btn-user-link(type='button') Link
+          input.form-control(name='newUsername', type='text', placeholder='enter a username')
+          div.input-group-btn
+            button.btn.btn-success.btn-user-link(type='button') Link
           |<% } %>
-        span.help-inline <%= errfor.newUsername %>
+        span.help-block <%= errfor.newUsername %>
   
   script(type='text/template', id='tmpl-status-new')
     legend Status
@@ -104,21 +105,19 @@ block body
         button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
-    div.form-inline
-      div.row-fluid
-        div.span9
-          select.input-block-level(name='status')
-            option(value='') -- choose --
-            for status in data.statuses
-              option(value='#{status._id}') #{status.name}
-        div.span3
-          button.btn.btn-block.btn-add Change
+    div.input-group
+      select.form-control(name='status')
+        option(value='') -- choose --
+        for status in data.statuses
+          option(value='#{status._id}') #{status.name}
+      div.input-group-btn
+        button.btn.btn-default.btn-add Change
   
   script(type='text/template', id='tmpl-status-collection')
-    #status-items.status-items
+    div#status-items.status-items
   
   script(type='text/template', id='tmpl-status-item')
-    div.pull-right.muted.badge.author
+    div.pull-right.badge.author
       |<%= userCreated.name %>
       | - 
       span.timeago <%= userCreated.time %>
@@ -133,37 +132,38 @@ block body
         button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
-    textarea.input-block-level(rows='3', name='data', placeholder='enter notes')
-    button.btn.btn-block.btn-add Add New Note
+    textarea.form-control(rows='3', name='data', placeholder='enter notes')
+    button.btn.btn-default.btn-block.btn-add Add New Note
   
   script(type='text/template', id='tmpl-notes-collection')
-    #notes-items.notes-items
+    div#notes-items.notes-items
   
   script(type='text/template', id='tmpl-notes-item')
-    div <%= data %>
-    div.pull-right.muted.badge.author
+    div.force-wrap <%= data %>
+    div.pull-right.badge.author
       |<%= userCreated.name %>
       | - 
       span.timeago <%= userCreated.time %>
     div.clearfix
   
   script(type='text/template', id='tmpl-notes-none')
-    div.note.muted no notes found
+    div.note.text-muted no notes found
   
   script(type='text/template', id='tmpl-delete')
-    legend Danger Zone
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-    span.badge.badge-important
-      | If you do this, it cannot be undone.
-    | 
-    span.muted
-      | You may also create orphaned document relationships too.
-    div.form-actions
-      button.btn.btn-danger.btn-delete(type='button') Delete
+    fieldset
+      legend Danger Zone
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+      div.control-group
+        span.help-block
+          span.label.label-danger If you do this, it cannot be undone.
+          | 
+          span.text-muted You may also create orphaned document relationships too.
+      div.control-group
+        button.btn.btn-danger.btn-delete(type='button') Delete
   
   script(type='text/template', id='data-record') !{data.record}

@@ -1,38 +1,44 @@
-// Core variables and mixins
-@import "bootstrap-vars.less"; // Modify this for custom colors, font-sizes, etc
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
 
-// Core mixins
+// Core variables and mixins
+@import "bootstrap-vars.less";
 @import "../vendor/bootstrap/less/mixins.less";
 
-// CSS Reset
-@import "../vendor/bootstrap/less/reset.less";
+// Reset
+@import "../vendor/bootstrap/less/normalize.less";
+@import "../vendor/bootstrap/less/print.less";
 
-// Grid system and page structure
+// Core CSS
 @import "../vendor/bootstrap/less/scaffolding.less";
-@import "../vendor/bootstrap/less/grid.less";
-@import "../vendor/bootstrap/less/layouts.less";
-
-// Base CSS
 @import "../vendor/bootstrap/less/type.less";
 @import "../vendor/bootstrap/less/code.less";
-@import "../vendor/bootstrap/less/forms.less";
+@import "../vendor/bootstrap/less/grid.less";
+
 @import "../vendor/bootstrap/less/tables.less";
+@import "../vendor/bootstrap/less/forms.less";
+@import "../vendor/bootstrap/less/buttons.less";
 
 // Components: common
-@import "../vendor/bootstrap/less/sprites.less";
-@import "../vendor/bootstrap/less/dropdowns.less";
-@import "../vendor/bootstrap/less/wells.less";
 @import "../vendor/bootstrap/less/component-animations.less";
+@import "../vendor/bootstrap/less/input-groups.less";
+@import "../vendor/bootstrap/less/dropdowns.less";
+@import "../vendor/bootstrap/less/list-group.less";
+@import "../vendor/bootstrap/less/panels.less";
+@import "../vendor/bootstrap/less/wells.less";
 @import "../vendor/bootstrap/less/close.less";
-
-// Components: Buttons & Alerts
-@import "../vendor/bootstrap/less/buttons.less";
-@import "../vendor/bootstrap/less/button-groups.less";
-@import "../vendor/bootstrap/less/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
 // Components: Nav
 @import "../vendor/bootstrap/less/navs.less";
 @import "../vendor/bootstrap/less/navbar.less";
+@import "../vendor/bootstrap/less/button-groups.less";
 @import "../vendor/bootstrap/less/breadcrumbs.less";
 @import "../vendor/bootstrap/less/pagination.less";
 @import "../vendor/bootstrap/less/pager.less";
@@ -43,20 +49,16 @@
 @import "../vendor/bootstrap/less/popovers.less";
 
 // Components: Misc
+@import "../vendor/bootstrap/less/alerts.less";
 @import "../vendor/bootstrap/less/thumbnails.less";
 @import "../vendor/bootstrap/less/media.less";
-@import "../vendor/bootstrap/less/labels-badges.less";
+@import "../vendor/bootstrap/less/labels.less";
+@import "../vendor/bootstrap/less/badges.less";
 @import "../vendor/bootstrap/less/progress-bars.less";
 @import "../vendor/bootstrap/less/accordion.less";
 @import "../vendor/bootstrap/less/carousel.less";
-@import "../vendor/bootstrap/less/hero-unit.less";
+@import "../vendor/bootstrap/less/jumbotron.less";
 
 // Utility classes
 @import "../vendor/bootstrap/less/utilities.less"; // Has to be last to override when necessary
-
-// Responsive classes
 @import "../vendor/bootstrap/less/responsive-utilities.less";
-@import "../vendor/bootstrap/less/responsive-1200px-min.less"; // Large desktops
-@import "../vendor/bootstrap/less/responsive-768px-979px.less"; // Tablets to regular desktops
-@import "../vendor/bootstrap/less/responsive-767px-max.less"; // Phones to portrait tablets and narrow desktops
-@import "../vendor/bootstrap/less/responsive-navbar.less"; // From 979px and below, show a button to toggle navbar contents

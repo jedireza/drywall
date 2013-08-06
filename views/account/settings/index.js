@@ -164,7 +164,7 @@ exports.disconnectFacebook = function(req, res, next){
 };
 
 exports.update = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.first) {
@@ -217,7 +217,7 @@ exports.update = function(req, res, next){
 };
 
 exports.identity = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.username) {
@@ -301,7 +301,7 @@ exports.identity = function(req, res, next){
 };
 
 exports.password = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.newPassword) {

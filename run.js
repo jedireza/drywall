@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict';
 
 //dependencies
 var watchr = require('watchr'),
@@ -24,7 +25,7 @@ var app = {
     app.start();
     setTimeout(function() {
       if (app.restartLog.length >= 3) {
-        console.log('\033[91mRUN {#} Mayday relay: app is sickly.\033[0m');
+        console.log('RUN {#} Mayday relay: app is sickly.');
         app.process.kill();
         process.exit(1);
       }
@@ -136,7 +137,18 @@ var build = function(filePath) {
       'public/vendor/jquery/jquery-1.10.2.js',
       'public/vendor/underscore/underscore.js',
       'public/vendor/backbone/backbone.js',
-      'public/vendor/bootstrap/js/bootstrap.js',
+      'public/vendor/bootstrap/js/affix.js',
+      'public/vendor/bootstrap/js/alert.js',
+      'public/vendor/bootstrap/js/button.js',
+      'public/vendor/bootstrap/js/carousel.js',
+      'public/vendor/bootstrap/js/collapse.js',
+      'public/vendor/bootstrap/js/dropdown.js',
+      'public/vendor/bootstrap/js/modal.js',
+      'public/vendor/bootstrap/js/tooltip.js',
+      'public/vendor/bootstrap/js/popover.js',
+      'public/vendor/bootstrap/js/scrollspy.js',
+      'public/vendor/bootstrap/js/tab.js',
+      'public/vendor/bootstrap/js/transition.js',
       'public/vendor/moment/moment.js'
     ];
   }

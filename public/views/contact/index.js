@@ -13,7 +13,6 @@
       errfor: {},
       name: '',
       email: '',
-      phone: '',
       message: ''
     }
   });
@@ -42,7 +41,6 @@
       this.model.save({
         name: this.$el.find('[name="name"]').val(),
         email: this.$el.find('[name="email"]').val(),
-        phone: this.$el.find('[name="phone"]').val(),
         message: this.$el.find('[name="message"]').val()
       });
     }

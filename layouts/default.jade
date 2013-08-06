@@ -8,24 +8,24 @@ html
     block neck
   body
     div.navbar.navbar-fixed-top
-      div.navbar-inner
-        div.container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='/')
-            img(src='/media/logo-black.png', width='150')
-          div.nav-collapse
-            ul.nav
-              li: a(href='/') Home
-              li: a(href='/about/') About
-              li: a(href='/signup/') Sign Up
-              li: a(href='/contact/') Contact
-            ul.nav.pull-right
-              li: a(href='/login/')
-                i.icon-user
-                |  Login
+      div.container
+        a.navbar-brand(href='/')
+          img.navbar-logo(src='/media/logo-symbol-64x64.png')
+          span.navbar-brand-label #{projectName}
+        button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        div.nav-collapse.my-navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li: a(href='/') Home
+            li: a(href='/about/') About
+            li: a(href='/signup/') Sign Up
+            li: a(href='/contact/') Contact
+          ul.nav.navbar-nav.pull-right
+            li: a(href='/login/')
+              i.icon-user
+              |  Sign In
     
     div.page
       div.container
@@ -33,15 +33,12 @@ html
     
     div.footer
       div.container
-        div.inner
-          span.copyright.pull-right
-            &#169; #{copyrightYear} #{copyrightName}
-          ul.links
-            li: a(href='/') Home
-            li: a(href='/about/') About
-            li: a(href='/signup/') Sign Up
-            li: a(href='/contact/') Contact
-          div.clearfix
+        span.copyright.pull-right
+          &#169; #{copyrightYear} #{copyrightName}
+        ul.links
+          li: a(href='/') Home
+          li: a(href='/contact/') Contact
+        div.clearfix
     
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')

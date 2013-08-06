@@ -5,35 +5,35 @@ html
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/layouts/core.min.css?#{cacheBreaker}')
+    link(rel='stylesheet', href='/layouts/admin.min.css?#{cacheBreaker}')
     block neck
   body
     div.navbar.navbar-inverse.navbar-fixed-top
-      div.navbar-inner
-        div.container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='/admin/')
-            img(src='/media/logo-white.png', width='150')
-          div.nav-collapse
-            ul.nav
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  | System 
-                  span.caret
-                ul.dropdown-menu
-                  li.nav-header Pivoted Settings
-                  li: a(href='/admin/statuses/') Statuses
-                  li: a(href='/admin/categories/') Categories
-                  li.divider
-                  li.nav-header User Admin
-                  li: a(href='/admin/users/') Users
-                  li: a(href='/admin/accounts/') Accounts
-                  li: a(href='/admin/administrators/') Administrators
-                  li: a(href='/admin/admin-groups/') Admin Groups
-            form.navbar-search.pull-right
-              #_search
+      div.container
+        a.navbar-brand(href='/admin/')
+          img.navbar-logo(src='/media/logo-symbol-64x64.png')
+          span.navbar-brand-label #{projectName}
+        button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        div.nav-collapse.my-navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | System 
+                span.caret
+              ul.dropdown-menu
+                li.dropdown-header Pivoted Settings
+                li: a(href='/admin/statuses/') Statuses
+                li: a(href='/admin/categories/') Categories
+                li.divider
+                li.dropdown-header User Admin
+                li: a(href='/admin/users/') Users
+                li: a(href='/admin/accounts/') Accounts
+                li: a(href='/admin/administrators/') Administrators
+                li: a(href='/admin/admin-groups/') Admin Groups
+          form.navbar-form.pull-right#_search
     
     div.page
       div.container
@@ -46,17 +46,16 @@ html
             &#169; #{copyrightYear} #{copyrightName}
           ul.links
             li: a(href='/') Home
-            li: a(href='/logout/') Logout
+            li: a(href='/logout/') Sign Out
           div.clearfix
     
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
     
     script(type='text/template', id='tmpl-_search')
-      ul.nav
-        li.dropdown.open
-          input.search-query(name='_search', type='text', placeholder='search', tab-index='1')
-          ul#_search-results-rows.dropdown-menu
+      div.dropdown
+        input.form-control(name='_search', type='text', placeholder='search', tab-index='1')
+        ul#_search-results-rows.dropdown-menu
     script(type='text/template', id='tmpl-_search-results-row')
       |<% if (type && type == 'header') { %>
       |<%= name %>
@@ -64,7 +63,7 @@ html
       a(href!='<%= url %>') <%= name %>
       |<% } %>
     script(type='text/template', id='tmpl-_search-results-empty-row')
-      li.nav-header no documents matched
+      li.dropdown-header no docs matched
     
     script(src='/layouts/core.min.js?#{cacheBreaker}')
     script(src='/layouts/admin.min.js?#{cacheBreaker}')

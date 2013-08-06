@@ -5,7 +5,7 @@ exports.init = function(req, res){
 };
 
 exports.sendMessage = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.name) {
@@ -16,16 +16,11 @@ exports.sendMessage = function(req, res){
       workflow.outcome.errfor.email = 'required';
     }
     
-    if (!req.body.phone) {
-      workflow.outcome.errfor.phone = 'required';
-    }
-    
     if (!req.body.message) {
       workflow.outcome.errfor.message = 'required';
     }
     
     if (workflow.hasErrors()) {
-      workflow.outcome.errors.push('missing required info');
       return workflow.emit('response');
     }
     
@@ -33,8 +28,9 @@ exports.sendMessage = function(req, res){
   });
   
   workflow.on('sendEmail', function() {
-    req.app.utility.email(req, res, {
+    req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      replyTo: req.body.email,
       to: req.app.get('admin-email'),
       subject: req.app.get('project-name') +' contact form',
       textPath: 'contact/email-text',
@@ -42,7 +38,6 @@ exports.sendMessage = function(req, res){
       locals: {
         name: req.body.name,
         email: req.body.email,
-        phone: req.body.phone,
         message: req.body.message,
         projectName: req.app.get('project-name')
       },
