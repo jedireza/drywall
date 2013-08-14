@@ -8,7 +8,7 @@ block feet
 
 block body
   div.row
-    div.col-12
+    div.col-xs-12
       div#header
       div#identity
       div#roles
@@ -26,12 +26,12 @@ block body
       legend Identity
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
@@ -57,7 +57,7 @@ block body
       legend Roles
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -98,12 +98,12 @@ block body
       legend Set Password
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
       |<% if (success) { %>
-      div.alert.alert-info
+      div.alert.alert-info.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
         | A new password has been set.
       |<% } %>
@@ -123,7 +123,7 @@ block body
       legend Danger Zone
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>

@@ -11,7 +11,7 @@ block feet
 
 block body
   div.row
-    div.col-12
+    div.col-xs-12
       div#header
       div#filters
       div#results-table
@@ -57,7 +57,7 @@ block body
   
   script(type='text/template', id='tmpl-results-row')
     td
-      input.btn.btn-default.btn-small.btn-details(type='button', value='Edit')
+      input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
     td.nowrap <%= name.full %>
     td <%= _id %>
   

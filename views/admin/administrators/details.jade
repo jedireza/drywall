@@ -11,7 +11,7 @@ block feet
 
 block body
   div.row
-    div.col-12
+    div.col-xs-12
       div#header
       div#details
       div#login
@@ -30,12 +30,12 @@ block body
       legend Contact Info
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
@@ -59,7 +59,7 @@ block body
       legend Login
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -70,7 +70,7 @@ block body
           input.form-control(disabled=true, value!='<%= name %>')
           div.input-group-btn
             button.btn.btn-warning.btn-user-unlink(type='button') Unlink
-            button.btn.btn-user-open(type='button') Open
+            button.btn.btn-default.btn-user-open(type='button') Open
           |<% } else { %>
           input.form-control(name='newUsername', type='text', placeholder='enter a username')
           div.input-group-btn
@@ -83,12 +83,12 @@ block body
       legend Groups
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
@@ -123,12 +123,12 @@ block body
       legend Permissions
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
@@ -169,7 +169,7 @@ block body
       legend Danger Zone
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
