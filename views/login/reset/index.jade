@@ -17,17 +17,17 @@ block body
     form
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Your password has been reset. Please login to confirm.
         |<% } %>
         |<% if (id == undefined) { %>
-        div.alert.alert-warning
+        div.alert.alert-warning.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | You do not have a valid reset request.
         |<% } %>

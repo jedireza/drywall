@@ -26,12 +26,12 @@ block body
     form
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-danger
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | We have received your message. Thank you.
         |<% } %>

@@ -8,7 +8,7 @@ block feet
 
 block body
   div.row
-    div.col-12
+    div.col-xs-12
       div#header
       div#details
       div#delete
@@ -24,12 +24,12 @@ block body
       legend Details
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
@@ -49,7 +49,7 @@ block body
       legend Danger Zone
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>

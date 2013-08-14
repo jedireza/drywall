@@ -9,20 +9,21 @@ html
   body
     div.navbar.navbar-fixed-top
       div.container
-        a.navbar-brand(href='/')
-          img.navbar-logo(src='/media/logo-symbol-64x64.png')
-          span.navbar-brand-label #{projectName}
-        button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        div.nav-collapse.my-navbar-collapse.collapse
+        div.navbar-header
+          a.navbar-brand(href='/')
+            img.navbar-logo(src='/media/logo-symbol-64x64.png')
+            span.navbar-brand-label #{projectName}
+          button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        div.navbar-collapse.my-navbar-collapse.collapse
           ul.nav.navbar-nav
             li: a(href='/') Home
             li: a(href='/about/') About
             li: a(href='/signup/') Sign Up
             li: a(href='/contact/') Contact
-          ul.nav.navbar-nav.pull-right
+          ul.nav.navbar-nav.navbar-right
             li: a(href='/login/')
               i.icon-user
               |  Sign In
