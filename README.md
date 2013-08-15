@@ -62,6 +62,12 @@ rootAdmin.user = { id: rootUser._id, name: rootUser.username };
 db.admins.save(rootAdmin);
 ```
 
+Or Run mongo script on terminal. __Set your email address inside script.__
+
+```
+mongo load scripts/0000-init-drywall-db.js
+```
+
 Now just use the reset password feature to set a password.
 
  - `http://localhost:3000/login/forgot/`
