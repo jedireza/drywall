@@ -1,22 +1,28 @@
 {
   "name": "Drywall.js",
-  "version": "0.4.4",
+  "version": "0.5.6",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app.js",
+    "postinstall": "node run.js build"
   },
   "dependencies": {
-    "express": "~3.0.0",
-    "jade": "~0.27.7",
-    "connect-mongo": "~0.2.0",
     "async": "~0.1.22",
-    "mongoose": "~3.6.7",
+    "connect-mongo": "~0.2.0",
     "emailjs": "~0.3.4",
-    "passport": "~0.1.16",
+    "express": "~3.0.0",
+    "findit": "~0.1.2",
+    "jade": "~0.27.7",
+    "jshint": "~2.1.4",
+    "mongoose": "~3.6.7",
+    "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport-oauth": "~0.1.15",
-    "passport-twitter": "~0.1.5",
     "passport-facebook": "~0.1.5",
-    "passport-github": "~0.1.4"
+    "passport-github": "~0.1.5",
+    "passport-twitter": "~0.1.5",
+    "recess": "~1.1.9",
+    "uglify-js": "~2.3.6",
+    "watchr": "~2.4.3"
   }
 }

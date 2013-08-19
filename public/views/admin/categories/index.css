@@ -1,9 +1,0 @@
-.input-append input:nth-child(2) {
-  border-top-left-radius: 0;
-  -moz-border-radius-topleft: 0;
-  -webkit-border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  -moz-border-radius-bottomleft: 0;
-  -webkit-border-bottom-left-radius: 0;
-  border-left: none;
-}

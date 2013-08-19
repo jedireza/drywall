@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Contact = Backbone.Model.extend({
     url: '/contact/',
     defaults: {
@@ -16,16 +13,10 @@
       errfor: {},
       name: '',
       email: '',
-      phone: '',
-      message: '',
+      message: ''
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.ContactView = Backbone.View.extend({
     el: '#contact',
     template: _.template( $('#tmpl-contact').html() ),
@@ -50,19 +41,12 @@
       this.model.save({
         name: this.$el.find('[name="name"]').val(),
         email: this.$el.find('[name="email"]').val(),
-        phone: this.$el.find('[name="phone"]').val(),
         message: this.$el.find('[name="message"]').val()
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.contactView = new app.ContactView();
   });
-
-
+}());

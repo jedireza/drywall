@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(app, mongoose) {
   var accountSchema = new mongoose.Schema({
     user: {
@@ -22,8 +24,8 @@ exports = module.exports = function(app, mongoose) {
         time: { type: Date, default: Date.now }
       }
     },
-    statusLog: [mongoose.modelSchemas['StatusLog']],
-    notes: [mongoose.modelSchemas['Note']],
+    statusLog: [mongoose.modelSchemas.StatusLog],
+    notes: [mongoose.modelSchemas.Note],
     userCreated: {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' },
@@ -35,6 +37,6 @@ exports = module.exports = function(app, mongoose) {
   accountSchema.index({ user: 1 });
   accountSchema.index({ 'status.id': 1 });
   accountSchema.index({ search: 1 });
-  accountSchema.set('autoIndex', (app.get('env') == 'development'));
+  accountSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('Account', accountSchema);
-}
+};

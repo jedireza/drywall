@@ -1,17 +1,21 @@
+'use strict';
+
 exports.find = function(req, res, next){
-  //defaults
   req.query.pivot = req.query.pivot ? req.query.pivot : '';
   req.query.name = req.query.name ? req.query.name : '';
-  req.query.limit = req.query.limit ? parseInt(req.query.limit) : 20;
-  req.query.page = req.query.page ? parseInt(req.query.page) : 1;
+  req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
+  req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
   req.query.sort = req.query.sort ? req.query.sort : '_id';
   
-  //filters
   var filters = {};
-  if (req.query.pivot) filters.pivot = new RegExp('^.*?'+ req.query.pivot +'.*$', 'i');
-  if (req.query.name) filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  if (req.query.pivot) {
+    filters.pivot = new RegExp('^.*?'+ req.query.pivot +'.*$', 'i');
+  }
   
-  //get results
+  if (req.query.name) {
+    filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
+  }
+  
   req.app.db.models.Status.pagedFind({
     filters: filters,
     keys: 'pivot name',
@@ -19,7 +23,9 @@ exports.find = function(req, res, next){
     page: req.query.page,
     sort: req.query.sort
   }, function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -33,11 +39,11 @@ exports.find = function(req, res, next){
   });
 };
 
-
-
 exports.read = function(req, res, next){
   req.app.db.models.Status.findById(req.params.id).exec(function(err, status) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     if (req.xhr) {
       res.send(status);
@@ -48,10 +54,8 @@ exports.read = function(req, res, next){
   });
 };
 
-
-
 exports.create = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -63,6 +67,7 @@ exports.create = function(req, res, next){
       workflow.outcome.errors.push('A name is required.');
       return workflow.emit('response');
     }
+    
     if (!req.body.name) {
       workflow.outcome.errors.push('A name is required.');
       return workflow.emit('response');
@@ -73,7 +78,9 @@ exports.create = function(req, res, next){
   
   workflow.on('duplicateStatusCheck', function() {
     req.app.db.models.Status.findById(req.app.utility.slugify(req.body.pivot +' '+ req.body.name)).exec(function(err, status) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (status) {
         workflow.outcome.errors.push('That status+pivot is already taken.');
@@ -92,7 +99,9 @@ exports.create = function(req, res, next){
     };
     
     req.app.db.models.Status.create(fieldsToSet, function(err, status) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.record = status;
       return workflow.emit('response');
@@ -102,10 +111,8 @@ exports.create = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.update = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -117,6 +124,7 @@ exports.update = function(req, res, next){
       workflow.outcome.errfor.pivot = 'pivot';
       return workflow.emit('response');
     }
+    
     if (!req.body.name) {
       workflow.outcome.errfor.name = 'required';
       return workflow.emit('response');
@@ -132,7 +140,9 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.Status.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, status) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.status = status;
       return workflow.emit('response');
@@ -142,10 +152,8 @@ exports.update = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.delete = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.user.roles.admin.isMemberOf('root')) {
@@ -158,8 +166,11 @@ exports.delete = function(req, res, next){
   
   workflow.on('deleteStatus', function(err) {
     req.app.db.models.Status.findByIdAndRemove(req.params.id, function(err, status) {
-        if (err) return workflow.emit('exception', err);
-        workflow.emit('response');
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.emit('response');
     });
   });
   

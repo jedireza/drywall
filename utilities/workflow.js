@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = function(req, res) {
   var workflow = new (require('events').EventEmitter)();
   
@@ -8,10 +10,7 @@ exports = module.exports = function(req, res) {
   };
   
   workflow.hasErrors = function() {
-    if (Object.keys(workflow.outcome.errfor).length != 0 || workflow.outcome.errors.length != 0) {
-      return true;
-    }
-    return false;
+    return Object.keys(workflow.outcome.errfor).length !== 0 || workflow.outcome.errors.length !== 0;
   };
   
   workflow.on('exception', function(err) {
@@ -25,4 +24,4 @@ exports = module.exports = function(req, res) {
   });
   
   return workflow;
-}
+};

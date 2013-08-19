@@ -1,11 +1,12 @@
+'use strict';
+
 //dependencies
-var express = require('express')
-  , mongoStore = require('connect-mongo')(express)
-  , http = require('http')
-  , path = require('path')
-  , passport = require('passport')
-  , mongoose = require('mongoose')
-;
+var express = require('express'),
+    mongoStore = require('connect-mongo')(express),
+    http = require('http'),
+    path = require('path'),
+    passport = require('passport'),
+    mongoose = require('mongoose');
 
 //create express app
 var app = express();
@@ -17,7 +18,7 @@ app.set('mongodb-uri', process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'l
 app.db = mongoose.createConnection(app.get('mongodb-uri'));
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
-  console.log('mongoose open for business');
+  //and... we have a data store
 });
 
 //config data models
@@ -83,6 +84,7 @@ app.configure(function(){
   app.locals.projectName = app.get('project-name');
   app.locals.copyrightYear = new Date().getFullYear();
   app.locals.copyrightName = app.get('company-name');
+  app.locals.cacheBreaker = 'br34k-01';
 });
 
 //config dev
@@ -101,5 +103,5 @@ require('./utilities')(app);
 
 //listen up
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('express server listening on port ' + app.get('port'));
+  //and... we're live
 });

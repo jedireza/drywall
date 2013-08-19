@@ -2,16 +2,18 @@ extends ../../../layouts/admin
 
 block head
   title Admin Groups / Details
-  link(rel='stylesheet', href='/views/admin/admin-groups/details.css')
+  link(rel='stylesheet', href='/views/admin/admin-groups/details.min.css?#{cacheBreaker}')
 
 block feet
-  script(src='/views/admin/admin-groups/details.js')
+  script(src='/views/admin/admin-groups/details.min.js?#{cacheBreaker}')
 
 block body
-  #header
-  #details.form-horizontal
-  #permissions.form-horizontal
-  #delete.form-horizontal
+  div.row
+    div.col-xs-12
+      div#header
+      div#details
+      div#permissions
+      div#delete
   
   script(type='text/template', id='tmpl-header')
     div.page-header
@@ -20,86 +22,88 @@ block body
         |  / <%= name %>
   
   script(type='text/template', id='tmpl-details')
-    legend Details
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.name ? "error" : "" %>')
-      label.control-label Name:
-      div.controls
-        input(type='text', name='name', value!='<%= name %>')
-        span.help-inline <%= errfor.name %>
-    div.form-actions
-      button.btn.btn-primary.btn-update(type='button') Update
+    fieldset
+      legend Details
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+        label.control-label Name:
+        input.form-control(type='text', name='name', value!='<%= name %>')
+        span.help-block <%= errfor.name %>
+      div.control-group
+        button.btn.btn-primary.btn-update(type='button') Update
   
   script(type='text/template', id='tmpl-permissions')
-    legend Permissions
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.newPermission ? "error" : "" %>')
-      label.control-label New Setting:
-      div.controls
-        div.input-append
-          input(name='newPermission', type='text', placeholder='enter a name')
-          button.btn.btn-success.btn-add(type='button') Add
-        span.help-inline <%= errfor.newUsername %>
-    div.control-group(class!='<%= errfor.newPermission ? "error" : "" %>')
-      label.control-label Settings:
-      div.controls.permissions
-        |<% _.each(permissions, function(permission) { %>
-        div
-          div.input-append
-            span.uneditable-input
-              |<%= permission.name %>
-            |<% if (permission.permit) { %>
-            button.btn.btn-allow(type='button', disabled) Allow
-            button.btn.btn-deny(type='button') Deny
-            |<% } else { %>
-            button.btn.btn-allow(type='button') Allow
-            button.btn.btn-deny(type='button', disabled) Deny
-            |<% } %>
-            button.btn.btn-danger.btn-delete(type='button')
-              i.icon-trash.icon-white
+    fieldset
+      legend Permissions
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
         |<% }); %>
-        |<% if (permissions.length == 0) { %>
-        span.badge
-          | no permissions defined
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
         |<% } %>
-        span.help-inline <%= errfor.settings %>
-    div.form-actions
-      button.btn.btn-primary.btn-set(type='button') Save Settings
+      div.control-group(class!='<%= errfor.newPermission ? "has-error" : "" %>')
+        label.control-label New Setting:
+        div.input-group
+          input.form-control(name='newPermission', type='text', placeholder='enter a name')
+          div.input-group-btn
+            button.btn.btn-success.btn-add(type='button') Add
+        span.help-block <%= errfor.newUsername %>
+      div.control-group(class!='<%= errfor.newPermission ? "has-error" : "" %>')
+        label.control-label Settings:
+        div.permissions
+          |<% _.each(permissions, function(permission) { %>
+          div.input-group
+            input.form-control(disabled=true, value!='<%= permission.name %>')
+            div.input-group-btn
+              div.btn-group
+                |<% if (permission.permit) { %>
+                button.btn.btn-default.btn-allow(type='button', disabled) Allow
+                button.btn.btn-default.btn-deny(type='button') Deny
+                |<% } else { %>
+                button.btn.btn-default.btn-allow(type='button') Allow
+                button.btn.btn-default.btn-deny(type='button', disabled) Deny
+                |<% } %>
+                button.btn.btn-danger.btn-delete(type='button')
+                  i.icon-trash.icon-white
+          |<% }); %>
+          |<% if (permissions.length == 0) { %>
+          span.badge
+            | no permissions defined
+          |<% } %>
+          span.help-block <%= errfor.settings %>
+      div.control-group
+        button.btn.btn-primary.btn-set(type='button') Save Settings
   
   script(type='text/template', id='tmpl-delete')
-    legend Danger Zone
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-    span.badge.badge-important
-      | If you do this, it cannot be undone.
-    | 
-    span.muted
-      | You may also create orphaned document relationships too.
-    div.form-actions
-      button.btn.btn-danger.btn-delete(type='button') Delete
+    fieldset
+      legend Danger Zone
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+      div.control-group
+        span.help-block
+          span.label.label-danger If you do this, it cannot be undone.
+          | 
+          span.text-muted You may also create orphaned document relationships too.
+      div.control-group
+        button.btn.btn-danger.btn-delete(type='button') Delete
   
   script(type='text/template', id='data-record') !{data.record}

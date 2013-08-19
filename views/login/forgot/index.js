@@ -1,5 +1,6 @@
+'use strict';
+
 exports.init = function(req, res){
-  //are we logged in?
   if (req.isAuthenticated()) { 
     res.redirect(req.user.defaultReturnUrl());
   }
@@ -9,24 +10,24 @@ exports.init = function(req, res){
 };
 
 exports.send = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
     if (!req.body.email) {
       workflow.outcome.errfor.email = 'required';
-      return workflow.emit('response')
+      return workflow.emit('response');
     }
     
     workflow.emit('patchUser');
   });
   
   workflow.on('patchUser', function() {
-    //create new reset token
     var token = require('crypto').createHash('md5').update(Math.random().toString()).digest('hex');
     
-    //find the user with that email and patch
     req.app.db.models.User.findOneAndUpdate({ email: req.body.email }, { resetPasswordToken: token }, function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('Email address not found.');
@@ -38,7 +39,7 @@ exports.send = function(req, res){
   });
   
   workflow.on('sendEmail', function(token, user) {
-    req.app.utility.email(req, res, {
+    req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: user.email,
       subject: 'Reset your '+ req.app.get('project-name') +' password',

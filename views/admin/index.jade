@@ -3,7 +3,41 @@ extends ../../layouts/admin
 block head
   title Admin Area
 
+block neck
+  link(rel='stylesheet', href='/views/admin/index.min.css?#{cacheBreaker}')
+
 block body
-  div.page-header
-    h1 Admin Area
-  p Where things get managed.
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Admin Area
+      div.row
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countUser}
+            div.stat-label Users
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countAccount}
+            div.stat-label Accounts
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countAdmin}
+            div.stat-label Admins
+      div.row
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countAdminGroup}
+            div.stat-label Groups
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countCategory}
+            div.stat-label Categories
+        div.col-sm-4
+          div.well.stat
+            div.stat-value #{countStatus}
+            div.stat-label Statuses
+    div.col-sm-6.special
+      div.page-header
+        h1 Super Dashboard
+      i.icon-gears.super-awesome

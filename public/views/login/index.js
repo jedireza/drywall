@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Login = Backbone.Model.extend({
     url: '/login/',
     defaults: {
@@ -17,12 +14,7 @@
       password: ''
     }
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.LoginView = Backbone.View.extend({
     el: '#login',
     template: _.template( $('#tmpl-login').html() ),
@@ -44,8 +36,8 @@
       event.preventDefault();
     },
     loginOnEnter: function(event) {
-      if (event.keyCode != 13) return;
-      if ($(event.target).attr('name') != 'password') return;
+      if (event.keyCode !== 13) { return; }
+      if ($(event.target).attr('name') !== 'password') { return; }
       event.preventDefault();
       this.login();
     },
@@ -56,10 +48,12 @@
         username: this.$el.find('[name="username"]').val(),
         password: this.$el.find('[name="password"]').val()
       },{
-        success: function(model, response, options) {
+        success: function(model, response) {
           if (response.success) {
             var returnUrl = app.loginView.$el.find('[name="returnUrl"]').val();
-            if (returnUrl == '/') returnUrl = response.defaultReturnUrl;
+            if (returnUrl === '/') {
+              returnUrl = response.defaultReturnUrl;
+            }
             location.href = returnUrl;
           }
           else {
@@ -69,14 +63,8 @@
       });
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.loginView = new app.LoginView();
   });
-
-
+}());

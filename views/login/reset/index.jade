@@ -4,46 +4,46 @@ block head
   title Reset Your Password
 
 block feet
-  script(src='/views/login/reset/index.js')
+  script(src='/views/login/reset/index.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Reset Your Password
-  #reset
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Reset Your Password
+      div#reset
   
   script(type='text/template', id='tmpl-reset')
-    form.form-horizontal
+    form
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-error.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
-        div.alert.alert-info
+        div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Your password has been reset. Please login to confirm.
         |<% } %>
         |<% if (id == undefined) { %>
-        div.alert.alert-warning
+        div.alert.alert-warning.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | You do not have a valid reset request.
         |<% } %>
       |<% if (!success && id != undefined) { %>
-      div.control-group(class!='<%= errfor.password ? "error" : "" %>')
+      div.form-group(class!='<%= errfor.password ? "has-error" : "" %>')
         label.control-label New Password:
-        div.controls
-          input(type='password', name='password', value!='<%= password %>')
-          span.help-inline <%= errfor.password %>
-      div.control-group(class!='<%= errfor.confirm ? "error" : "" %>')
+        input.form-control(type='password', name='password', value!='<%= password %>')
+        span.help-block <%= errfor.password %>
+      div.form-group(class!='<%= errfor.confirm ? "has-error" : "" %>')
         label.control-label Confirm Password:
-        div.controls
-          input(type='password', name='confirm', value!='<%= confirm %>')
-          span.help-inline <%= errfor.confirm %>
+        input.form-control(type='password', name='confirm', value!='<%= confirm %>')
+        span.help-block <%= errfor.confirm %>
       |<% } %>
-      div.form-actions
+      div.form-group
         |<% if (!success && id != undefined) { %>
         button.btn.btn-primary.btn-reset(type='button') Set Password
         |<% } %>
         | 
-        a.btn(href='/login/') Back to Login
+        a.btn.btn-link(href='/login/') Back to Login

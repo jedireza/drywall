@@ -1,3 +1,5 @@
+'use strict';
+
 exports.http404 = function(req, res){
   res.status(404);
   if (req.xhr) {

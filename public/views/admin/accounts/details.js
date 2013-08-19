@@ -1,13 +1,10 @@
-/**
- * SETUP
- **/
-  var app = app || {};
+/* global app:true */
 
-
-
-/**
- * MODELS
- **/
+(function() {
+  'use strict';
+  
+  app = app || {};
+  
   app.Account = Backbone.Model.extend({
     idAttribute: '_id',
     url: function() {
@@ -48,6 +45,7 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
+      
       return response;
     }
   });
@@ -70,6 +68,7 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
+      
       return response;
     }
   });
@@ -90,6 +89,7 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
+      
       return response;
     }
   });
@@ -114,6 +114,7 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
+      
       return response;
     }
   });
@@ -121,12 +122,7 @@
   app.StatusCollection = Backbone.Collection.extend({
     model: app.Status
   });
-
-
-
-/**
- * VIEWS
- **/
+  
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -166,12 +162,12 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     update: function() {
@@ -203,7 +199,7 @@
     delete: function() {
       if (confirm('Are you sure?')) {
         this.model.destroy({
-          success: function(model, response, options) {
+          success: function(model, response) {
             if (response.success) {
               location.href = '/admin/accounts/';
             }
@@ -240,12 +236,12 @@
       });
     },
     render: function() {
-      //render
       this.$el.html(this.template( this.model.attributes ));
       
-      //set input values
-      for(var key in this.model.attributes) {
-        this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
       }
     },
     userOpen: function() {
@@ -259,11 +255,12 @@
     userUnlink: function() {
       if (confirm('Are you sure?')) {
         this.model.destroy({
-          success: function(model, response, options) {
+          success: function(model, response) {
             if (response.account) {
               app.mainView.model.set(response.account);
               delete response.account;
             }
+            
             app.loginView.model.set(response);
           }
         });
@@ -287,14 +284,15 @@
     },
     validates: function() {
       var errors = [];
-      if (this.$el.find('[name="data"]').val() == '') {
+      if (this.$el.find('[name="data"]').val() === '') {
         errors.push('Please enter some notes.');
       }
       
       if (errors.length > 0) {
-        this.model.set({ errors: errors })
+        this.model.set({ errors: errors });
         return false;
       }
+      
       return true;
     },
     addNew: function() {
@@ -328,7 +326,7 @@
         $('#notes-items').prepend( view.render().$el );
       }, this);
       
-      if (this.collection.length == 0) {
+      if (this.collection.length === 0) {
         $('#notes-items').append( $('#tmpl-notes-none').html() );
       }
     }
@@ -374,24 +372,25 @@
     render: function() {
       this.$el.html( this.template(this.model.attributes) );
       
-      //selected value
       if (app.mainView.model.get('status') && app.mainView.model.get('status').id) {
         this.$el.find('[name="status"]').val(app.mainView.model.get('status').id);
       }
     },
     validates: function() {
       var errors = [];
-      if (this.$el.find('[name="status"]').val() == '') {
+      if (this.$el.find('[name="status"]').val() === '') {
         errors.push('Please choose a status.');
       }
-      if (this.$el.find('[name="status"]').val() == app.mainView.model.get('status').id) {
+      
+      if (this.$el.find('[name="status"]').val() === app.mainView.model.get('status').id) {
         errors.push('That is the current status.');
       }
       
       if (errors.length > 0) {
-        this.model.set({ errors: errors })
+        this.model.set({ errors: errors });
         return false;
       }
+      
       return true;
     },
     addNew: function() {
@@ -449,11 +448,8 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      
-      //setup model
       this.model = new app.Account( JSON.parse($('#data-record').html()) );
       
-      //sub views
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
       app.deleteView = new app.DeleteView();
@@ -464,14 +460,8 @@
       app.statusCollectionView = new app.StatusCollectionView();
     }
   });
-
-
-
-/**
- * BOOTUP
- **/
+  
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });
-
-
+}());

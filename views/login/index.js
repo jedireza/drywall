@@ -1,5 +1,6 @@
+'use strict';
+
 exports.init = function(req, res){
-  //are we logged in?
   if (req.isAuthenticated()) { 
     res.redirect(req.user.defaultReturnUrl());
   }
@@ -15,24 +16,30 @@ exports.init = function(req, res){
   }
 };
 
-
-
 exports.login = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.username) workflow.outcome.errfor.username = 'required';
-    if (!req.body.password) workflow.outcome.errfor.password = 'required';
+    if (!req.body.username) {
+      workflow.outcome.errfor.username = 'required';
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (!req.body.password) {
+      workflow.outcome.errfor.password = 'required';
+    }
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('attemptLogin');
   });
   
   workflow.on('attemptLogin', function() {
     req._passport.instance.authenticate('local', function(err, user, info) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (!user) {
         workflow.outcome.errors.push('Username and password combination not found or your account is inactive.');
@@ -40,7 +47,9 @@ exports.login = function(req, res){
       }
       else {
         req.login(user, function(err) {
-          if (err) return workflow.emit('exception', err);
+          if (err) {
+            return workflow.emit('exception', err);
+          }
           
           workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           workflow.emit('response');
@@ -56,10 +65,14 @@ exports.login = function(req, res){
 
 exports.loginTwitter = function(req, res, next){
   req._passport.instance.authenticate('twitter', function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/login/');
+    if (!info || !info.profile) {
+      return res.redirect('/login/');
+    }
     
     req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (!user) {
         res.render('login/index', {
@@ -87,7 +100,9 @@ exports.loginTwitter = function(req, res, next){
       }
       else {
         req.login(user, function(err) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect(user.defaultReturnUrl());
         });
@@ -96,14 +111,16 @@ exports.loginTwitter = function(req, res, next){
   })(req, res, next);
 };
 
-
-
 exports.loginGitHub = function(req, res, next){
   req._passport.instance.authenticate('github', function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/login/');
+    if (!info || !info.profile) {
+      return res.redirect('/login/');
+    }
     
     req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (!user) {
         res.render('login/index', {
@@ -131,7 +148,9 @@ exports.loginGitHub = function(req, res, next){
       }
       else {
         req.login(user, function(err) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect(user.defaultReturnUrl());
         });
@@ -140,14 +159,16 @@ exports.loginGitHub = function(req, res, next){
   })(req, res, next);
 };
 
-
-
 exports.loginFacebook = function(req, res, next){
   req._passport.instance.authenticate('facebook', { callbackURL: '/login/facebook/callback/' }, function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/login/');
+    if (!info || !info.profile) {
+      return res.redirect('/login/');
+    }
     
     req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (!user) {
         res.render('login/index', {
@@ -175,7 +196,9 @@ exports.loginFacebook = function(req, res, next){
       }
       else {
         req.login(user, function(err) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect(user.defaultReturnUrl());
         });

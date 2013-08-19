@@ -1,9 +1,14 @@
+'use strict';
+
 var renderSettings = function(req, res, next, oauthMessage) {
   var outcome = {};
   
   var getAccountData = function(callback) {
     req.app.db.models.Account.findById(req.user.roles.account.id, 'name company phone zip').exec(function(err, account) {
-      if (err) return callback(err, null);
+      if (err) {
+        return callback(err, null);
+      }
+      
       outcome.account = account;
       callback(null, 'done');
     });
@@ -11,14 +16,19 @@ var renderSettings = function(req, res, next, oauthMessage) {
   
   var getUserData = function(callback) {
     req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id').exec(function(err, user) {
-      if (err) callback(err, null);
+      if (err) {
+        callback(err, null);
+      }
+      
       outcome.user = user;
       return callback(null, 'done');
     });
   };
   
   var asyncFinally = function(err, results) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     res.render('account/settings/index', {
       data: {
@@ -38,27 +48,29 @@ var renderSettings = function(req, res, next, oauthMessage) {
   require('async').parallel([getAccountData, getUserData], asyncFinally);
 };
 
-
-
 exports.init = function(req, res, next){
   renderSettings(req, res, next, '');
 };
 
-
-
 exports.connectTwitter = function(req, res, next){
   req._passport.instance.authenticate('twitter', function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/account/settings/');
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
     
     req.app.db.models.User.findOne({ 'twitter.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (user) {
         renderSettings(req, res, next, 'Another user has already connected with that Twitter account.');
       }
       else {
         req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: info.profile._json }, function(err, user) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect('/account/settings/');
         });
@@ -67,21 +79,25 @@ exports.connectTwitter = function(req, res, next){
   })(req, res, next);
 };
 
-
-
 exports.connectGitHub = function(req, res, next){
   req._passport.instance.authenticate('github', function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/account/settings/');
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
     
     req.app.db.models.User.findOne({ 'github.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (user) {
         renderSettings(req, res, next, 'Another user has already connected with that GitHub account.');
       }
       else {
         req.app.db.models.User.findByIdAndUpdate(req.user.id, { github: info.profile._json }, function(err, user) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect('/account/settings/');
         });
@@ -90,21 +106,25 @@ exports.connectGitHub = function(req, res, next){
   })(req, res, next);
 };
 
-
-
 exports.connectFacebook = function(req, res, next){
   req._passport.instance.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }, function(err, user, info) {
-    if (!info || !info.profile) return res.redirect('/account/settings/');
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
     
     req.app.db.models.User.findOne({ 'facebook.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       
       if (user) {
         renderSettings(req, res, next, 'Another user has already connected with that Facebook account.');
       }
       else {
         req.app.db.models.User.findByIdAndUpdate(req.user.id, { facebook: info.profile._json }, function(err, user) {
-          if (err) return next(err);
+          if (err) {
+            return next(err);
+          }
           
           res.redirect('/account/settings/');
         });
@@ -113,47 +133,51 @@ exports.connectFacebook = function(req, res, next){
   })(req, res, next);
 };
 
-
-
 exports.disconnectTwitter = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: { id: undefined } }, function(err, user) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     res.redirect('/account/settings/');
   });
 };
-
-
 
 exports.disconnectGitHub = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { github: { id: undefined } }, function(err, user) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     res.redirect('/account/settings/');
   });
 };
-
-
 
 exports.disconnectFacebook = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { facebook: { id: undefined } }, function(err, user) {
-    if (err) return next(err);
+    if (err) {
+      return next(err);
+    }
     
     res.redirect('/account/settings/');
   });
 };
 
-
-
 exports.update = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.first) workflow.outcome.errfor.first = 'required';
-    if (!req.body.last) workflow.outcome.errfor.last = 'required';
+    if (!req.body.first) {
+      workflow.outcome.errfor.first = 'required';
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (!req.body.last) {
+      workflow.outcome.errfor.last = 'required';
+    }
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('patchAccount');
   });
@@ -180,7 +204,9 @@ exports.update = function(req, res, next){
     };
     
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       workflow.outcome.account = account;
       return workflow.emit('response');
@@ -190,19 +216,17 @@ exports.update = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.identity = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    //verify
     if (!req.body.username) {
       workflow.outcome.errfor.username = 'required';
     }
     else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
       workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
     }
+    
     if (!req.body.email) {
       workflow.outcome.errfor.email = 'required';
     }
@@ -210,15 +234,18 @@ exports.identity = function(req, res, next){
       workflow.outcome.errfor.email = 'invalid email format';
     }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('duplicateUsernameCheck');
   });
   
   workflow.on('duplicateUsernameCheck', function() {
     req.app.db.models.User.findOne({ username: req.body.username, _id: { $ne: req.user.id } }, function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (user) {
         workflow.outcome.errfor.username = 'username already taken';
@@ -231,7 +258,9 @@ exports.identity = function(req, res, next){
   
   workflow.on('duplicateEmailCheck', function() {
     req.app.db.models.User.findOne({ email: req.body.email, _id: { $ne: req.user.id } }, function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       if (user) {
         workflow.outcome.errfor.email = 'email already taken';
@@ -253,10 +282,14 @@ exports.identity = function(req, res, next){
     };
     
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       user.populate('roles.admin roles.account', 'name.full', function(err, user) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.user = user;
         workflow.emit('response');
@@ -267,20 +300,25 @@ exports.identity = function(req, res, next){
   workflow.emit('validate');
 };
 
-
-
 exports.password = function(req, res, next){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.newPassword) workflow.outcome.errfor.newPassword = 'required';
-    if (!req.body.confirm) workflow.outcome.errfor.confirm = 'required';
-    if (req.body.newPassword != req.body.confirm) {
+    if (!req.body.newPassword) {
+      workflow.outcome.errfor.newPassword = 'required';
+    }
+    
+    if (!req.body.confirm) {
+      workflow.outcome.errfor.confirm = 'required';
+    }
+    
+    if (req.body.newPassword !== req.body.confirm) {
       workflow.outcome.errors.push('Passwords do not match.');
     }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('patchUser');
   });
@@ -291,10 +329,14 @@ exports.password = function(req, res, next){
     };
     
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
-      if (err) return workflow.emit('exception', err);
+      if (err) {
+        return workflow.emit('exception', err);
+      }
       
       user.populate('roles.admin roles.account', 'name.full', function(err, user) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         workflow.outcome.user = user;
         workflow.outcome.newPassword = '';

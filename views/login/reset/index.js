@@ -1,5 +1,6 @@
+'use strict';
+
 exports.init = function(req, res){
-  //are we logged in?
   if (req.isAuthenticated()) { 
     res.redirect(req.user.defaultReturnUrl());
   }
@@ -9,29 +10,38 @@ exports.init = function(req, res){
 };
 
 exports.set = function(req, res){
-  var workflow = new req.app.utility.Workflow(req, res);
+  var workflow = req.app.utility.workflow(req, res);
   
   workflow.on('validate', function() {
-    if (!req.body.password) workflow.outcome.errfor.password = 'required';
-    if (!req.body.confirm) workflow.outcome.errfor.confirm = 'required';
-    if (req.body.password != req.body.confirm) workflow.outcome.errors.push('Passwords do not match.');
+    if (!req.body.password) {
+      workflow.outcome.errfor.password = 'required';
+    }
     
-    //return if we have errors already
-    if (workflow.hasErrors()) return workflow.emit('response');
+    if (!req.body.confirm) {
+      workflow.outcome.errfor.confirm = 'required';
+    }
+    
+    if (req.body.password !== req.body.confirm) {
+      workflow.outcome.errors.push('Passwords do not match.');
+    }
+    
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
     
     workflow.emit('patchUser');
   });
   
   workflow.on('patchUser', function() {
-    //encrypt password
     var encryptedPassword = req.app.db.models.User.encryptPassword(req.body.password);
     
-    //find the user with that email and update
     req.app.db.models.User.findOneAndUpdate(
       { resetPasswordToken: req.params.token },
       { password: encryptedPassword, resetPasswordToken: '' }, 
       function(err, user) {
-        if (err) return workflow.emit('exception', err);
+        if (err) {
+          return workflow.emit('exception', err);
+        }
         
         if (!user) {
           workflow.outcome.errors.push('Invalid reset token.');

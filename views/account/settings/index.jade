@@ -4,22 +4,24 @@ block head
   title Account Settings
 
 block feet
-  script(src='/views/account/settings/index.js')
+  script(src='/views/account/settings/index.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Account Settings
   div.row
-    div.span9
-      #details.form-horizontal
-      #identity.form-horizontal
-      #password.form-horizontal
-    div.span3
+    div.col-xs-12
+      div.page-header
+        h1 Account Settings
+  div.row
+    div.col-sm-9
+      div#details
+      div#identity
+      div#password
+    div.col-sm-3
       if oauthTwitter || oauthGitHub || oauthFacebook
         legend Social Connections
         if oauthMessage
           div.alerts
-            div.alert.alert-info
+            div.alert.alert-info.alert-dismissable
               button.close(type='button', data-dismiss='alert') &times;
               |#{oauthMessage}
         if oauthTwitter
@@ -28,7 +30,7 @@ block body
               i.icon-twitter.icon-large
               |  Disconnect Twitter
           else
-            a.btn.btn-block.btn-info(href='/account/settings/twitter/')
+            a.btn.btn-block.btn-default(href='/account/settings/twitter/')
               i.icon-twitter.icon-large
               |  Connect Twitter
         if oauthGitHub
@@ -37,7 +39,7 @@ block body
               i.icon-github.icon-large
               |  Disconnect GitHub
           else
-            a.btn.btn-block.btn-info(href='/account/settings/github/')
+            a.btn.btn-block.btn-default(href='/account/settings/github/')
               i.icon-github.icon-large
               |  Connect GitHub
         if oauthFacebook
@@ -46,106 +48,99 @@ block body
               i.icon-facebook-sign.icon-large
               |  Disconnect Facebook
           else
-            a.btn.btn-block.btn-info(href='/account/settings/facebook/')
+            a.btn.btn-block.btn-default(href='/account/settings/facebook/')
               i.icon-facebook-sign.icon-large
               |  Connect Facebook
   
   script(type='text/template', id='tmpl-details')
-    legend Contact Info
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.first ? "error" : "" %>')
-      label.control-label First Name:
-      div.controls
-        input(type='text', name='first', value!='<%= first %>')
-        span.help-inline <%= errfor.first %>
-    div.control-group(class!='<%= errfor.middle ? "error" : "" %>')
-      label.control-label Middle Name:
-      div.controls
-        input(type='text', name='middle', value!='<%= middle %>')
-        span.help-inline <%= errfor.middle %>
-    div.control-group(class!='<%= errfor.last ? "error" : "" %>')
-      label.control-label Last Name:
-      div.controls
-        input(type='text', name='last', value!='<%= last %>')
-        span.help-inline <%= errfor['last'] %>
-    div.control-group(class!='<%= errfor.company ? "error" : "" %>')
-      label.control-label Company Name:
-      div.controls
-        input(type='text', name='company', value!='<%= company %>')
-        span.help-inline <%= errfor.company %>
-    div.control-group(class!='<%= errfor.phone ? "error" : "" %>')
-      label.control-label Phone:
-      div.controls
-        input(type='text', name='phone', value!='<%= phone %>')
-        span.help-inline <%= errfor.phone %>
-    div.control-group(class!='<%= errfor.zip ? "error" : "" %>')
-      label.control-label Zip:
-      div.controls
-        input(type='text', name='zip', value!='<%= zip %>')
-        span.help-inline <%= errfor.zip %>
-    div.form-actions
-      button.btn.btn-primary.btn-update(type='button') Update
+    fieldset
+      legend Contact Info
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.control-group(class!='<%= errfor.first ? "has-error" : "" %>')
+        label.control-label First Name:
+        input.form-control(type='text', name='first', value!='<%= first %>')
+        span.help-block <%= errfor.first %>
+      div.control-group(class!='<%= errfor.middle ? "has-error" : "" %>')
+        label.control-label Middle Name:
+        input.form-control(type='text', name='middle', value!='<%= middle %>')
+        span.help-block <%= errfor.middle %>
+      div.control-group(class!='<%= errfor.last ? "has-error" : "" %>')
+        label.control-label Last Name:
+        input.form-control(type='text', name='last', value!='<%= last %>')
+        span.help-block <%= errfor['last'] %>
+      div.control-group(class!='<%= errfor.company ? "has-error" : "" %>')
+        label.control-label Company Name:
+        input.form-control(type='text', name='company', value!='<%= company %>')
+        span.help-block <%= errfor.company %>
+      div.control-group(class!='<%= errfor.phone ? "has-error" : "" %>')
+        label.control-label Phone:
+        input.form-control(type='text', name='phone', value!='<%= phone %>')
+        span.help-block <%= errfor.phone %>
+      div.control-group(class!='<%= errfor.zip ? "has-error" : "" %>')
+        label.control-label Zip:
+        input.form-control(type='text', name='zip', value!='<%= zip %>')
+        span.help-block <%= errfor.zip %>
+      div.control-group
+        button.btn.btn-primary.btn-update(type='button') Update
   
   script(type='text/template', id='tmpl-identity')
-    legend Identity
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
-        button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-      |<% if (success) { %>
-      div.alert.alert-info
-        button.close(type='button', data-dismiss='alert') &times;
-        | Changes have been saved.
-      |<% } %>
-    div.control-group(class!='<%= errfor.username ? "error" : "" %>')
-      label.control-label Username:
-      div.controls
-        input(type='text', name='username', value!='<%= username %>')
-        span.help-inline <%= errfor.username %>
-    div.control-group(class!='<%= errfor.email ? "error" : "" %>')
-      label.control-label Email:
-      div.controls
-        input(type='text', name='email', value!='<%= email %>')
-        span.help-inline <%= errfor.email %>
-    div.form-actions
-      button.btn.btn-primary.btn-update(type='button') Update
+    fieldset
+      legend Identity
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.control-group(class!='<%= errfor.username ? "has-error" : "" %>')
+        label.control-label Username:
+        input.form-control(type='text', name='username', value!='<%= username %>')
+        span.help-block <%= errfor.username %>
+      div.control-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        label.control-label Email:
+        input.form-control(type='text', name='email', value!='<%= email %>')
+        span.help-block <%= errfor.email %>
+      div.control-group
+        button.btn.btn-primary.btn-update(type='button') Update
   
   script(type='text/template', id='tmpl-password')
-    legend Set Password
-    div.alerts
-      |<% _.each(errors, function(err) { %>
-      div.alert.alert-error
+    fieldset
+      legend Set Password
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-error.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%= err %>
+        |<% }); %>
+      |<% if (success) { %>
+      div.alert.alert-info.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
-        |<%= err %>
-      |<% }); %>
-    |<% if (success) { %>
-    div.alert.alert-info
-      button.close(type='button', data-dismiss='alert') &times;
-      | A new password has been set.
-    |<% } %>
-    div.control-group(class!='<%= errfor.newPassword ? "error" : "" %>')
-      label.control-label New Password:
-      div.controls
-        input(type='password', name='newPassword', value!='<%= newPassword %>')
-        span.help-inline <%= errfor.newPassword %>
-    div.control-group(class!='<%= errfor.confirm ? "error" : "" %>')
-      label.control-label Confirm Password:
-      div.controls
-        input(type='password', name='confirm', value!='<%= confirm %>')
-        span.help-inline <%= errfor.confirm %>
-    div.form-actions
-      button.btn.btn-primary.btn-password(type='button') Set Password
+        | A new password has been set.
+      |<% } %>
+      div.control-group(class!='<%= errfor.newPassword ? "has-error" : "" %>')
+        label.control-label New Password:
+        input.form-control(type='password', name='newPassword', value!='<%= newPassword %>')
+        span.help-block <%= errfor.newPassword %>
+      div.control-group(class!='<%= errfor.confirm ? "has-error" : "" %>')
+        label.control-label Confirm Password:
+        input.form-control(type='password', name='confirm', value!='<%= confirm %>')
+        span.help-block <%= errfor.confirm %>
+      div.control-group
+        button.btn.btn-primary.btn-password(type='button') Set Password
   
   script(type='text/template', id='data-account') !{data.account}
   script(type='text/template', id='data-user') !{data.user}

@@ -4,15 +4,17 @@ block head
   title Forgot Your Password?
 
 block feet
-  script(src='/views/login/forgot/index.js')
+  script(src='/views/login/forgot/index.min.js?#{cacheBreaker}')
 
 block body
-  div.page-header
-    h1 Forgot Your Password?
-  #forgot
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Forgot Your Password?
+      div#forgot
   
   script(type='text/template', id='tmpl-forgot')
-    form.form-horizontal
+    form
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-error
@@ -25,15 +27,14 @@ block body
           | We sent password reset instructions to your email address.
         |<% } %>
       |<% if (!success) { %>
-      div.control-group(class!='<%= errfor.email ? "error" : "" %>')
-        label.control-label Email Address:
-        div.controls
-          input(type='text', name='email', value!='<%= email %>')
-          span.help-inline <%= errfor.email %>
+      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        label.control-label Enter Your Email:
+        input.form-control(type='text', name='email', value!='<%= email %>')
+        span.help-block <%= errfor.email %>
       |<% } %>
-      div.form-actions
+      div.form-group
         |<% if (!success) { %>
         button.btn.btn-primary.btn-forgot(type='button') Send Reset
         |<% } %>
         | 
-        a.btn(href='/login/') Back to Login
+        a.btn.btn-link(href='/login/') Back to Login
