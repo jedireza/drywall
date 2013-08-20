@@ -119,6 +119,7 @@ exports.signup = function(req, res){
       workflow.user.save(function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
+        }
         if (req.app.get('verify-email')) {
           workflow.emit('sendValidationEmail');
         }
