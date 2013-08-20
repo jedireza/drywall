@@ -4,7 +4,7 @@
 //dependencies
 var watchr = require('watchr'),
     path = require('path'),
-    findit = require('findit'),
+    findit = require('findit2'),
     fs = require('fs'),
     cp = require('child_process');
 
