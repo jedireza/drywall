@@ -17,7 +17,7 @@ block body
     form
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error
+        div.alert.alert-danger
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>

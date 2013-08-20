@@ -37,7 +37,7 @@ block body
       legend Contact Info
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           |<%= err %>
         |<% }); %>
         |<% if (success) { %>
@@ -77,7 +77,7 @@ block body
       legend Login
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -101,7 +101,7 @@ block body
     legend Status
     div.alerts
       |<% _.each(errors, function(err) { %>
-      div.alert.alert-error.alert-dismissable
+      div.alert.alert-danger.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
@@ -128,7 +128,7 @@ block body
     legend Notes
     div.alerts
       |<% _.each(errors, function(err) { %>
-      div.alert.alert-error.alert-dismissable
+      div.alert.alert-danger.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
         |<%= err %>
       |<% }); %>
@@ -154,7 +154,7 @@ block body
       legend Danger Zone
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
