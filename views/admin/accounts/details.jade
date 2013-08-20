@@ -111,7 +111,7 @@ block body
         for status in data.statuses
           option(value='#{status._id}') #{status.name}
       div.input-group-btn
-        button.btn.btn-info.btn-add Change
+        button.btn.btn-default.btn-add Change
   
   script(type='text/template', id='tmpl-status-collection')
     div#status-items.status-items
@@ -133,7 +133,7 @@ block body
         |<%= err %>
       |<% }); %>
     textarea.form-control(rows='3', name='data', placeholder='enter notes')
-    button.btn.btn-info.btn-block.btn-add Add New Note
+    button.btn.btn-default.btn-block.btn-add Add New Note
   
   script(type='text/template', id='tmpl-notes-collection')
     div#notes-items.notes-items
