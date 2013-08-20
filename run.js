@@ -168,7 +168,7 @@ var build = function(filePath) {
 
 //a function that lints less files
 var lintLESS = function(filePath, cb) {
-  var lesscmd = cp.spawn('node_modules/.bin/recess', [filePath, '--noSummary', '--strictPropertyOrder', 'false']);
+  var lesscmd = cp.spawn(createCommand('node_modules/.bin/recess'), [filePath, '--noSummary', '--strictPropertyOrder', 'false']);
   lesscmd.stdout.on('data', function(d) { process.stdout.write(d); });
   lesscmd.stderr.on('data', function(d) { process.stderr.write(d); });
   lesscmd.on('close', function (code) {
@@ -189,7 +189,7 @@ var compileLESS = function(filePath, dependencyPaths) {
   var lessMinPath = basePath + lessMinName;
   
   var cssStream = fs.createWriteStream(lessMinPath);
-  var lesscmd = cp.spawn('node_modules/.bin/recess', args);
+  var lesscmd = cp.spawn(createCommand('node_modules/.bin/recess'), args);
   lesscmd.stdout.on('data', function(d) { cssStream.write(d); });
   lesscmd.stderr.on('data', function(d) { process.stderr.write(d); });
   lesscmd.on('close', function (code) {
@@ -204,7 +204,7 @@ var lintJS = function(filePath, cb) {
   if (!/public\//.test(filePath)) {
     configFile = './.jshintrc-server';
   }
-  var hintcmd = cp.spawn('node_modules/.bin/jshint', [filePath, '--config', configFile]);
+  var hintcmd = cp.spawn(createCommand('node_modules/.bin/jshint'), [filePath, '--config', configFile]);
   hintcmd.stdout.on('data', function(d) { process.stdout.write(d); });
   hintcmd.stderr.on('data', function(d) { process.stderr.write(d); });
   hintcmd.on('close', function (code) {
@@ -232,10 +232,18 @@ var compileJS = function(filePath, dependencyPaths) {
     '--source-map-url', jsMapName
   ]);
   
-  var uglycmd = cp.spawn('node_modules/.bin/uglifyjs', args);
+  var uglycmd = cp.spawn(createCommand('node_modules/.bin/uglifyjs'), args);
   uglycmd.stdout.on('data', function(d) { process.stdout.write(d); });
   uglycmd.stderr.on('data', function(d) { process.stderr.write(d); });
   uglycmd.on('close', function (code) {
     console.log('RUN [✔] Compiled: '+ filePath +' > '+ jsMinName);
   });
 };
+
+// Create the proper command for Windows environments
+var createCommand = function(command) {
+  if (!!process.platform.match(/^win/)) {
+    return command.replace(/\//g, '\\') + '.cmd';
+  }
+  return command;
+}
