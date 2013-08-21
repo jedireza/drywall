@@ -44,7 +44,6 @@
     },
     signup: function() {
       this.$el.find('.btn-signup').attr('disabled', true);
-      
       this.model.save({
         username: this.$el.find('[name="username"]').val(),
         email: this.$el.find('[name="email"]').val(),
@@ -52,7 +51,7 @@
       },{
         success: function(model, response) {
           if (response.success) {
-            location.href = '/account/';
+            location.href = response.href;
           }
           else {
             model.set(response);

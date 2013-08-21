@@ -22,6 +22,10 @@ block body
               |#{oauthMessage} 
               b
                 a(href='/signup/') Sign Up Here
+      if inactiveMessage
+        div.alerts
+          div.alert.alert-error
+            |#{inactiveMessage}
         div.form-actions
           div.btn-group.btn-group-justified
             if oauthTwitter
