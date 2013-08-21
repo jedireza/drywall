@@ -1,6 +1,6 @@
 {
   "name": "Drywall.js",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "private": true,
   "scripts": {
     "start": "node app.js",
@@ -11,7 +11,7 @@
     "connect-mongo": "~0.2.0",
     "emailjs": "~0.3.4",
     "express": "~3.0.0",
-    "findit": "~0.1.2",
+    "findit2": "~0.2.0",
     "jade": "~0.27.7",
     "jshint": "~2.1.4",
     "mongoose": "~3.6.7",

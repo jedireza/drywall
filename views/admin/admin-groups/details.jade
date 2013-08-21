@@ -26,7 +26,7 @@ block body
       legend Details
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -47,7 +47,7 @@ block body
       legend Permissions
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>
@@ -94,7 +94,7 @@ block body
       legend Danger Zone
       div.alerts
         |<% _.each(errors, function(err) { %>
-        div.alert.alert-error.alert-dismissable
+        div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           |<%= err %>
         |<% }); %>

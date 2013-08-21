@@ -4,7 +4,7 @@
 //dependencies
 var watchr = require('watchr'),
     path = require('path'),
-    findit = require('findit'),
+    findit = require('findit2'),
     fs = require('fs'),
     cp = require('child_process');
 
@@ -240,10 +240,10 @@ var compileJS = function(filePath, dependencyPaths) {
   });
 };
 
-// Create the proper command for Windows environments
+//create the proper command for Windows environments
 var createCommand = function(command) {
-  if (!!process.platform.match(/^win/)) {
+  if (/^win/.test(process.platform)) {
     return command.replace(/\//g, '\\') + '.cmd';
   }
   return command;
-}
+};
