@@ -76,6 +76,7 @@ exports.signup = function(req, res){
   workflow.on('createUser', function() {
     var fieldsToSet = {
       isActive: 'yes',
+      isVerified: 'yes',
       username: req.body.username,
       email: req.body.email,
       password: req.app.db.models.User.encryptPassword(req.body.password),
@@ -84,6 +85,10 @@ exports.signup = function(req, res){
         req.body.email
       ]
     };
+    if (req.app.get('verify-email')) {
+      fieldsToSet.isVerified = 'no';
+      fieldsToSet.verifyEmailToken = require('crypto').createHash('md5').update(Math.random().toString()).digest('hex');
+    }
     req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
@@ -115,9 +120,13 @@ exports.signup = function(req, res){
       workflow.user.save(function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
+	    }
+        if (req.app.get('verify-email')) {
+          workflow.emit('sendValidationEmail');
         }
-        
-        workflow.emit('sendWelcomeEmail');
+        else {
+          workflow.emit('sendWelcomeEmail');
+        }
       });
     });
   });
@@ -136,6 +145,7 @@ exports.signup = function(req, res){
         projectName: req.app.get('project-name')
       },
       success: function(message) {
+        workflow.outcome.href = '/account/';
         workflow.emit('logUserIn');
       },
       error: function(err) {
@@ -167,7 +177,30 @@ exports.signup = function(req, res){
       }
     })(req, res);
   });
-  
+
+  workflow.on('sendValidationEmail', function() {
+    req.app.utility.email(req, res, {
+      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      to: req.body.email,
+      subject: req.app.get('project-name') + '- Verify Your Email Address',
+      textPath: 'signup/verify/email-text',
+      htmlPath: 'signup/verify/email-html',
+      locals: {
+          verifyURL: 'http://'+ req.headers.host +'/signup/verify/' + workflow.user.verifyEmailToken + '/',
+          projectName: req.app.get('project-name')
+      },
+      success: function(message) {
+          workflow.outcome.href = '/signup/verify/confirm/';
+          workflow.emit('response');
+      },
+      error: function(err) {
+          console.log('Error Sending Verification Email: '+ err);
+          workflow.outcome.errors.push('Failed to send verification email. Please contact an admin.');
+          workflow.emit('response');
+      }
+    });
+  });
+
   workflow.emit('validate');
 };
 
@@ -312,6 +345,7 @@ exports.signupSocial = function(req, res){
   workflow.on('createUser', function() {
     var fieldsToSet = {
       isActive: 'yes',
+      isVerified: 'yes',
       username: workflow.username,
       email: req.body.email,
       search: [
