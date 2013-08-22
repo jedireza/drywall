@@ -150,6 +150,7 @@ exports.signup = function(req, res){
       },
       error: function(err) {
         console.log('Error Sending Welcome Email: '+ err);
+        workflow.outcome.href = '/account/';
         workflow.emit('logUserIn');
       }
     });
@@ -179,7 +180,7 @@ exports.signup = function(req, res){
   });
 
   workflow.on('sendValidationEmail', function() {
-    req.app.utility.email(req, res, {
+    req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
       subject: req.app.get('project-name') + '- Verify Your Email Address',
