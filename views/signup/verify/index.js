@@ -41,7 +41,7 @@ exports.verify = function(req, res){
   });
 
   workflow.on('sendWelcomeEmail', function(user) {
-      req.app.utility.email(req, res, {
+      req.app.utility.sendmail(req, res, {
           from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
           to: user.email,
           subject: 'Your '+ req.app.get('project-name') +' Account',
