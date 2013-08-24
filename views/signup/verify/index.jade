@@ -1,39 +1,11 @@
 extends ../../../layouts/default
 
 block head
-  title Verify Email
-
-block feet
-    script(src='/views/signup/verify/index.min.js?#{cacheBreaker}')
+  title Verification Required
 
 block body
-  div.row
-    div.col-sm-6
-      div.page-header
-        h1 Email Verification
-      div#verify
-
-    script(type='text/template', id='tmpl-verify')
-      form.form-horizontal
-        div.alerts
-          |<% _.each(errors, function(err) { %>
-          div.alert.alert-danger
-            |<%= err %>
-          |<% }); %>
-          |<% if (success) { %>
-          div.alert.alert-info
-            | Your email address has been verified. You may log in now.
-          |<% } %>
-          |<% if (id == undefined) { %>
-          div.alert.alert-warning
-            | You do not have a valid reset request.
-          |<% } %>
-        |<% if (!success && id != undefined) { %>
-        p Enter your email address below to complete validation.
-        div.form-group(class!='<%= errfor.email ? "error" : "" %>')
-          label.control-label Email Address:
-          input.form-control(type='email', name='email', value!='<%= email %>')
-          span.help-block <%= errfor.email %>
-        div.form-group
-          button.btn.btn-primary.btn-verify(type='button') Verify Email
-        |<% } %>
+  div.page-header
+    h1 Verify Your Email
+  
+  div.alert.alert-info
+    | Your account has been created and is awaiting verification. Check your inbox for next steps.

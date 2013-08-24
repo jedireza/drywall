@@ -4,64 +4,61 @@ exports.init = function(req, res){
   res.render('signup/verify/index');
 };
 
-exports.initConfirm = function(req, res){
-  res.render('signup/verify/confirm');
-};
-
-exports.verify = function(req, res){
+exports.verify = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
-
-  workflow.on('validate', function() {
-      if (!req.body.email) {
-          workflow.outcome.errfor.email = 'required';
-      }
-
-      //return if we have errors already
-      if (workflow.hasErrors()) return workflow.emit('response');
-
-      workflow.emit('patchUser');
-  });
-
+  
   workflow.on('patchUser', function() {
-      //find the user with that email and update
-      req.app.db.models.User.findOneAndUpdate(
-          { verifyEmailToken: req.params.token, email: req.body.email },
-          { verifyEmailToken: '', isVerified: 'yes' },
-          function(err, user) {
-              if (err) return workflow.emit('exception', err);
-
-              if (!user) {
-                  workflow.outcome.errors.push('Email and token do not match.');
-                  return workflow.emit('response');
-              }
-
-              workflow.emit('sendWelcomeEmail', user);
-          }
-      );
+    var conditions = {
+      verifyEmailToken: req.params.token
+    };
+    var fieldsToSet = {
+      verifyEmailToken: '',
+      isVerified: 'yes'
+    };
+    req.app.db.models.User.findOneAndUpdate(conditions, fieldsToSet, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      
+      if (!user) {
+        return res.render('signup/verify/failure');
+      }
+      
+      workflow.emit('sendWelcomeEmail', user);
+    });
   });
-
+  
   workflow.on('sendWelcomeEmail', function(user) {
-      req.app.utility.sendmail(req, res, {
-          from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
-          to: user.email,
-          subject: 'Your '+ req.app.get('project-name') +' Account',
-          textPath: 'signup/email-text',
-          htmlPath: 'signup/email-html',
-          locals: {
-              username: user.username,
-              email: user.email,
-              loginURL: 'http://'+ req.headers.host +'/login/',
-              projectName: req.app.get('project-name')
-          },
-          success: function(message) {
-              workflow.emit('response');
-          },
-          error: function(err) {
-              console.log('Error Sending Welcome Email: '+ err);
-              workflow.emit('response');
-          }
-      });
+    req.app.utility.sendmail(req, res, {
+      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      to: user.email,
+      subject: 'Your '+ req.app.get('project-name') +' Account',
+      textPath: 'signup/email-text',
+      htmlPath: 'signup/email-html',
+      locals: {
+        username: user.username,
+        email: user.email,
+        loginURL: 'http://'+ req.headers.host +'/login/',
+        projectName: req.app.get('project-name')
+      },
+      success: function(message) {
+        workflow.emit('logUserIn', user);
+      },
+      error: function(err) {
+        workflow.emit('logUserIn', user);
+      }
+    });
   });
-
-  workflow.emit('validate');
+  
+  workflow.on('logUserIn', function(user) {
+    req.login(user, function(err) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      res.render('signup/verify/success');
+    });
+  });
+  
+  workflow.emit('patchUser');
 };
