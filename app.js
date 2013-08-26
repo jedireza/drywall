@@ -36,6 +36,7 @@ app.configure(function(){
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
   app.set('crypto-key', 'k3yb0ardc4t');
+  app.set('verify-signup-email', false);
   
   //email (smtp) settings
   app.set('email-from-name', app.get('project-name')+ ' Website');
@@ -46,9 +47,6 @@ app.configure(function(){
     host: 'smtp.gmail.com',
     ssl: true
   });
-
-  // Require email verification?
-  app.set('verify-email', false);
   
   //twitter settings
   app.set('twitter-oauth-key', '');

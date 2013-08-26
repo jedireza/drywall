@@ -85,10 +85,12 @@ exports.signup = function(req, res){
         req.body.email
       ]
     };
-    if (req.app.get('verify-email')) {
+    
+    if (req.app.get('verify-signup-email')) {
       fieldsToSet.isVerified = 'no';
       fieldsToSet.verifyEmailToken = require('crypto').createHash('md5').update(Math.random().toString()).digest('hex');
     }
+    
     req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
@@ -110,6 +112,7 @@ exports.signup = function(req, res){
         workflow.user.username
       ]
     };
+    
     req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
@@ -120,9 +123,10 @@ exports.signup = function(req, res){
       workflow.user.save(function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
-	    }
-        if (req.app.get('verify-email')) {
-          workflow.emit('sendValidationEmail');
+        }
+        
+        if (req.app.get('verify-signup-email')) {
+          workflow.emit('sendVerificationEmail');
         }
         else {
           workflow.emit('sendWelcomeEmail');
@@ -132,6 +136,7 @@ exports.signup = function(req, res){
   });
   
   workflow.on('sendWelcomeEmail', function() {
+    workflow.outcome.href = '/account/';
     req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
@@ -145,12 +150,9 @@ exports.signup = function(req, res){
         projectName: req.app.get('project-name')
       },
       success: function(message) {
-        workflow.outcome.href = '/account/';
         workflow.emit('logUserIn');
       },
       error: function(err) {
-        console.log('Error Sending Welcome Email: '+ err);
-        workflow.outcome.href = '/account/';
         workflow.emit('logUserIn');
       }
     });
@@ -178,34 +180,31 @@ exports.signup = function(req, res){
       }
     })(req, res);
   });
-
-  workflow.on('sendValidationEmail', function() {
+  
+  workflow.on('sendVerificationEmail', function() {
+    workflow.outcome.href = '/signup/verify/';
     req.app.utility.sendmail(req, res, {
       from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
       to: req.body.email,
-      subject: req.app.get('project-name') + '- Verify Your Email Address',
+      subject: 'Verify Your '+ req.app.get('project-name') +' Account',
       textPath: 'signup/verify/email-text',
       htmlPath: 'signup/verify/email-html',
       locals: {
-          verifyURL: 'http://'+ req.headers.host +'/signup/verify/' + workflow.user.verifyEmailToken + '/',
-          projectName: req.app.get('project-name')
+        verifyURL: 'http://'+ req.headers.host +'/signup/verify/' + workflow.user.verifyEmailToken + '/',
+        projectName: req.app.get('project-name')
       },
       success: function(message) {
-          workflow.outcome.href = '/signup/verify/confirm/';
-          workflow.emit('response');
+        workflow.emit('response');
       },
       error: function(err) {
-          console.log('Error Sending Verification Email: '+ err);
-          workflow.outcome.errors.push('Failed to send verification email. Please contact an admin.');
-          workflow.emit('response');
+        workflow.outcome.errors.push('Failed to send verification email.');
+        workflow.emit('response');
       }
     });
   });
-
+  
   workflow.emit('validate');
 };
-
-
 
 exports.signupTwitter = function(req, res, next) {
   req._passport.instance.authenticate('twitter', function(err, user, info) {

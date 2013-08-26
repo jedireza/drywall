@@ -45,10 +45,6 @@ exports.login = function(req, res){
         return workflow.emit('response');
       }
       else {
-        if (user.isVerified === 'no') {
-          workflow.outcome.errors.push('Your email address has not yet been verified.');
-          return workflow.emit('response');
-        }
         req.login(user, function(err) {
           if (err) {
             return workflow.emit('exception', err);
