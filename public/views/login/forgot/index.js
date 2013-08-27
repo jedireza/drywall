@@ -43,6 +43,8 @@
     },
     forgot: function() {
       this.$el.find('.btn-forgot').attr('disabled', true);
+      this.model.attributes.errors = [];
+      this.model.attributes.errfor = {};
       
       this.model.save({
         email: this.$el.find('[name="email"]').val()

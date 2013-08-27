@@ -46,6 +46,8 @@
     },
     reset: function() {
       this.$el.find('.btn-reset').attr('disabled', true);
+      this.model.attributes.errors = [];
+      this.model.attributes.errfor = {};
       
       this.model.save({
         password: this.$el.find('[name="password"]').val(),

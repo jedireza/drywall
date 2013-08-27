@@ -43,6 +43,8 @@
     },
     login: function() {
       this.$el.find('.btn-login').attr('disabled', true);
+      this.model.attributes.errors = [];
+      this.model.attributes.errfor = {};
       
       this.model.save({
         username: this.$el.find('[name="username"]').val(),
