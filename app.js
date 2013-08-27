@@ -36,6 +36,7 @@ app.configure(function(){
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
   app.set('crypto-key', 'k3yb0ardc4t');
+  app.set('require-account-verification', false);
   
   //email (smtp) settings
   app.set('email-from-name', app.get('project-name')+ ' Website');
