@@ -17,6 +17,11 @@ function ensureAdmin(req, res, next) {
 
 function ensureAccount(req, res, next) {
   if (req.user.canPlayRoleOf('account')) {
+    if (req.app.get('require-account-verification')) {
+      if (req.user.roles.account.isVerified !== 'yes' && !/^\/account\/verification\//.test(req.url)) {
+        return res.redirect('/account/verification/');
+      }
+    }
     return next();
   }
   res.redirect('/');
@@ -128,6 +133,11 @@ exports = module.exports = function(app, passport) {
   app.all('/account*', ensureAuthenticated);
   app.all('/account*', ensureAccount);
   app.get('/account/', require('./views/account/index').init);
+  
+  //account > verification
+  app.get('/account/verification/', require('./views/account/verification/index').init);
+  app.post('/account/verification/', require('./views/account/verification/index').resendVerification);
+  app.get('/account/verification/:token/', require('./views/account/verification/index').verify);
   
   //account > settings
   app.get('/account/settings/', require('./views/account/settings/index').init);
