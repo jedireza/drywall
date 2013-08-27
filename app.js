@@ -32,7 +32,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('strict routing', true);
-  app.set('project-name', 'Drywall.js');
+  app.set('project-name', 'Drywall');
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
   app.set('crypto-key', 'k3yb0ardc4t');
