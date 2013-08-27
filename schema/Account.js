@@ -6,6 +6,8 @@ exports = module.exports = function(app, mongoose) {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       name: { type: String, default: '' }
     },
+    isVerified: { type: String, default: '' },
+    verificationToken: { type: String, default: '' },
     name: {
       first: { type: String, default: '' },
       middle: { type: String, default: '' },
