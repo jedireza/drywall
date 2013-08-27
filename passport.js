@@ -15,6 +15,9 @@ exports = module.exports = function(app, passport) {
       else {
         conditions.email = username;
       }
+      if (app.get('verify-signup-email')) {
+        conditions.isVerified = 'yes';
+      }
       
       app.db.models.User.findOne(conditions, function(err, user) {
         if (err) {
