@@ -96,6 +96,7 @@ exports.signup = function(req, res){
   
   workflow.on('createAccount', function() {
     var fieldsToSet = {
+      isVerified: req.app.get('require-account-verification') ? 'no' : 'yes',
       'name.full': workflow.user.username,
       user: {
         id: workflow.user._id,
@@ -105,6 +106,7 @@ exports.signup = function(req, res){
         workflow.user.username
       ]
     };
+    
     req.app.db.models.Account.create(fieldsToSet, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
@@ -334,6 +336,7 @@ exports.signupSocial = function(req, res){
   workflow.on('createAccount', function() {
     var nameParts = req.session.socialProfile.displayName.split(' ');
     var fieldsToSet = {
+      isVerified: 'yes',
       'name.first': nameParts[0],
       'name.last': nameParts[1] || '',
       'name.full': req.session.socialProfile.displayName,
