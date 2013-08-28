@@ -126,7 +126,7 @@ exports.signup = function(req, res){
   
   workflow.on('sendWelcomeEmail', function() {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
       to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',
       textPath: 'signup/email-text',
@@ -368,7 +368,7 @@ exports.signupSocial = function(req, res){
   
   workflow.on('sendWelcomeEmail', function() {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
       to: req.body.email,
       subject: 'Your '+ req.app.get('project-name') +' Account',
       textPath: 'signup/email-text',

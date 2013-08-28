@@ -37,17 +37,17 @@ app.configure(function(){
   app.set('admin-email', 'your@email.addy');
   app.set('crypto-key', process.env.CRYPTO_KEY || 'k3yb0ardc4t');
   app.set('require-account-verification', false);
-  
-  //email (smtp) settings
-  app.set('email-from-name', app.get('project-name')+ ' Website');
-  app.set('email-from-address', 'your@email.addy');
-  app.set('email-credentials', {
-    user: 'your@email.addy',
-    password: process.env.EMAIL_PASSWORD || 'bl4rg!',
-    host: 'smtp.gmail.com',
-    ssl: true
+
+  //smtp settings
+  app.set('smtp-from-name', process.env.SMTP_FROM_NAME || app.get('project-name')+ ' Website');
+  app.set('smtp-from-address', process.env.SMTP_FROM_ADDRESS || 'your@email.addy');
+  app.set('smtp-credentials', {
+      user: process.env.SMTP_USERNAME || 'your@email.addy',
+      password: process.env.SMTP_PASSWORD || 'bl4rg!',
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      ssl: /yes|true/.test(process.env.SMTP_USE_SSL) || true
   });
-  
+
   //twitter settings
   app.set('twitter-oauth-key', process.env.TWITTER_OAUTH_KEY || '');
   app.set('twitter-oauth-secret', process.env.TWITTER_OAUTH_SECRET || '');
