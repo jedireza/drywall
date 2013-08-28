@@ -40,7 +40,7 @@ exports.send = function(req, res){
   
   workflow.on('sendEmail', function(token, user) {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
       to: user.email,
       subject: 'Reset your '+ req.app.get('project-name') +' password',
       textPath: 'login/forgot/email-text',

@@ -35,30 +35,30 @@ app.configure(function(){
   app.set('project-name', 'Drywall');
   app.set('company-name', 'Acme, Inc.');
   app.set('admin-email', 'your@email.addy');
-  app.set('crypto-key', 'k3yb0ardc4t');
+  app.set('crypto-key', process.env.CRYPTO_KEY || 'k3yb0ardc4t');
   app.set('require-account-verification', false);
-  
-  //email (smtp) settings
-  app.set('email-from-name', app.get('project-name')+ ' Website');
-  app.set('email-from-address', 'your@email.addy');
-  app.set('email-credentials', {
-    user: 'your@email.addy',
-    password: 'bl4rg!',
-    host: 'smtp.gmail.com',
-    ssl: true
+
+  //smtp settings
+  app.set('smtp-from-name', process.env.SMTP_FROM_NAME || app.get('project-name')+ ' Website');
+  app.set('smtp-from-address', process.env.SMTP_FROM_ADDRESS || 'your@email.addy');
+  app.set('smtp-credentials', {
+      user: process.env.SMTP_USERNAME || 'your@email.addy',
+      password: process.env.SMTP_PASSWORD || 'bl4rg!',
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      ssl: /yes|true/.test(process.env.SMTP_USE_SSL) || true
   });
-  
+
   //twitter settings
-  app.set('twitter-oauth-key', '');
-  app.set('twitter-oauth-secret', '');
+  app.set('twitter-oauth-key', process.env.TWITTER_OAUTH_KEY || '');
+  app.set('twitter-oauth-secret', process.env.TWITTER_OAUTH_SECRET || '');
   
   //github settings
-  app.set('github-oauth-key', '');
-  app.set('github-oauth-secret', '');
+  app.set('github-oauth-key', process.env.GITHUB_OAUTH_KEY || '');
+  app.set('github-oauth-secret', process.env.GITHUB_OAUTH_SECRET || '');
   
   //facebook settings
-  app.set('facebook-oauth-key', '');
-  app.set('facebook-oauth-secret', '');
+  app.set('facebook-oauth-key', process.env.FACEBOOK_OAUTH_KEY || '');
+  app.set('facebook-oauth-secret', process.env.FACEBOOK_OAUTH_SECRET || '');
   
   //middleware
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
@@ -68,7 +68,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({
-    secret: 'Sup3rS3cr3tK3y',
+    secret: process.env.SESSION_SECRET || 'Sup3rS3cr3tK3y',
     store: new mongoStore({ url: app.get('mongodb-uri') })
   }));
   app.use(passport.initialize());

@@ -29,7 +29,7 @@ exports.sendMessage = function(req, res){
   
   workflow.on('sendEmail', function() {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
       replyTo: req.body.email,
       to: req.app.get('admin-email'),
       subject: req.app.get('project-name') +' contact form',

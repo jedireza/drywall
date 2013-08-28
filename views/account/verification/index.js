@@ -2,7 +2,7 @@
 
 var sendVerificationEmail = function(req, res, options) {
   req.app.utility.sendmail(req, res, {
-    from: req.app.get('email-from-name') +' <'+ req.app.get('email-from-address') +'>',
+    from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
     to: options.email,
     subject: 'Verify Your '+ req.app.get('project-name') +' Account',
     textPath: 'account/verification/email-text',
