@@ -31,7 +31,7 @@ exports.sendMessage = function(req, res){
     req.app.utility.sendmail(req, res, {
       from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
       replyTo: req.body.email,
-      to: req.app.get('admin-email'),
+      to: req.app.get('system-email'),
       subject: req.app.get('project-name') +' contact form',
       textPath: 'contact/email-text',
       htmlPath: 'contact/email-html',
