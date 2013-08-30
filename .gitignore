@@ -2,3 +2,4 @@ node_modules
 *.min.js
 *.min.js.map
 *.min.css
+/config.js
