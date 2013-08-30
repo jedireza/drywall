@@ -41,8 +41,8 @@ Installation
 
  1. Clone the repository (or download/unzip) into a directory.
  2. Run `$ npm install`
- 3. Configure `/app.js` with mongodb and email credentials.
- 4. Run app via `$ ./run.js`
+ 3. Rename `/config.example.js` to `/config.js` and set mongodb and email credentials.
+ 4. Run app via `$ ./run.js` or `$ node run`
 
 Setup
 ------------
