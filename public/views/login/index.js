@@ -25,7 +25,7 @@
     },
     initialize: function() {
       this.model = new app.Login();
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {

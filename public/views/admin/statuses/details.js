@@ -51,7 +51,7 @@
     template: _.template( $('#tmpl-header').html() ),
     initialize: function() {
       this.model = app.mainView.model;
-      this.model.on('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {
@@ -68,9 +68,8 @@
     initialize: function() {
       this.model = new app.Details();
       this.syncUp();
-      app.mainView.model.bind('change', this.syncUp, this);
-      
-      this.model.on('change', this.render, this);
+      this.listenTo(app.mainView.model, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     syncUp: function() {
@@ -105,7 +104,7 @@
     },
     initialize: function() {
       this.model = new app.Delete({ _id: app.mainView.model.id });
-      this.model.on('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {

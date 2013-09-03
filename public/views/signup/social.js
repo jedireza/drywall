@@ -25,7 +25,7 @@
     initialize: function() {
       this.model = new app.Signup();
       this.model.set('email', $('#data-email').text());
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {

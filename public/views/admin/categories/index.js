@@ -56,7 +56,7 @@
     },
     initialize: function() {
       this.model = new app.Record();
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {
@@ -144,7 +144,7 @@
     },
     initialize: function() {
       this.model = new app.Filter( app.mainView.results.filters );
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {
@@ -177,7 +177,7 @@
     },
     initialize: function() {
       this.model = new app.Paging({ pages: app.mainView.results.pages, items: app.mainView.results.items });
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {

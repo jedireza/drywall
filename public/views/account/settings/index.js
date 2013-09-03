@@ -88,9 +88,8 @@
     initialize: function() {
       this.model = new app.Details();
       this.syncUp();
-      app.mainView.account.bind('change', this.syncUp, this);
-      
-      this.model.on('change', this.render, this);
+      this.listenTo(app.mainView.account, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     syncUp: function() {
@@ -134,9 +133,8 @@
     initialize: function() {
       this.model = new app.Identity();
       this.syncUp();
-      app.mainView.user.bind('change', this.syncUp, this);
-      
-      this.model.on('change', this.render, this);
+      this.listenTo(app.mainView.user, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     syncUp: function() {
@@ -171,7 +169,7 @@
     },
     initialize: function() {
       this.model = new app.Password({ _id: app.mainView.user.id });
-      this.model.on('change', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
     render: function() {
