@@ -68,9 +68,8 @@ block body
             |<% if (roles && roles.admin) { %>
             input.form-control(disabled=true, value!='<%= roles.admin.name.full %>')
             div.input-group-btn
-              div.btn-group
-                button.btn.btn-warning.btn-admin-unlink(type='button') Unlink
-                button.btn.btn-default.btn-admin-open(type='button') Open
+              button.btn.btn-warning.btn-admin-unlink(type='button') Unlink
+              button.btn.btn-default.btn-admin-open(type='button') Open
             |<% } else { %>
             input.form-control(name='newAdminId', type='text', placeholder='enter admin id')
             div.input-group-btn
@@ -83,9 +82,8 @@ block body
           |<% if (roles && roles.account) { %>
           input.form-control(disabled=true, value!='<%= roles.account.name.full %>')
           div.input-group-btn
-            div.btn-group
-              button.btn.btn-warning.btn-account-unlink(type='button') Unlink
-              button.btn.btn-default.btn-account-open(type='button') Open
+            button.btn.btn-warning.btn-account-unlink(type='button') Unlink
+            button.btn.btn-default.btn-account-open(type='button') Open
           |<% } else { %>
           input.form-control(name='newAccountId', type='text', placeholder='enter account id')
           div.input-group-btn

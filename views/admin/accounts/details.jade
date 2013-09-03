@@ -87,9 +87,8 @@ block body
           |<% if (name) { %>
           input.form-control(disabled=true, value!='<%= name %>')
           div.input-group-btn
-            div.btn-group
-              button.btn.btn-warning.btn-user-unlink(type='button') Unlink
-              button.btn.btn-default.btn-user-open(type='button') Open
+            button.btn.btn-warning.btn-user-unlink(type='button') Unlink
+            button.btn.btn-default.btn-user-open(type='button') Open
           |<% } else { %>
           input.form-control(name='newUsername', type='text', placeholder='enter a username')
           div.input-group-btn

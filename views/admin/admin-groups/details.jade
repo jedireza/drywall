@@ -70,16 +70,15 @@ block body
           div.input-group
             input.form-control(disabled=true, value!='<%= permission.name %>')
             div.input-group-btn
-              div.btn-group
-                |<% if (permission.permit) { %>
-                button.btn.btn-default.btn-allow(type='button', disabled) Allow
-                button.btn.btn-default.btn-deny(type='button') Deny
-                |<% } else { %>
-                button.btn.btn-default.btn-allow(type='button') Allow
-                button.btn.btn-default.btn-deny(type='button', disabled) Deny
-                |<% } %>
-                button.btn.btn-danger.btn-delete(type='button')
-                  i.icon-trash.icon-white
+              |<% if (permission.permit) { %>
+              button.btn.btn-default.btn-allow(type='button', disabled) Allow
+              button.btn.btn-default.btn-deny(type='button') Deny
+              |<% } else { %>
+              button.btn.btn-default.btn-allow(type='button') Allow
+              button.btn.btn-default.btn-deny(type='button', disabled) Deny
+              |<% } %>
+              button.btn.btn-danger.btn-delete(type='button')
+                i.icon-trash.icon-white
           |<% }); %>
           |<% if (permissions.length == 0) { %>
           span.badge
