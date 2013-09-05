@@ -40,7 +40,7 @@ app.configure(function(){
   app.set('company-name', config.companyName);
   app.set('system-email', config.systemEmail);
   app.set('crypto-key', config.cryptoKey);
-  app.set('require-account-verification', true);
+  app.set('require-account-verification', false);
 
   //smtp settings
   app.set('smtp-from-name', config.smtp.from.name);
