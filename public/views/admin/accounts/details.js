@@ -309,7 +309,7 @@
       this.collection = new app.NoteCollection();
       this.syncUp();
       this.listenTo(app.mainView.model, 'change', this.syncUp);
-      this.collection.on('reset', this.render, this);
+      this.listenTo(this.collection, 'reset', this.render);
       this.render();
     },
     syncUp: function() {
@@ -406,7 +406,7 @@
       this.collection = new app.StatusCollection();
       this.syncUp();
       this.listenTo(app.mainView.model, 'change', this.syncUp);
-      this.collection.on('reset', this.render, this);
+      this.listenTo(this.collection, 'reset', this.render);
       this.render();
     },
     syncUp: function() {

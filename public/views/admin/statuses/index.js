@@ -102,7 +102,7 @@
     template: _.template( $('#tmpl-results-table').html() ),
     initialize: function() {
       this.collection = new app.RecordCollection( app.mainView.results.data );
-      this.collection.on('reset', this.render, this);
+      this.listenTo(this.collection, 'reset', this.render);
       this.render();
     },
     render: function() {
