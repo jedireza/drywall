@@ -100,6 +100,7 @@ else {
       'utilities.js',
       'views/'
     ],
+    ignoreCustomPatterns: /\.tmp/i,
     listener: function(changeType, filePath, fileCurrentStat, filePreviousStat) {
       if ('delete' === changeType) { return; }
       console.log('RUN {*} Change detected: '+ filePath);
