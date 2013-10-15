@@ -34,7 +34,12 @@ https://drywall.nodejitsu.com/
  - username: root
  - password: j1ts00t
 
-Note: The apps on Heroku and Nodejitsu have been modified so you cannot change the root user, the root user's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
+https://drywall.onmodulus.net/
+
+ - username: root
+ - password: m0dr00t
+
+Note: The apps on Heroku, Nodejitsu and Modulus have been modified so you cannot change the root user, the root user's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
 
 Installation
 ------------
