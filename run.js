@@ -153,6 +153,14 @@ var build = function(filePath) {
     ];
   }
   
+  //add dependencies for ie-sucks js
+  if (/public\/layouts\/ie-sucks\.js/.test(filePath)) {
+    dependencies = [
+      'public/vendor/html5shiv/html5shiv.js',
+      'public/vendor/respond/respond.src.js'
+    ];
+  }
+  
   //build less files
   if (/\.less/.test(filePath)) {
     lintLESS(filePath);

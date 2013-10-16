@@ -66,6 +66,8 @@ html
     script(type='text/template', id='tmpl-_search-results-empty-row')
       li.dropdown-header no docs matched
     
+    //if lte IE 9
+      script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')
     script(src='/layouts/core.min.js?#{cacheBreaker}')
     script(src='/layouts/admin.min.js?#{cacheBreaker}')
     

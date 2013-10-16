@@ -94,6 +94,7 @@
 // Basic navbar
 .navbar {
   #gradient > .vertical(@start-color: lighten(@navbar-default-bg, 10%); @end-color: @navbar-default-bg;);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   border-radius: @navbar-border-radius;
   @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 5px rgba(0,0,0,.075);
   .box-shadow(@shadow);
@@ -106,6 +107,7 @@
 // Inverted navbar
 .navbar-inverse {
   #gradient > .vertical(@start-color: lighten(@navbar-inverse-bg, 10%); @end-color: @navbar-inverse-bg;);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   .navbar-brand,
   .navbar-nav > li > a {
     text-shadow: 0 -1px 0 rgba(0,0,0,.25);
