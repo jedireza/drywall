@@ -286,14 +286,60 @@ exports.identity = function(req, res, next){
         return workflow.emit('exception', err);
       }
       
-      user.populate('roles.admin roles.account', 'name.full', function(err, user) {
+      workflow.emit('patchAdmin', user);
+    });
+  });
+  
+  workflow.on('patchAdmin', function(user) {
+    if (user.roles.admin) {
+      var fieldsToSet = {
+        user: {
+          id: req.user.id,
+          name: user.username
+        }
+      };
+      req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, function(err, admin) {
         if (err) {
           return workflow.emit('exception', err);
         }
         
-        workflow.outcome.user = user;
-        workflow.emit('response');
+        workflow.emit('patchAccount', user);
       });
+    }
+    else {
+      workflow.emit('patchAccount', user);
+    }
+  });
+  
+  workflow.on('patchAccount', function(user) {
+    if (user.roles.account) {
+      var fieldsToSet = {
+        user: {
+          id: req.user.id,
+          name: user.username
+        }
+      };
+      req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, function(err, account) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        
+        workflow.emit('populateRoles', user);
+      });
+    }
+    else {
+      workflow.emit('populateRoles', user);
+    }
+  });
+  
+  workflow.on('populateRoles', function(user) {
+    user.populate('roles.admin roles.account', 'name.full', function(err, populatedUser) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      
+      workflow.outcome.user = populatedUser;
+      workflow.emit('response');
     });
   });
   
