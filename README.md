@@ -1,13 +1,4 @@
-```
-    ____                            ____    _     
-   / __ \_______  ___      ______ _/ / /   (_)____
-  / / / / ___/ / / / | /| / / __ `/ / /   / / ___/
- / /_/ / /  / /_/ /| |/ |/ / /_/ / / /   / (__  ) 
-/_____/_/   \__, / |__/|__/\__,_/_/_(_)_/ /____/  
-           /____/                    /___/        
-```
-
-Drywall.js
+Drywall
 =============
 
 A website and user system for Node.js. What you create with Drywall is more important than Drywall.
@@ -17,29 +8,25 @@ A website and user system for Node.js. What you create with Drywall is more impo
 Technology
 ------------
 
-Server = [express, jade, passport, mongoose, emailjs, async]
+| On The Server | On The Client  |
+| ------------- | -------------- |
+| Express       | Bootstrap 3    |
+| Jade          | Backbone.js    |
+| Passport      | jQuery         |
+| Mongoose      | Underscore.js  |
+| Async         | Font-Awesome   |
+| EmailJS       | Moment.js      |
 
-Client = [bootstrap, backbone.js, jquery]
-
-Test Drive
+Live Demos
 ------------
 
-https://drywall.herokuapp.com/
+| Platform                       | Username | Password |
+| ------------------------------ | -------- | -------- |
+| https://drywall.herokuapp.com/ | root     | h3r00t   |
+| https://drywall.nodejitsu.com/ | root     | j1ts00t  |
+| https://drywall.onmodulus.net/ | root     | m0dr00t  |
 
- - username: root
- - password: h3r00t
-
-https://drywall.nodejitsu.com/
-
- - username: root
- - password: j1ts00t
-
-https://drywall.onmodulus.net/
-
- - username: root
- - password: m0dr00t
-
-Note: The apps on Heroku, Nodejitsu and Modulus have been modified so you cannot change the root user, the root user's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
+__Note:__ The live demos have been modified so you cannot change the root user, the root user's linked Administrator role or the root Admin Group. This was done in order to keep the app ready to test at all times.
 
 Installation
 ------------
@@ -84,7 +71,7 @@ Philosophy
  - Write code in a simple and consistant way.
  - No home-grown modules or libraries.
  - Only create minor utilities or plugins to avoid repetitiveness.
- - Find and use good tools; frameworks, modules and libraries.
+ - Find and use good tools.
  - Use tools in their native/default behavior.
 
 Features
@@ -93,10 +80,11 @@ Features
  - Basic front end web pages.
  - Contact page has form to email.
  - Login system with forgot password and reset password.
- - Signup and Login with Facebook, Twitter and GitHub
+ - Signup and Login with Facebook, Twitter and GitHub.
+ - Optional email verification during signup flow.
  - User system with seperate account and admin roles.
  - Admin groups with shared permission settings.
- - Administrator level permissions which override group permissions.
+ - Administrator level permissions that override group permissions.
  - Global admin quick search component.
 
 License
