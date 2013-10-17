@@ -1,0 +1,50 @@
+.jumbotron {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
+  background: #a7a7a7; /* Old browsers */
+  background: -moz-linear-gradient(45deg,  #002a41 0%, #a7a7a7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#002a41), color-stop(100%,#a7a7a7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(45deg,  #002a41 0%,#a7a7a7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(45deg,  #002a41 0%,#a7a7a7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(45deg,  #002a41 0%,#a7a7a7 100%); /* IE10+ */
+  background: linear-gradient(45deg,  #002a41 0%,#a7a7a7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002a41', endColorstr='#a7a7a7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.jumbotron h1 {
+  font-weight: 200;
+}
+.jumbotron h2 {
+  font-weight: 200;
+  margin-bottom: 20px;
+}
+.jumbotron .btn {
+  width: 225px;
+  margin-bottom: 5px;
+  padding: 15px 24px;
+  font-size: 24px;
+  font-weight: 200;
+  color: #fff;
+  border: 0;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 5px rgba(0,0,0,.25);
+  -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 5px rgba(0,0,0,.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 5px rgba(0,0,0,.25);
+  -webkit-transition: none;
+  -moz-transition: none;
+  transition: none;
+  background-color: #363636;
+  background-image: -moz-linear-gradient(top,#444,#222);
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(#444),to(#222));
+  background-image: -webkit-linear-gradient(top,#444,#222);
+  background-image: -o-linear-gradient(top,#444,#222);
+  background-image: linear-gradient(to bottom,#444,#222);
+  background-repeat: repeat-x;
+  border-color: #222 #222 #000;
+  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff444444',endColorstr='#ff222222',GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+}
