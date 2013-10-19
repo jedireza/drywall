@@ -32,8 +32,8 @@ var renderSettings = function(req, res, next, oauthMessage) {
     
     res.render('account/settings/index', {
       data: {
-        account: JSON.stringify(outcome.account),
-        user: JSON.stringify(outcome.user)
+        account: escape(JSON.stringify(outcome.account)),
+        user: escape(JSON.stringify(outcome.user))
       },
       oauthMessage: oauthMessage,
       oauthTwitter: !!req.app.get('twitter-oauth-key'),

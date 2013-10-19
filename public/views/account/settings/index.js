@@ -193,8 +193,8 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      this.account = new app.Account( JSON.parse($('#data-account').html()) );
-      this.user = new app.User( JSON.parse($('#data-user').html()) );
+      this.account = new app.Account( JSON.parse( unescape($('#data-account').html()) ) );
+      this.user = new app.User( JSON.parse( unescape($('#data-user').html()) ) );
       
       app.detailsView = new app.DetailsView();
       app.identityView = new app.IdentityView();

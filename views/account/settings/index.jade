@@ -67,27 +67,27 @@ block body
         |<% } %>
       div.control-group(class!='<%= errfor.first ? "has-error" : "" %>')
         label.control-label First Name:
-        input.form-control(type='text', name='first', value!='<%= first %>')
+        input.form-control(type='text', name='first', value!='<%- first %>')
         span.help-block <%= errfor.first %>
       div.control-group(class!='<%= errfor.middle ? "has-error" : "" %>')
         label.control-label Middle Name:
-        input.form-control(type='text', name='middle', value!='<%= middle %>')
+        input.form-control(type='text', name='middle', value!='<%- middle %>')
         span.help-block <%= errfor.middle %>
       div.control-group(class!='<%= errfor.last ? "has-error" : "" %>')
         label.control-label Last Name:
-        input.form-control(type='text', name='last', value!='<%= last %>')
+        input.form-control(type='text', name='last', value!='<%- last %>')
         span.help-block <%= errfor['last'] %>
       div.control-group(class!='<%= errfor.company ? "has-error" : "" %>')
         label.control-label Company Name:
-        input.form-control(type='text', name='company', value!='<%= company %>')
+        input.form-control(type='text', name='company', value!='<%- company %>')
         span.help-block <%= errfor.company %>
       div.control-group(class!='<%= errfor.phone ? "has-error" : "" %>')
         label.control-label Phone:
-        input.form-control(type='text', name='phone', value!='<%= phone %>')
+        input.form-control(type='text', name='phone', value!='<%- phone %>')
         span.help-block <%= errfor.phone %>
       div.control-group(class!='<%= errfor.zip ? "has-error" : "" %>')
         label.control-label Zip:
-        input.form-control(type='text', name='zip', value!='<%= zip %>')
+        input.form-control(type='text', name='zip', value!='<%- zip %>')
         span.help-block <%= errfor.zip %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update

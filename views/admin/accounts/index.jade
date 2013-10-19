@@ -21,7 +21,7 @@ block body
     div.page-header
       form.form-inline.pull-right
         div.input-group
-          input.form-control(name='name', type='text', placeholder='enter a name', value!='<%= name.full %>')
+          input.form-control(name='name', type='text', placeholder='enter a name', value!='<%- name.full %>')
           button.btn.btn-primary.btn-add(type='button') Add New
       h1 Accounts
   
@@ -71,10 +71,10 @@ block body
       input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
     td.stretch
       span.badge.badge-clear.timeago.pull-right(data-age='y') <%= userCreated.time %>
-      |<%= name.full %>
-    td.nowrap <%= phone %>
+      |<%- name.full %>
+    td.nowrap <%- phone %>
     td.nowrap
-      div <%= status.name %>
+      div <%- status.name %>
       div.timeago.muted <%= status.userCreated.time %>
   
   script(type='text/template', id='tmpl-results-empty-row')

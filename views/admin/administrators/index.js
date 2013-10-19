@@ -29,7 +29,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/administrators/index', { data: { results: JSON.stringify(results) } });
+      res.render('admin/administrators/index', { data: { results: escape(JSON.stringify(results)) } });
     }
   });
 };
@@ -70,7 +70,7 @@ exports.read = function(req, res, next){
     else {
       res.render('admin/administrators/details', {
         data: {
-          record: JSON.stringify(outcome.record),
+          record: escape(JSON.stringify(outcome.record)),
           adminGroups: outcome.adminGroups
         }
       });
