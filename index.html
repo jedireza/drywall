@@ -4,134 +4,147 @@
     <meta charset="utf-8">
     <title>Drywall - A website and user system for Node.js</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/index.css" rel="stylesheet">
+    <link href="assets/index.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="assets/favicon.ico">
   </head>
   <body>
     <div class="jumbotron">
       <div class="container">
         <h1>Drywall</h1>
         <h2>A website and user system for Node.js</h2>
-        <p class="download-info">
-          <a href="https://drywall.nodejitsu.com/" class="btn btn-info btn-lg">Live on Nodejitsu</a>
-          <a href="https://drywall.herokuapp.com/" class="btn btn-info btn-lg">Live on Heroku</a>
-          <a href="https://drywall.onmodulus.net/" class="btn btn-info btn-lg">Live on Modulus</a>
-        </p>
-        <ul class="masthead-links">
+        <div class="demo-links">
+          <a href="https://drywall.nodejitsu.com/" class="btn btn-default btn-lg">Live on Nodejitsu</a>
+          <a href="https://drywall.herokuapp.com/" class="btn btn-default btn-lg">Live on Heroku</a>
+          <a href="https://drywall.onmodulus.net/" class="btn btn-default btn-lg">Live on Modulus</a>
+        </div>
+        <ul class="project-links">
           <li><a href="https://github.com/jedireza/drywall/">View GitHub Project</a></li>
-          <li>Version 0.7.1</li>
-          <li><a href="https://github.com/jedireza/drywall/zipball/master" onclick="_gaq.push(['_trackEvent', 'jumbotron actions', 'download', 'v 0.4.2']);">Download Drywall</a></li>
+          <li>Version 0.7.2</li>
+          <li><a href="https://github.com/jedireza/drywall/zipball/master" onclick="_gaq.push(['_trackEvent', 'jumbotron actions', 'download', 'v0.7.2']);">Download Drywall</a></li>
         </ul>
       </div>
     </div>
     
-    
     <div class="marketing">
       <div class="container">
-        <h1>The Front-End Pages</h1>
-        <p class="marketing-byline">
+        <h3>The Front-End Pages</h3>
+        <p class="lead">
           Home, about, sign-up and contact us.
         </p>
         
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/01.png" /></a>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/01.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/02.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/03.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/03.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/04.png" /></a>
           </div>
         </div>
         
-        <hr class="soften">
+        <hr>
         
-        <h1>Authentication Screens</h1>
-        <p class="marketing-byline">
+        <h3>Authentication Screens</h3>
+        <p class="lead">
           Login, forgot password and reset password.
         </p>
         
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/04.png" /></a>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/05.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/05.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/06.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/06.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/07.png" /></a>
           </div>
         </div>
         
-        <hr class="soften">
+        <hr>
         
-        <h1>The Administration Area</h1>
-        <p class="marketing-byline">
+        <h3>The Administration Area</h3>
+        <p class="lead">
           Manage users, accounts, admins, admin groups, statuses, categories and search.
         </p>
         
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/07.png" /></a>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/08.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/08.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/09.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/09.png" /></a>
-          </div>
-        </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/10.png" /></a>
-          </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/11.png" /></a>
-          </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/12.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/10.png" /></a>
           </div>
         </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/13.png" /></a>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/11.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/14.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/12.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/15.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/13.png" /></a>
           </div>
         </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/16.png" /></a>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/14.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/17.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/15.png" /></a>
           </div>
-          <div class="span4">
-            <a href="#open" rel="thumbnail"><img class="img-responsive" src="media/screen-shots/18.png" /></a>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/16.png" /></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/17.png" /></a>
+          </div>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/18.png" /></a>
+          </div>
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/19.png" /></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/20.png" /></a>
           </div>
         </div>
         
-        <hr class="soften">
+        <hr>
         
-        <h1>The Account Area</h1>
-        <p class="marketing-byline">
-          Ready for you to customize the shit out of it. Well... go on then.
+        <h3>The Account Area</h3>
+        <p class="lead">
+          Mock up dashboard and account settings.
         </p>
         
-        <hr class="soften">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/21.png" /></a>
+          </div>
+          <div class="col-md-6">
+            <a href="#screenModal" class="thumbnail" data-toggle="modal"><img class="img-responsive" src="media/screen-shots/22.png" /></a>
+          </div>
+        </div>
         
-        <h1>Jedi Mind Development</h1>
-        <p class="marketing-byline">What you build with Drywall is more important than Drywall.</p>
+        <hr>
+        
+        <h3>Jedi Mind Development</h3>
+        <p class="lead">What you build with Drywall is more important than Drywall.</p>
       </div>
     </div>
     
-    <footer class="footer">
+    <footer>
       <div class="container">
         <p>Made using the force by <a href="http://twitter.com/jedireza" target="_blank">@jedireza</a>. Code licensed under The MIT License.</p>
         <p>A special thanks goes to the creators and contributors of the tools Drywall is built with.</p>
@@ -143,9 +156,17 @@
       </div>
     </footer>
     
+    <div class="modal fade" id="screenModal" tabindex="-1" role="dialog" aria-labelledby="screenModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <img class="img-responsive" src="#" data-dismiss="modal" />
+        </div>
+      </div>
+    </div>
+    
     <script src="vendor/jquery/jquery-1.10.2.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/google-analytics.js"></script>
     <script src="assets/index.js"></script>
+    <script src="assets/google-analytics.js"></script>
   </body>
 </html>

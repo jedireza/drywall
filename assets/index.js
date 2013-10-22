@@ -1,28 +1,11 @@
-$(document).ready(function () {
-  //make code pretty
-  window.prettyPrint && prettyPrint()
+(function() {
+  'use strict';
   
-  //tooltips
-  $("[rel='tooltip']").tooltip();
-  
-  //thumbnails
-  $("[rel='thumbnail']").click(function() {
-    var prevClass = $(this).attr('class');
+  $(document).ready(function () {
+    $("[rel='tooltip']").tooltip();
     
-    $("[rel='thumbnail']").removeClass('thumbnail-open');
-    $('.modal-backdrop').remove();
-    
-    if (prevClass != "thumbnail-open") {
-      $('body').append('<div class="modal-backdrop fade in"></div>');
-      $(this).toggleClass('thumbnail-open');
-    }
+    $('#screenModal').on('show.bs.modal', function (e) {
+      $('#screenModal img').attr('src', $(e.relatedTarget).find('img').attr('src'));
+    });
   });
-  
-  //listen for esc
-  $(document).keyup(function(e) {
-    if (e.keyCode == 27) {
-      $('.modal-backdrop').remove();
-      $("[rel='thumbnail']").removeClass('thumbnail-open');
-    }
-  });
-});
+})();
