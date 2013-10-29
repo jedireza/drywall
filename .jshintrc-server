@@ -65,7 +65,7 @@
   "jquery"        : false,    // jQuery
   "mootools"      : false,    // MooTools
   "node"          : true,     // Node.js
-  "nonstandard"   : false,    // Widely adopted globals (escape, unescape, etc)
+  "nonstandard"   : true,     // Widely adopted globals (escape, unescape, etc)
   "prototypejs"   : false,    // Prototype and Scriptaculous
   "rhino"         : false,    // Rhino
   "worker"        : false,    // Web Workers
