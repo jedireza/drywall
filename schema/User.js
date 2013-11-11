@@ -4,7 +4,7 @@ exports = module.exports = function(app, mongoose) {
   var userSchema = new mongoose.Schema({
     username: { type: String, unique: true },
     password: String,
-    email: String,
+    email: { type: String, unique: true },
     roles: {
       admin: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
       account: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' }
@@ -44,8 +44,8 @@ exports = module.exports = function(app, mongoose) {
     return require('crypto').createHmac('sha512', app.get('crypto-key')).update(password).digest('hex');
   };
   userSchema.plugin(require('./plugins/pagedFind'));
-  userSchema.index({ username: 1 }, {unique: true});
-  userSchema.index({ email: 1 });
+  userSchema.index({ username: 1 }, { unique: true });
+  userSchema.index({ email: 1 }, { unique: true });
   userSchema.index({ timeCreated: 1 });
   userSchema.index({ resetPasswordToken: 1 });
   userSchema.index({ 'twitter.id': 1 });
