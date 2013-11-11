@@ -109,7 +109,7 @@ block body
             input.form-control(disabled=true, value!='<%= group.name %>')
             div.input-group-btn
               button.btn.btn-danger.btn-delete(type='button')
-                i.icon-trash.icon-white
+                i.fa.fa-trash-o.fa-inverse
           |<% }); %>
           |<% if (groups.length == 0) { %>
           span.badge no memberships defined
@@ -154,7 +154,7 @@ block body
               button.btn.btn-default.btn-deny(type='button', disabled) Deny
               |<% } %>
               button.btn.btn-danger.btn-delete(type='button')
-                i.icon-trash.icon-white
+                i.fa.fa-trash-o.fa-inverse
           |<% }); %>
           |<% if (permissions.length == 0) { %>
           span.badge no permissions defined

@@ -27,29 +27,29 @@ block body
         if oauthTwitter
           if oauthTwitterActive
             a.btn.btn-block.btn-danger(href='/account/settings/twitter/disconnect/')
-              i.icon-twitter.icon-large
+              i.fa.fa-twitter.fa-lg
               |  Disconnect Twitter
           else
             a.btn.btn-block.btn-default(href='/account/settings/twitter/')
-              i.icon-twitter.icon-large
+              i.fa.fa-twitter.fa-lg
               |  Connect Twitter
         if oauthGitHub
           if oauthGitHubActive
             a.btn.btn-block.btn-danger(href='/account/settings/github/disconnect/')
-              i.icon-github.icon-large
+              i.fa.fa-github.fa-lg
               |  Disconnect GitHub
           else
             a.btn.btn-block.btn-default(href='/account/settings/github/')
-              i.icon-github.icon-large
+              i.fa.fa-github.fa-lg
               |  Connect GitHub
         if oauthFacebook
           if oauthFacebookActive
             a.btn.btn-block.btn-danger(href='/account/settings/facebook/disconnect/')
-              i.icon-facebook-sign.icon-large
+              i.fa.fa-facebook-square.fa-lg
               |  Disconnect Facebook
           else
             a.btn.btn-block.btn-default(href='/account/settings/facebook/')
-              i.icon-facebook-sign.icon-large
+              i.fa.fa-facebook-square.fa-lg
               |  Connect Facebook
   
   script(type='text/template', id='tmpl-details')
