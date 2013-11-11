@@ -274,7 +274,7 @@
     },
     initialize: function() {
       this.model = new app.Note();
-      this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'change', this.render);
       this.render();
     },
     render: function() {
@@ -318,10 +318,16 @@
     render: function() {
       this.$el.html(this.template());
       
+      var frag = document.createDocumentFragment();
+      var last = document.createTextNode('');
+      frag.appendChild(last);
       this.collection.each(function(model) {
         var view = new app.NotesItemView({ model: model });
-        $('#notes-items').prepend( view.render().$el );
+        var newEl = view.render().el;
+        frag.insertBefore(newEl, last);
+        last = newEl;
       }, this);
+      $('#notes-items').append(frag);
       
       if (this.collection.length === 0) {
         $('#notes-items').append( $('#tmpl-notes-none').html() );
@@ -356,7 +362,7 @@
       this.model = new app.Status();
       this.syncUp();
       this.listenTo(app.mainView.model, 'change', this.syncUp);
-      this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'change', this.render);
       this.render();
     },
     syncUp: function() {
@@ -415,10 +421,16 @@
     render: function() {
       this.$el.html( this.template() );
       
+      var frag = document.createDocumentFragment();
+      var last = document.createTextNode('');
+      frag.appendChild(last);
       this.collection.each(function(model) {
         var view = new app.StatusItemView({ model: model });
-        $('#status-items').prepend( view.render().$el );
+        var newEl = view.render().el;
+        frag.insertBefore(newEl, last);
+        last = newEl;
       }, this);
+      $('#status-items').append(frag);
     }
   });
   

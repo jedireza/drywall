@@ -101,10 +101,12 @@
     render: function() {
       this.$el.html( this.template() );
       
+      var frag = document.createDocumentFragment();
       this.collection.each(function(record) {
         var view = new app.ResultsRowView({ model: record });
-        $('#results-rows').append( view.render().$el );
+        frag.appendChild(view.render().el);
       }, this);
+      $('#results-rows').append(frag);
       
       if (this.collection.length === 0) {
         $('#results-rows').append( $('#tmpl-results-empty-row').html() );
