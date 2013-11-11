@@ -291,7 +291,7 @@
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
-      this.model = new app.User( JSON.parse($('#data-record').html()) );
+      this.model = new app.User( JSON.parse( unescape($('#data-record').html())) );
       
       app.headerView = new app.HeaderView();
       app.identityView = new app.IdentityView();
