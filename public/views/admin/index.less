@@ -1,3 +1,5 @@
+@import "../../vendor/bootstrap/less/mixins.less";
+
 .special {
   text-align: center;
 }
@@ -10,6 +12,7 @@
 
 .stat {
   text-align: center;
+  #gradient > .vertical(@start-color: #555; @end-color: darken(#555, 12%));
   background-color: #555;
 }
 .stat-value {
