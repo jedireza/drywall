@@ -257,7 +257,7 @@ exports.identity = function(req, res, next){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase(), _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -274,7 +274,7 @@ exports.identity = function(req, res, next){
   workflow.on('patchUser', function() {
     var fieldsToSet = {
       username: req.body.username,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       search: [
         req.body.username,
         req.body.email

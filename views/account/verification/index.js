@@ -89,7 +89,7 @@ exports.resendVerification = function(req, res){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase(), _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -105,7 +105,7 @@ exports.resendVerification = function(req, res){
   
   workflow.on('patchUser', function() {
     var fieldsToSet = {
-      email: req.body.email
+      email: req.body.email.toLowerCase()
     };
     
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {

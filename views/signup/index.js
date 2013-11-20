@@ -59,7 +59,7 @@ exports.signup = function(req, res){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -77,7 +77,7 @@ exports.signup = function(req, res){
     var fieldsToSet = {
       isActive: 'yes',
       username: req.body.username,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       password: req.app.db.models.User.encryptPassword(req.body.password),
       search: [
         req.body.username,
@@ -297,7 +297,7 @@ exports.signupSocial = function(req, res){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -315,7 +315,7 @@ exports.signupSocial = function(req, res){
     var fieldsToSet = {
       isActive: 'yes',
       username: workflow.username,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       search: [
         workflow.username,
         req.body.email

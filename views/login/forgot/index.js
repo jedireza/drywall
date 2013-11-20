@@ -24,7 +24,7 @@ exports.send = function(req, res){
   workflow.on('patchUser', function() {
     var token = require('crypto').createHash('md5').update(Math.random().toString()).digest('hex');
     
-    req.app.db.models.User.findOneAndUpdate({ email: req.body.email }, { resetPasswordToken: token }, function(err, user) {
+    req.app.db.models.User.findOneAndUpdate({ email: req.body.email.toLowerCase() }, { resetPasswordToken: token }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }

@@ -158,7 +158,7 @@ exports.update = function(req, res, next){
   });
   
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email, _id: { $ne: req.params.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase(), _id: { $ne: req.params.id } }, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -176,7 +176,7 @@ exports.update = function(req, res, next){
     var fieldsToSet = {
       isActive: req.body.isActive,
       username: req.body.username,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       search: [
         req.body.username,
         req.body.email
