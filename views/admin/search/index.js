@@ -8,7 +8,7 @@ exports.find = function(req, res, next){
   var searchUsers = function(done) {
     req.app.db.models.User.find({search: regexQuery}, 'username').sort('username').limit(10).lean().exec(function(err, results) {
       if (err) {
-          return done(err, null);
+        return done(err, null);
       }
       
       outcome.users = results;
