@@ -93,11 +93,12 @@ module.exports = function(grunt) {
       public: {
         options: {
           jshintrc: '.jshintrc-client',
-          ignores: [
-            'public/views/**/*.min.js'
-          ]
+          ignores: ['public/views/**/*.min.js']
         },
-        src: ['public/views/**/*.js']
+        src: [
+          'public/layouts/**/*.js',
+          'public/views/**/*.js'
+        ]
       },
       server: {
         options: {
