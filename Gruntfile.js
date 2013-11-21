@@ -163,5 +163,5 @@ module.exports = function(grunt) {
   
   grunt.registerTask('default', ['uglify', 'less', 'concurrent']);
   grunt.registerTask('build', ['uglify', 'less']);
-  grunt.registerTask('lint', ['jslint']);
+  grunt.registerTask('lint', ['jshint']);
 };
