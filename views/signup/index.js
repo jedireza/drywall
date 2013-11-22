@@ -1,5 +1,15 @@
 'use strict';
 
+
+//return email potentially set by social provider
+//currently only github supplies this.
+var getEmailVerifiedBySocialProvider = function(socialProfile){
+  if( socialProfile.provider === 'github' ){
+    return socialProfile.emails[0].value;
+  }
+};
+
+
 exports.init = function(req, res){
   if (req.isAuthenticated()) { 
     res.redirect(req.user.defaultReturnUrl());
@@ -256,6 +266,9 @@ exports.signupFacebook = function(req, res, next) {
   })(req, res, next);
 };
 
+
+
+
 exports.signupSocial = function(req, res){
   var workflow = req.app.utility.workflow(req, res);
   
@@ -334,9 +347,18 @@ exports.signupSocial = function(req, res){
   });
   
   workflow.on('createAccount', function() {
+
+    var emailEntered = req.body.email.toLowerCase().trim(),
+      emailVerifiedBySocial = (getEmailVerifiedBySocialProvider(req.session.socialProfile) || '').toLowerCase().trim();
+
+    //check to see if we need to verify email address
+    var verifyEmailBool =  req.app.get('require-account-verification') &&
+      req.app.get('require-unknown-email-verification') &&
+      emailEntered !== emailVerifiedBySocial;
+
     var nameParts = req.session.socialProfile.displayName.split(' ');
     var fieldsToSet = {
-      isVerified: 'yes',
+      isVerified: verifyEmailBool ? 'no' : 'yes',
       'name.first': nameParts[0],
       'name.last': nameParts[1] || '',
       'name.full': req.session.socialProfile.displayName,
