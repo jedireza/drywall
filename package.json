@@ -3,27 +3,21 @@
   "version": "0.7.9",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "postinstall": "node run.js build"
+    "start": "node app.js"
   },
   "dependencies": {
     "async": "~0.2.9",
     "connect-mongo": "~0.3.3",
     "emailjs": "~0.3.6",
     "express": "~3.4.1",
-    "findit2": "~0.2.0",
     "jade": "~0.35.0",
-    "jshint": "~2.1.11",
     "mongoose": "~3.6.20",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport-oauth": "~1.0.0",
     "passport-facebook": "~1.0.1",
     "passport-github": "~0.1.5",
-    "passport-twitter": "~1.0.2",
-    "recess": "~1.1.9",
-    "uglify-js": "~2.4.0",
-    "watchr": "~2.4.4"
+    "passport-twitter": "~1.0.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
