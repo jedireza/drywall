@@ -8,13 +8,13 @@
   },
   "dependencies": {
     "async": "~0.2.9",
-    "connect-mongo": "~0.3.3",
+    "connect-mongo": "~0.4.0",
     "emailjs": "~0.3.6",
-    "express": "~3.4.1",
+    "express": "~3.4.4",
     "findit2": "~0.2.0",
     "jade": "~0.35.0",
-    "jshint": "~2.1.11",
-    "mongoose": "~3.6.20",
+    "jshint": "~2.3.0",
+    "mongoose": "~3.8.1",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport-oauth": "~1.0.0",
@@ -22,7 +22,7 @@
     "passport-github": "~0.1.5",
     "passport-twitter": "~1.0.2",
     "recess": "~1.1.9",
-    "uglify-js": "~2.4.0",
+    "uglify-js": "~2.4.3",
     "watchr": "~2.4.4"
   }
 }
