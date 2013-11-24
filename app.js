@@ -96,7 +96,10 @@ require('./passport')(app, passport);
 require('./routes')(app, passport);
 
 //setup utilities
-require('./utilities')(app);
+app.utility = {};
+app.utility.sendmail = require('drywall-sendmail');
+app.utility.slugify = require('drywall-slugify');
+app.utility.workflow = require('drywall-workflow');
 
 //listen up
 app.server.listen(app.get('port'), function(){
