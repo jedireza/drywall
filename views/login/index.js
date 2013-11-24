@@ -68,7 +68,7 @@ exports.loginTwitter = function(req, res, next){
       return res.redirect('/login/');
     }
     
-    req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'twitter.id': info.profile._json.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -101,7 +101,7 @@ exports.loginGitHub = function(req, res, next){
       return res.redirect('/login/');
     }
     
-    req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'github.id': info.profile._json.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -134,7 +134,7 @@ exports.loginFacebook = function(req, res, next){
       return res.redirect('/login/');
     }
     
-    req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'facebook.id': info.profile._json.id }, function(err, user) {
       if (err) {
         return next(err);
       }

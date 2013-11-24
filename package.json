@@ -18,7 +18,7 @@
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport-oauth": "~1.0.0",
-    "passport-facebook": "~1.0.1",
+    "passport-facebook": "~1.0.2",
     "passport-github": "~0.1.5",
     "passport-twitter": "~1.0.2",
     "recess": "~1.1.9",
