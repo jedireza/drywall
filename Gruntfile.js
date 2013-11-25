@@ -15,27 +15,33 @@ module.exports = function(grunt) {
       dev: {
         options: {
           file: 'app.js',
-          ignoredFiles: ['node_modules/**'],
-          ignoredFiles: ['public/**'],
+          ignoredFiles: [
+            'node_modules/**',
+            'public/**'
+          ],
           watchedExtensions: ['js']
         }
       }
     },
     watch: {
-      publicJS: {
+      clientJS: {
          files: [
           'public/layouts/**/*.js', '!public/layouts/**/*.min.js',
           'public/views/**/*.js', '!public/views/**/*.min.js'
          ],
-         tasks: ['newer:uglify', 'newer:jshint:public']
+         tasks: ['newer:uglify', 'newer:jshint:client']
       },
-      publicLess: {
+      serverJS: {
+         files: ['views/**/*.js'],
+         tasks: ['newer:jshint:server']
+      },
+      clientLess: {
          files: [
           'public/layouts/**/*.less',
           'public/views/**/*.less',
           'public/less/**/*.less'
          ],
-         tasks: ['newer:less', 'newer:jshint:server']
+         tasks: ['newer:less']
       }
     },
     uglify: {
@@ -50,7 +56,7 @@ module.exports = function(grunt) {
           return path.basename(filePath) +'.map';
         }
       },
-      publicLayouts: {
+      layouts: {
         files: {
           'public/layouts/core.min.js': [
             'public/vendor/jquery/jquery-1.10.2.js',
@@ -79,7 +85,7 @@ module.exports = function(grunt) {
           'public/layouts/admin.min.js': ['public/layouts/admin.js']
         }
       },
-      publicViews: {
+      views: {
         files: [{
           expand: true,
           cwd: 'public/views/',
@@ -90,7 +96,7 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      public: {
+      client: {
         options: {
           jshintrc: '.jshintrc-client',
           ignores: [
@@ -117,7 +123,7 @@ module.exports = function(grunt) {
       options: {
         compress: true
       },
-      publicLayouts: {
+      layouts: {
         files: {
           'public/layouts/core.min.css': [
             'public/less/bootstrap-build.less',
@@ -127,7 +133,7 @@ module.exports = function(grunt) {
           'public/layouts/admin.min.css': ['public/layouts/admin.less']
         }
       },
-      publicViews: {
+      views: {
         files: [{
           expand: true,
           cwd: 'public/views/',
@@ -138,7 +144,7 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      publicJS: {
+      js: {
         src: [
           'public/layouts/**/*.min.js',
           'public/layouts/**/*.min.js.map',
@@ -146,7 +152,7 @@ module.exports = function(grunt) {
           'public/views/**/*.min.js.map'
         ]
       },
-      publicCSS: {
+      css: {
         src: [
           'public/layouts/**/*.min.css',
           'public/views/**/*.min.css'
@@ -164,7 +170,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
   
-  grunt.registerTask('default', ['uglify', 'less', 'concurrent']);
+  grunt.registerTask('default', ['newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);
 };
