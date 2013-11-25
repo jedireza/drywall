@@ -108,9 +108,8 @@ module.exports = function(grunt) {
           jshintrc: '.jshintrc-server'
         },
         src: [
-          'views/**/*.js',
           'schema/**/*.js',
-          'utilities/**/*.js',
+          'views/**/*.js'
         ]
       }
     },
