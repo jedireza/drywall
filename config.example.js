@@ -8,6 +8,7 @@ exports.companyName = 'Acme, Inc.';
 exports.projectName = 'Drywall';
 exports.systemEmail = 'your@email.addy';
 exports.cryptoKey = 'k3yb0ardc4t';
+exports.requireAccountVerification = false;
 exports.smtp = {
   from: {
     name: process.env.SMTP_FROM_NAME || exports.projectName +' Website',
