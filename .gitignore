@@ -6,3 +6,4 @@ node_modules/*
 *.min.js.map
 *.min.css
 /config.js
+.nodemonignore
