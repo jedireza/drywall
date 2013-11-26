@@ -46,7 +46,6 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        compress: true,
         sourceMapRoot: '/',
         sourceMapPrefix: 1,
         sourceMap: function(filePath) {
