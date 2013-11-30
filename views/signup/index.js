@@ -173,8 +173,6 @@ exports.signup = function(req, res){
   workflow.emit('validate');
 };
 
-
-
 exports.signupTwitter = function(req, res, next) {
   req._passport.instance.authenticate('twitter', function(err, user, info) {
     if (!info || !info.profile) {
@@ -334,12 +332,13 @@ exports.signupSocial = function(req, res){
   });
   
   workflow.on('createAccount', function() {
-    var nameParts = req.session.socialProfile.displayName.split(' ');
+    var displayName = req.session.socialProfile.displayName || '';
+    var nameParts = displayName.split(' ');
     var fieldsToSet = {
       isVerified: 'yes',
       'name.first': nameParts[0],
       'name.last': nameParts[1] || '',
-      'name.full': req.session.socialProfile.displayName,
+      'name.full': displayName,
       user: {
         id: workflow.user._id,
         name: workflow.user.username
