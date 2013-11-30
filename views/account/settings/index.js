@@ -58,7 +58,7 @@ exports.connectTwitter = function(req, res, next){
       return res.redirect('/account/settings/');
     }
     
-    req.app.db.models.User.findOne({ 'twitter.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'twitter.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -85,7 +85,7 @@ exports.connectGitHub = function(req, res, next){
       return res.redirect('/account/settings/');
     }
     
-    req.app.db.models.User.findOne({ 'github.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'github.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -112,7 +112,7 @@ exports.connectFacebook = function(req, res, next){
       return res.redirect('/account/settings/');
     }
     
-    req.app.db.models.User.findOne({ 'facebook.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'facebook.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
