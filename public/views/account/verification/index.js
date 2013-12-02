@@ -39,6 +39,7 @@
       this.model.set({
         keepFormOpen: true
       });
+      this.render();
     },
     verify: function() {
       this.$el.find('.btn-verify').attr('disabled', true);
