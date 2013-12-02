@@ -16,7 +16,7 @@ block body
       div#filters
       div#results-table
       div#results-paging
-  
+
   script(type='text/template', id='tmpl-header')
     div.page-header
       form.form-inline.pull-right
@@ -25,7 +25,7 @@ block body
           input.form-control(name='name', type='text', placeholder='name', value!='<%= name %>')
           button.btn.btn-primary.btn-add(type='button') Add New
       h1 Statuses
-  
+
   script(type='text/template', id='tmpl-filters')
     form.filters
       div.row
@@ -49,28 +49,28 @@ block body
             option(value='20', selected='selected') 20 items
             option(value='50') 50 items
             option(value='100') 100 items
-  
+
   script(type='text/template', id='tmpl-results-table')
     table.table.table-striped
       thead
         tr
-          th 
+          th
           th pivot
           th.stretch name
           th id
       tbody#results-rows
-  
+
   script(type='text/template', id='tmpl-results-row')
     td
       input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
     td <%- pivot %>
     td <%- name %>
     td.nowrap <%= _id %>
-  
+
   script(type='text/template', id='tmpl-results-empty-row')
     tr
       td(colspan='4') no documents matched
-  
+
   script(type='text/template', id='tmpl-results-paging')
     div.well
       div.btn-group.pull-left
@@ -80,5 +80,5 @@ block body
         button.btn.btn-default.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
         button.btn.btn-default.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
       div.clearfix
-  
+
   script(type='text/template', id='data-results') !{data.results}

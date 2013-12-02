@@ -2,9 +2,9 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Signup = Backbone.Model.extend({
     url: '/signup/',
     defaults: {
@@ -15,7 +15,7 @@
       password: ''
     }
   });
-  
+
   app.SignupView = Backbone.View.extend({
     el: '#signup',
     template: _.template( $('#tmpl-signup').html() ),
@@ -44,7 +44,7 @@
     },
     signup: function() {
       this.$el.find('.btn-signup').attr('disabled', true);
-      
+
       this.model.save({
         username: this.$el.find('[name="username"]').val(),
         email: this.$el.find('[name="email"]').val(),
@@ -61,7 +61,7 @@
       });
     }
   });
-  
+
   $(document).ready(function() {
     app.signupView = new app.SignupView();
   });

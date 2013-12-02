@@ -2,9 +2,9 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Forgot = Backbone.Model.extend({
     url: '/login/forgot/',
     defaults: {
@@ -14,7 +14,7 @@
       email: '',
     }
   });
-  
+
   app.ForgotView = Backbone.View.extend({
     el: '#forgot',
     template: _.template( $('#tmpl-forgot').html() ),
@@ -43,13 +43,13 @@
     },
     forgot: function() {
       this.$el.find('.btn-forgot').attr('disabled', true);
-      
+
       this.model.save({
         email: this.$el.find('[name="email"]').val()
       });
     }
   });
-  
+
   $(document).ready(function() {
     app.forgotView = new app.ForgotView();
   });

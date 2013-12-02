@@ -25,13 +25,13 @@ block body
       fieldset
         div#notes-new.notes-new
         div#notes-collection
-  
+
   script(type='text/template', id='tmpl-header')
     div.page-header
       h1
         a(href='/admin/accounts/') Accounts
         |  / <%- name.full %>
-  
+
   script(type='text/template', id='tmpl-details')
     fieldset
       legend Contact Info
@@ -71,7 +71,7 @@ block body
         span.help-block <%= errfor.zip %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-login')
     fieldset
       legend Login
@@ -95,7 +95,7 @@ block body
             button.btn.btn-success.btn-user-link(type='button') Link
           |<% } %>
         span.help-block <%= errfor.newUsername %>
-  
+
   script(type='text/template', id='tmpl-status-new')
     legend Status
     div.alerts
@@ -111,18 +111,18 @@ block body
           option(value='#{status._id}') #{status.name}
       div.input-group-btn
         button.btn.btn-default.btn-add Change
-  
+
   script(type='text/template', id='tmpl-status-collection')
     div#status-items.status-items
-  
+
   script(type='text/template', id='tmpl-status-item')
     div.pull-right.badge.author
       |<%= userCreated.name %>
-      | - 
+      | -&nbsp;
       span.timeago <%= userCreated.time %>
     div <%- name %>
     div.clearfix
-  
+
   script(type='text/template', id='tmpl-notes-new')
     legend Notes
     div.alerts
@@ -133,21 +133,21 @@ block body
       |<% }); %>
     textarea.form-control(rows='3', name='data', placeholder='enter notes')
     button.btn.btn-default.btn-block.btn-add Add New Note
-  
+
   script(type='text/template', id='tmpl-notes-collection')
     div#notes-items.notes-items
-  
+
   script(type='text/template', id='tmpl-notes-item')
     div.force-wrap <%- data %>
     div.pull-right.badge.author
       |<%= userCreated.name %>
-      | - 
+      | -&nbsp;
       span.timeago <%= userCreated.time %>
     div.clearfix
-  
+
   script(type='text/template', id='tmpl-notes-none')
     div.note.text-muted no notes found
-  
+
   script(type='text/template', id='tmpl-delete')
     fieldset
       legend Danger Zone
@@ -160,9 +160,9 @@ block body
       div.control-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
-          | 
+          |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
       div.control-group
         button.btn.btn-danger.btn-delete(type='button') Delete
-  
+
   script(type='text/template', id='data-record') !{data.record}

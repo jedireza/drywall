@@ -2,9 +2,9 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Contact = Backbone.Model.extend({
     url: '/contact/',
     defaults: {
@@ -16,7 +16,7 @@
       message: ''
     }
   });
-  
+
   app.ContactView = Backbone.View.extend({
     el: '#contact',
     template: _.template( $('#tmpl-contact').html() ),
@@ -38,7 +38,7 @@
     },
     contact: function() {
       this.$el.find('.btn-contact').attr('disabled', true);
-      
+
       this.model.save({
         name: this.$el.find('[name="name"]').val(),
         email: this.$el.find('[name="email"]').val(),
@@ -46,7 +46,7 @@
       });
     }
   });
-  
+
   $(document).ready(function() {
     app.contactView = new app.ContactView();
   });

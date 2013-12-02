@@ -2,9 +2,9 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Signup = Backbone.Model.extend({
     url: '/signup/social/',
     defaults: {
@@ -13,7 +13,7 @@
       email: ''
     }
   });
-  
+
   app.SignupView = Backbone.View.extend({
     el: '#signup',
     template: _.template( $('#tmpl-signup').html() ),
@@ -42,7 +42,7 @@
     },
     signup: function() {
       this.$el.find('.btn-signup').attr('disabled', true);
-      
+
       this.model.save({
         email: this.$el.find('[name="email"]').val()
       },{
@@ -57,7 +57,7 @@
       });
     }
   });
-  
+
   $(document).ready(function() {
     app.signupView = new app.SignupView();
   });

@@ -27,11 +27,11 @@ html
             li: a(href='/login/')
               i.fa.fa-user
               |  Sign In
-    
+
     div.page
       div.container
         block body
-    
+
     div.footer
       div.container
         span.copyright.pull-right
@@ -40,12 +40,12 @@ html
           li: a(href='/') Home
           li: a(href='/contact/') Contact
         div.clearfix
-    
+
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
-    
+
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')
     script(src='/layouts/core.min.js?#{cacheBreaker}')
-    
+
     block feet

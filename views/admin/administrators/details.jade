@@ -18,13 +18,13 @@ block body
       div#groups
       div#permissions
       div#delete
-  
+
   script(type='text/template', id='tmpl-header')
     div.page-header
       h1
         a(href='/admin/administrators/') Administrators
         |  / <%- name.full %>
-  
+
   script(type='text/template', id='tmpl-details')
     fieldset
       legend Contact Info
@@ -53,7 +53,7 @@ block body
         span.help-block <%= errfor.last %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-login')
     fieldset
       legend Login
@@ -77,7 +77,7 @@ block body
             button.btn.btn-success.btn-user-link(type='button') Link
           |<% } %>
         span.help-block <%= errfor.newUsername %>
-  
+
   script(type='text/template', id='tmpl-groups')
     fieldset
       legend Groups
@@ -117,7 +117,7 @@ block body
           span.help-block <%= errfor.memberships %>
       div.control-group
         button.btn.btn-primary.btn-save(type='button') Save Groups
-  
+
   script(type='text/template', id='tmpl-permissions')
     fieldset
       legend Permissions
@@ -162,7 +162,7 @@ block body
           span.help-block <%= errfor.settings %>
       div.control-group
         button.btn.btn-primary.btn-set(type='button') Save Settings
-  
+
   script(type='text/template', id='tmpl-delete')
     fieldset
       legend Danger Zone
@@ -175,9 +175,9 @@ block body
       div.control-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
-          | 
+          |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
       div.control-group
         button.btn.btn-danger.btn-delete(type='button') Delete
-  
+
   script(type='text/template', id='data-record') !{data.record}

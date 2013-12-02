@@ -12,7 +12,7 @@ block body
       div.page-header
         h1 Forgot Your Password?
       div#forgot
-  
+
   script(type='text/template', id='tmpl-forgot')
     form
       div.alerts
@@ -36,5 +36,5 @@ block body
         |<% if (!success) { %>
         button.btn.btn-primary.btn-forgot(type='button') Send Reset
         |<% } %>
-        | 
+        |&nbsp;
         a.btn.btn-link(href='/login/') Back to Login

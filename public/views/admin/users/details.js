@@ -2,16 +2,16 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.User = Backbone.Model.extend({
     idAttribute: '_id',
     url: function() {
       return '/admin/users/'+ this.id +'/';
     }
   });
-  
+
   app.Delete = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -23,7 +23,7 @@
       return '/admin/users/'+ app.mainView.model.id +'/';
     }
   });
-  
+
   app.Identity = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -42,11 +42,11 @@
         app.mainView.model.set(response.user);
         delete response.user;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Roles = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -65,11 +65,11 @@
         app.mainView.model.set(response.user);
         delete response.user;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Password = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -87,11 +87,11 @@
         app.mainView.model.set(response.user);
         delete response.user;
       }
-      
+
       return response;
     }
   });
-  
+
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -104,7 +104,7 @@
       this.$el.html(this.template( this.model.attributes ));
     }
   });
-  
+
   app.IdentityView = Backbone.View.extend({
     el: '#identity',
     template: _.template( $('#tmpl-identity').html() ),
@@ -128,7 +128,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -143,7 +143,7 @@
       });
     }
   });
-  
+
   app.RolesView = Backbone.View.extend({
     el: '#roles',
     template: _.template( $('#tmpl-roles').html() ),
@@ -170,7 +170,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -196,7 +196,7 @@
               app.mainView.model.set(response.user);
               delete response.user;
             }
-            
+
             app.rolesView.model.set(response);
           }
         });
@@ -221,14 +221,14 @@
               app.mainView.model.set(response.user);
               delete response.user;
             }
-            
+
             app.rolesView.model.set(response);
           }
         });
       }
     }
   });
-  
+
   app.PasswordView = Backbone.View.extend({
     el: '#password',
     template: _.template( $('#tmpl-password').html() ),
@@ -242,7 +242,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -256,7 +256,7 @@
       });
     }
   });
-  
+
   app.DeleteView = Backbone.View.extend({
     el: '#delete',
     template: _.template( $('#tmpl-delete').html() ),
@@ -286,13 +286,13 @@
       }
     }
   });
-  
+
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
       this.model = new app.User( JSON.parse( unescape($('#data-record').html())) );
-      
+
       app.headerView = new app.HeaderView();
       app.identityView = new app.IdentityView();
       app.passwordView = new app.PasswordView();
@@ -300,7 +300,7 @@
       app.deleteView = new app.DeleteView();
     }
   });
-  
+
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });

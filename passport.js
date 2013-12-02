@@ -5,7 +5,7 @@ exports = module.exports = function(app, passport) {
       TwitterStrategy = require('passport-twitter').Strategy,
       GitHubStrategy = require('passport-github').Strategy,
       FacebookStrategy = require('passport-facebook').Strategy;
-  
+
   passport.use(new LocalStrategy(
     function(username, password, done) {
       var conditions = { isActive: 'yes' };
@@ -15,26 +15,26 @@ exports = module.exports = function(app, passport) {
       else {
         conditions.email = username;
       }
-      
+
       app.db.models.User.findOne(conditions, function(err, user) {
         if (err) {
           return done(err);
         }
-        
+
         if (!user) {
           return done(null, false, { message: 'Unknown user' });
         }
-        
+
         var encryptedPassword = app.db.models.User.encryptPassword(password);
         if (user.password !== encryptedPassword) {
           return done(null, false, { message: 'Invalid password' });
         }
-        
+
         return done(null, user);
       });
     }
   ));
-  
+
   if (app.get('twitter-oauth-key')) {
     passport.use(new TwitterStrategy({
         consumerKey: app.get('twitter-oauth-key'),
@@ -49,7 +49,7 @@ exports = module.exports = function(app, passport) {
       }
     ));
   }
-  
+
   if (app.get('github-oauth-key')) {
     passport.use(new GitHubStrategy({
         clientID: app.get('github-oauth-key'),
@@ -65,7 +65,7 @@ exports = module.exports = function(app, passport) {
       }
     ));
   }
-  
+
   if (app.get('facebook-oauth-key')) {
     passport.use(new FacebookStrategy({
         clientID: app.get('facebook-oauth-key'),
@@ -80,11 +80,11 @@ exports = module.exports = function(app, passport) {
       }
     ));
   }
-  
+
   passport.serializeUser(function(user, done) {
     done(null, user._id);
   });
-  
+
   passport.deserializeUser(function(id, done) {
     app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
       if (user.roles && user.roles.admin) {

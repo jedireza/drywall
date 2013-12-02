@@ -12,13 +12,13 @@ block body
       div#header
       div#details
       div#delete
-  
+
   script(type='text/template', id='tmpl-header')
     div.page-header
       h1
         a(href='/admin/categories/') Categories
         |  / <%- name %>
-  
+
   script(type='text/template', id='tmpl-details')
     fieldset
       legend Details
@@ -43,7 +43,7 @@ block body
         span.help-block <%= errfor.name %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-delete')
     fieldset
       legend Danger Zone
@@ -56,9 +56,9 @@ block body
       div.control-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
-          | 
+          |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
       div.control-group
         button.btn.btn-danger.btn-delete(type='button') Delete
-  
+
   script(type='text/template', id='data-record') !{data.record}

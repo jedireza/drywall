@@ -2,19 +2,19 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Account = Backbone.Model.extend({
     idAttribute: '_id',
     url: '/account/settings/'
   });
-  
+
   app.User = Backbone.Model.extend({
     idAttribute: '_id',
     url: '/account/settings/'
   });
-  
+
   app.Details = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -34,11 +34,11 @@
         app.mainView.account.set(response.account);
         delete response.account;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Identity = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -54,11 +54,11 @@
         app.mainView.user.set(response.user);
         delete response.user;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Password = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -74,11 +74,11 @@
         app.mainView.user.set(response.user);
         delete response.user;
       }
-      
+
       return response;
     }
   });
-  
+
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details').html() ),
@@ -105,7 +105,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -123,7 +123,7 @@
       });
     }
   });
-  
+
   app.IdentityView = Backbone.View.extend({
     el: '#identity',
     template: _.template( $('#tmpl-identity').html() ),
@@ -146,7 +146,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -160,7 +160,7 @@
       });
     }
   });
-  
+
   app.PasswordView = Backbone.View.extend({
     el: '#password',
     template: _.template( $('#tmpl-password').html() ),
@@ -174,7 +174,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -188,20 +188,20 @@
       });
     }
   });
-  
+
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
       this.account = new app.Account( JSON.parse( unescape($('#data-account').html()) ) );
       this.user = new app.User( JSON.parse( unescape($('#data-user').html()) ) );
-      
+
       app.detailsView = new app.DetailsView();
       app.identityView = new app.IdentityView();
       app.passwordView = new app.PasswordView();
     }
   });
-  
+
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });

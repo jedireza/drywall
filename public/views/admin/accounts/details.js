@@ -2,16 +2,16 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Account = Backbone.Model.extend({
     idAttribute: '_id',
     url: function() {
       return '/admin/accounts/'+ this.id +'/';
     }
   });
-  
+
   app.Delete = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -23,7 +23,7 @@
       return '/admin/accounts/'+ app.mainView.model.id +'/';
     }
   });
-  
+
   app.Details = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -45,11 +45,11 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Login = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -68,11 +68,11 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
-      
+
       return response;
     }
   });
-  
+
   app.Note = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -89,15 +89,15 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
-      
+
       return response;
     }
   });
-  
+
   app.NoteCollection = Backbone.Collection.extend({
     model: app.Note
   });
-  
+
   app.Status = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -114,15 +114,15 @@
         app.mainView.model.set(response.account);
         delete response.account;
       }
-      
+
       return response;
     }
   });
-  
+
   app.StatusCollection = Backbone.Collection.extend({
     model: app.Status
   });
-  
+
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -135,7 +135,7 @@
       this.$el.html(this.template( this.model.attributes ));
     }
   });
-  
+
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details').html() ),
@@ -162,7 +162,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -180,7 +180,7 @@
       });
     }
   });
-  
+
   app.DeleteView = Backbone.View.extend({
     el: '#delete',
     template: _.template( $('#tmpl-delete').html() ),
@@ -210,7 +210,7 @@
       }
     }
   });
-  
+
   app.LoginView = Backbone.View.extend({
     el: '#login',
     template: _.template( $('#tmpl-login').html() ),
@@ -235,7 +235,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -258,14 +258,14 @@
               app.mainView.model.set(response.account);
               delete response.account;
             }
-            
+
             app.loginView.model.set(response);
           }
         });
       }
     }
   });
-  
+
   app.NewNoteView = Backbone.View.extend({
     el: '#notes-new',
     template: _.template( $('#tmpl-notes-new').html() ),
@@ -285,12 +285,12 @@
       if (this.$el.find('[name="data"]').val() === '') {
         errors.push('Please enter some notes.');
       }
-      
+
       if (errors.length > 0) {
         this.model.set({ errors: errors });
         return false;
       }
-      
+
       return true;
     },
     addNew: function() {
@@ -301,7 +301,7 @@
       }
     }
   });
-  
+
   app.NoteCollectionView = Backbone.View.extend({
     el: '#notes-collection',
     template: _.template( $('#tmpl-notes-collection').html() ),
@@ -317,7 +317,7 @@
     },
     render: function() {
       this.$el.html(this.template());
-      
+
       var frag = document.createDocumentFragment();
       var last = document.createTextNode('');
       frag.appendChild(last);
@@ -328,20 +328,20 @@
         last = newEl;
       }, this);
       $('#notes-items').append(frag);
-      
+
       if (this.collection.length === 0) {
         $('#notes-items').append( $('#tmpl-notes-none').html() );
       }
     }
   });
-  
+
   app.NotesItemView = Backbone.View.extend({
     tagName: 'div',
     className: 'note',
     template: _.template( $('#tmpl-notes-item').html() ),
     render: function() {
       this.$el.html( this.template(this.model.attributes) );
-      
+
       this.$el.find('.timeago').each(function(index, indexValue) {
         if (indexValue.innerText) {
           var myMoment = moment(indexValue.innerText);
@@ -351,7 +351,7 @@
       return this;
     }
   });
-  
+
   app.NewStatusView = Backbone.View.extend({
     el: '#status-new',
     template: _.template( $('#tmpl-status-new').html() ),
@@ -373,7 +373,7 @@
     },
     render: function() {
       this.$el.html( this.template(this.model.attributes) );
-      
+
       if (app.mainView.model.get('status') && app.mainView.model.get('status').id) {
         this.$el.find('[name="status"]').val(app.mainView.model.get('status').id);
       }
@@ -383,16 +383,16 @@
       if (this.$el.find('[name="status"]').val() === '') {
         errors.push('Please choose a status.');
       }
-      
+
       if (this.$el.find('[name="status"]').val() === app.mainView.model.get('status').id) {
         errors.push('That is the current status.');
       }
-      
+
       if (errors.length > 0) {
         this.model.set({ errors: errors });
         return false;
       }
-      
+
       return true;
     },
     addNew: function() {
@@ -404,7 +404,7 @@
       }
     }
   });
-  
+
   app.StatusCollectionView = Backbone.View.extend({
     el: '#status-collection',
     template: _.template( $('#tmpl-status-collection').html() ),
@@ -420,7 +420,7 @@
     },
     render: function() {
       this.$el.html( this.template() );
-      
+
       var frag = document.createDocumentFragment();
       var last = document.createTextNode('');
       frag.appendChild(last);
@@ -433,14 +433,14 @@
       $('#status-items').append(frag);
     }
   });
-  
+
   app.StatusItemView = Backbone.View.extend({
     tagName: 'div',
     className: 'status',
     template: _.template( $('#tmpl-status-item').html() ),
     render: function() {
       this.$el.html( this.template(this.model.attributes) );
-      
+
       this.$el.find('.timeago').each(function(index, indexValue) {
         if (indexValue.innerText) {
           var myMoment = moment(indexValue.innerText);
@@ -450,13 +450,13 @@
       return this;
     }
   });
-  
+
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
       this.model = new app.Account( JSON.parse( unescape($('#data-record').html()) ) );
-      
+
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
       app.deleteView = new app.DeleteView();
@@ -467,7 +467,7 @@
       app.statusCollectionView = new app.StatusCollectionView();
     }
   });
-  
+
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });

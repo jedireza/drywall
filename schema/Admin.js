@@ -32,18 +32,18 @@ exports = module.exports = function(app, mongoose) {
         }
       }
     }
-    
+
     //check admin permissions
     for (var k = 0 ; k < this.permissions.length ; k++) {
       if (this.permissions[k].name === something) {
         if (this.permissions[k].permit) {
           return true;
         }
-        
+
         return false;
       }
     }
-    
+
     return groupHasPermission;
   };
   adminSchema.methods.isMemberOf = function(group) {
@@ -52,7 +52,7 @@ exports = module.exports = function(app, mongoose) {
         return true;
       }
     }
-    
+
     return false;
   };
   adminSchema.plugin(require('./plugins/pagedFind'));

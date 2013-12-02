@@ -50,15 +50,15 @@ app.configure(function(){
   //twitter settings
   app.set('twitter-oauth-key', config.oauth.twitter.key);
   app.set('twitter-oauth-secret', config.oauth.twitter.secret);
-  
+
   //github settings
   app.set('github-oauth-key', config.oauth.github.key);
   app.set('github-oauth-secret', config.oauth.github.secret);
-  
+
   //facebook settings
   app.set('facebook-oauth-key', config.oauth.facebook.key);
   app.set('facebook-oauth-secret', config.oauth.facebook.secret);
-  
+
   //middleware
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.logger('dev'));
@@ -73,10 +73,10 @@ app.configure(function(){
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  
+
   //error handler
   app.use(require('./views/http/index').http500);
-  
+
   //global locals
   app.locals.projectName = app.get('project-name');
   app.locals.copyrightYear = new Date().getFullYear();

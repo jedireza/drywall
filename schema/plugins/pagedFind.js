@@ -3,30 +3,30 @@
 module.exports = exports = function pagedFindPlugin (schema) {
   schema.statics.pagedFind = function(options, cb) {
     var thisSchema = this;
-    
+
     if (!options.filters) {
       options.filters = {};
     }
-    
+
     if (!options.keys) {
       options.keys = '';
     }
-    
+
     if (!options.limit) {
       options.limit = 20;
     }
-    
+
     if (!options.page) {
       options.page = 1;
     }
-    
+
     if (!options.sort) {
       options.sort = {};
     }
-    
+
     var output = {
       data: null,
-      pages: { 
+      pages: {
         current: options.page,
         prev: 0,
         hasPrev: false,
@@ -34,20 +34,20 @@ module.exports = exports = function pagedFindPlugin (schema) {
         hasNext: false,
         total: 0
       },
-      items: { 
-        begin: ((options.page * options.limit) - options.limit) + 1, 
-        end: options.page * options.limit, 
-        total: 0 
+      items: {
+        begin: ((options.page * options.limit) - options.limit) + 1,
+        end: options.page * options.limit,
+        total: 0
       }
     };
-    
+
     var countResults = function(callback) {
       thisSchema.count(options.filters, function(err, count) {
         output.items.total = count;
         callback(null, 'done counting');
       });
     };
-    
+
     var getResults = function(callback) {
       var query = thisSchema.find(options.filters, options.keys);
       query.skip((options.page - 1) * options.limit);
@@ -58,16 +58,16 @@ module.exports = exports = function pagedFindPlugin (schema) {
         callback(null, 'done getting records');
       });
     };
-    
+
     require('async').parallel([
-      countResults, 
+      countResults,
       getResults
     ],
     function(err, results){
       if (err) {
         cb(err, null);
       }
-      
+
       //final paging math
       output.pages.total = Math.ceil(output.items.total / options.limit);
       output.pages.next = ((output.pages.current + 1) > output.pages.total ? 0 : output.pages.current + 1);
@@ -77,7 +77,7 @@ module.exports = exports = function pagedFindPlugin (schema) {
       if (output.items.end > output.items.total) {
         output.items.end = output.items.total;
       }
-      
+
       cb(null, output);
     });
   };

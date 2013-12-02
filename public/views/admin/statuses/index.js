@@ -2,9 +2,9 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Record = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -16,7 +16,7 @@
       return '/admin/statuses/'+ (this.isNew() ? '' : this.id +'/');
     }
   });
-  
+
   app.RecordCollection = Backbone.Collection.extend({
     model: app.Record,
     url: '/admin/statuses/',
@@ -29,7 +29,7 @@
       return results.data;
     }
   });
-  
+
   app.Filter = Backbone.Model.extend({
     defaults: {
       pivot: '',
@@ -38,14 +38,14 @@
       limit: ''
     }
   });
-  
+
   app.Paging = Backbone.Model.extend({
     defaults: {
       pages: {},
       items: {}
     }
   });
-  
+
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -96,7 +96,7 @@
       }
     }
   });
-  
+
   app.ResultsView = Backbone.View.extend({
     el: '#results-table',
     template: _.template( $('#tmpl-results-table').html() ),
@@ -107,20 +107,20 @@
     },
     render: function() {
       this.$el.html( this.template() );
-      
+
       var frag = document.createDocumentFragment();
       this.collection.each(function(record) {
         var view = new app.ResultsRowView({ model: record });
         frag.appendChild(view.render().el);
       }, this);
       $('#results-rows').append(frag);
-      
+
       if (this.collection.length === 0) {
         $('#results-rows').append( $('#tmpl-results-empty-row').html() );
       }
     }
   });
-  
+
   app.ResultsRowView = Backbone.View.extend({
     tagName: 'tr',
     template: _.template( $('#tmpl-results-row').html() ),
@@ -135,7 +135,7 @@
       return this;
     }
   });
-  
+
   app.FilterView = Backbone.View.extend({
     el: '#filters',
     template: _.template( $('#tmpl-filters').html() ),
@@ -151,7 +151,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -165,12 +165,12 @@
       if (event.keyCode !== 13) { return; }
       this.filter();
     },
-    filter: function() {  
+    filter: function() {
       var query = $('#filters form').serialize();
-      Backbone.history.navigate('q/'+ query, { trigger: true }); 
+      Backbone.history.navigate('q/'+ query, { trigger: true });
     }
   });
-  
+
   app.PagingView = Backbone.View.extend({
     el: '#results-paging',
     template: _.template( $('#tmpl-results-paging').html() ),
@@ -185,11 +185,11 @@
     render: function() {
       if (this.model.get('pages').total > 1) {
         this.$el.html(this.template( this.model.attributes ));
-        
+
         if (!this.model.get('pages').hasPrev) {
           this.$el.find('.btn-prev').attr('disabled', 'disabled');
         }
-        
+
         if (!this.model.get('pages').hasNext) {
           this.$el.find('.btn-next').attr('disabled', 'disabled');
         }
@@ -200,24 +200,24 @@
     },
     goToPage: function(event) {
       var query = $('#filters form').serialize() +'&page='+ $(event.target).data('page');
-      Backbone.history.navigate('q/'+ query, { trigger: true }); 
+      Backbone.history.navigate('q/'+ query, { trigger: true });
       $('body').scrollTop(0);
     }
   });
-  
+
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
       this.results = JSON.parse( unescape($('#data-results').html()) );
-      
+
       app.headerView = new app.HeaderView();
       app.resultsView = new app.ResultsView();
       app.filterView = new app.FilterView();
       app.pagingView = new app.PagingView();
     }
   });
-  
+
   app.Router = Backbone.Router.extend({
     routes: {
       '': 'default',
@@ -230,7 +230,7 @@
       if (!app.firstLoad) {
         app.resultsView.collection.fetch({ reset: true });
       }
-      
+
       app.firstLoad = false;
     },
     query: function(params) {
@@ -238,7 +238,7 @@
       app.firstLoad = false;
     }
   });
-  
+
   $(document).ready(function() {
     app.firstLoad = true;
     app.router = new app.Router();

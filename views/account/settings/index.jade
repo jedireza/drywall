@@ -51,7 +51,7 @@ block body
             a.btn.btn-block.btn-default(href='/account/settings/facebook/')
               i.fa.fa-facebook-square.fa-lg
               |  Connect Facebook
-  
+
   script(type='text/template', id='tmpl-details')
     fieldset
       legend Contact Info
@@ -91,7 +91,7 @@ block body
         span.help-block <%= errfor.zip %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-identity')
     fieldset
       legend Identity
@@ -116,7 +116,7 @@ block body
         span.help-block <%= errfor.email %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-password')
     fieldset
       legend Set Password
@@ -141,6 +141,6 @@ block body
         span.help-block <%= errfor.confirm %>
       div.control-group
         button.btn.btn-primary.btn-password(type='button') Set Password
-  
+
   script(type='text/template', id='data-account') !{data.account}
   script(type='text/template', id='data-user') !{data.user}

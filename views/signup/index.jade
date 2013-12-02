@@ -13,7 +13,7 @@ block body
   div.row
     div.col-sm-6
       div.page-header
-        h1 Sign Up 
+        h1 Sign Up
       div#signup
       if oauthTwitter || oauthGitHub || oauthFacebook
         hr
@@ -22,7 +22,7 @@ block body
           div.alerts
             div.alert.alert-info.alert-dismissable
               button.close(type='button', data-dismiss='alert') &times;
-              |#{oauthMessage} 
+              |#{oauthMessage}&nbsp;
               b
                 a(href='/login/') Login Here
         div.btn-group.btn-group-justified
@@ -43,7 +43,7 @@ block body
         h1 Campy Benefits
       p.lead Really, you will love it inside. It's super great!
       i.fa.fa-thumbs-o-up.super-awesome
-  
+
   script(type='text/template', id='tmpl-signup')
     form
       div.alerts

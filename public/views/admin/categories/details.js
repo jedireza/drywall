@@ -2,16 +2,16 @@
 
 (function() {
   'use strict';
-  
+
   app = app || {};
-  
+
   app.Category = Backbone.Model.extend({
     idAttribute: '_id',
     url: function() {
       return '/admin/categories/'+ this.id +'/';
     }
   });
-  
+
   app.Delete = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -23,7 +23,7 @@
       return '/admin/categories/'+ app.mainView.model.id +'/';
     }
   });
-  
+
   app.Details = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -41,11 +41,11 @@
         app.mainView.model.set(response.category);
         delete response.category;
       }
-      
+
       return response;
     }
   });
-  
+
   app.HeaderView = Backbone.View.extend({
     el: '#header',
     template: _.template( $('#tmpl-header').html() ),
@@ -58,7 +58,7 @@
       this.$el.html(this.template( this.model.attributes ));
     }
   });
-  
+
   app.DetailsView = Backbone.View.extend({
     el: '#details',
     template: _.template( $('#tmpl-details').html() ),
@@ -81,7 +81,7 @@
     },
     render: function() {
       this.$el.html(this.template( this.model.attributes ));
-      
+
       for (var key in this.model.attributes) {
         if (this.model.attributes.hasOwnProperty(key)) {
           this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
@@ -95,7 +95,7 @@
       });
     }
   });
-  
+
   app.DeleteView = Backbone.View.extend({
     el: '#delete',
     template: _.template( $('#tmpl-delete').html() ),
@@ -125,19 +125,19 @@
       }
     }
   });
-  
+
   app.MainView = Backbone.View.extend({
     el: '.page .container',
     initialize: function() {
       app.mainView = this;
       this.model = new app.Category( JSON.parse( unescape($('#data-record').html()) ) );
-      
+
       app.headerView = new app.HeaderView();
       app.detailsView = new app.DetailsView();
       app.deleteView = new app.DeleteView();
     }
   });
-  
+
   $(document).ready(function() {
     app.mainView = new app.MainView();
   });

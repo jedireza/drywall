@@ -25,11 +25,11 @@ html
             li: a(href='/logout/')
               i.fa.fa-user
               |  Sign Out
-    
+
     div.page
       div.container
         block body
-    
+
     div.footer
       div.container
         div.inner
@@ -39,12 +39,12 @@ html
             li: a(href='/') Home
             li: a(href='/logout/') Sign Out
           div.clearfix
-    
+
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
-    
+
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')
     script(src='/layouts/core.min.js?#{cacheBreaker}')
-    
+
     block feet

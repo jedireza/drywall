@@ -12,7 +12,7 @@ block body
       div.page-header
         h1 Reset Your Password
       div#reset
-  
+
   script(type='text/template', id='tmpl-reset')
     form
       div.alerts
@@ -45,5 +45,5 @@ block body
         |<% if (!success && id != undefined) { %>
         button.btn.btn-primary.btn-reset(type='button') Set Password
         |<% } %>
-        | 
+        |&nbsp;
         a.btn.btn-link(href='/login/') Back to Login

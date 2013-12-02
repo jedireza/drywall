@@ -14,13 +14,13 @@ block body
       div#roles
       div#password
       div#delete
-  
+
   script(type='text/template', id='tmpl-header')
     div.page-header
       h1
         a(href='/admin/users/') Users
         |  / <%= username %>
-  
+
   script(type='text/template', id='tmpl-identity')
     fieldset
       legend Identity
@@ -51,7 +51,7 @@ block body
         span.help-block <%= errfor.email %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
-  
+
   script(type='text/template', id='tmpl-roles')
     fieldset
       legend Roles
@@ -90,7 +90,7 @@ block body
             button.btn.btn-success.btn-account-link(type='button') Link
           |<% } %>
         span.help-block <%= errfor.newAccountId %>
-  
+
   script(type='text/template', id='tmpl-password')
     fieldset
       legend Set Password
@@ -115,7 +115,7 @@ block body
         span.help-block <%= errfor.confirm %>
       div.control-group
         button.btn.btn-primary.btn-password(type='button') Set Password
-  
+
   script(type='text/template', id='tmpl-delete')
     fieldset
       legend Danger Zone
@@ -128,9 +128,9 @@ block body
       div.control-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
-          | 
+          |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
       div.control-group
         button.btn.btn-danger.btn-delete(type='button') Delete
-  
+
   script(type='text/template', id='data-record') !{data.record}

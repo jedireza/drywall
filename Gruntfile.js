@@ -159,7 +159,7 @@ module.exports = function(grunt) {
       }
     }
   });
-  
+
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
@@ -168,7 +168,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
-  
+
   grunt.registerTask('default', ['newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);

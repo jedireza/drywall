@@ -19,7 +19,7 @@ block body
           div.alerts
             div.alert.alert-info.alert-dismissable
               button.close(type='button', data-dismiss='alert') &times;
-              |#{oauthMessage} 
+              |#{oauthMessage}&nbsp;
               b
                 a(href='/signup/') Sign Up Here
         div.form-actions
@@ -36,7 +36,7 @@ block body
               a.btn.btn-info(href='/login/facebook/')
                 i.fa.fa-facebook-square.fa-lg
                 |  Facebook
-  
+
   script(type='text/template', id='tmpl-login')
     form
       div.alerts
@@ -55,6 +55,6 @@ block body
         span.help-block <%= errfor.password %>
       div.form-actions
         button.btn.btn-primary.btn-login(type='button') Sign In
-        | 
+        |&nbsp;
         a.btn.btn-link(href='/login/forgot/') Forget your password?
         input(type='hidden', name='returnUrl', value=returnUrl)
