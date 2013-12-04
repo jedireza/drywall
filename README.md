@@ -82,7 +82,6 @@ Philosophy
 
  - Create a website and user system.
  - Write code in a simple and consistent way.
- - No home-grown modules or libraries.
  - Only create minor utilities or plugins to avoid repetitiveness.
  - Find and use good tools.
  - Use tools in their native/default behavior.
