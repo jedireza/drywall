@@ -36,7 +36,7 @@ You need [Node.js](http://nodejs.org/download/) and [MongoDB](http://www.mongodb
 We use [Grunt](http://gruntjs.com/) as our task runner. Get the CLI (command line interface).
 
 ```bash
-$ [sudo] npm install -g grunt-cli
+$ npm install -g grunt-cli
 ```
 
 Installation
