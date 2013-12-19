@@ -44,7 +44,7 @@ exports = module.exports = function(app, passport) {
   app.get('/signup/twitter/callback/', require('./views/signup/index').signupTwitter);
   app.get('/signup/github/', passport.authenticate('github', { callbackURL: '/signup/github/callback/' }));
   app.get('/signup/github/callback/', require('./views/signup/index').signupGitHub);
-  app.get('/signup/facebook/', passport.authenticate('facebook', { callbackURL: '/signup/facebook/callback/' }));
+  app.get('/signup/facebook/', passport.authenticate('facebook', { callbackURL: '/signup/facebook/callback/', scope: ['email'] }));
   app.get('/signup/facebook/callback/', require('./views/signup/index').signupFacebook);
 
   //login/out
