@@ -240,7 +240,7 @@ exports.signupFacebook = function(req, res, next) {
       console.log(info.profile);
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: '' });
+        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
         res.render('signup/index', {
