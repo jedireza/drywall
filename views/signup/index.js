@@ -213,7 +213,7 @@ exports.signupGitHub = function(req, res, next) {
 
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails[0].value || '' });
+        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
         res.render('signup/index', {
