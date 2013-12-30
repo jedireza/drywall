@@ -237,7 +237,6 @@ exports.signupFacebook = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      console.log(info.profile);
       if (!user) {
         req.session.socialProfile = info.profile;
         res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
