@@ -40,20 +40,53 @@ We use [Grunt](http://gruntjs.com/) as our task runner. Get the CLI (command lin
 $ npm install -g grunt-cli
 ```
 
-Installation
+Git Installation
 ------------
+Go into the folder where your project is located and type the following commands
 
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
 $ npm install
-$ mv ./config.example.js ./config.js #set mongodb and email credentials
+$ mv config.example.js config.js
 $ grunt
 ```
 
 Setup
 ------------
 
-You need a few records in the database to start using the user system.
+You need to change some variables in the config.js file.
+
+If you are using a remote database, change 'localhost/drywall' to the URL of your remote database.
+```js
+exports.mongodb = {
+  uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/drywall'
+};
+```
+Configure the following information according to your preferences. 
+```js
+exports.companyName = 'Acme, Inc.';
+exports.projectName = 'Drywall';
+/*systemEmail is the sender of transactional emails such as registration confirmation and password reset emails*/
+exports.systemEmail = 'your@email.addy';
+/*cryptoKey can be any strong, secure key*/
+exports.cryptoKey = 'k3yb0ardc4t';
+exports.requireAccountVerification = false;
+exports.smtp = {
+  from: {
+    name: process.env.SMTP_FROM_NAME || exports.projectName +' Website',
+    address: process.env.SMTP_FROM_ADDRESS || 'your@email.addy'
+  },
+  credentials: {
+    //Set email credentials for your systemAdmin account
+    user: process.env.SMTP_USERNAME || 'your@email.addy',
+    password: process.env.SMTP_PASSWORD || 'bl4rg!',
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    ssl: true
+  }
+};
+```
+
+Next, you need a few records in the database to start using the user system.
 
 Run these commands on mongo. __Obviously you should use your email address.__
 
