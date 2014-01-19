@@ -51,13 +51,13 @@ module.exports = function(grunt) {
     },
     nodemon: {
       dev: {
+        script: 'app.js',
         options: {
-          file: 'app.js',
-          ignoredFiles: [
+          ignore: [
             'node_modules/**',
             'public/**'
           ],
-          watchedExtensions: ['js']
+          ext: 'js'
         }
       }
     },
