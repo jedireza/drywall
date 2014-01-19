@@ -12,7 +12,7 @@ Technology
 | On The Server | On The Client  | Development |
 | ------------- | -------------- | ----------- |
 | Express       | Bootstrap      | Grunt       |
-| Jade          | Backbone.js    |             |
+| Jade          | Backbone.js    | Bower       |
 | Mongoose      | jQuery         |             |
 | Passport      | Underscore.js  |             |
 | Async         | Font-Awesome   |             |
@@ -37,15 +37,22 @@ You need [Node.js](http://nodejs.org/download/) and [MongoDB](http://www.mongodb
 We use [Grunt](http://gruntjs.com/) as our task runner. Get the CLI (command line interface).
 
 ```bash
-$ npm install -g grunt-cli
+$ npm install grunt-cli -g
 ```
+
+We use [Bower](http://bower.io/) as our front-end package manager. Get the CLI (command line interface).
+
+```bash
+$ npm install bower -g
+```
+
 
 Installation
 ------------
 
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
-$ npm install
+$ npm install && bower install
 $ mv ./config.example.js ./config.js #set mongodb and email credentials
 $ grunt
 ```
