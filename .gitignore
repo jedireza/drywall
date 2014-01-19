@@ -1,3 +1,5 @@
+bower_components/*
+public/vendor/*
 node_modules/*
 !node_modules/drywall-sendmail
 !node_modules/drywall-slugify
