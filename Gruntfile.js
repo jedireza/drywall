@@ -84,13 +84,9 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        sourceMapRoot: '/',
-        sourceMapPrefix: 1,
-        sourceMap: function(filePath) {
-          return filePath.replace(/.js/, '.js.map');
-        },
-        sourceMappingURL: function(filePath) {
-          return path.basename(filePath) +'.map';
+        sourceMap: true,
+        sourceMapName: function(filePath) {
+          return filePath + '.map';
         }
       },
       layouts: {
