@@ -73,6 +73,16 @@ exports.find = function(req, res, next){
 exports.read = function(req, res, next){
   var outcome = {};
 
+  var getAccountGroups = function(callback) {
+    req.app.db.models.AccountGroup.find({}, 'name').sort('name').exec(function(err, accountGroups) {
+      if (err) {
+        return callback(err, null);
+      }
+
+      outcome.accountGroups = accountGroups;
+      return callback(null, 'done');
+    });
+  };
   var getStatusOptions = function(callback) {
     req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
       if (err) {
@@ -107,13 +117,14 @@ exports.read = function(req, res, next){
       res.render('admin/accounts/details', {
         data: {
           record: escape(JSON.stringify(outcome.record)),
+          accountGroups : outcome.accountGroups,
           statuses: outcome.statuses
         }
       });
     }
   };
 
-  require('async').parallel([getStatusOptions, getRecord], asyncFinally);
+  require('async').parallel([getAccountGroups,getStatusOptions, getRecord], asyncFinally);
 };
 
 exports.create = function(req, res, next){
