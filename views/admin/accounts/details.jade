@@ -17,6 +17,7 @@ block body
     div.col-sm-8
       div#details
       div#login
+      div#groups
       div#delete
     div.col-sm-4
       fieldset
@@ -95,6 +96,45 @@ block body
             button.btn.btn-success.btn-user-link(type='button') Link
           |<% } %>
         span.help-block <%= errfor.newUsername %>
+  script(type='text/template', id='tmpl-groups')
+      fieldset
+        legend Groups
+        div.alerts
+          |<% _.each(errors, function(err) { %>
+          div.alert.alert-danger.alert-dismissable
+            button.close(type='button', data-dismiss='alert') &times;
+            |<%= err %>
+          |<% }); %>
+          |<% if (success) { %>
+          div.alert.alert-info.alert-dismissable
+            button.close(type='button', data-dismiss='alert') &times;
+            | Changes have been saved.
+          |<% } %>
+        div.control-group(class!='<%= errfor.newMembership ? "has-error" : "" %>')
+          label.control-label Add Membership:
+          div.input-group
+            select.form-control(name='newMembership')
+              for group in data.accountGroups
+                option(value='#{group._id}') #{group.name}
+            div.input-group-btn
+              button.btn.btn-success.btn-add(type='button') Add
+          span.help-block <%= errfor.newUsername %>
+        div.control-group(class!='<%= errfor.memberships ? "has-error" : "" %>')
+          label.control-label Memberships:
+          div.groups
+            |<% _.each(groups, function(group) { %>
+            div.input-group
+              input.form-control(disabled=true, value!='<%= group.name %>')
+              div.input-group-btn
+                button.btn.btn-danger.btn-delete(type='button')
+                  i.fa.fa-trash-o.fa-inverse
+            |<% }); %>
+            |<% if (groups.length == 0) { %>
+            span.badge no memberships defined
+            |<% } %>
+            span.help-block <%= errfor.memberships %>
+        div.control-group
+          button.btn.btn-primary.btn-save(type='button') Save Groups
 
   script(type='text/template', id='tmpl-status-new')
     legend Status
