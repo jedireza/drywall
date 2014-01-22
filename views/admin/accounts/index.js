@@ -363,6 +363,47 @@ exports.unlinkUser = function(req, res, next){
   workflow.emit('validate');
 };
 
+exports.groups = function(req, res, next){
+  var workflow = req.app.utility.workflow(req, res);
+
+  workflow.on('validate', function() {
+    if (!req.user.roles.admin.isMemberOf('root')) {
+      workflow.outcome.errors.push('You may not change the group memberships of accounts.');
+      return workflow.emit('response');
+    }
+
+    if (!req.body.groups) {
+      workflow.outcome.errfor.groups = 'required';
+      return workflow.emit('response');
+    }
+
+    workflow.emit('patchAccount');
+  });
+
+  workflow.on('patchAccount', function() {
+    var fieldsToSet = {
+      groups: req.body.groups
+    };
+
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+
+      admin.populate('groups', 'name', function(err, account) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        workflow.outcome.account = account;
+        workflow.emit('response');
+      });
+    });
+  });
+
+  workflow.emit('validate');
+};
+
 exports.newNote = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
 
