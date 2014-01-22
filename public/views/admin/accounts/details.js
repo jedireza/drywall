@@ -73,6 +73,28 @@
     }
   });
 
+  app.Groups = Backbone.Model.extend({
+    idAttribute: '_id',
+    defaults: {
+      success: false,
+      errors: [],
+      errfor: {},
+      groups: [],
+      newMembership: ''
+    },
+    url: function() {
+      return '/admin/accounts/'+ app.mainView.model.id +'/groups/';
+    },
+    parse: function(response) {
+      if (response.admin) {
+        app.mainView.model.set(response.admin);
+        delete response.admin;
+      }
+
+      return response;
+    }
+  });
+
   app.Note = Backbone.Model.extend({
     idAttribute: '_id',
     defaults: {
@@ -263,6 +285,78 @@
           }
         });
       }
+    }
+  });
+  app.GroupsView = Backbone.View.extend({
+    el: '#groups',
+    template: _.template( $('#tmpl-groups').html() ),
+    events: {
+      'click .btn-add': 'add',
+      'click .btn-delete': 'delete',
+      'click .btn-save': 'saveGroups'
+    },
+    initialize: function() {
+      this.model = new app.Groups();
+      this.syncUp();
+      this.listenTo(app.mainView.model, 'change', this.syncUp);
+      this.listenTo(this.model, 'sync', this.render);
+      this.render();
+    },
+    syncUp: function() {
+      this.model.set({
+        _id: app.mainView.model.id,
+        groups: app.mainView.model.get('groups')
+      });
+    },
+    render: function() {
+      this.$el.html(this.template( this.model.attributes ));
+
+      for (var key in this.model.attributes) {
+        if (this.model.attributes.hasOwnProperty(key)) {
+          this.$el.find('[name="'+ key +'"]').val(this.model.attributes[key]);
+        }
+      }
+    },
+    add: function() {
+      var newMembership = this.$el.find('[name="newMembership"]').val();
+      var newMembershipName = this.$el.find('[name="newMembership"] option:selected').text();
+      if (!newMembership) {
+        alert('Please select a group.');
+        return;
+      }
+      else {
+        var alreadyAdded = false;
+        _.each(this.model.get('groups'), function(group) {
+          if (newMembership === group._id) {
+            alreadyAdded = true;
+          }
+        });
+
+        if (alreadyAdded) {
+          alert('That group already exists.');
+          return;
+        }
+      }
+
+      this.model.get('groups').push({ _id: newMembership, name: newMembershipName });
+
+      var sorted = this.model.get('groups');
+      sorted.sort(function(a, b) {
+        return a.name.toLowerCase() > b.name.toLowerCase();
+      });
+      this.model.set('groups', sorted);
+
+      this.render();
+    },
+    delete: function(event) {
+      if (confirm('Are you sure?')) {
+        var idx = this.$el.find('.btn-delete').index(event.currentTarget);
+        this.model.get('groups').splice(idx, 1);
+        this.render();
+      }
+    },
+    saveGroups: function() {
+      this.model.save();
     }
   });
 
@@ -461,6 +555,7 @@
       app.detailsView = new app.DetailsView();
       app.deleteView = new app.DeleteView();
       app.loginView = new app.LoginView();
+      app.groupsView = new app.GroupsView();
       app.newNoteView = new app.NewNoteView();
       app.notesCollectionView = new app.NoteCollectionView();
       app.newStatusView = new app.NewStatusView();

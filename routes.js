@@ -108,9 +108,19 @@ exports = module.exports = function(app, passport) {
   app.put('/admin/accounts/:id/', require('./views/admin/accounts/index').update);
   app.put('/admin/accounts/:id/user/', require('./views/admin/accounts/index').linkUser);
   app.delete('/admin/accounts/:id/user/', require('./views/admin/accounts/index').unlinkUser);
+  app.put('/admin/accounts/:id/groups/', require('./views/admin/accounts/index').groups);
   app.post('/admin/accounts/:id/notes/', require('./views/admin/accounts/index').newNote);
   app.post('/admin/accounts/:id/status/', require('./views/admin/accounts/index').newStatus);
   app.delete('/admin/accounts/:id/', require('./views/admin/accounts/index').delete);
+
+  //admin > account groups
+  app.get('/admin/account-groups/', require('./views/admin/account-groups/index').find);
+  app.post('/admin/account-groups/', require('./views/admin/account-groups/index').create);
+  app.get('/admin/account-groups/:id/', require('./views/admin/account-groups/index').read);
+  app.put('/admin/account-groups/:id/', require('./views/admin/account-groups/index').update);
+  app.put('/admin/account-groups/:id/permissions/', require('./views/admin/account-groups/index').permissions);
+  app.delete('/admin/account-groups/:id/', require('./views/admin/account-groups/index').delete);
+
 
   //admin > statuses
   app.get('/admin/statuses/', require('./views/admin/statuses/index').find);

@@ -27,6 +27,7 @@ exports = module.exports = function(app, mongoose) {
       }
     },
     statusLog: [mongoose.modelSchemas.StatusLog],
+    groups: [{ type: String, ref: 'AccountGroup' }],
     notes: [mongoose.modelSchemas.Note],
     userCreated: {
       id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
