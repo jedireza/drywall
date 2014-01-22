@@ -124,7 +124,7 @@ block body
           div.groups
             |<% _.each(groups, function(group) { %>
             div.input-group
-              input.form-control(disabled=true, value!='<%= group.name %>')
+              input.form-control(disabled=true, value!='<%= group %>')
               div.input-group-btn
                 button.btn.btn-danger.btn-delete(type='button')
                   i.fa.fa-trash-o.fa-inverse
