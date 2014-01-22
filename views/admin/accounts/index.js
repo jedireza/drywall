@@ -3,6 +3,17 @@
 exports.find = function(req, res, next){
   var outcome = {};
 
+  var getAccountGroups = function(callback) {
+    req.app.db.models.AccountGroup.find({}, 'name').sort('name').exec(function(err, accountGroups) {
+      if (err) {
+        return callback(err, null);
+      }
+
+      outcome.accountGroups = accountGroups;
+      return callback(null, 'done');
+    });
+  };
+
   var getStatusOptions = function(callback) {
     req.app.db.models.Status.find({ pivot: 'Account' }, 'name').sort('name').exec(function(err, statuses) {
       if (err) {
@@ -61,13 +72,14 @@ exports.find = function(req, res, next){
       res.render('admin/accounts/index', {
         data: {
           results: escape(JSON.stringify(outcome.results)),
+          accountGroups: outcome.accountGroups,
           statuses: outcome.statuses
         }
       });
     }
   };
 
-  require('async').parallel([getStatusOptions, getResults], asyncFinally);
+  require('async').parallel([getAccountGroups,getStatusOptions, getResults], asyncFinally);
 };
 
 exports.read = function(req, res, next){
