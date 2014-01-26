@@ -9,7 +9,7 @@ exports.init = function(req, res){
   }
 };
 
-exports.send = function(req, res){
+exports.send = function(req, res, next){
   var workflow = req.app.utility.workflow(req, res);
 
   workflow.on('validate', function() {
@@ -24,8 +24,16 @@ exports.send = function(req, res){
   workflow.on('generateToken', function() {
     var crypto = require('crypto');
     crypto.randomBytes(21, function(err, buf) {
+      if (err) {
+        return next(err);
+      }
+
       var token = buf.toString('hex');
       req.app.db.models.User.encryptPassword(token, function(err, hash) {
+        if (err) {
+          return next(err);
+        }
+
         workflow.emit('patchUser', token, hash);
       });
     });
