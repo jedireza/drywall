@@ -12,7 +12,7 @@
     "express": "~3.4.4",
     "jade": "~1.1.5",
     "mongoose": "~3.8.1",
-    "passport": "~0.1.17",
+    "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "passport-oauth": "~1.0.0",
     "passport-facebook": "~1.0.2",
