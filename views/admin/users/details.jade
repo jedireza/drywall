@@ -28,27 +28,27 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.isActive ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.isActive ? "has-error" : "" %>')
         label.control-label Is Active:
         select.form-control(name='isActive')
           option(value='yes') yes
           option(value='no') no
-        span.help-block <%= errfor.isActive %>
-      div.control-group(class!='<%= errfor.username ? "has-error" : "" %>')
+        span.help-block <%- errfor.isActive %>
+      div.control-group(class!='<%- errfor.username ? "has-error" : "" %>')
         label.control-label Username:
         input.form-control(type='text', name='username', value!='<%= username %>')
-        span.help-block <%= errfor.username %>
-      div.control-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        span.help-block <%- errfor.username %>
+      div.control-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label.control-label Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
-        span.help-block <%= errfor.email %>
+        span.help-block <%- errfor.email %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -59,9 +59,9 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
-      div.control-group(class!='<%= errfor.newAdminId ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newAdminId ? "has-error" : "" %>')
         label.control-label Admin:
         div.controls
           div.input-group
@@ -75,8 +75,8 @@ block body
             div.input-group-btn
               button.btn.btn-success.btn-admin-link(type='button') Link
             |<% } %>
-          span.help-block <%= errfor.newAdminId %>
-      div.control-group(class!='<%= errfor.newAccountId ? "has-error" : "" %>')
+          span.help-block <%- errfor.newAdminId %>
+      div.control-group(class!='<%- errfor.newAccountId ? "has-error" : "" %>')
         label.control-label Account:
         div.input-group
           |<% if (roles && roles.account) { %>
@@ -89,7 +89,7 @@ block body
           div.input-group-btn
             button.btn.btn-success.btn-account-link(type='button') Link
           |<% } %>
-        span.help-block <%= errfor.newAccountId %>
+        span.help-block <%- errfor.newAccountId %>
 
   script(type='text/template', id='tmpl-password')
     fieldset
@@ -98,21 +98,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
         | A new password has been set.
       |<% } %>
-      div.control-group(class!='<%= errfor.newPassword ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newPassword ? "has-error" : "" %>')
         label.control-label New Password:
         input.form-control(type='password', name='newPassword', value!='<%= newPassword %>')
-        span.help-block <%= errfor.newPassword %>
-      div.control-group(class!='<%= errfor.confirm ? "has-error" : "" %>')
+        span.help-block <%- errfor.newPassword %>
+      div.control-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
         label.control-label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
-        span.help-block <%= errfor.confirm %>
+        span.help-block <%- errfor.confirm %>
       div.control-group
         button.btn.btn-primary.btn-password(type='button') Set Password
 
@@ -123,7 +123,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       div.control-group
         span.help-block

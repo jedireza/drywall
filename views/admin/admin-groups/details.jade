@@ -28,17 +28,17 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.name ? "has-error" : "" %>')
         label.control-label Name:
         input.form-control(type='text', name='name', value!='<%= name %>')
-        span.help-block <%= errfor.name %>
+        span.help-block <%- errfor.name %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -49,21 +49,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.newPermission ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
         label.control-label New Setting:
         div.input-group
           input.form-control(name='newPermission', type='text', placeholder='enter a name')
           div.input-group-btn
             button.btn.btn-success.btn-add(type='button') Add
-        span.help-block <%= errfor.newUsername %>
-      div.control-group(class!='<%= errfor.newPermission ? "has-error" : "" %>')
+        span.help-block <%- errfor.newUsername %>
+      div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
         label.control-label Settings:
         div.permissions
           |<% _.each(permissions, function(permission) { %>
@@ -84,7 +84,7 @@ block body
           span.badge
             | no permissions defined
           |<% } %>
-          span.help-block <%= errfor.settings %>
+          span.help-block <%- errfor.settings %>
       div.control-group
         button.btn.btn-primary.btn-set(type='button') Save Settings
 
@@ -95,7 +95,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       div.control-group
         span.help-block

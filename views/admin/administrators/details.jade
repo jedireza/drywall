@@ -32,25 +32,25 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.first ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.first ? "has-error" : "" %>')
         label.control-label First Name:
         input.form-control(type='text', name='first', value!='<%= first %>')
-        span.help-block <%= errfor.first %>
-      div.control-group(class!='<%= errfor.middle ? "has-error" : "" %>')
+        span.help-block <%- errfor.first %>
+      div.control-group(class!='<%- errfor.middle ? "has-error" : "" %>')
         label.control-label Middle Name:
         input.form-control(type='text', name='middle', value!='<%= middle %>')
-        span.help-block <%= errfor['middle'] %>
-      div.control-group(class!='<%= errfor.last ? "has-error" : "" %>')
+        span.help-block <%- errfor['middle'] %>
+      div.control-group(class!='<%- errfor.last ? "has-error" : "" %>')
         label.control-label Last Name:
         input.form-control(type='text', name='last', value!='<%= last %>')
-        span.help-block <%= errfor.last %>
+        span.help-block <%- errfor.last %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -61,9 +61,9 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
-      div.control-group(class!='<%= errfor.newUsername ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newUsername ? "has-error" : "" %>')
         label.control-label Username:
         div.input-group
           |<% if (name) { %>
@@ -76,7 +76,7 @@ block body
           div.input-group-btn
             button.btn.btn-success.btn-user-link(type='button') Link
           |<% } %>
-        span.help-block <%= errfor.newUsername %>
+        span.help-block <%- errfor.newUsername %>
 
   script(type='text/template', id='tmpl-groups')
     fieldset
@@ -85,14 +85,14 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.newMembership ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newMembership ? "has-error" : "" %>')
         label.control-label Add Membership:
         div.input-group
           select.form-control(name='newMembership')
@@ -100,8 +100,8 @@ block body
               option(value='#{group._id}') #{group.name}
           div.input-group-btn
             button.btn.btn-success.btn-add(type='button') Add
-        span.help-block <%= errfor.newUsername %>
-      div.control-group(class!='<%= errfor.memberships ? "has-error" : "" %>')
+        span.help-block <%- errfor.newUsername %>
+      div.control-group(class!='<%- errfor.memberships ? "has-error" : "" %>')
         label.control-label Memberships:
         div.groups
           |<% _.each(groups, function(group) { %>
@@ -114,7 +114,7 @@ block body
           |<% if (groups.length == 0) { %>
           span.badge no memberships defined
           |<% } %>
-          span.help-block <%= errfor.memberships %>
+          span.help-block <%- errfor.memberships %>
       div.control-group
         button.btn.btn-primary.btn-save(type='button') Save Groups
 
@@ -125,21 +125,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.newPermission ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
         label.control-label New Setting:
         div.input-group
           input.form-control(name='newPermission', type='text', placeholder='enter a name')
           div.input-group-btn
             button.btn.btn-success.btn-add(type='button') Add
-        span.help-block <%= errfor.newUsername %>
-      div.control-group(class!='<%= errfor.settings ? "has-error" : "" %>')
+        span.help-block <%- errfor.newUsername %>
+      div.control-group(class!='<%- errfor.settings ? "has-error" : "" %>')
         label.control-label Settings:
         div.permissions
           |<% _.each(permissions, function(permission) { %>
@@ -159,7 +159,7 @@ block body
           |<% if (permissions.length == 0) { %>
           span.badge no permissions defined
           |<% } %>
-          span.help-block <%= errfor.settings %>
+          span.help-block <%- errfor.settings %>
       div.control-group
         button.btn.btn-primary.btn-set(type='button') Save Settings
 
@@ -170,7 +170,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       div.control-group
         span.help-block

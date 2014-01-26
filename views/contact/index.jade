@@ -28,7 +28,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
@@ -36,18 +36,18 @@ block body
           | We have received your message. Thank you.
         |<% } %>
       |<% if (!success) { %>
-      div.form-group(class!='<%= errfor.name ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.name ? "has-error" : "" %>')
         label.control-label Your Name:
         input.form-control(type='text', name='name', value!='<%= name %>')
-        span.help-block <%= errfor.name %>
-      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        span.help-block <%- errfor.name %>
+      div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label.control-label Your Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
-        span.help-block <%= errfor.email %>
-      div.form-group(class!='<%= errfor.message ? "has-error" : "" %>')
+        span.help-block <%- errfor.email %>
+      div.form-group(class!='<%- errfor.message ? "has-error" : "" %>')
         label.control-label Message:
         textarea.form-control(name='message', rows='5') <%= message %>
-        span.help-block <%= errfor.message %>
+        span.help-block <%- errfor.message %>
       div.form-group
         button.btn.btn-primary.btn-contact(type='button') Send Message
       |<% } %>

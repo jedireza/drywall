@@ -58,37 +58,37 @@ block body
       div.alerts
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.first ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.first ? "has-error" : "" %>')
         label.control-label First Name:
         input.form-control(type='text', name='first', value!='<%- first %>')
-        span.help-block <%= errfor.first %>
-      div.control-group(class!='<%= errfor.middle ? "has-error" : "" %>')
+        span.help-block <%- errfor.first %>
+      div.control-group(class!='<%- errfor.middle ? "has-error" : "" %>')
         label.control-label Middle Name:
         input.form-control(type='text', name='middle', value!='<%- middle %>')
-        span.help-block <%= errfor.middle %>
-      div.control-group(class!='<%= errfor.last ? "has-error" : "" %>')
+        span.help-block <%- errfor.middle %>
+      div.control-group(class!='<%- errfor.last ? "has-error" : "" %>')
         label.control-label Last Name:
         input.form-control(type='text', name='last', value!='<%- last %>')
-        span.help-block <%= errfor['last'] %>
-      div.control-group(class!='<%= errfor.company ? "has-error" : "" %>')
+        span.help-block <%- errfor['last'] %>
+      div.control-group(class!='<%- errfor.company ? "has-error" : "" %>')
         label.control-label Company Name:
         input.form-control(type='text', name='company', value!='<%- company %>')
-        span.help-block <%= errfor.company %>
-      div.control-group(class!='<%= errfor.phone ? "has-error" : "" %>')
+        span.help-block <%- errfor.company %>
+      div.control-group(class!='<%- errfor.phone ? "has-error" : "" %>')
         label.control-label Phone:
         input.form-control(type='text', name='phone', value!='<%- phone %>')
-        span.help-block <%= errfor.phone %>
-      div.control-group(class!='<%= errfor.zip ? "has-error" : "" %>')
+        span.help-block <%- errfor.phone %>
+      div.control-group(class!='<%- errfor.zip ? "has-error" : "" %>')
         label.control-label Zip:
         input.form-control(type='text', name='zip', value!='<%- zip %>')
-        span.help-block <%= errfor.zip %>
+        span.help-block <%- errfor.zip %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -99,21 +99,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.username ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.username ? "has-error" : "" %>')
         label.control-label Username:
         input.form-control(type='text', name='username', value!='<%= username %>')
-        span.help-block <%= errfor.username %>
-      div.control-group(class!='<%= errfor.email ? "has-error" : "" %>')
+        span.help-block <%- errfor.username %>
+      div.control-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label.control-label Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
-        span.help-block <%= errfor.email %>
+        span.help-block <%- errfor.email %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -124,21 +124,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       |<% if (success) { %>
       div.alert.alert-info.alert-dismissable
         button.close(type='button', data-dismiss='alert') &times;
         | A new password has been set.
       |<% } %>
-      div.control-group(class!='<%= errfor.newPassword ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.newPassword ? "has-error" : "" %>')
         label.control-label New Password:
         input.form-control(type='password', name='newPassword', value!='<%= newPassword %>')
-        span.help-block <%= errfor.newPassword %>
-      div.control-group(class!='<%= errfor.confirm ? "has-error" : "" %>')
+        span.help-block <%- errfor.newPassword %>
+      div.control-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
         label.control-label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
-        span.help-block <%= errfor.confirm %>
+        span.help-block <%- errfor.confirm %>
       div.control-group
         button.btn.btn-primary.btn-password(type='button') Set Password
 

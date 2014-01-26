@@ -19,7 +19,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
@@ -32,14 +32,14 @@ block body
           | You do not have a valid reset request.
         |<% } %>
       |<% if (!success && id != undefined) { %>
-      div.form-group(class!='<%= errfor.password ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.password ? "has-error" : "" %>')
         label.control-label New Password:
         input.form-control(type='password', name='password', value!='<%= password %>')
-        span.help-block <%= errfor.password %>
-      div.form-group(class!='<%= errfor.confirm ? "has-error" : "" %>')
+        span.help-block <%- errfor.password %>
+      div.form-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
         label.control-label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
-        span.help-block <%= errfor.confirm %>
+        span.help-block <%- errfor.confirm %>
       |<% } %>
       div.form-group
         |<% if (!success && id != undefined) { %>

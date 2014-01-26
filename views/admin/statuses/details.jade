@@ -26,21 +26,21 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%= errfor.pivot ? "has-error" : "" %>')
+      div.control-group(class!='<%- errfor.pivot ? "has-error" : "" %>')
         label.control-label Pivot:
         input.form-control(type='text', name='pivot', value!='<%- pivot %>')
-        span.help-block <%= errfor.pivot %>
-      div.control-group(class!='<%= errfor.name ? "has-error" : "" %>')
+        span.help-block <%- errfor.pivot %>
+      div.control-group(class!='<%- errfor.name ? "has-error" : "" %>')
         label.control-label Name:
         input.form-control(type='text', name='name', value!='<%- name %>')
-        span.help-block <%= errfor.name %>
+        span.help-block <%- errfor.name %>
       div.control-group
         button.btn.btn-primary.btn-update(type='button') Update
 
@@ -51,7 +51,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger.alert-dismissable
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
       div.control-group
         span.help-block

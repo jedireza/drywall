@@ -19,7 +19,7 @@ block body
         |<% _.each(errors, function(err) { %>
         div.alert.alert-danger
           button.close(type='button', data-dismiss='alert') &times;
-          |<%= err %>
+          |<%- err %>
         |<% }); %>
         |<% if (success) { %>
         div.alert.alert-info
@@ -27,10 +27,10 @@ block body
           | We sent password reset instructions to your email address.
         |<% } %>
       |<% if (!success) { %>
-      div.form-group(class!='<%= errfor.email ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label.control-label Enter Your Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
-        span.help-block <%= errfor.email %>
+        span.help-block <%- errfor.email %>
       |<% } %>
       div.form-group
         |<% if (!success) { %>
