@@ -40,8 +40,23 @@ exports = module.exports = function(app, mongoose) {
 
     return returnUrl;
   };
-  userSchema.statics.encryptPassword = function(password) {
-    return require('crypto').createHmac('sha512', app.get('crypto-key')).update(password).digest('hex');
+  userSchema.statics.encryptPassword = function(password, done) {
+    var bcrypt = require('bcrypt');
+    bcrypt.genSalt(10, function(err, salt) {
+      if (err) {
+        return done(err);
+      }
+
+      bcrypt.hash(password, salt, function(err, hash) {
+        done(err, hash);
+      });
+    });
+  };
+  userSchema.statics.validatePassword = function(password, hash, done) {
+    var bcrypt = require('bcrypt');
+    bcrypt.compare(password, hash, function(err, res) {
+      done(err, res);
+    });
   };
   userSchema.plugin(require('./plugins/pagedFind'));
   userSchema.index({ username: 1 }, { unique: true });

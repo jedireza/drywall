@@ -33,12 +33,14 @@ exports.set = function(req, res){
   });
 
   workflow.on('patchUser', function() {
-    var encryptedPassword = req.app.db.models.User.encryptPassword(req.body.password);
+    req.app.db.models.User.encryptPassword(req.body.password, function(err, hash) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
 
-    req.app.db.models.User.findOneAndUpdate(
-      { resetPasswordToken: req.params.token },
-      { password: encryptedPassword, resetPasswordToken: '' },
-      function(err, user) {
+      var conditions = { resetPasswordToken: req.params.token };
+      var fieldsToSet = { password: hash, resetPasswordToken: '' };
+      req.app.db.models.User.findOneAndUpdate(conditions, fieldsToSet, function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
         }
@@ -49,8 +51,8 @@ exports.set = function(req, res){
         }
 
         workflow.emit('response');
-      }
-    );
+      });
+    });
   });
 
   workflow.emit('validate');

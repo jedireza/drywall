@@ -74,23 +74,29 @@ exports.signup = function(req, res){
   });
 
   workflow.on('createUser', function() {
-    var fieldsToSet = {
-      isActive: 'yes',
-      username: req.body.username,
-      email: req.body.email.toLowerCase(),
-      password: req.app.db.models.User.encryptPassword(req.body.password),
-      search: [
-        req.body.username,
-        req.body.email
-      ]
-    };
-    req.app.db.models.User.create(fieldsToSet, function(err, user) {
+    req.app.db.models.User.encryptPassword(req.body.password, function(err, hash) {
       if (err) {
         return workflow.emit('exception', err);
       }
 
-      workflow.user = user;
-      workflow.emit('createAccount');
+      var fieldsToSet = {
+        isActive: 'yes',
+        username: req.body.username,
+        email: req.body.email.toLowerCase(),
+        password: hash, 
+        search: [
+          req.body.username,
+          req.body.email
+        ]
+      };
+      req.app.db.models.User.create(fieldsToSet, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+  
+        workflow.user = user;
+        workflow.emit('createAccount');
+      });
     });
   });
 
