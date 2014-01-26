@@ -11,11 +11,12 @@
       errors: [],
       errfor: {},
       id: undefined,
+      email: undefined,
       password: '',
       confirm: ''
     },
     url: function() {
-      return '/login/reset/'+ this.id +'/';
+      return '/login/reset/'+ this.get('email') +'/'+ this.id +'/';
     }
   });
 
@@ -57,10 +58,10 @@
   app.Router = Backbone.Router.extend({
     routes: {
       'login/reset/': 'start',
-      'login/reset/:token/': 'start'
+      'login/reset/:email/:token/': 'start'
     },
-    start: function(token) {
-      app.resetView = new app.ResetView({ model: new app.Reset({ id: token }) });
+    start: function(email, token) {
+      app.resetView = new app.ResetView({ model: new app.Reset({ id: token, email: email }) });
     }
   });
 

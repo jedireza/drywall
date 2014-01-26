@@ -12,6 +12,7 @@ exports = module.exports = function(app, mongoose) {
     isActive: String,
     timeCreated: { type: Date, default: Date.now },
     resetPasswordToken: String,
+    resetPasswordExpires: Date,
     twitter: {},
     github: {},
     facebook: {},
@@ -62,7 +63,6 @@ exports = module.exports = function(app, mongoose) {
   userSchema.index({ username: 1 }, { unique: true });
   userSchema.index({ email: 1 }, { unique: true });
   userSchema.index({ timeCreated: 1 });
-  userSchema.index({ resetPasswordToken: 1 });
   userSchema.index({ 'twitter.id': 1 });
   userSchema.index({ 'github.id': 1 });
   userSchema.index({ 'facebook.id': 1 });

@@ -54,8 +54,8 @@ exports = module.exports = function(app, passport) {
   app.get('/login/forgot/', require('./views/login/forgot/index').init);
   app.post('/login/forgot/', require('./views/login/forgot/index').send);
   app.get('/login/reset/', require('./views/login/reset/index').init);
-  app.get('/login/reset/:token/', require('./views/login/reset/index').init);
-  app.put('/login/reset/:token/', require('./views/login/reset/index').set);
+  app.get('/login/reset/:email/:token/', require('./views/login/reset/index').init);
+  app.put('/login/reset/:email/:token/', require('./views/login/reset/index').set);
   app.get('/logout/', require('./views/logout/index').init);
 
   //social login

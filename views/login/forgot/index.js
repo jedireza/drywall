@@ -18,13 +18,26 @@ exports.send = function(req, res){
       return workflow.emit('response');
     }
 
-    workflow.emit('patchUser');
+    workflow.emit('generateToken');
   });
 
-  workflow.on('patchUser', function() {
-    var token = require('crypto').createHash('md5').update(Math.random().toString()).digest('hex');
+  workflow.on('generateToken', function() {
+    var crypto = require('crypto');
+    crypto.randomBytes(21, function(err, buf) {
+      var token = buf.toString('hex');
+      req.app.db.models.User.encryptPassword(token, function(err, hash) {
+        workflow.emit('patchUser', token, hash);
+      });
+    });
+  });
 
-    req.app.db.models.User.findOneAndUpdate({ email: req.body.email.toLowerCase() }, { resetPasswordToken: token }, function(err, user) {
+  workflow.on('patchUser', function(token, hash) {
+    var conditions = { email: req.body.email.toLowerCase() };
+    var fieldsToSet = {
+      resetPasswordToken: hash,
+      resetPasswordExpires: Date.now() + 10000000
+    };
+    req.app.db.models.User.findOneAndUpdate(conditions, fieldsToSet, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -47,7 +60,7 @@ exports.send = function(req, res){
       htmlPath: 'login/forgot/email-html',
       locals: {
         username: user.username,
-        resetLink: 'http://'+ req.headers.host +'/login/reset/'+ token +'/',
+        resetLink: req.protocol +'://'+ req.headers.host +'/login/reset/'+ user.email +'/'+ token +'/',
         projectName: req.app.get('project-name')
       },
       success: function(message) {
