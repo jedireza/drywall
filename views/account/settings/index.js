@@ -202,8 +202,9 @@ exports.update = function(req, res, next){
         req.body.zip
       ]
     };
+    var options = { select: 'name company phone zip' };
 
-    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
+    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -280,8 +281,9 @@ exports.identity = function(req, res, next){
         req.body.email
       ]
     };
+    var options = { select: 'username email twitter.id github.id facebook.id' };
 
-    req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+    req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -386,7 +388,6 @@ exports.password = function(req, res, next){
             return workflow.emit('exception', err);
           }
 
-          workflow.outcome.user = user;
           workflow.outcome.newPassword = '';
           workflow.outcome.confirm = '';
           workflow.emit('response');
