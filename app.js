@@ -7,7 +7,8 @@ var config = require('./config'),
     http = require('http'),
     path = require('path'),
     passport = require('passport'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    helmet = require('helmet');
 
 //create express app
 var app = express();
@@ -72,6 +73,7 @@ app.configure(function(){
   }));
   app.use(passport.initialize());
   app.use(passport.session());
+  helmet.defaults(app);
   app.use(app.router);
 
   //error handler
