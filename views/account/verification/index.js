@@ -25,7 +25,9 @@ exports.init = function(req, res, next){
     return res.redirect(req.user.defaultReturnUrl());
   }
 
-  var renderPage = function() {
+  var workflow = req.app.utility.workflow(req, res);
+
+  workflow.on('renderPage', function() {
     req.app.db.models.User.findById(req.user.id, 'email').exec(function(err, user) {
       if (err) {
         return next(err);
@@ -37,13 +39,36 @@ exports.init = function(req, res, next){
         }
       });
     });
-  };
+  });
 
-  if (req.user.roles.account.verificationToken === '') {
-    var fieldsToSet = {
-      verificationToken: require('crypto').createHash('md5').update(Math.random().toString()).digest('hex')
-    };
+  workflow.on('generateTokenOrRender', function() {
+    if (req.user.roles.account.verificationToken !== '') {
+      return workflow.emit('renderPage');
+    }
 
+    workflow.emit('generateToken');
+  });
+
+  workflow.on('generateToken', function() {
+    var crypto = require('crypto');
+    crypto.randomBytes(21, function(err, buf) {
+      if (err) {
+        return next(err);
+      }
+
+      var token = buf.toString('hex');
+      req.app.db.models.User.encryptPassword(token, function(err, hash) {
+        if (err) {
+          return next(err);
+        }
+
+        workflow.emit('patchAccount', token, hash);
+      });
+    });
+  });
+
+  workflow.on('patchAccount', function(token, hash) {
+    var fieldsToSet = { verificationToken: hash };
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
       if (err) {
         return next(err);
@@ -51,22 +76,21 @@ exports.init = function(req, res, next){
 
       sendVerificationEmail(req, res, {
         email: req.user.email,
-        verificationToken: account.verificationToken,
+        verificationToken: token,
         onSuccess: function() {
-          return renderPage();
+          return workflow.emit('renderPage');
         },
         onError: function(err) {
           return next(err);
         }
       });
     });
-  }
-  else {
-    renderPage();
-  }
+  });
+
+  workflow.emit('generateTokenOrRender');
 };
 
-exports.resendVerification = function(req, res){
+exports.resendVerification = function(req, res, next){
   if (req.user.roles.account.isVerified === 'yes') {
     return res.redirect(req.user.defaultReturnUrl());
   }
@@ -104,25 +128,37 @@ exports.resendVerification = function(req, res){
   });
 
   workflow.on('patchUser', function() {
-    var fieldsToSet = {
-      email: req.body.email.toLowerCase()
-    };
-
+    var fieldsToSet = { email: req.body.email.toLowerCase() };
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
 
       workflow.user = user;
-      workflow.emit('patchAccount');
+      workflow.emit('generateToken');
     });
   });
 
-  workflow.on('patchAccount', function() {
-    var fieldsToSet = {
-      verificationToken: require('crypto').createHash('md5').update(Math.random().toString()).digest('hex')
-    };
+  workflow.on('generateToken', function() {
+    var crypto = require('crypto');
+    crypto.randomBytes(21, function(err, buf) {
+      if (err) {
+        return next(err);
+      }
 
+      var token = buf.toString('hex');
+      req.app.db.models.User.encryptPassword(token, function(err, hash) {
+        if (err) {
+          return next(err);
+        }
+
+        workflow.emit('patchAccount', token, hash);
+      });
+    });
+  });
+
+  workflow.on('patchAccount', function(token, hash) {
+    var fieldsToSet = { verificationToken: hash };
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
@@ -130,7 +166,7 @@ exports.resendVerification = function(req, res){
 
       sendVerificationEmail(req, res, {
         email: workflow.user.email,
-        verificationToken: account.verificationToken,
+        verificationToken: token,
         onSuccess: function() {
           workflow.emit('response');
         },
@@ -146,21 +182,18 @@ exports.resendVerification = function(req, res){
 };
 
 exports.verify = function(req, res, next){
-  var conditions = {
-    _id: req.user.roles.account.id,
-    verificationToken: req.params.token
-  };
-
-  var fieldsToSet = {
-    isVerified: 'yes',
-    verificationToken: ''
-  };
-
-  req.app.db.models.Account.findOneAndUpdate(conditions, fieldsToSet, function(err, account) {
-    if (err) {
-      return next(err);
+  req.app.db.models.User.validatePassword(req.params.token, req.user.roles.account.verificationToken, function(err, isValid) {
+    if (!isValid) {
+      return res.redirect(req.user.defaultReturnUrl());
     }
 
-    return res.redirect(req.user.defaultReturnUrl());
+    var fieldsToSet = { isVerified: 'yes', verificationToken: '' };
+    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account._id, fieldsToSet, function(err, account) {
+      if (err) {
+        return next(err);
+      }
+
+      return res.redirect(req.user.defaultReturnUrl());
+    });
   });
 };
