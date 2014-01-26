@@ -5,7 +5,8 @@ function ensureAuthenticated(req, res, next) {
     return next();
   }
   res.set('X-Auth-Required', 'true');
-  res.redirect('/login/?returnUrl='+ encodeURIComponent(req.originalUrl));
+  req.session.returnUrl = req.originalUrl;
+  res.redirect('/login/');
 }
 
 function ensureAdmin(req, res, next) {

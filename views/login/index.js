@@ -1,12 +1,20 @@
 'use strict';
 
+var getReturnUrl = function(req) {
+  var returnUrl = req.user.defaultReturnUrl();
+  if (req.session.returnUrl) {
+    returnUrl = req.session.returnUrl;
+    delete req.session.returnUrl;
+  }
+  return returnUrl;
+};
+
 exports.init = function(req, res){
   if (req.isAuthenticated()) {
-    res.redirect(req.user.defaultReturnUrl());
+    res.redirect(getReturnUrl(req));
   }
   else {
     res.render('login/index', {
-      returnUrl: req.query.returnUrl || '/',
       oauthMessage: '',
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
@@ -50,7 +58,6 @@ exports.login = function(req, res){
             return workflow.emit('exception', err);
           }
 
-          workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           workflow.emit('response');
         });
       }
@@ -75,7 +82,6 @@ exports.loginTwitter = function(req, res, next){
 
       if (!user) {
         res.render('login/index', {
-          returnUrl: req.query.returnUrl || '/',
           oauthMessage: 'No users found linked to your Twitter account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
@@ -88,7 +94,7 @@ exports.loginTwitter = function(req, res, next){
             return next(err);
           }
 
-          res.redirect(user.defaultReturnUrl());
+          res.redirect(getReturnUrl(req));
         });
       }
     });
@@ -108,7 +114,6 @@ exports.loginGitHub = function(req, res, next){
 
       if (!user) {
         res.render('login/index', {
-          returnUrl: req.query.returnUrl || '/',
           oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
@@ -121,7 +126,7 @@ exports.loginGitHub = function(req, res, next){
             return next(err);
           }
 
-          res.redirect(user.defaultReturnUrl());
+          res.redirect(getReturnUrl(req));
         });
       }
     });
@@ -141,7 +146,6 @@ exports.loginFacebook = function(req, res, next){
 
       if (!user) {
         res.render('login/index', {
-          returnUrl: req.query.returnUrl || '/',
           oauthMessage: 'No users found linked to your Facebook account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
@@ -154,7 +158,7 @@ exports.loginFacebook = function(req, res, next){
             return next(err);
           }
 
-          res.redirect(user.defaultReturnUrl());
+          res.redirect(getReturnUrl(req));
         });
       }
     });

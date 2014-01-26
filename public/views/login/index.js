@@ -50,11 +50,7 @@
       },{
         success: function(model, response) {
           if (response.success) {
-            var returnUrl = app.loginView.$el.find('[name="returnUrl"]').val();
-            if (returnUrl === '/') {
-              returnUrl = response.defaultReturnUrl;
-            }
-            location.href = returnUrl;
+            location.href = '/login/';
           }
           else {
             model.set(response);
