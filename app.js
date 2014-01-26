@@ -61,8 +61,9 @@ app.configure(function(){
   app.set('facebook-oauth-secret', config.oauth.facebook.secret);
 
   //middleware
-  app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.logger('dev'));
+  app.use(express.compress());
+  app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
