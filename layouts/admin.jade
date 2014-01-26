@@ -59,9 +59,9 @@ html
         ul#_search-results-rows.dropdown-menu
     script(type='text/template', id='tmpl-_search-results-row')
       |<% if (type && type == 'header') { %>
-      |<%= name %>
+      |<%- name %>
       |<% } else { %>
-      a(href!='<%= url %>') <%= name %>
+      a(href!='<%= url %>') <%- name %>
       |<% } %>
     script(type='text/template', id='tmpl-_search-results-empty-row')
       li.dropdown-header no docs matched
