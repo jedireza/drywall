@@ -24,7 +24,7 @@ block body
         |<% if (success) { %>
         div.alert.alert-info
           button.close(type='button', data-dismiss='alert') &times;
-          | We sent password reset instructions to your email address.
+          | If an account matched that address, an email will be sent with instructions.
         |<% } %>
       |<% if (!success) { %>
       div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')

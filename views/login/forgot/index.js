@@ -51,7 +51,6 @@ exports.send = function(req, res, next){
       }
 
       if (!user) {
-        workflow.outcome.errors.push('Email address not found.');
         return workflow.emit('response');
       }
 
