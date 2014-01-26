@@ -80,7 +80,7 @@ Now just use the reset password feature to set a password.
  - `http://localhost:3000/login/forgot/`
  - Submit your email address and wait a second.
  - Go check your email and get the reset link.
- - `http://localhost:3000/login/reset/:token/`
+ - `http://localhost:3000/login/reset/:email/:token/`
  - Set a new password.
 
 Login. Customize. Enjoy.
