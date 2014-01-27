@@ -24,9 +24,14 @@ html
             li: a(href='/signup/') Sign Up
             li: a(href='/contact/') Contact
           ul.nav.navbar-nav.navbar-right
-            li: a(href='/login/')
-              i.fa.fa-user
-              |  Sign In
+            if user && user.username
+              li: a(href='#{user.defaultReturnUrl}')
+                i.fa.fa-user
+                |  #{user.username}
+            else
+              li: a(href='/login/')
+                i.fa.fa-user
+                |  Sign In
 
     div.page
       div.container

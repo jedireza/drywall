@@ -75,6 +75,16 @@ app.configure(function(){
   app.use(passport.initialize());
   app.use(passport.session());
   helmet.defaults(app);
+
+  //response locals
+  app.use(function(req, res, next) {
+    res.locals.user = {};
+    res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
+    res.locals.user.username = req.user && req.user.username;
+    next();
+  });
+
+  //mount the routes
   app.use(app.router);
 
   //error handler
