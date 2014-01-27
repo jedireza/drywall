@@ -8,6 +8,11 @@ exports.companyName = 'Acme, Inc.';
 exports.projectName = 'Drywall';
 exports.systemEmail = 'your@email.addy';
 exports.cryptoKey = 'k3yb0ardc4t';
+exports.loginAttempts = {
+  forIp: 50,
+  forIpAndUser: 7,
+  logExpiration: '20m'
+};
 exports.requireAccountVerification = false;
 exports.smtp = {
   from: {
