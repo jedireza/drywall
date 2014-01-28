@@ -68,7 +68,8 @@ app.configure(function(){
   app.use(express.compress());
   app.use(express.favicon(__dirname + '/public/favicon.ico'));
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.bodyParser());
+  app.use(express.urlencoded());
+  app.use(express.json());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({
