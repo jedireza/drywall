@@ -102,10 +102,10 @@ module.exports = function(grunt) {
             'public/vendor/bootstrap/js/collapse.js',
             'public/vendor/bootstrap/js/dropdown.js',
             'public/vendor/bootstrap/js/modal.js',
-            'public/vendor/bootstrap/js/tooltip.js',
             'public/vendor/bootstrap/js/popover.js',
             'public/vendor/bootstrap/js/scrollspy.js',
             'public/vendor/bootstrap/js/tab.js',
+            'public/vendor/bootstrap/js/tooltip.js',
             'public/vendor/bootstrap/js/transition.js',
             'public/vendor/momentjs/moment.js',
             'public/layouts/core.js'
