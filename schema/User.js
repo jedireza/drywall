@@ -42,19 +42,19 @@ exports = module.exports = function(app, mongoose) {
     return returnUrl;
   };
   userSchema.statics.encryptPassword = function(password, done) {
-    var bcrypt = require('bcrypt');
+    var bcrypt = require('bcrypt-nodejs');
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
         return done(err);
       }
 
-      bcrypt.hash(password, salt, function(err, hash) {
+      bcrypt.hash(password, salt, null, function(err, hash) {
         done(err, hash);
       });
     });
   };
   userSchema.statics.validatePassword = function(password, hash, done) {
-    var bcrypt = require('bcrypt');
+    var bcrypt = require('bcrypt-nodejs');
     bcrypt.compare(password, hash, function(err, res) {
       done(err, res);
     });
