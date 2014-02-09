@@ -7,4 +7,5 @@ block body
   h1 Server Error
   p.lead
     | Sorry something went wrong.
-    div.clearfix
+  if err.stack
+    pre #{err.stack}
