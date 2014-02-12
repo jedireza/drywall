@@ -36,16 +36,12 @@ var renderSettings = function(req, res, next, oauthMessage) {
         user: escape(JSON.stringify(outcome.user))
       },
       oauthMessage: oauthMessage,
-
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthTwitterActive: outcome.user.twitter ? !!outcome.user.twitter.id : false,
-
       oauthGitHub: !!req.app.get('github-oauth-key'),
       oauthGitHubActive: outcome.user.github ? !!outcome.user.github.id : false,
-
       oauthGoogle: !!req.app.get('google-oauth-key'),
       oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
-
       oauthFacebook: !!req.app.get('facebook-oauth-key'),
       oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false
 
@@ -246,7 +242,7 @@ exports.update = function(req, res, next){
 
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
-        return workflow.emit('exception', 'Account.findByIdAndUpdate ' + err);
+        return workflow.emit('exception', err);
       }
 
       workflow.outcome.account = account;
@@ -300,7 +296,7 @@ exports.identity = function(req, res, next){
   workflow.on('duplicateEmailCheck', function() {
     req.app.db.models.User.findOne({ email: req.body.email.toLowerCase(), _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
-        return workflow.emit('exception', 'duplicateEmailCheck ' + err);
+        return workflow.emit('exception', err);
       }
 
       if (user) {
@@ -325,7 +321,7 @@ exports.identity = function(req, res, next){
 
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {
-        return workflow.emit('exception', 'User.findByIdAndUpdate ' + err);
+        return workflow.emit('exception', err);
       }
 
       workflow.emit('patchAdmin', user);
@@ -342,7 +338,7 @@ exports.identity = function(req, res, next){
       };
       req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, function(err, admin) {
         if (err) {
-          return workflow.emit('exception', 'Admin.findByIdAndUpdate ' + err);
+          return workflow.emit('exception', err);
         }
 
         workflow.emit('patchAccount', user);
@@ -363,7 +359,7 @@ exports.identity = function(req, res, next){
       };
       req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, function(err, account) {
         if (err) {
-          return workflow.emit('exception', 'Account.findByIdAndUpdate ' + err);
+          return workflow.emit('exception', err);
         }
 
         workflow.emit('populateRoles', user);
@@ -377,7 +373,7 @@ exports.identity = function(req, res, next){
   workflow.on('populateRoles', function(user) {
     user.populate('roles.admin roles.account', 'name.full', function(err, populatedUser) {
       if (err) {
-        return workflow.emit('exception', 'populateRoles ' + err);
+        return workflow.emit('exception', err);
       }
 
       workflow.outcome.user = populatedUser;
@@ -414,7 +410,7 @@ exports.password = function(req, res, next){
   workflow.on('patchUser', function() {
     req.app.db.models.User.encryptPassword(req.body.newPassword, function(err, hash) {
       if (err) {
-        return workflow.emit('exception', 'patchUser ' + err);
+        return workflow.emit('exception', err);
       }
 
       var fieldsToSet = { password: hash };
@@ -425,7 +421,7 @@ exports.password = function(req, res, next){
 
         user.populate('roles.admin roles.account', 'name.full', function(err, user) {
           if (err) {
-            return workflow.emit('exception', 'patchUser user.populate ' + err);
+            return workflow.emit('exception', err);
           }
 
           workflow.outcome.newPassword = '';
