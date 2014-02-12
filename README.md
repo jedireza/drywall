@@ -88,9 +88,7 @@ Login. Customize. Enjoy.
 Obtaining API Keys
 ------------------
 
-If you want to use any of the APIs or OAuth authentication methods, you will need to obtain appropriate credentials: Client ID, Client Secret, API Key, or Username & Password. You will need to go through each provider to generate new credentials.
-
-:pushpin: You could support all 4 authentication methods by setting up OAuth keys, but you don't have to. If you would only like to have **Facebook sign-in** and **Local sign-in** with email and password, in **config.js** just add the credentials you need - i.e. in this case Facebook credentials.
+:pushpin: If you want to use any of the APIs or OAuth authentication methods, you will need to obtain appropriate credentials.  You could support all 4 authentication methods by setting up the appropriate OAuth keys in `config.js` but you don't have to. If you would only like to have **Facebook sign-in** and **Local sign-in** with email and password, then just add Facebook credentials.
 
 <img src="http://images.google.com/intl/en_ALL/images/srpr/logo6w.png" width="200">
 - Visit [Google Cloud Console](https://cloud.google.com/console/project)
@@ -100,7 +98,10 @@ If you want to use any of the APIs or OAuth authentication methods, you will nee
 - Click **CREATE NEW CLIENT ID** button
  - **Application Type**: Web Application
  - **Authorized Javascript origins**: http://localhost:3000
- - **Authorized redirect URI**: http://localhost:3000/auth/google/callback
+ - **Authorized redirect URIs**: 
+     - http://localhost:3000/signup/google/callback/
+     - http://localhost:3000/login/google/callback/
+     - http://localhost:3000/account/settings/google/callback/
 - Copy and paste *Client ID* and *Client secret* keys into `config/secrets.js`
 
 :exclamation: **Note**: When you ready to deploy to production don't forget to add your new url to *Authorized Javascript origins* and *Authorized redirect URI*, e.g. `http://my-awesome-app.herokuapp.com` and `http://my-awesome-app.herokuapp.com/auth/google/callback` respectively. The same goes for other providers.
