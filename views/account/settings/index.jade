@@ -17,7 +17,7 @@ block body
       div#identity
       div#password
     div.col-sm-3
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthGoogle ||oauthFacebook
         legend Social Connections
         if oauthMessage
           div.alerts
@@ -42,6 +42,15 @@ block body
             a.btn.btn-block.btn-default(href='/account/settings/github/')
               i.fa.fa-github.fa-lg
               |  Connect GitHub
+        if oauthGoogle
+          if oauthGoogleActive
+            a.btn.btn-block.btn-danger(href='/account/settings/google/disconnect/')
+              i.fa.fa-google-plus.fa-lg
+              |  Disconnect Google
+          else
+            a.btn.btn-block.btn-default(href='/account/settings/google/')
+              i.fa.fa-google-plus.fa-lg
+              |  Connect Google
         if oauthFacebook
           if oauthFacebookActive
             a.btn.btn-block.btn-danger(href='/account/settings/facebook/disconnect/')

@@ -15,7 +15,7 @@ block body
       div.page-header
         h1 Sign Up
       div#signup
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthGoogle ||oauthFacebook
         hr
         p Or sign up using...
         if oauthMessage
@@ -28,12 +28,16 @@ block body
         div.btn-group.btn-group-justified
           if oauthTwitter
             a.btn.btn-info(href='/signup/twitter/')
-              i.fa.fa-twitter.fa-lg
+              i.fa.fa-twitter-square.fa-lg
               |  Twitter
           if oauthGitHub
             a.btn.btn-info(href='/signup/github/')
-              i.fa.fa-github.fa-lg
-              |  GitHub
+              i.fa.fa-github-square.fa-lg
+              |  github
+          if oauthGoogle
+            a.btn.btn-info(href='/signup/google/')
+              i.fa.fa-google-plus-square.fa-lg
+              |  Google
           if oauthFacebook
             a.btn.btn-info(href='/signup/facebook/')
               i.fa.fa-facebook-square.fa-lg

@@ -18,6 +18,7 @@ exports.init = function(req, res){
       oauthMessage: '',
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
+      oauthGoogle: !!req.app.get('google-oauth-key'),
       oauthFacebook: !!req.app.get('facebook-oauth-key')
     });
   }
@@ -130,6 +131,7 @@ exports.loginTwitter = function(req, res, next){
           oauthMessage: 'No users found linked to your Twitter account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
@@ -162,6 +164,40 @@ exports.loginGitHub = function(req, res, next){
           oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+      else {
+        req.login(user, function(err) {
+          if (err) {
+            return next(err);
+          }
+
+          res.redirect(getReturnUrl(req));
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+exports.loginGoogle = function(req, res, next){
+  req._passport.instance.authenticate('google', { callbackURL: '/login/google/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/login/');
+    }
+
+    req.app.db.models.User.findOne({ 'google.id': info.profile._json.id }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        res.render('login/index', {
+          oauthMessage: 'No users found linked to your Google account. You may need to create an account first.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
@@ -194,6 +230,7 @@ exports.loginFacebook = function(req, res, next){
           oauthMessage: 'No users found linked to your Facebook account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
