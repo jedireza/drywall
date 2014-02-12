@@ -12,7 +12,7 @@ block body
       div.page-header
         h1 Sign In
       div#login
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthGoogle ||oauthFacebook
         hr
         p Or sign in using...
         if oauthMessage
@@ -32,6 +32,10 @@ block body
               a.btn.btn-info(href='/login/github/')
                 i.fa.fa-github.fa-lg
                 |  GitHub
+            if oauthGoogle
+              a.btn.btn-info(href='/login/google/')
+                i.fa.fa-google-plus.fa-lg
+                |  Google
             if oauthFacebook
               a.btn.btn-info(href='/login/facebook/')
                 i.fa.fa-facebook-square.fa-lg

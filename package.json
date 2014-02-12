@@ -15,6 +15,7 @@
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "passport-oauth": "~1.0.0",
+    "passport-google-oauth": "~0.1.5",
     "passport-facebook": "~1.0.2",
     "passport-github": "~0.1.5",
     "passport-twitter": "~1.0.2",
@@ -31,6 +32,6 @@
     "grunt-concurrent": "~0.4.1",
     "grunt-nodemon": "~0.2.0",
     "grunt-newer": "~0.6.0",
-    "grunt-contrib-copy": "~0.5.0"
+    "grunt-contrib-copy": "~0.5.0",
   }
 }
