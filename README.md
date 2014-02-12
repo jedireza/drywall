@@ -88,6 +88,8 @@ Login. Customize. Enjoy.
 Obtaining API Keys
 ------------------
 
+If you want to use any of the APIs or OAuth authentication methods, you will need to obtain appropriate credentials: Client ID, Client Secret, API Key, or Username & Password. You will need to go through each provider to generate new credentials.
+
 :pushpin: You could support all 4 authentication methods by setting up OAuth keys, but you don't have to. If you would only like to have **Facebook sign-in** and **Local sign-in** with email and password, in **config.js** just add the credentials you need - i.e. in this case Facebook credentials.
 
 <img src="http://images.google.com/intl/en_ALL/images/srpr/logo6w.png" width="200">
@@ -104,6 +106,46 @@ Obtaining API Keys
 :exclamation: **Note**: When you ready to deploy to production don't forget to add your new url to *Authorized Javascript origins* and *Authorized redirect URI*, e.g. `http://my-awesome-app.herokuapp.com` and `http://my-awesome-app.herokuapp.com/auth/google/callback` respectively. The same goes for other providers.
 
 <hr>
+
+<img src="http://www.doit.ba/img/facebook.jpg" width="200">
+- Visit [Facebook Developers](https://developers.facebook.com/)
+- Click **Apps > Create a New App** in the navigation bar
+- Enter *Display Name*, then choose a category, then click **Create app**
+- Copy and paste *App ID* and *App Secret* keys into `config/secrets.js`
+ - *App ID* is **clientID**, *App Secret* is **clientSecret**
+- Click on *Settings* on the sidebar, then click **+ Add Platform**
+- Select **Website**
+- Enter `http://localhost:3000` for *Site URL*
+
+:exclamation: **Note**: After a successful sign in with Facebook, a user will be redirected back to home page with appended hash `#_=_` in the URL. It is *not* a bug. See this [Stack Overflow](https://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url) discussion for ways to handle it.
+
+<hr>
+
+<img src="https://github.global.ssl.fastly.net/images/modules/logos_page/GitHub-Logo.png" width="200">
+- Go to [Account Settings](https://github.com/settings/profile)
+- Select **Applications** from the sidebar
+- Then inside **Developer applications** click on **Register new application**
+- Enter *Application Name* and *Homepage URL*.
+- For *Authorization Callback URL*: http://localhost:3000/auth/github/callback
+- Click **Register application**
+- Now copy and paste *Client ID* and *Client Secret* keys into `config/secrets.js`
+
+<hr>
+
+<img src="https://g.twimg.com/Twitter_logo_blue.png" width="100">
+- Sign in at [https://dev.twitter.com](https://dev.twitter.com/)
+- From the profile picture dropdown menu select **My Applications**
+- Click **Create a new application**
+- Enter your application name, website and description
+- For **Callback URL**: http://127.0.0.1:3000/auth/twitter/callback
+- Go to **Settings** tab
+- Under *Application Type* select **Read and Write** access
+- Check the box **Allow this application to be used to Sign in with Twitter**
+- Click **Update this Twitter's applications settings**
+- Copy and paste *Consumer Key* and *Consumer Secret* keys into `config/secrets.js`
+
+<hr>
+
 
 Philosophy
 ------------
