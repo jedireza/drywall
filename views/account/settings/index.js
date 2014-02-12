@@ -114,7 +114,7 @@ exports.connectGitHub = function(req, res, next){
 };
 
 exports.connectGoogle = function(req, res, next){
-  req._passport.instance.authenticate('google', function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: '/account/settings/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/account/settings/');
     }
@@ -246,7 +246,7 @@ exports.update = function(req, res, next){
 
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
-        return workflow.emit('exception', err);
+        return workflow.emit('exception', 'Account.findByIdAndUpdate ' + err);
       }
 
       workflow.outcome.account = account;
@@ -300,7 +300,7 @@ exports.identity = function(req, res, next){
   workflow.on('duplicateEmailCheck', function() {
     req.app.db.models.User.findOne({ email: req.body.email.toLowerCase(), _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
-        return workflow.emit('exception', err);
+        return workflow.emit('exception', 'duplicateEmailCheck ' + err);
       }
 
       if (user) {
@@ -325,7 +325,7 @@ exports.identity = function(req, res, next){
 
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {
-        return workflow.emit('exception', err);
+        return workflow.emit('exception', 'User.findByIdAndUpdate ' + err);
       }
 
       workflow.emit('patchAdmin', user);
@@ -342,7 +342,7 @@ exports.identity = function(req, res, next){
       };
       req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, function(err, admin) {
         if (err) {
-          return workflow.emit('exception', err);
+          return workflow.emit('exception', 'Admin.findByIdAndUpdate ' + err);
         }
 
         workflow.emit('patchAccount', user);
@@ -363,7 +363,7 @@ exports.identity = function(req, res, next){
       };
       req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, function(err, account) {
         if (err) {
-          return workflow.emit('exception', err);
+          return workflow.emit('exception', 'Account.findByIdAndUpdate ' + err);
         }
 
         workflow.emit('populateRoles', user);
@@ -377,7 +377,7 @@ exports.identity = function(req, res, next){
   workflow.on('populateRoles', function(user) {
     user.populate('roles.admin roles.account', 'name.full', function(err, populatedUser) {
       if (err) {
-        return workflow.emit('exception', err);
+        return workflow.emit('exception', 'populateRoles ' + err);
       }
 
       workflow.outcome.user = populatedUser;
@@ -414,7 +414,7 @@ exports.password = function(req, res, next){
   workflow.on('patchUser', function() {
     req.app.db.models.User.encryptPassword(req.body.newPassword, function(err, hash) {
       if (err) {
-        return workflow.emit('exception', err);
+        return workflow.emit('exception', 'patchUser ' + err);
       }
 
       var fieldsToSet = { password: hash };
@@ -425,7 +425,7 @@ exports.password = function(req, res, next){
 
         user.populate('roles.admin roles.account', 'name.full', function(err, user) {
           if (err) {
-            return workflow.emit('exception', err);
+            return workflow.emit('exception', 'patchUser user.populate ' + err);
           }
 
           workflow.outcome.newPassword = '';

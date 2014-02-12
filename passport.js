@@ -79,7 +79,6 @@ exports = module.exports = function(app, passport) {
     passport.use(new GoogleStrategy({
         clientID: app.get('google-oauth-key'),
         clientSecret: app.get('google-oauth-secret'),
-        customHeaders: { "User-Agent": app.get('project-name') }
       },
       function(accessToken, refreshToken, profile, done) {
         done(null, false, {
