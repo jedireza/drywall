@@ -17,7 +17,7 @@ block body
       div#identity
       div#password
     div.col-sm-3
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthGoogle ||oauthFacebook
         legend Social Connections
         if oauthMessage
           div.alerts
@@ -27,29 +27,38 @@ block body
         if oauthTwitter
           if oauthTwitterActive
             a.btn.btn-block.btn-danger(href='/account/settings/twitter/disconnect/')
-              i.fa.fa-twitter.fa-lg
+              i.fa.fa-twitter.fa-lg.fa-fw
               |  Disconnect Twitter
           else
             a.btn.btn-block.btn-default(href='/account/settings/twitter/')
-              i.fa.fa-twitter.fa-lg
+              i.fa.fa-twitter.fa-lg.fa-fw
               |  Connect Twitter
         if oauthGitHub
           if oauthGitHubActive
             a.btn.btn-block.btn-danger(href='/account/settings/github/disconnect/')
-              i.fa.fa-github.fa-lg
+              i.fa.fa-github.fa-lg.fa-fw
               |  Disconnect GitHub
           else
             a.btn.btn-block.btn-default(href='/account/settings/github/')
-              i.fa.fa-github.fa-lg
+              i.fa.fa-github.fa-lg.fa-fw
               |  Connect GitHub
+        if oauthGoogle
+          if oauthGoogleActive
+            a.btn.btn-block.btn-danger(href='/account/settings/google/disconnect/')
+              i.fa.fa-google-plus.fa-lg.fa-fw
+              |  Disconnect Google
+          else
+            a.btn.btn-block.btn-default(href='/account/settings/google/')
+              i.fa.fa-google-plus.fa-lg.fa-fw
+              |  Connect Google
         if oauthFacebook
           if oauthFacebookActive
             a.btn.btn-block.btn-danger(href='/account/settings/facebook/disconnect/')
-              i.fa.fa-facebook-square.fa-lg
+              i.fa.fa-facebook.fa-lg.fa-fw
               |  Disconnect Facebook
           else
             a.btn.btn-block.btn-default(href='/account/settings/facebook/')
-              i.fa.fa-facebook-square.fa-lg
+              i.fa.fa-facebook.fa-lg.fa-fw
               |  Connect Facebook
 
   script(type='text/template', id='tmpl-details')

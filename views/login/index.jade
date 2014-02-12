@@ -12,7 +12,7 @@ block body
       div.page-header
         h1 Sign In
       div#login
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthGoogle ||oauthFacebook
         hr
         p Or sign in using...
         if oauthMessage
@@ -25,16 +25,20 @@ block body
         div.form-actions
           div.btn-group.btn-group-justified
             if oauthTwitter
-              a.btn.btn-info(href='/login/twitter/')
-                i.fa.fa-twitter.fa-lg
+              a.btn.btn-twitter(href='/login/twitter/')
+                i.fa.fa-twitter.fa-lg.fa-fw
                 |  Twitter
             if oauthGitHub
-              a.btn.btn-info(href='/login/github/')
-                i.fa.fa-github.fa-lg
+              a.btn.btn-github(href='/login/github/')
+                i.fa.fa-github.fa-lg.fa-fw
                 |  GitHub
+            if oauthGoogle
+              a.btn.btn-google(href='/login/google/')
+                i.fa.fa-google-plus.fa-lg.fa-fw
+                |  Google
             if oauthFacebook
-              a.btn.btn-info(href='/login/facebook/')
-                i.fa.fa-facebook-square.fa-lg
+              a.btn.btn-facebook(href='/login/facebook/')
+                i.fa.fa-facebook.fa-lg.fa-fw
                 |  Facebook
 
   script(type='text/template', id='tmpl-login')

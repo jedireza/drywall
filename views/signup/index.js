@@ -9,6 +9,7 @@ exports.init = function(req, res){
       oauthMessage: '',
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
+      oauthGoogle: !!req.app.get('google-oauth-key'),
       oauthFacebook: !!req.app.get('facebook-oauth-key')
     });
   }
@@ -83,7 +84,7 @@ exports.signup = function(req, res){
         isActive: 'yes',
         username: req.body.username,
         email: req.body.email.toLowerCase(),
-        password: hash, 
+        password: hash,
         search: [
           req.body.username,
           req.body.email
@@ -93,7 +94,7 @@ exports.signup = function(req, res){
         if (err) {
           return workflow.emit('exception', err);
         }
-  
+
         workflow.user = user;
         workflow.emit('createAccount');
       });
@@ -199,6 +200,7 @@ exports.signupTwitter = function(req, res, next) {
           oauthMessage: 'We found a user linked to your Twitter account.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
@@ -226,6 +228,34 @@ exports.signupGitHub = function(req, res, next) {
           oauthMessage: 'We found a user linked to your GitHub account.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key')
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+exports.signupGoogle = function(req, res, next) {
+  req._passport.instance.authenticate('google', { callbackURL: '/signup/google/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/signup/');
+    }
+
+    req.app.db.models.User.findOne({ 'google.id': info.profile._json.id }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        req.session.socialProfile = info.profile;
+        res.render('signup/social', { email: info.profile.emails[0].value || '' });
+      }
+      else {
+        res.render('signup/index', {
+          oauthMessage: 'We found a user linked to your Google account.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
@@ -252,6 +282,7 @@ exports.signupFacebook = function(req, res, next) {
           oauthMessage: 'We found a user linked to your Facebook account.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key')
         });
       }
@@ -278,7 +309,10 @@ exports.signupSocial = function(req, res){
   });
 
   workflow.on('duplicateUsernameCheck', function() {
-    workflow.username = req.session.socialProfile.username;
+
+    // first is for facebook/twitter/github second is for google
+    workflow.username = req.session.socialProfile.username || req.session.socialProfile.displayName;
+
     if (!/^[a-zA-Z0-9\-\_]+$/.test(workflow.username)) {
       workflow.username = workflow.username.replace(/[^a-zA-Z0-9\-\_]/g, '');
     }
@@ -324,6 +358,7 @@ exports.signupSocial = function(req, res){
         req.body.email
       ]
     };
+
     fieldsToSet[req.session.socialProfile.provider] = req.session.socialProfile._json;
 
     req.app.db.models.User.create(fieldsToSet, function(err, user) {

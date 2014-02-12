@@ -15,7 +15,7 @@ var renderSettings = function(req, res, next, oauthMessage) {
   };
 
   var getUserData = function(callback) {
-    req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id').exec(function(err, user) {
+    req.app.db.models.User.findById(req.user.id, 'username email twitter.id google.id github.id facebook.id').exec(function(err, user) {
       if (err) {
         callback(err, null);
       }
@@ -40,8 +40,11 @@ var renderSettings = function(req, res, next, oauthMessage) {
       oauthTwitterActive: outcome.user.twitter ? !!outcome.user.twitter.id : false,
       oauthGitHub: !!req.app.get('github-oauth-key'),
       oauthGitHubActive: outcome.user.github ? !!outcome.user.github.id : false,
+      oauthGoogle: !!req.app.get('google-oauth-key'),
+      oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
       oauthFacebook: !!req.app.get('facebook-oauth-key'),
       oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false
+
     });
   };
 
@@ -106,6 +109,33 @@ exports.connectGitHub = function(req, res, next){
   })(req, res, next);
 };
 
+exports.connectGoogle = function(req, res, next){
+  req._passport.instance.authenticate('google', { callbackURL: '/account/settings/google/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
+
+    req.app.db.models.User.findOne({ 'google.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      if (user) {
+        renderSettings(req, res, next, 'Another user has already connected with that Google account.');
+      }
+      else {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { google: info.profile._json }, function(err, user) {
+          if (err) {
+            return next(err);
+          }
+
+          res.redirect('/account/settings/');
+        });
+      }
+    });
+  })(req, res, next);
+};
+
 exports.connectFacebook = function(req, res, next){
   req._passport.instance.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
@@ -138,7 +168,6 @@ exports.disconnectTwitter = function(req, res, next){
     if (err) {
       return next(err);
     }
-
     res.redirect('/account/settings/');
   });
 };
@@ -148,7 +177,15 @@ exports.disconnectGitHub = function(req, res, next){
     if (err) {
       return next(err);
     }
+    res.redirect('/account/settings/');
+  });
+};
 
+exports.disconnectGoogle = function(req, res, next){
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, { google: { id: undefined } }, function(err, user) {
+    if (err) {
+      return next(err);
+    }
     res.redirect('/account/settings/');
   });
 };
@@ -158,7 +195,6 @@ exports.disconnectFacebook = function(req, res, next){
     if (err) {
       return next(err);
     }
-
     res.redirect('/account/settings/');
   });
 };
@@ -281,7 +317,7 @@ exports.identity = function(req, res, next){
         req.body.email
       ]
     };
-    var options = { select: 'username email twitter.id github.id facebook.id' };
+    var options = { select: 'username email twitter.id github.id google.id facebook.id' };
 
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {

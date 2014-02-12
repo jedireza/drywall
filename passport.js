@@ -1,10 +1,14 @@
 'use strict';
 
 exports = module.exports = function(app, passport) {
-  var LocalStrategy = require('passport-local').Strategy,
-      TwitterStrategy = require('passport-twitter').Strategy,
-      GitHubStrategy = require('passport-github').Strategy,
-      FacebookStrategy = require('passport-facebook').Strategy;
+
+  var LocalStrategy      = require('passport-local').Strategy;
+  var TwitterStrategy    = require('passport-twitter').Strategy;
+  var GitHubStrategy     = require('passport-github').Strategy;
+  var FacebookStrategy   = require('passport-facebook').Strategy;
+  var OAuthStrategy      = require('passport-oauth').OAuthStrategy;
+  var OAuth2Strategy     = require('passport-oauth').OAuth2Strategy;
+  var GoogleStrategy     = require('passport-google-oauth').OAuth2Strategy;
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
@@ -60,6 +64,21 @@ exports = module.exports = function(app, passport) {
         clientID: app.get('github-oauth-key'),
         clientSecret: app.get('github-oauth-secret'),
         customHeaders: { "User-Agent": app.get('project-name') }
+      },
+      function(accessToken, refreshToken, profile, done) {
+        done(null, false, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          profile: profile
+        });
+      }
+    ));
+  }
+
+  if (app.get('google-oauth-key')) {
+    passport.use(new GoogleStrategy({
+        clientID: app.get('google-oauth-key'),
+        clientSecret: app.get('google-oauth-secret'),
       },
       function(accessToken, refreshToken, profile, done) {
         done(null, false, {

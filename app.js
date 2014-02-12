@@ -59,6 +59,10 @@ app.configure(function(){
   app.set('github-oauth-key', config.oauth.github.key);
   app.set('github-oauth-secret', config.oauth.github.secret);
 
+  //google settings
+  app.set('google-oauth-key', config.oauth.google.key);
+  app.set('google-oauth-secret', config.oauth.google.secret);
+
   //facebook settings
   app.set('facebook-oauth-key', config.oauth.facebook.key);
   app.set('facebook-oauth-secret', config.oauth.facebook.secret);
