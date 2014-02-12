@@ -85,6 +85,26 @@ Now just use the reset password feature to set a password.
 
 Login. Customize. Enjoy.
 
+Obtaining API Keys
+------------------
+
+:pushpin: You could support all 4 authentication methods by setting up OAuth keys, but you don't have to. If you would only like to have **Facebook sign-in** and **Local sign-in** with email and password, in **config.js** just add the credentials you need - i.e. in this case Facebook credentials.
+
+<img src="http://images.google.com/intl/en_ALL/images/srpr/logo6w.png" width="200">
+- Visit [Google Cloud Console](https://cloud.google.com/console/project)
+- Click **CREATE PROJECT** button
+- Enter *Project Name*, then click **CREATE**
+- Then select *APIs & auth* from the sidebar and click on *Credentials* tab
+- Click **CREATE NEW CLIENT ID** button
+ - **Application Type**: Web Application
+ - **Authorized Javascript origins**: http://localhost:3000
+ - **Authorized redirect URI**: http://localhost:3000/auth/google/callback
+- Copy and paste *Client ID* and *Client secret* keys into `config/secrets.js`
+
+:exclamation: **Note**: When you ready to deploy to production don't forget to add your new url to *Authorized Javascript origins* and *Authorized redirect URI*, e.g. `http://my-awesome-app.herokuapp.com` and `http://my-awesome-app.herokuapp.com/auth/google/callback` respectively. The same goes for other providers.
+
+<hr>
+
 Philosophy
 ------------
 
