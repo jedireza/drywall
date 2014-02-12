@@ -41,16 +41,12 @@ exports = module.exports = function(app, passport) {
 
   //social sign up
   app.post('/signup/social/', require('./views/signup/index').signupSocial);
-
   app.get('/signup/twitter/', passport.authenticate('twitter', { callbackURL: '/signup/twitter/callback/' }));
   app.get('/signup/twitter/callback/', require('./views/signup/index').signupTwitter);
-
   app.get('/signup/github/', passport.authenticate('github', { callbackURL: '/signup/github/callback/', scope: ['user:email'] }));
   app.get('/signup/github/callback/', require('./views/signup/index').signupGitHub);
-
   app.get('/signup/google/', passport.authenticate('google', { callbackURL: '/signup/google/callback/', scope: ['profile email'] }));
   app.get('/signup/google/callback/', require('./views/signup/index').signupGoogle);
-
   app.get('/signup/facebook/', passport.authenticate('facebook', { callbackURL: '/signup/facebook/callback/', scope: ['email'] }));
   app.get('/signup/facebook/callback/', require('./views/signup/index').signupFacebook);
 
@@ -67,13 +63,10 @@ exports = module.exports = function(app, passport) {
   //social login
   app.get('/login/twitter/', passport.authenticate('twitter', { callbackURL: '/login/twitter/callback/' }));
   app.get('/login/twitter/callback/', require('./views/login/index').loginTwitter);
-
   app.get('/login/github/', passport.authenticate('github', { callbackURL: '/login/github/callback/' }));
   app.get('/login/github/callback/', require('./views/login/index').loginGitHub);
-
   app.get('/login/google/', passport.authenticate('google', { callbackURL: '/login/google/callback/', scope: ['profile email'] }));
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
-
   app.get('/login/facebook/', passport.authenticate('facebook', { callbackURL: '/login/facebook/callback/' }));
   app.get('/login/facebook/callback/', require('./views/login/index').loginFacebook);
 
@@ -161,15 +154,12 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/twitter/', passport.authenticate('twitter', { callbackURL: '/account/settings/twitter/callback/' }));
   app.get('/account/settings/twitter/callback/', require('./views/account/settings/index').connectTwitter);
   app.get('/account/settings/twitter/disconnect/', require('./views/account/settings/index').disconnectTwitter);
-
   app.get('/account/settings/github/', passport.authenticate('github', { callbackURL: '/account/settings/github/callback/' }));
   app.get('/account/settings/github/callback/', require('./views/account/settings/index').connectGitHub);
   app.get('/account/settings/github/disconnect/', require('./views/account/settings/index').disconnectGitHub);
-
   app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: '/account/settings/google/callback/', scope: ['profile email']  }));
   app.get('/account/settings/google/callback/', require('./views/account/settings/index').connectGoogle);
   app.get('/account/settings/google/disconnect/', require('./views/account/settings/index').disconnectGoogle);
-
   app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }));
   app.get('/account/settings/facebook/callback/', require('./views/account/settings/index').connectFacebook);
   app.get('/account/settings/facebook/disconnect/', require('./views/account/settings/index').disconnectFacebook);

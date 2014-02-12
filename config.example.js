@@ -35,6 +35,10 @@ exports.oauth = {
     key: process.env.FACEBOOK_OAUTH_KEY || '',
     secret: process.env.FACEBOOK_OAUTH_SECRET || ''
   },
+  google: {
+    key: process.env.GOOGLE_OAUTH_KEY || '',
+    secret: process.env.GOOGLE_OAUTH_SECRET || ''
+  },
   github: {
     key: process.env.GITHUB_OAUTH_KEY || '',
     secret: process.env.GITHUB_OAUTH_SECRET || ''

@@ -248,7 +248,7 @@ exports.signupGoogle = function(req, res, next) {
       }
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social', { email: info.profile.emails[0].value || '' });
       }
       else {
         res.render('signup/index', {
@@ -309,7 +309,10 @@ exports.signupSocial = function(req, res){
   });
 
   workflow.on('duplicateUsernameCheck', function() {
-    workflow.username = req.session.socialProfile.username;
+
+    // first is for facebook/twitter/github second is for google
+    workflow.username = req.session.socialProfile.username || req.session.socialProfile.displayName;
+
     if (!/^[a-zA-Z0-9\-\_]+$/.test(workflow.username)) {
       workflow.username = workflow.username.replace(/[^a-zA-Z0-9\-\_]/g, '');
     }
@@ -355,6 +358,7 @@ exports.signupSocial = function(req, res){
         req.body.email
       ]
     };
+
     fieldsToSet[req.session.socialProfile.provider] = req.session.socialProfile._json;
 
     req.app.db.models.User.create(fieldsToSet, function(err, user) {

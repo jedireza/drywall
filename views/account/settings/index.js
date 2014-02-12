@@ -36,16 +36,12 @@ var renderSettings = function(req, res, next, oauthMessage) {
         user: escape(JSON.stringify(outcome.user))
       },
       oauthMessage: oauthMessage,
-
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthTwitterActive: outcome.user.twitter ? !!outcome.user.twitter.id : false,
-
       oauthGitHub: !!req.app.get('github-oauth-key'),
       oauthGitHubActive: outcome.user.github ? !!outcome.user.github.id : false,
-
       oauthGoogle: !!req.app.get('google-oauth-key'),
       oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
-
       oauthFacebook: !!req.app.get('facebook-oauth-key'),
       oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false
 
@@ -114,7 +110,7 @@ exports.connectGitHub = function(req, res, next){
 };
 
 exports.connectGoogle = function(req, res, next){
-  req._passport.instance.authenticate('google', function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: '/account/settings/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/account/settings/');
     }
