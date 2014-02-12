@@ -8,10 +8,7 @@ var config = require('./config'),
     path = require('path'),
     passport = require('passport'),
     mongoose = require('mongoose'),
-    helmet = require('helmet'),
-    // colorize console output
-    colors = require('colors'),
-    pkg = require('./package.json');
+    helmet = require('helmet');
 
 //create express app
 var app = express();
@@ -26,7 +23,7 @@ app.server = http.createServer(app);
 app.db = mongoose.createConnection(config.mongodb.uri);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
-  console.log("✔ Mongodb " + "connected!".green.bold);
+  //and... we have a data store
 });
 
 //config data models
@@ -126,22 +123,6 @@ app.utility.slugify = require('drywall-slugify');
 app.utility.workflow = require('drywall-workflow');
 
 //listen up
-// app.server.listen(app.get('port'), function(){
-//   //and... we're live
-// });
-app.server.listen(app.get('port'), function() {
-  // Note how we are running
-  console.log(
-    "✔ " + pkg.name + " listening on port " + app.get('port').toString().green.bold,
-    "in " + app.settings.env.green.bold + " mode.",
-    "\n✔ Hint: " + "Ctrl+C".red.bold + " to shut down."
-  );
-  // Exit cleanly on Ctrl+C
-  process.on('SIGINT', function () {
-    console.log(
-      "\n✔ " + pkg.name + " has " + "shutdown".green.bold,
-      "\n✔ " + pkg.name + " was running for " + Math.round(process.uptime()).toString().green.bold + " seconds."
-    );
-    process.exit(0);
-  });
+app.server.listen(app.get('port'), function(){
+  //and... we're live
 });
