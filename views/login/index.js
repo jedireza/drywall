@@ -182,7 +182,7 @@ exports.loginGitHub = function(req, res, next){
 };
 
 exports.loginGoogle = function(req, res, next){
-  req._passport.instance.authenticate('google', function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: '/login/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/login/');
     }
@@ -194,7 +194,7 @@ exports.loginGoogle = function(req, res, next){
 
       if (!user) {
         res.render('login/index', {
-          oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
+          oauthMessage: 'No users found linked to your Google account. You may need to create an account first.',
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthGoogle: !!req.app.get('google-oauth-key'),

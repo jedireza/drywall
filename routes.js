@@ -166,7 +166,7 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/github/callback/', require('./views/account/settings/index').connectGitHub);
   app.get('/account/settings/github/disconnect/', require('./views/account/settings/index').disconnectGitHub);
 
-  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: '/account/settings/google/callback/' }));
+  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: '/account/settings/google/callback/', scope: ['profile email']  }));
   app.get('/account/settings/google/callback/', require('./views/account/settings/index').connectGoogle);
   app.get('/account/settings/google/disconnect/', require('./views/account/settings/index').disconnectGoogle);
 

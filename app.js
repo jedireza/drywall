@@ -9,6 +9,8 @@ var config = require('./config'),
     passport = require('passport'),
     mongoose = require('mongoose'),
     helmet = require('helmet'),
+    // colorize console output
+    colors = require('colors'),
     pkg = require('./package.json');
 
 //create express app
@@ -24,7 +26,7 @@ app.server = http.createServer(app);
 app.db = mongoose.createConnection(config.mongodb.uri);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
-  console.log("✔ Mongodb " + "connected!".green);
+  console.log("✔ Mongodb " + "connected!".green.bold);
 });
 
 //config data models
@@ -128,21 +130,18 @@ app.utility.workflow = require('drywall-workflow');
 //   //and... we're live
 // });
 app.server.listen(app.get('port'), function() {
-
   // Note how we are running
   console.log(
-    "✔ " + pkg.name + " listening on port " + app.get('port').toString().green,
-    "in " + app.settings.env.green + " mode.",
-    "\n✔ Hint: " + "Ctrl+C".green + " to shut down."
+    "✔ " + pkg.name + " listening on port " + app.get('port').toString().green.bold,
+    "in " + app.settings.env.green.bold + " mode.",
+    "\n✔ Hint: " + "Ctrl+C".red.bold + " to shut down."
   );
-
   // Exit cleanly on Ctrl+C
   process.on('SIGINT', function () {
     console.log(
-      "\n✔ " + pkg.name + " has " + "shutdown".green,
-      "\n✔ " + pkg.name + " was running for " + Math.round(process.uptime()).toString().green + " seconds."
+      "\n✔ " + pkg.name + " has " + "shutdown".green.bold,
+      "\n✔ " + pkg.name + " was running for " + Math.round(process.uptime()).toString().green.bold + " seconds."
     );
     process.exit(0);
   });
-
 });

@@ -237,7 +237,7 @@ exports.signupGitHub = function(req, res, next) {
 };
 
 exports.signupGoogle = function(req, res, next) {
-  req._passport.instance.authenticate('google', { callbackURL: '/auth/google/callback' }, function(err, user, info) {
+  req._passport.instance.authenticate('google', { callbackURL: '/signup/google/callback/' }, function(err, user, info) {
     if (!info || !info.profile) {
       return res.redirect('/signup/');
     }
