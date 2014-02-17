@@ -2,7 +2,7 @@
   "name": "Drywall",
   "dependencies": {
     "backbone": "~1.1.0",
-    "bootstrap": "~3.1.0",
+    "bootstrap": "~3.1.1",
     "font-awesome": "~4.0.3",
     "html5shiv": "~3.7.0",
     "jquery": "~1.11.0",
