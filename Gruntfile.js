@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             src: ['html5shiv.js'], dest: 'public/vendor/html5shiv/'
           },
           {
-            expand: true, cwd: 'bower_components/jquery/',
+            expand: true, cwd: 'bower_components/jquery/dist/',
             src: ['jquery.js'], dest: 'public/vendor/jquery/'
           },
           {
