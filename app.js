@@ -63,6 +63,10 @@ app.configure(function(){
   app.set('facebook-oauth-key', config.oauth.facebook.key);
   app.set('facebook-oauth-secret', config.oauth.facebook.secret);
 
+  //google settings
+  app.set('google-oauth-key', config.oauth.google.key);
+  app.set('google-oauth-secret', config.oauth.google.secret);
+
   //middleware
   app.use(express.logger('dev'));
   app.use(express.compress());

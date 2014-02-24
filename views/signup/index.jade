@@ -15,7 +15,7 @@ block body
       div.page-header
         h1 Sign Up
       div#signup
-      if oauthTwitter || oauthGitHub || oauthFacebook
+      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle
         hr
         p Or sign up using...
         if oauthMessage
@@ -38,6 +38,10 @@ block body
             a.btn.btn-info(href='/signup/facebook/')
               i.fa.fa-facebook-square.fa-lg
               |  Facebook
+          if oauthGoogle
+            a.btn.btn-info(href='/signup/google/')
+              i.fa.fa-google-plus-square.fa-lg
+              |  Google
     div.col-sm-6.marketing
       div.page-header
         h1 Campy Benefits

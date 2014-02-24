@@ -4,7 +4,8 @@ exports = module.exports = function(app, passport) {
   var LocalStrategy = require('passport-local').Strategy,
       TwitterStrategy = require('passport-twitter').Strategy,
       GitHubStrategy = require('passport-github').Strategy,
-      FacebookStrategy = require('passport-facebook').Strategy;
+      FacebookStrategy = require('passport-facebook').Strategy,
+      GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
@@ -75,6 +76,21 @@ exports = module.exports = function(app, passport) {
     passport.use(new FacebookStrategy({
         clientID: app.get('facebook-oauth-key'),
         clientSecret: app.get('facebook-oauth-secret')
+      },
+      function(accessToken, refreshToken, profile, done) {
+        done(null, false, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          profile: profile
+        });
+      }
+    ));
+  }
+
+  if (app.get('google-oauth-key')) {
+    passport.use(new GoogleStrategy({
+        clientID: app.get('google-oauth-key'),
+        clientSecret: app.get('google-oauth-secret')
       },
       function(accessToken, refreshToken, profile, done) {
         done(null, false, {

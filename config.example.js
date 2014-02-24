@@ -38,5 +38,9 @@ exports.oauth = {
   github: {
     key: process.env.GITHUB_OAUTH_KEY || '',
     secret: process.env.GITHUB_OAUTH_SECRET || ''
+  },
+  google: {
+    key: process.env.GOOGLE_OAUTH_KEY || '',
+    secret: process.env.GOOGLE_OAUTH_SECRET || ''
   }
 };
