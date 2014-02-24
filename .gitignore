@@ -1,12 +1,8 @@
 bower_components/*
-public/vendor/*
 node_modules/*
 !node_modules/drywall-sendmail
 !node_modules/drywall-slugify
 !node_modules/drywall-workflow
-*.min.js
-*.min.js.map
-*.min.css
 *.DS_Store
 /siteConfig.js
 .nodemonignore
