@@ -1,6 +1,6 @@
 {
   "name": "Drywall",
-  "version": "0.9.26",
+  "version": "0.9.27",
   "private": true,
   "scripts": {
     "start": "node app.js"
