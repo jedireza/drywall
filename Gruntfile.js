@@ -37,6 +37,66 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'bower_components/underscore/',
             src: ['underscore.js'], dest: 'public/vendor/underscore/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['amelia/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['cerulean/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['cosmo/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['cupid/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['cyborg/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['flatly/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['journal/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['lumen/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['readable/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['simplex/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['slate/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['spacelab/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['superhero/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['united/**'], dest: 'public/vendor/bootswatch/'
+          },
+          {
+            expand: true, cwd: 'bower_components/bootswatch/',
+            src: ['yeti/**'], dest: 'public/vendor/bootswatch/'
           }
         ]
       }
@@ -159,7 +219,7 @@ module.exports = function(grunt) {
       layouts: {
         files: {
           'public/layouts/core.min.css': [
-            'public/less/bootstrap-build.less',
+            'public/vendor/bootswatch/amelia/bootstrap.min.css',
             'public/less/font-awesome-build.less',
             'public/layouts/core.less'
           ],
