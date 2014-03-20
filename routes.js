@@ -165,5 +165,6 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/google/disconnect/', require('./views/account/settings/index').disconnectGoogle);
 
   //route not found
+  app.all('/admin/*', require('./views/http/index').http404Admin);
   app.all('*', require('./views/http/index').http404);
 };
