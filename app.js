@@ -8,7 +8,8 @@ var config = require('./config'),
     path = require('path'),
     passport = require('passport'),
     mongoose = require('mongoose'),
-    helmet = require('helmet');
+    helmet = require('helmet'),
+    oauthserver = require('node-oauth2-server');
 
 //create express app
 var app = express();
@@ -103,6 +104,15 @@ app.configure(function(){
   app.locals.copyrightYear = new Date().getFullYear();
   app.locals.copyrightName = app.get('company-name');
   app.locals.cacheBreaker = 'br34k-01';
+
+  //oauth
+  app.oauth = oauthserver({
+    model: {}, // See below for specification
+    grants: ['password'],
+    debug: true
+  });
+  app.all('/oauth/token', app.oauth.grant());
+
 });
 
 //config express in dev environment
