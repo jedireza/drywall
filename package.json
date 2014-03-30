@@ -20,7 +20,8 @@
     "passport-twitter": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
     "helmet": "~0.1.2",
-    "bcrypt": "~0.7.7"
+    "bcrypt": "~0.7.7",
+    "grunt-jade-i18n": "~0.1.5"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -32,6 +33,7 @@
     "grunt-concurrent": "~0.4.1",
     "grunt-nodemon": "~0.2.0",
     "grunt-newer": "~0.6.0",
-    "grunt-contrib-copy": "~0.5.0"
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-jade-i18n": "^0.1.5"
   }
 }

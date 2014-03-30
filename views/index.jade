@@ -1,7 +1,7 @@
 extends ../layouts/default
 
 block head
-  title Drywall is Running
+  title #{$i18n.hello.world}!
 
 block neck
   link(rel='stylesheet', href='/views/index.min.css?#{cacheBreaker}')

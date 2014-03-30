@@ -3,6 +3,22 @@ var path = require('path');
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    jade: {
+      templates: {
+        options: {
+          // jade i18n specific options
+          i18n: {
+            locales: 'locales/*.json',
+            namespace: '$i18n'
+          },
+          // Jade specific options
+          pretty: true
+        },
+        files: {
+          "path/to/dest.html": ["path/to/templates/*.jade", "another/path/tmpl.jade"]
+        }
+      }
+    },
     copy: {
       vendor: {
         files: [
@@ -206,6 +222,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-jade-i18n');
 
   grunt.registerTask('default', ['copy:vendor', 'newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['copy:vendor', 'uglify', 'less']);
