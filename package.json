@@ -20,7 +20,7 @@
     "passport-twitter": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
     "helmet": "~0.2.0",
-    "bcrypt": "~0.7.7"
+    "bcryptjs": "~0.7.12"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
