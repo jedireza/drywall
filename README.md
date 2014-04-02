@@ -46,7 +46,7 @@ We use [Bower](http://bower.io/) as our front-end package manager. Get the CLI (
 $ npm install bower -g
 ```
 
-We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing secrets. If you have issues during installation related to `bcrypt` then [refer to the docs](https://github.com/ncb000gt/node.bcrypt.js#dependencies).
+We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing secrets. If you have issues during installation related to `bcrypt` then [refer to this wiki page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 
 Installation
 ------------
