@@ -6,7 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "async": "~0.6.2",
+    "async": "~0.7.0",
     "connect-mongo": "~0.4.0",
     "emailjs": "~0.3.6",
     "express": "~3.5.1",
