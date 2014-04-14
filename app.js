@@ -88,6 +88,7 @@ app.configure(function(){
   app.use(function(req, res, next) {
     res.locals.user = {};
     res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
+    res.locals.user.canPlayRoleOfAdmin = req.user && req.user.canPlayRoleOf('admin');
     res.locals.user.username = req.user && req.user.username;
     next();
   });
