@@ -21,6 +21,8 @@ html
           ul.nav.navbar-nav
             li: a(href='/account/') My Account
             li: a(href='/account/settings/') Settings
+            if user && user.canPlayRoleOfAdmin
+              li: a(href='/admin/') Admin Area
           ul.nav.navbar-nav.pull-right
             li: a(href='/logout/')
               i.fa.fa-user
