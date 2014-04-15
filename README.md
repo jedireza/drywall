@@ -108,6 +108,13 @@ Features
  - Administrator level permissions that override group permissions.
  - Global admin quick search component.
 
+Contributing
+------------
+
+Contributions welcome. Make sure your code passes `grunt lint` without error.
+
+If you're changing something non-trivial or user-facing, you may want to submit an issue first.
+
 License
 ------------
 
