@@ -40,15 +40,15 @@ block body
           | Changes have been saved.
         |<% } %>
       div.control-group(class!='<%- errfor.first ? "has-error" : "" %>')
-        label.control-label First Name:
+        label First Name:
         input.form-control(type='text', name='first', value!='<%= first %>')
         span.help-block <%- errfor.first %>
       div.control-group(class!='<%- errfor.middle ? "has-error" : "" %>')
-        label.control-label Middle Name:
+        label Middle Name:
         input.form-control(type='text', name='middle', value!='<%= middle %>')
         span.help-block <%- errfor['middle'] %>
       div.control-group(class!='<%- errfor.last ? "has-error" : "" %>')
-        label.control-label Last Name:
+        label Last Name:
         input.form-control(type='text', name='last', value!='<%= last %>')
         span.help-block <%- errfor.last %>
       div.control-group
@@ -64,7 +64,7 @@ block body
           |<%- err %>
         |<% }); %>
       div.control-group(class!='<%- errfor.newUsername ? "has-error" : "" %>')
-        label.control-label Username:
+        label Username:
         div.input-group
           |<% if (name) { %>
           input.form-control(disabled=true, value!='<%= name %>')
@@ -93,7 +93,7 @@ block body
           | Changes have been saved.
         |<% } %>
       div.control-group(class!='<%- errfor.newMembership ? "has-error" : "" %>')
-        label.control-label Add Membership:
+        label Add Membership:
         div.input-group
           select.form-control(name='newMembership')
             for group in data.adminGroups
@@ -102,7 +102,7 @@ block body
             button.btn.btn-success.btn-add(type='button') Add
         span.help-block <%- errfor.newUsername %>
       div.control-group(class!='<%- errfor.memberships ? "has-error" : "" %>')
-        label.control-label Memberships:
+        label Memberships:
         div.groups
           |<% _.each(groups, function(group) { %>
           div.input-group
@@ -133,14 +133,14 @@ block body
           | Changes have been saved.
         |<% } %>
       div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
-        label.control-label New Setting:
+        label New Setting:
         div.input-group
           input.form-control(name='newPermission', type='text', placeholder='enter a name')
           div.input-group-btn
             button.btn.btn-success.btn-add(type='button') Add
         span.help-block <%- errfor.newUsername %>
       div.control-group(class!='<%- errfor.settings ? "has-error" : "" %>')
-        label.control-label Settings:
+        label Settings:
         div.permissions
           |<% _.each(permissions, function(permission) { %>
           div.input-group

@@ -50,11 +50,11 @@ block body
           |<%- err %>
         |<% }); %>
       div.form-group(class!='<%- errfor.username ? "has-error" : "" %>')
-        label.control-label Username or Email:
+        label Username or Email:
         input.form-control(type='text', name='username', value!='<%= username %>')
         span.help-block <%- errfor.username %>
       div.form-group(class!='<%- errfor.password ? "has-error" : "" %>')
-        label.control-label Password:
+        label Password:
         input.form-control(type='password', name='password', value!='<%= password %>')
         span.help-block <%- errfor.password %>
       div.form-actions

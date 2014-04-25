@@ -22,7 +22,7 @@ block body
           |<%- err %>
         |<% }); %>
       div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
-        label.control-label Enter Your Email:
+        label Enter Your Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
         span.help-block <%- errfor.email %>
       div.form-group

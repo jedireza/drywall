@@ -36,17 +36,17 @@ block body
           | Changes have been saved.
         |<% } %>
       div.control-group(class!='<%- errfor.isActive ? "has-error" : "" %>')
-        label.control-label Is Active:
+        label Is Active:
         select.form-control(name='isActive')
           option(value='yes') yes
           option(value='no') no
         span.help-block <%- errfor.isActive %>
       div.control-group(class!='<%- errfor.username ? "has-error" : "" %>')
-        label.control-label Username:
+        label Username:
         input.form-control(type='text', name='username', value!='<%= username %>')
         span.help-block <%- errfor.username %>
       div.control-group(class!='<%- errfor.email ? "has-error" : "" %>')
-        label.control-label Email:
+        label Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
         span.help-block <%- errfor.email %>
       div.control-group
@@ -62,7 +62,7 @@ block body
           |<%- err %>
         |<% }); %>
       div.control-group(class!='<%- errfor.newAdminId ? "has-error" : "" %>')
-        label.control-label Admin:
+        label Admin:
         div.controls
           div.input-group
             |<% if (roles && roles.admin) { %>
@@ -77,7 +77,7 @@ block body
             |<% } %>
           span.help-block <%- errfor.newAdminId %>
       div.control-group(class!='<%- errfor.newAccountId ? "has-error" : "" %>')
-        label.control-label Account:
+        label Account:
         div.input-group
           |<% if (roles && roles.account) { %>
           input.form-control(disabled=true, value!='<%= roles.account.name.full %>')
@@ -106,11 +106,11 @@ block body
         | A new password has been set.
       |<% } %>
       div.control-group(class!='<%- errfor.newPassword ? "has-error" : "" %>')
-        label.control-label New Password:
+        label New Password:
         input.form-control(type='password', name='newPassword', value!='<%= newPassword %>')
         span.help-block <%- errfor.newPassword %>
       div.control-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
-        label.control-label Confirm Password:
+        label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
         span.help-block <%- errfor.confirm %>
       div.control-group

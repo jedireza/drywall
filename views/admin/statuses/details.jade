@@ -34,11 +34,11 @@ block body
           | Changes have been saved.
         |<% } %>
       div.control-group(class!='<%- errfor.pivot ? "has-error" : "" %>')
-        label.control-label Pivot:
+        label Pivot:
         input.form-control(type='text', name='pivot', value!='<%- pivot %>')
         span.help-block <%- errfor.pivot %>
       div.control-group(class!='<%- errfor.name ? "has-error" : "" %>')
-        label.control-label Name:
+        label Name:
         input.form-control(type='text', name='name', value!='<%- name %>')
         span.help-block <%- errfor.name %>
       div.control-group
