@@ -128,7 +128,7 @@
     template: _.template( $('#tmpl-header').html() ),
     initialize: function() {
       this.model = app.mainView.model;
-      this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'change', this.render);
       this.render();
     },
     render: function() {
