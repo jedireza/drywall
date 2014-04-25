@@ -45,31 +45,31 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%- errfor.first ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.first ? "has-error" : "" %>')
         label First Name:
         input.form-control(type='text', name='first', value!='<%- first %>')
         span.help-block <%- errfor.first %>
-      div.control-group(class!='<%- errfor.middle ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.middle ? "has-error" : "" %>')
         label Middle Name:
         input.form-control(type='text', name='middle', value!='<%- middle %>')
         span.help-block <%- errfor.middle %>
-      div.control-group(class!='<%- errfor.last ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.last ? "has-error" : "" %>')
         label Last Name:
         input.form-control(type='text', name='last', value!='<%- last %>')
         span.help-block <%- errfor['last'] %>
-      div.control-group(class!='<%- errfor.company ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.company ? "has-error" : "" %>')
         label Company Name:
         input.form-control(type='text', name='company', value!='<%- company %>')
         span.help-block <%- errfor.company %>
-      div.control-group(class!='<%- errfor.phone ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.phone ? "has-error" : "" %>')
         label Phone:
         input.form-control(type='text', name='phone', value!='<%- phone %>')
         span.help-block <%- errfor.phone %>
-      div.control-group(class!='<%- errfor.zip ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.zip ? "has-error" : "" %>')
         label Zip:
         input.form-control(type='text', name='zip', value!='<%- zip %>')
         span.help-block <%- errfor.zip %>
-      div.control-group
+      div.form-group
         button.btn.btn-primary.btn-update(type='button') Update
 
   script(type='text/template', id='tmpl-login')
@@ -81,7 +81,7 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           |<%- err %>
         |<% }); %>
-      div.control-group(class!='<%- errfor.newUsername ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.newUsername ? "has-error" : "" %>')
         label Username:
         div.input-group
           |<% if (name) { %>
@@ -157,12 +157,12 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           |<%- err %>
         |<% }); %>
-      div.control-group
+      div.form-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
           |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
-      div.control-group
+      div.form-group
         button.btn.btn-danger.btn-delete(type='button') Delete
 
   script(type='text/template', id='data-record') !{data.record}

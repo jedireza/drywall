@@ -35,21 +35,21 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%- errfor.isActive ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.isActive ? "has-error" : "" %>')
         label Is Active:
         select.form-control(name='isActive')
           option(value='yes') yes
           option(value='no') no
         span.help-block <%- errfor.isActive %>
-      div.control-group(class!='<%- errfor.username ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.username ? "has-error" : "" %>')
         label Username:
         input.form-control(type='text', name='username', value!='<%= username %>')
         span.help-block <%- errfor.username %>
-      div.control-group(class!='<%- errfor.email ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
         label Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
         span.help-block <%- errfor.email %>
-      div.control-group
+      div.form-group
         button.btn.btn-primary.btn-update(type='button') Update
 
   script(type='text/template', id='tmpl-roles')
@@ -61,7 +61,7 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           |<%- err %>
         |<% }); %>
-      div.control-group(class!='<%- errfor.newAdminId ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.newAdminId ? "has-error" : "" %>')
         label Admin:
         div.controls
           div.input-group
@@ -76,7 +76,7 @@ block body
               button.btn.btn-success.btn-admin-link(type='button') Link
             |<% } %>
           span.help-block <%- errfor.newAdminId %>
-      div.control-group(class!='<%- errfor.newAccountId ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.newAccountId ? "has-error" : "" %>')
         label Account:
         div.input-group
           |<% if (roles && roles.account) { %>
@@ -105,15 +105,15 @@ block body
         button.close(type='button', data-dismiss='alert') &times;
         | A new password has been set.
       |<% } %>
-      div.control-group(class!='<%- errfor.newPassword ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.newPassword ? "has-error" : "" %>')
         label New Password:
         input.form-control(type='password', name='newPassword', value!='<%= newPassword %>')
         span.help-block <%- errfor.newPassword %>
-      div.control-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
+      div.form-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
         label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
         span.help-block <%- errfor.confirm %>
-      div.control-group
+      div.form-group
         button.btn.btn-primary.btn-password(type='button') Set Password
 
   script(type='text/template', id='tmpl-delete')
@@ -125,12 +125,12 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           |<%- err %>
         |<% }); %>
-      div.control-group
+      div.form-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
           |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
-      div.control-group
+      div.form-group
         button.btn.btn-danger.btn-delete(type='button') Delete
 
   script(type='text/template', id='data-record') !{data.record}
