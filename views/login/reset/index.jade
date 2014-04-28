@@ -33,11 +33,11 @@ block body
         |<% } %>
       |<% if (!success && id != undefined) { %>
       div.form-group(class!='<%- errfor.password ? "has-error" : "" %>')
-        label.control-label New Password:
+        label New Password:
         input.form-control(type='password', name='password', value!='<%= password %>')
         span.help-block <%- errfor.password %>
       div.form-group(class!='<%- errfor.confirm ? "has-error" : "" %>')
-        label.control-label Confirm Password:
+        label Confirm Password:
         input.form-control(type='password', name='confirm', value!='<%= confirm %>')
         span.help-block <%- errfor.confirm %>
       |<% } %>

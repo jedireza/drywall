@@ -39,7 +39,7 @@ block body
         a.btn.btn-link.btn-resend I checked my email and spam folder, nothing yet.
       div(class!='verify-form<%= keepFormOpen ? "" : " verify-form-hidden" %>')
         div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
-          label.control-label Your Email:
+          label Your Email:
           input.form-control(type='text', name='email', value!='<%= email %>')
           span.help-block <%- errfor.email %>
         div.form-group

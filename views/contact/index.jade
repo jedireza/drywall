@@ -37,15 +37,15 @@ block body
         |<% } %>
       |<% if (!success) { %>
       div.form-group(class!='<%- errfor.name ? "has-error" : "" %>')
-        label.control-label Your Name:
+        label Your Name:
         input.form-control(type='text', name='name', value!='<%= name %>')
         span.help-block <%- errfor.name %>
       div.form-group(class!='<%- errfor.email ? "has-error" : "" %>')
-        label.control-label Your Email:
+        label Your Email:
         input.form-control(type='text', name='email', value!='<%= email %>')
         span.help-block <%- errfor.email %>
       div.form-group(class!='<%- errfor.message ? "has-error" : "" %>')
-        label.control-label Message:
+        label Message:
         textarea.form-control(name='message', rows='5') <%= message %>
         span.help-block <%- errfor.message %>
       div.form-group

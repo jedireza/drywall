@@ -35,11 +35,11 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%- errfor.name ? "has-error" : "" %>')
-        label.control-label Name:
+      div.form-group(class!='<%- errfor.name ? "has-error" : "" %>')
+        label Name:
         input.form-control(type='text', name='name', value!='<%= name %>')
         span.help-block <%- errfor.name %>
-      div.control-group
+      div.form-group
         button.btn.btn-primary.btn-update(type='button') Update
 
   script(type='text/template', id='tmpl-permissions')
@@ -56,15 +56,15 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           | Changes have been saved.
         |<% } %>
-      div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
-        label.control-label New Setting:
+      div.form-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
+        label New Setting:
         div.input-group
           input.form-control(name='newPermission', type='text', placeholder='enter a name')
           div.input-group-btn
             button.btn.btn-success.btn-add(type='button') Add
         span.help-block <%- errfor.newUsername %>
-      div.control-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
-        label.control-label Settings:
+      div.form-group(class!='<%- errfor.newPermission ? "has-error" : "" %>')
+        label Settings:
         div.permissions
           |<% _.each(permissions, function(permission) { %>
           div.input-group
@@ -85,7 +85,7 @@ block body
             | no permissions defined
           |<% } %>
           span.help-block <%- errfor.settings %>
-      div.control-group
+      div.form-group
         button.btn.btn-primary.btn-set(type='button') Save Settings
 
   script(type='text/template', id='tmpl-delete')
@@ -97,12 +97,12 @@ block body
           button.close(type='button', data-dismiss='alert') &times;
           |<%- err %>
         |<% }); %>
-      div.control-group
+      div.form-group
         span.help-block
           span.label.label-danger If you do this, it cannot be undone.
           |&nbsp;
           span.text-muted You may also create orphaned document relationships too.
-      div.control-group
+      div.form-group
         button.btn.btn-danger.btn-delete(type='button') Delete
 
   script(type='text/template', id='data-record') !{data.record}
