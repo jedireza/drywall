@@ -60,7 +60,7 @@ exports.connectTwitter = function(req, res, next){
       return res.redirect('/account/settings/');
     }
 
-    req.app.db.models.User.findOne({ 'twitter.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'twitter.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -69,7 +69,7 @@ exports.connectTwitter = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Twitter account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: info.profile._json }, function(err, user) {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'twitter.id': info.profile.id }, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -87,7 +87,7 @@ exports.connectGitHub = function(req, res, next){
       return res.redirect('/account/settings/');
     }
 
-    req.app.db.models.User.findOne({ 'github.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'github.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -96,7 +96,7 @@ exports.connectGitHub = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that GitHub account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { github: info.profile._json }, function(err, user) {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'github.id': info.profile.id }, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -114,7 +114,7 @@ exports.connectFacebook = function(req, res, next){
       return res.redirect('/account/settings/');
     }
 
-    req.app.db.models.User.findOne({ 'facebook.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'facebook.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -123,7 +123,7 @@ exports.connectFacebook = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Facebook account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { facebook: info.profile._json }, function(err, user) {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'facebook.id': info.profile.id }, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -141,7 +141,7 @@ exports.connectGoogle = function(req, res, next){
       return res.redirect('/account/settings/');
     }
 
-    req.app.db.models.User.findOne({ 'google.id': info.profile._json.id, _id: { $ne: req.user.id } }, function(err, user) {
+    req.app.db.models.User.findOne({ 'google.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -150,7 +150,7 @@ exports.connectGoogle = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Google account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { google: info.profile._json }, function(err, user) {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'google.id': info.profile.id }, function(err, user) {
           if (err) {
             return next(err);
           }

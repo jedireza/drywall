@@ -186,7 +186,7 @@ exports.signupTwitter = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
-    req.app.db.models.User.findOne({ 'twitter.id': info.profile._json.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -214,7 +214,7 @@ exports.signupGitHub = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
-    req.app.db.models.User.findOne({ 'github.id': info.profile._json.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -242,7 +242,7 @@ exports.signupFacebook = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
-    req.app.db.models.User.findOne({ 'facebook.id': info.profile._json.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -269,7 +269,7 @@ exports.signupGoogle = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
-    req.app.db.models.User.findOne({ 'google.id': info.profile._json.id }, function(err, user) {
+    req.app.db.models.User.findOne({ 'google.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);
       }
@@ -355,7 +355,7 @@ exports.signupSocial = function(req, res){
         req.body.email
       ]
     };
-    fieldsToSet[req.session.socialProfile.provider] = req.session.socialProfile._json;
+    fieldsToSet[req.session.socialProfile.provider] = { id: req.session.socialProfile.id };
 
     req.app.db.models.User.create(fieldsToSet, function(err, user) {
       if (err) {
