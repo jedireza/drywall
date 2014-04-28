@@ -63,7 +63,7 @@ exports.create = function(req, res, next){
     }
 
     if (!req.body.pivot) {
-      workflow.outcome.errors.push('A name is required.');
+      workflow.outcome.errors.push('A pivot is required.');
       return workflow.emit('response');
     }
 
