@@ -10,7 +10,8 @@ exports.init = function(req, res){
       oauthTwitter: !!req.app.get('twitter-oauth-key'),
       oauthGitHub: !!req.app.get('github-oauth-key'),
       oauthFacebook: !!req.app.get('facebook-oauth-key'),
-      oauthGoogle: !!req.app.get('google-oauth-key')
+      oauthGoogle: !!req.app.get('google-oauth-key'),
+      oauthTumblr: !!req.app.get('tumblr-oauth-key')
     });
   }
 };
@@ -201,7 +202,8 @@ exports.signupTwitter = function(req, res, next) {
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key'),
-          oauthGoogle: !!req.app.get('google-oauth-key')
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthTumblr: !!req.app.get('tumblr-oauth-key')
         });
       }
     });
@@ -229,7 +231,8 @@ exports.signupGitHub = function(req, res, next) {
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key'),
-          oauthGoogle: !!req.app.get('google-oauth-key')
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthTumblr: !!req.app.get('tumblr-oauth-key')
         });
       }
     });
@@ -256,7 +259,8 @@ exports.signupFacebook = function(req, res, next) {
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key'),
-          oauthGoogle: !!req.app.get('google-oauth-key')
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthTumblr: !!req.app.get('tumblr-oauth-key')
         });
       }
     });
@@ -283,7 +287,37 @@ exports.signupGoogle = function(req, res, next) {
           oauthTwitter: !!req.app.get('twitter-oauth-key'),
           oauthGitHub: !!req.app.get('github-oauth-key'),
           oauthFacebook: !!req.app.get('facebook-oauth-key'),
-          oauthGoogle: !!req.app.get('google-oauth-key')
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthTumblr: !!req.app.get('tumblr-oauth-key')
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+exports.signupTumblr = function(req, res, next) {
+  req._passport.instance.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/signup/');
+    }
+
+    console.log(info);
+    req.app.db.models.User.findOne({ 'tumblr.id': info.profile.id }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        req.session.socialProfile = info.profile;
+        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+      }
+      else {
+        res.render('signup/index', {
+          oauthMessage: 'We found a user linked to your Tumblr account.',
+          oauthTwitter: !!req.app.get('twitter-oauth-key'),
+          oauthGitHub: !!req.app.get('github-oauth-key'),
+          oauthFacebook: !!req.app.get('facebook-oauth-key'),
+          oauthGoogle: !!req.app.get('google-oauth-key'),
+          oauthTumblr: !!req.app.get('tumblr-oauth-key')
         });
       }
     });

@@ -15,7 +15,7 @@ var renderSettings = function(req, res, next, oauthMessage) {
   };
 
   var getUserData = function(callback) {
-    req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id google.id').exec(function(err, user) {
+    req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id google.id tumblr.id').exec(function(err, user) {
       if (err) {
         callback(err, null);
       }
@@ -43,7 +43,9 @@ var renderSettings = function(req, res, next, oauthMessage) {
       oauthFacebook: !!req.app.get('facebook-oauth-key'),
       oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false,
       oauthGoogle: !!req.app.get('google-oauth-key'),
-      oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false
+      oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
+      oauthTumblr: !!req.app.get('tumblr-oauth-key'),
+      oauthTumblrActive: outcome.user.tumblr ? !!outcome.user.tumblr.id : false
     });
   };
 
@@ -162,6 +164,33 @@ exports.connectGoogle = function(req, res, next){
   })(req, res, next);
 };
 
+exports.connectTumblr = function(req, res, next){
+  req._passport.instance.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
+
+    req.app.db.models.User.findOne({ 'tumblr.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      if (user) {
+        renderSettings(req, res, next, 'Another user has already connected with that Tumblr account.');
+      }
+      else {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'tumblr.id': info.profile.id }, function(err, user) {
+          if (err) {
+            return next(err);
+          }
+
+          res.redirect('/account/settings/');
+        });
+      }
+    });
+  })(req, res, next);
+};
+
 exports.disconnectTwitter = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: { id: undefined } }, function(err, user) {
     if (err) {
@@ -194,6 +223,16 @@ exports.disconnectFacebook = function(req, res, next){
 
 exports.disconnectGoogle = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { google: { id: undefined } }, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect('/account/settings/');
+  });
+};
+
+exports.disconnectTumblr = function(req, res, next){
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, { tumblr: { id: undefined } }, function(err, user) {
     if (err) {
       return next(err);
     }

@@ -49,6 +49,8 @@ exports = module.exports = function(app, passport) {
   app.get('/signup/facebook/callback/', require('./views/signup/index').signupFacebook);
   app.get('/signup/google/', passport.authenticate('google', { callbackURL: '/signup/google/callback/', scope: ['profile email'] }));
   app.get('/signup/google/callback/', require('./views/signup/index').signupGoogle);
+  app.get('/signup/tumblr/', passport.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }));
+  app.get('/signup/tumblr/callback/', require('./views/signup/index').signupTumblr);
 
   //login/out
   app.get('/login/', require('./views/login/index').init);
@@ -69,6 +71,8 @@ exports = module.exports = function(app, passport) {
   app.get('/login/facebook/callback/', require('./views/login/index').loginFacebook);
   app.get('/login/google/', passport.authenticate('google', { callbackURL: '/login/google/callback/', scope: ['profile email'] }));
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
+  app.get('/login/tumblr/', passport.authenticate('tumblr', { callbackURL: '/login/tumblr/callback/', scope: ['profile email'] }));
+  app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
 
   //admin
   app.all('/admin*', ensureAuthenticated);
@@ -163,6 +167,9 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: '/account/settings/google/callback/', scope: ['profile email'] }));
   app.get('/account/settings/google/callback/', require('./views/account/settings/index').connectGoogle);
   app.get('/account/settings/google/disconnect/', require('./views/account/settings/index').disconnectGoogle);
+  app.get('/account/settings/tumblr/', passport.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }));
+  app.get('/account/settings/tumblr/callback/', require('./views/account/settings/index').connectTumblr);
+  app.get('/account/settings/tumblr/disconnect/', require('./views/account/settings/index').disconnectTumblr);
 
   //route not found
   app.all('*', require('./views/http/index').http404);

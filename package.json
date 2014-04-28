@@ -19,6 +19,7 @@
     "passport-github": "~0.1.5",
     "passport-twitter": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
+    "passport-tumblr": "^0.1.2",
     "helmet": "~0.2.0",
     "bcrypt": "~0.7.7"
   },

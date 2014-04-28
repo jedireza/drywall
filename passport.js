@@ -5,7 +5,8 @@ exports = module.exports = function(app, passport) {
       TwitterStrategy = require('passport-twitter').Strategy,
       GitHubStrategy = require('passport-github').Strategy,
       FacebookStrategy = require('passport-facebook').Strategy,
-      GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+      GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+      TumblrStrategy = require('passport-tumblr').Strategy;
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
@@ -96,6 +97,21 @@ exports = module.exports = function(app, passport) {
         done(null, false, {
           accessToken: accessToken,
           refreshToken: refreshToken,
+          profile: profile
+        });
+      }
+    ));
+  }
+
+  if (app.get('tumblr-oauth-key')) {
+    passport.use(new TumblrStrategy({
+        consumerKey: app.get('tumblr-oauth-key'),
+        consumerSecret: app.get('tumblr-oauth-secret')
+      },
+      function(token, tokenSecret, profile, done) {
+        done(null, false, {
+          token: token,
+          tokenSecret: tokenSecret,
           profile: profile
         });
       }

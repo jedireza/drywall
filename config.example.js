@@ -42,5 +42,9 @@ exports.oauth = {
   google: {
     key: process.env.GOOGLE_OAUTH_KEY || '',
     secret: process.env.GOOGLE_OAUTH_SECRET || ''
+  },
+  tumblr: {
+    key: process.env.TUMBLR_OAUTH_KEY || '',
+    secret: process.env.TUMBLR_OAUTH_SECRET || ''
   }
 };

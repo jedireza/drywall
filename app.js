@@ -67,6 +67,10 @@ app.configure(function(){
   app.set('google-oauth-key', config.oauth.google.key);
   app.set('google-oauth-secret', config.oauth.google.secret);
 
+  //google settings
+  app.set('tumblr-oauth-key', config.oauth.tumblr.key);
+  app.set('tumblr-oauth-secret', config.oauth.tumblr.secret);
+
   //middleware
   app.use(express.logger('dev'));
   app.use(express.compress());
