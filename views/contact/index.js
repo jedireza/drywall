@@ -29,17 +29,17 @@ exports.sendMessage = function(req, res){
 
   workflow.on('sendEmail', function() {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
+      from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
       replyTo: req.body.email,
-      to: req.app.get('system-email'),
-      subject: req.app.get('project-name') +' contact form',
+      to: req.app.config.systemEmail,
+      subject: req.app.config.projectName +' contact form',
       textPath: 'contact/email-text',
       htmlPath: 'contact/email-html',
       locals: {
         name: req.body.name,
         email: req.body.email,
         message: req.body.message,
-        projectName: req.app.get('project-name')
+        projectName: req.app.config.projectName
       },
       success: function(message) {
         workflow.emit('response');

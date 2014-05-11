@@ -18,7 +18,7 @@ function ensureAdmin(req, res, next) {
 
 function ensureAccount(req, res, next) {
   if (req.user.canPlayRoleOf('account')) {
-    if (req.app.get('require-account-verification')) {
+    if (req.app.config.requireAccountVerification) {
       if (req.user.roles.account.isVerified !== 'yes' && !/^\/account\/verification\//.test(req.url)) {
         return res.redirect('/account/verification/');
       }

@@ -60,15 +60,15 @@ exports.send = function(req, res, next){
 
   workflow.on('sendEmail', function(token, user) {
     req.app.utility.sendmail(req, res, {
-      from: req.app.get('smtp-from-name') +' <'+ req.app.get('smtp-from-address') +'>',
+      from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
       to: user.email,
-      subject: 'Reset your '+ req.app.get('project-name') +' password',
+      subject: 'Reset your '+ req.app.config.projectName +' password',
       textPath: 'login/forgot/email-text',
       htmlPath: 'login/forgot/email-html',
       locals: {
         username: user.username,
         resetLink: req.protocol +'://'+ req.headers.host +'/login/reset/'+ user.email +'/'+ token +'/',
-        projectName: req.app.get('project-name')
+        projectName: req.app.config.projectName
       },
       success: function(message) {
         workflow.emit('response');

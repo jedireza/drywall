@@ -40,36 +40,6 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('strict routing', true);
-  app.set('project-name', config.projectName);
-  app.set('company-name', config.companyName);
-  app.set('system-email', config.systemEmail);
-  app.set('crypto-key', config.cryptoKey);
-  app.set('require-account-verification', config.requireAccountVerification);
-
-  //smtp settings
-  app.set('smtp-from-name', config.smtp.from.name);
-  app.set('smtp-from-address', config.smtp.from.address);
-  app.set('smtp-credentials', config.smtp.credentials);
-
-  //twitter settings
-  app.set('twitter-oauth-key', config.oauth.twitter.key);
-  app.set('twitter-oauth-secret', config.oauth.twitter.secret);
-
-  //github settings
-  app.set('github-oauth-key', config.oauth.github.key);
-  app.set('github-oauth-secret', config.oauth.github.secret);
-
-  //facebook settings
-  app.set('facebook-oauth-key', config.oauth.facebook.key);
-  app.set('facebook-oauth-secret', config.oauth.facebook.secret);
-
-  //google settings
-  app.set('google-oauth-key', config.oauth.google.key);
-  app.set('google-oauth-secret', config.oauth.google.secret);
-
-  //google settings
-  app.set('tumblr-oauth-key', config.oauth.tumblr.key);
-  app.set('tumblr-oauth-secret', config.oauth.tumblr.secret);
 
   //middleware
   app.use(express.logger('dev'));
@@ -103,9 +73,9 @@ app.configure(function(){
   app.use(require('./views/http/index').http500);
 
   //global locals
-  app.locals.projectName = app.get('project-name');
+  app.locals.projectName = app.config.projectName;
   app.locals.copyrightYear = new Date().getFullYear();
-  app.locals.copyrightName = app.get('company-name');
+  app.locals.copyrightName = app.config.companyName;
   app.locals.cacheBreaker = 'br34k-01';
 });
 
@@ -127,6 +97,6 @@ app.utility.slugify = require('drywall-slugify');
 app.utility.workflow = require('drywall-workflow');
 
 //listen up
-app.server.listen(app.get('port'), function(){
+app.server.listen(app.config.port, function(){
   //and... we're live
 });

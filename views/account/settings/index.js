@@ -36,15 +36,15 @@ var renderSettings = function(req, res, next, oauthMessage) {
         user: escape(JSON.stringify(outcome.user))
       },
       oauthMessage: oauthMessage,
-      oauthTwitter: !!req.app.get('twitter-oauth-key'),
+      oauthTwitter: !!req.app.config.oauth.twitter.key,
       oauthTwitterActive: outcome.user.twitter ? !!outcome.user.twitter.id : false,
-      oauthGitHub: !!req.app.get('github-oauth-key'),
+      oauthGitHub: !!req.app.config.oauth.github.key,
       oauthGitHubActive: outcome.user.github ? !!outcome.user.github.id : false,
-      oauthFacebook: !!req.app.get('facebook-oauth-key'),
+      oauthFacebook: !!req.app.config.oauth.facebook.key,
       oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false,
-      oauthGoogle: !!req.app.get('google-oauth-key'),
+      oauthGoogle: !!req.app.config.oauth.google.key,
       oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
-      oauthTumblr: !!req.app.get('tumblr-oauth-key'),
+      oauthTumblr: !!req.app.config.oauth.tumblr.key,
       oauthTumblrActive: outcome.user.tumblr ? !!outcome.user.tumblr.id : false
     });
   };
