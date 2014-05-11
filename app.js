@@ -76,9 +76,9 @@ app.use(require('./views/http/index').http500);
 
 //setup utilities
 app.utility = {};
-app.utility.sendmail = require('drywall-sendmail');
-app.utility.slugify = require('drywall-slugify');
-app.utility.workflow = require('drywall-workflow');
+app.utility.sendmail = require('./util/sendmail');
+app.utility.slugify = require('./util/slugify');
+app.utility.workflow = require('./util/workflow');
 
 //listen up
 app.server.listen(app.config.port, function(){
