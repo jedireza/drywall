@@ -66,7 +66,10 @@ You need a few records in the database to start using the user system.
 Run these commands on mongo. __Obviously you should use your email address.__
 
 ```js
-use drywall;
+use drywall; //your mongo db name
+```
+
+```js
 db.admingroups.insert({ _id: 'root', name: 'Root' });
 db.admins.insert({ name: {first: 'Root', last: 'Admin', full: 'Root Admin'}, groups: ['root'] });
 var rootAdmin = db.admins.findOne();
