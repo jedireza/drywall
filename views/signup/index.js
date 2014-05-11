@@ -301,7 +301,10 @@ exports.signupTumblr = function(req, res, next) {
       return res.redirect('/signup/');
     }
 
-    console.log(info);
+    if (!info.profile.hasOwnProperty('id')) {
+      info.profile.id = info.profile.username;
+    }
+
     req.app.db.models.User.findOne({ 'tumblr.id': info.profile.id }, function(err, user) {
       if (err) {
         return next(err);

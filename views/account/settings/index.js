@@ -170,6 +170,10 @@ exports.connectTumblr = function(req, res, next){
       return res.redirect('/account/settings/');
     }
 
+    if (!info.profile.hasOwnProperty('id')) {
+      info.profile.id = info.profile.username;
+    }
+
     req.app.db.models.User.findOne({ 'tumblr.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
       if (err) {
         return next(err);

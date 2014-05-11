@@ -17,6 +17,7 @@ exports = module.exports = function(app, mongoose) {
     github: {},
     facebook: {},
     google: {},
+    tumblr: {},
     search: [String]
   });
   userSchema.methods.canPlayRoleOf = function(role) {
