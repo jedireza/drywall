@@ -3,7 +3,8 @@
 //dependencies
 var config = require('./config'),
     express = require('express'),
-    mongoStore = require('connect-mongo')(express),
+    session = require('express-session'),
+    mongoStore = require('connect-mongo')(session),
     http = require('http'),
     path = require('path'),
     passport = require('passport'),
@@ -29,66 +30,49 @@ app.db.once('open', function () {
 //config data models
 require('./models')(app, mongoose);
 
-//setup the session store
-app.sessionStore = new mongoStore({ url: config.mongodb.uri });
+//settings
+app.disable('x-powered-by');
+app.set('port', config.port);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-//config express in all environments
-app.configure(function(){
-  //settings
-  app.disable('x-powered-by');
-  app.set('port', config.port);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.set('strict routing', true);
+//middleware
+app.use(require('morgan')('dev'));
+app.use(require('compression')());
+app.use(require('serve-static')(path.join(__dirname, 'public')));
+app.use(require('body-parser')());
+app.use(require('method-override')());
+app.use(require('cookie-parser')());
+app.use(session({
+  secret: config.cryptoKey,
+  store: new mongoStore({ url: config.mongodb.uri })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+helmet.defaults(app);
 
-  //middleware
-  app.use(express.logger('dev'));
-  app.use(express.compress());
-  app.use(express.favicon(__dirname + '/public/favicon.ico'));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use(express.urlencoded());
-  app.use(express.json());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser());
-  app.use(express.session({
-    secret: config.cryptoKey,
-    store: app.sessionStore
-  }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  helmet.defaults(app);
-
-  //response locals
-  app.use(function(req, res, next) {
-    res.locals.user = {};
-    res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
-    res.locals.user.username = req.user && req.user.username;
-    next();
-  });
-
-  //mount the routes
-  app.use(app.router);
-
-  //error handler
-  app.use(require('./views/http/index').http500);
-
-  //global locals
-  app.locals.projectName = app.config.projectName;
-  app.locals.copyrightYear = new Date().getFullYear();
-  app.locals.copyrightName = app.config.companyName;
-  app.locals.cacheBreaker = 'br34k-01';
+//response locals
+app.use(function(req, res, next) {
+  res.locals.user = {};
+  res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
+  res.locals.user.username = req.user && req.user.username;
+  next();
 });
 
-//config express in dev environment
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+//global locals
+app.locals.projectName = app.config.projectName;
+app.locals.copyrightYear = new Date().getFullYear();
+app.locals.copyrightName = app.config.companyName;
+app.locals.cacheBreaker = 'br34k-01';
 
 //setup passport
 require('./passport')(app, passport);
 
-//route requests
+//setup routes
 require('./routes')(app, passport);
+
+//custom (friendly) error handler
+app.use(require('./views/http/index').http500);
 
 //setup utilities
 app.utility = {};
