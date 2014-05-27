@@ -51,11 +51,52 @@ We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing secret
 Installation
 ------------
 
+Generic install
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
 $ npm install && bower install
 $ mv ./config.example.js ./config.js #set mongodb and email credentials
 $ grunt
+```
+<br>
+Centos 6.x install
+```bash
+#!/bin/bash
+sudo yum update -y
+echo "[mongodb]" >> /etc/yum.repos.d/mongodb.repo
+echo "name=MongoDB Repository" >> /etc/yum.repos.d/mongodb.repo
+echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" >> /etc/yum.repos.d/mongodb.repo
+echo "gpgcheck=0" >> /etc/yum.repos.d/mongodb.repo
+echo "enabled=1" >> /etc/yum.repos.d/mongodb.repo
+sudo yum install mongodb-org -y
+sudo service mongod start
+sudo chkconfig mongod on
+sudo rpm --import https://fedoraproject.org/static/0608B895.txt
+sudo rpm -Uvh http://download-i2.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+sudo yum install nodejs npm --enablerepo=epel -y
+clear
+
+iptables -F
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 3000 -j ACCEPT
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
+iptables-save | sudo tee /etc/sysconfig/iptables
+service iptables restart
+
+sudo yum install git -y
+git clone https://github.com/jedireza/drywall.git && cd ./drywall
+npm install inherits -g
+npm install grunt-cli -g
+npm install bower -g
+npm install && bower install --allow-root
+mv ./config.example.js ./config.js
+grunt
 ```
 
 Setup
