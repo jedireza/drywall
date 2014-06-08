@@ -13,7 +13,7 @@
     "compression": "^1.0.2",
     "serve-static": "^1.1.0",
     "body-parser": "^1.2.0",
-    "method-override": "^1.0.1",
+    "method-override": "^2.0.2",
     "cookie-parser": "^1.1.0",
     "express-session": "^1.2.0",
     "morgan": "^1.1.1",
