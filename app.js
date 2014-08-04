@@ -4,7 +4,6 @@
 var config = require('./config'),
     express = require('express'),
     session = require('express-session'),
-    mongoStore = require('connect-mongo')(session),
     http = require('http'),
     path = require('path'),
     passport = require('passport'),
@@ -43,9 +42,37 @@ app.use(require('serve-static')(path.join(__dirname, 'public')));
 app.use(require('body-parser')());
 app.use(require('method-override')());
 app.use(require('cookie-parser')());
+
+var session_store;
+var mongoStore;
+var redisStore;
+var redis;
+var redis_client;
+
+if (config.session_redis.use_redis) 
+  {
+    console.log("Setup Redis");
+    redis=require('redis');
+    if (!session) console.log("No Redis");
+    redisStore = require('connect-redis')(session);
+    redis_client = redis.createClient();
+
+    session_store = new redisStore({
+	    client: redis_client,
+	    url: config.session_redis.url,
+            ttl: config.session_redis.ttl              
+	                           });
+    if (!session_store) console.log("No session");
+
+  }
+else
+  {
+    mongoStore = require('connect-mongo')(session);
+    session_store = new mongoStore({ url: config.mongodb.uri });
+  }
 app.use(session({
   secret: config.cryptoKey,
-  store: new mongoStore({ url: config.mongodb.uri })
+  store: session_store
 }));
 app.use(passport.initialize());
 app.use(passport.session());
