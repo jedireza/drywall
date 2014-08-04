@@ -1,6 +1,11 @@
 'use strict';
 
 exports.port = process.env.PORT || 3000;
+exports.session_redis = { use_redis: false ,
+			  //url: 'redis://user:pass@host:port/db',
+                          url: process.env.REDIS_URL || 'redis://127.0.0.1:6379/0',
+			  ttl: process.env.SESSION_TTL || 1800
+                         };
 exports.mongodb = {
   uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/drywall'
 };
