@@ -13,6 +13,11 @@ var app; //the main declaration
     //register global ajax handlers
     $(document).ajaxStart(function(){ $('.ajax-spinner').show(); });
     $(document).ajaxStop(function(){  $('.ajax-spinner').hide(); });
+    $.ajaxSetup({
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('x-csrf-token', $.cookie('_csrfToken'));
+      }
+    });
 
     //ajax spinner follows mouse
     $(document).bind('mousemove', function(e) {

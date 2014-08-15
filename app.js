@@ -3,13 +3,15 @@
 //dependencies
 var config = require('./config'),
     express = require('express'),
+    cookieParser = require('cookie-parser'),
     session = require('express-session'),
     mongoStore = require('connect-mongo')(session),
     http = require('http'),
     path = require('path'),
     passport = require('passport'),
     mongoose = require('mongoose'),
-    helmet = require('helmet');
+    helmet = require('helmet'),
+    csrf = require('csurf');
 
 //create express app
 var app = express();
@@ -42,17 +44,19 @@ app.use(require('compression')());
 app.use(require('serve-static')(path.join(__dirname, 'public')));
 app.use(require('body-parser')());
 app.use(require('method-override')());
-app.use(require('cookie-parser')());
+app.use(cookieParser(config.cryptoKey));
 app.use(session({
   secret: config.cryptoKey,
   store: new mongoStore({ url: config.mongodb.uri })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(csrf({ cookie: { signed: true } }));
 helmet.defaults(app);
 
 //response locals
 app.use(function(req, res, next) {
+  res.cookie('_csrfToken', req.csrfToken());
   res.locals.user = {};
   res.locals.user.defaultReturnUrl = req.user && req.user.defaultReturnUrl();
   res.locals.user.username = req.user && req.user.username;

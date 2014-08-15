@@ -27,6 +27,10 @@ module.exports = function(grunt) {
             src: ['jquery.js'], dest: 'public/vendor/jquery/'
           },
           {
+            expand: true, cwd: 'bower_components/jquery.cookie/',
+            src: ['jquery.cookie.js'], dest: 'public/vendor/jquery.cookie/'
+          },
+          {
             expand: true, cwd: 'bower_components/momentjs/',
             src: ['moment.js'], dest: 'public/vendor/momentjs/'
           },
@@ -93,6 +97,7 @@ module.exports = function(grunt) {
         files: {
           'public/layouts/core.min.js': [
             'public/vendor/jquery/jquery.js',
+            'public/vendor/jquery.cookie/jquery.cookie.js',
             'public/vendor/underscore/underscore.js',
             'public/vendor/backbone/backbone.js',
             'public/vendor/bootstrap/js/affix.js',
