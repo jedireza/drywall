@@ -25,7 +25,6 @@ Live Demos
 | ------------------------------ | -------- | -------- |
 | https://drywall.herokuapp.com/ | root     | h3r00t   |
 | https://drywall.nodejitsu.com/ | root     | j1ts00t  |
-| https://drywall.onmodulus.net/ | root     | m0dr00t  |
 
 __Note:__ The live demos have been modified so you cannot change the root user, the root user's linked Administrator role or the root Admin Group. This was done in order to keep the app ready to test at all times.
 
