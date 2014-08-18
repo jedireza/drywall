@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
   var attemptSchema = new mongoose.Schema({
     ip: { type: String, default: '' },
@@ -10,4 +12,5 @@ exports = module.exports = function(app, mongoose) {
   attemptSchema.index({ user: 1 });
   attemptSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('LoginAttempt', attemptSchema);
+  debug('LoginAttempt Schema Added');
 };

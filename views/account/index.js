@@ -1,5 +1,5 @@
 'use strict';
 
 exports.init = function(req, res){
-  res.render('account/index');
+  res.render('account/index.jade');
 };

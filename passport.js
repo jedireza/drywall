@@ -1,4 +1,5 @@
 'use strict';
+var debug=require('debug')('drywall:login');
 
 exports = module.exports = function(app, passport) {
   var LocalStrategy = require('passport-local').Strategy,
@@ -20,6 +21,7 @@ exports = module.exports = function(app, passport) {
 
       app.db.models.User.findOne(conditions, function(err, user) {
         if (err) {
+	  debug(err);
           return done(err);
         }
 
@@ -29,6 +31,7 @@ exports = module.exports = function(app, passport) {
 
         app.db.models.User.validatePassword(password, user.password, function(err, isValid) {
           if (err) {
+  	    debug(err);
             return done(err);
           }
 

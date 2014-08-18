@@ -5,7 +5,7 @@ exports.init = function(req, res){
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
-    res.render('login/reset/index');
+    res.render('login/reset/index.jade');
   }
 };
 

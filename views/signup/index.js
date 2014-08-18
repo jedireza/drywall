@@ -5,7 +5,7 @@ exports.init = function(req, res){
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
-    res.render('signup/index', {
+    res.render('signup/index.jade', {
       oauthMessage: '',
       oauthTwitter: !!req.app.config.oauth.twitter.key,
       oauthGitHub: !!req.app.config.oauth.github.key,
@@ -194,10 +194,10 @@ exports.signupTwitter = function(req, res, next) {
 
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: '' });
+        res.render('signup/social.jade', { email: '' });
       }
       else {
-        res.render('signup/index', {
+        res.render('signup/index.jade', {
           oauthMessage: 'We found a user linked to your Twitter account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -223,10 +223,10 @@ exports.signupGitHub = function(req, res, next) {
 
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social.jade', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
-        res.render('signup/index', {
+        res.render('signup/index.jade', {
           oauthMessage: 'We found a user linked to your GitHub account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -251,10 +251,10 @@ exports.signupFacebook = function(req, res, next) {
       }
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social.jade', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
-        res.render('signup/index', {
+        res.render('signup/index.jade', {
           oauthMessage: 'We found a user linked to your Facebook account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -279,10 +279,10 @@ exports.signupGoogle = function(req, res, next) {
       }
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social.jade', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
-        res.render('signup/index', {
+        res.render('signup/index.jade', {
           oauthMessage: 'We found a user linked to your Google account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -311,10 +311,10 @@ exports.signupTumblr = function(req, res, next) {
       }
       if (!user) {
         req.session.socialProfile = info.profile;
-        res.render('signup/social', { email: info.profile.emails && info.profile.emails[0].value || '' });
+        res.render('signup/social.jade', { email: info.profile.emails && info.profile.emails[0].value || '' });
       }
       else {
-        res.render('signup/index', {
+        res.render('signup/index.jade', {
           oauthMessage: 'We found a user linked to your Tumblr account.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,

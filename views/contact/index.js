@@ -1,7 +1,7 @@
 'use strict';
 
 exports.init = function(req, res){
-  res.render('contact/index');
+  res.render('contact/index.jade');
 };
 
 exports.sendMessage = function(req, res){

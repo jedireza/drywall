@@ -58,7 +58,7 @@ exports.find = function(req, res, next){
     }
     else {
       outcome.results.filters = req.query;
-      res.render('admin/accounts/index', {
+      res.render('admin/accounts/index.jade', {
         data: {
           results: escape(JSON.stringify(outcome.results)),
           statuses: outcome.statuses
@@ -104,7 +104,7 @@ exports.read = function(req, res, next){
       res.send(outcome.record);
     }
     else {
-      res.render('admin/accounts/details', {
+      res.render('admin/accounts/details.jade', {
         data: {
           record: escape(JSON.stringify(outcome.record)),
           statuses: outcome.statuses

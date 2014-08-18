@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
   var userSchema = new mongoose.Schema({
     username: { type: String, unique: true },
@@ -72,4 +74,5 @@ exports = module.exports = function(app, mongoose) {
   userSchema.index({ search: 1 });
   userSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('User', userSchema);
+  debug('User Schema Added');
 };

@@ -1,11 +1,13 @@
 'use strict';
 
+var debug=require('debug')('drywall:login');
+
 exports.init = function(req, res){
   if (req.isAuthenticated()) {
     res.redirect(req.user.defaultReturnUrl());
   }
   else {
-    res.render('login/forgot/index');
+    res.render('login/forgot/index.jade');
   }
 };
 
@@ -59,12 +61,13 @@ exports.send = function(req, res, next){
   });
 
   workflow.on('sendEmail', function(token, user) {
+	  debug('Sending Email from '+req.app.config.smtp.from.name+' <'+ req.app.config.smtp.from.address +'> to '+user.email+' ')
     req.app.utility.sendmail(req, res, {
       from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
       to: user.email,
       subject: 'Reset your '+ req.app.config.projectName +' password',
-      textPath: 'login/forgot/email-text',
-      htmlPath: 'login/forgot/email-html',
+      textPath: 'login/forgot/email-text.jade',
+      htmlPath: 'login/forgot/email-html.jade',
       locals: {
         username: user.username,
         resetLink: req.protocol +'://'+ req.headers.host +'/login/reset/'+ user.email +'/'+ token +'/',

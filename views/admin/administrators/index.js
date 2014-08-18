@@ -29,7 +29,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/administrators/index', { data: { results: escape(JSON.stringify(results)) } });
+      res.render('admin/administrators/index.jade', { data: { results: escape(JSON.stringify(results)) } });
     }
   });
 };
@@ -68,7 +68,7 @@ exports.read = function(req, res, next){
       res.send(outcome.record);
     }
     else {
-      res.render('admin/administrators/details', {
+      res.render('admin/administrators/details.jade', {
         data: {
           record: escape(JSON.stringify(outcome.record)),
           adminGroups: outcome.adminGroups

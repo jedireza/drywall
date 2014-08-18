@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:login');
+
 var getReturnUrl = function(req) {
   var returnUrl = req.user.defaultReturnUrl();
   if (req.session.returnUrl) {
@@ -14,7 +16,7 @@ exports.init = function(req, res){
     res.redirect(getReturnUrl(req));
   }
   else {
-    res.render('login/index', {
+    res.render('login/index.jade', {
       oauthMessage: '',
       oauthTwitter: !!req.app.config.oauth.twitter.key,
       oauthGitHub: !!req.app.config.oauth.github.key,
@@ -27,17 +29,20 @@ exports.init = function(req, res){
 
 exports.login = function(req, res){
   var workflow = req.app.utility.workflow(req, res);
-
+   
   workflow.on('validate', function() {
     if (!req.body.username) {
+      debug('No req.body.username, this field is required');
       workflow.outcome.errfor.username = 'required';
     }
 
     if (!req.body.password) {
+      debug('No req.body.password, this field is required');
       workflow.outcome.errfor.password = 'required';
     }
 
     if (workflow.hasErrors()) {
+      debug('Missing field errors');
       return workflow.emit('response');
     }
 
@@ -45,10 +50,12 @@ exports.login = function(req, res){
   });
 
   workflow.on('abuseFilter', function() {
+    debug ('Checking Abuse Filter');
     var getIpCount = function(done) {
       var conditions = { ip: req.ip };
       req.app.db.models.LoginAttempt.count(conditions, function(err, count) {
         if (err) {
+	  debug(err);
           return done(err);
         }
 
@@ -60,6 +67,7 @@ exports.login = function(req, res){
       var conditions = { ip: req.ip, user: req.body.username };
       req.app.db.models.LoginAttempt.count(conditions, function(err, count) {
         if (err) {
+	  debug(err);
           return done(err);
         }
 
@@ -69,6 +77,7 @@ exports.login = function(req, res){
 
     var asyncFinally = function(err, results) {
       if (err) {
+        debug(err);
         return workflow.emit('exception', err);
       }
 
@@ -85,8 +94,11 @@ exports.login = function(req, res){
   });
 
   workflow.on('attemptLogin', function() {
+    debug('Doing attempt login function and passport authentication');
+    debug(req._passport.instance.authenticate);
     req._passport.instance.authenticate('local', function(err, user, info) {
       if (err) {
+	debug(err);
         return workflow.emit('exception', err);
       }
 
@@ -94,6 +106,7 @@ exports.login = function(req, res){
         var fieldsToSet = { ip: req.ip, user: req.body.username };
         req.app.db.models.LoginAttempt.create(fieldsToSet, function(err, doc) {
           if (err) {
+  	    debug(err);
             return workflow.emit('exception', err);
           }
 
@@ -104,6 +117,7 @@ exports.login = function(req, res){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return workflow.emit('exception', err);
           }
 
@@ -113,6 +127,7 @@ exports.login = function(req, res){
     })(req, res);
   });
 
+  debug('Starting Validation Process');
   workflow.emit('validate');
 };
 
@@ -124,11 +139,12 @@ exports.loginTwitter = function(req, res, next){
 
     req.app.db.models.User.findOne({ 'twitter.id': info.profile.id }, function(err, user) {
       if (err) {
+	debug(err);
         return next(err);
       }
 
       if (!user) {
-        res.render('login/index', {
+        res.render('login/index.jade', {
           oauthMessage: 'No users found linked to your Twitter account. You may need to create an account first.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -140,6 +156,7 @@ exports.loginTwitter = function(req, res, next){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return next(err);
           }
 
@@ -158,11 +175,12 @@ exports.loginGitHub = function(req, res, next){
 
     req.app.db.models.User.findOne({ 'github.id': info.profile.id }, function(err, user) {
       if (err) {
+	debug(err);
         return next(err);
       }
 
       if (!user) {
-        res.render('login/index', {
+        res.render('login/index.jade', {
           oauthMessage: 'No users found linked to your GitHub account. You may need to create an account first.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -174,6 +192,7 @@ exports.loginGitHub = function(req, res, next){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return next(err);
           }
 
@@ -192,11 +211,12 @@ exports.loginFacebook = function(req, res, next){
 
     req.app.db.models.User.findOne({ 'facebook.id': info.profile.id }, function(err, user) {
       if (err) {
+	debug(err);
         return next(err);
       }
 
       if (!user) {
-        res.render('login/index', {
+        res.render('login/index.jade', {
           oauthMessage: 'No users found linked to your Facebook account. You may need to create an account first.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -208,6 +228,7 @@ exports.loginFacebook = function(req, res, next){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return next(err);
           }
 
@@ -226,11 +247,12 @@ exports.loginGoogle = function(req, res, next){
 
     req.app.db.models.User.findOne({ 'google.id': info.profile.id }, function(err, user) {
       if (err) {
+        debug(err);
         return next(err);
       }
 
       if (!user) {
-        res.render('login/index', {
+        res.render('login/index.jade', {
           oauthMessage: 'No users found linked to your Google account. You may need to create an account first.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -242,6 +264,7 @@ exports.loginGoogle = function(req, res, next){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return next(err);
           }
 
@@ -264,11 +287,12 @@ exports.loginTumblr = function(req, res, next){
 
     req.app.db.models.User.findOne({ 'tumblr.id': info.profile.id }, function(err, user) {
       if (err) {
+	debug(err);
         return next(err);
       }
 
       if (!user) {
-        res.render('login/index', {
+        res.render('login/index.jade', {
           oauthMessage: 'No users found linked to your Tumblr account. You may need to create an account first.',
           oauthTwitter: !!req.app.config.oauth.twitter.key,
           oauthGitHub: !!req.app.config.oauth.github.key,
@@ -280,6 +304,7 @@ exports.loginTumblr = function(req, res, next){
       else {
         req.login(user, function(err) {
           if (err) {
+	    debug(err);
             return next(err);
           }
 

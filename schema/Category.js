@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
   var categorySchema = new mongoose.Schema({
     _id: { type: String },
@@ -11,4 +13,5 @@ exports = module.exports = function(app, mongoose) {
   categorySchema.index({ name: 1 });
   categorySchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('Category', categorySchema);
+  debug('Category Schema Added');
 };

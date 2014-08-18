@@ -23,7 +23,7 @@ exports.init = function(req, res, next){
       return next(err);
     }
 
-    res.render('admin/index', sigma);
+    res.render('admin/index.jade', sigma);
   };
 
   require('async').parallel(queries, asyncFinally);

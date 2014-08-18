@@ -33,7 +33,7 @@ exports.init = function(req, res, next){
         return next(err);
       }
 
-      res.render('account/verification/index', {
+      res.render('account/verification/index.jade', {
         data: {
           user: JSON.stringify(user)
         }

@@ -33,7 +33,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/categories/index', { data: { results: escape(JSON.stringify(results)) } });
+      res.render('admin/categories/index.jade', { data: { results: escape(JSON.stringify(results)) } });
     }
   });
 };
@@ -48,7 +48,7 @@ exports.read = function(req, res, next){
       res.send(category);
     }
     else {
-      res.render('admin/categories/details', { data: { record: escape(JSON.stringify(category)) } });
+      res.render('admin/categories/details.jade', { data: { record: escape(JSON.stringify(category)) } });
     }
   });
 };

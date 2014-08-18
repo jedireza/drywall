@@ -30,7 +30,7 @@ var renderSettings = function(req, res, next, oauthMessage) {
       return next(err);
     }
 
-    res.render('account/settings/index', {
+    res.render('account/settings/index.jade', {
       data: {
         account: escape(JSON.stringify(outcome.account)),
         user: escape(JSON.stringify(outcome.user))

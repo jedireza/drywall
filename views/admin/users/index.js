@@ -41,7 +41,7 @@ exports.find = function(req, res, next){
     }
     else {
       results.filters = req.query;
-      res.render('admin/users/index', { data: { results: JSON.stringify(results) } });
+      res.render('admin/users/index.jade', { data: { results: JSON.stringify(results) } });
     }
   });
 };
@@ -56,7 +56,7 @@ exports.read = function(req, res, next){
       res.send(user);
     }
     else {
-      res.render('admin/users/details', { data: { record: escape(JSON.stringify(user)) } });
+      res.render('admin/users/details.jade', { data: { record: escape(JSON.stringify(user)) } });
     }
   });
 };

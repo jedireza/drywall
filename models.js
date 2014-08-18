@@ -1,6 +1,9 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
+  debug('Loading Database Schemas');
   //embeddable docs first
   require('./schema/Note')(app, mongoose);
   require('./schema/Status')(app, mongoose);

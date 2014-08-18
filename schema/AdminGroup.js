@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
   var adminGroupSchema = new mongoose.Schema({
     _id: { type: String },
@@ -10,4 +12,5 @@ exports = module.exports = function(app, mongoose) {
   adminGroupSchema.index({ name: 1 }, { unique: true });
   adminGroupSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('AdminGroup', adminGroupSchema);
+  debug('AdminGroup Schema Added');
 };

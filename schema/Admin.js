@@ -1,5 +1,7 @@
 'use strict';
 
+var debug=require('debug')('drywall:database');
+
 exports = module.exports = function(app, mongoose) {
   var adminSchema = new mongoose.Schema({
     user: {
@@ -60,4 +62,5 @@ exports = module.exports = function(app, mongoose) {
   adminSchema.index({ search: 1 });
   adminSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('Admin', adminSchema);
+  debug('Admin Schema Added');
 };

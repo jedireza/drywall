@@ -1,4 +1,5 @@
 'use strict';
+var debug=require('debug')('drywall:database');
 
 exports = module.exports = function(app, mongoose) {
   var statusSchema = new mongoose.Schema({
@@ -11,4 +12,5 @@ exports = module.exports = function(app, mongoose) {
   statusSchema.index({ name: 1 });
   statusSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('Status', statusSchema);
+  debug('Status Schema Added');
 };
