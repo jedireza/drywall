@@ -10,7 +10,7 @@ exports = module.exports = function(req, res, options) {
     textPath String,
     html: String,
     htmlPath: String,
-    attachements: [String],
+    attachments: [String],
     success: Function,
     error: Function
   } */
@@ -56,15 +56,15 @@ exports = module.exports = function(req, res, options) {
         return;
       }
 
-      var attachements = [];
+      var attachments = [];
 
       if (options.html) {
-        attachements.push({ data: options.html, alternative: true });
+        attachments.push({ data: options.html, alternative: true });
       }
 
       if (options.attachments) {
         for (var i = 0 ; i < options.attachments.length ; i++) {
-          attachements.push(options.attachments[i]);
+          attachments.push(options.attachments[i]);
         }
       }
 
@@ -78,7 +78,7 @@ exports = module.exports = function(req, res, options) {
         bcc: options.bcc,
         subject: options.subject,
         text: options.text,
-        attachment: attachements
+        attachment: attachments
       }, function(err, message) {
         if (err) {
           options.error('Email failed to send. '+ err);
