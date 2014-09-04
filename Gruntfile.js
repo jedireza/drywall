@@ -84,6 +84,13 @@ module.exports = function(grunt) {
           'public/less/**/*.less'
          ],
          tasks: ['newer:less']
+      },
+      layoutLess: {
+        files: [
+          'public/layouts/**/*.less',
+          'public/less/**/*.less'
+        ],
+        tasks: ['less:layouts']
       }
     },
     uglify: {
