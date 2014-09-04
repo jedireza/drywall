@@ -4,6 +4,7 @@
 var config = require('./config'),
     express = require('express'),
     cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
     session = require('express-session'),
     mongoStore = require('connect-mongo')(session),
     http = require('http'),
@@ -42,17 +43,20 @@ app.set('view engine', 'jade');
 app.use(require('morgan')('dev'));
 app.use(require('compression')());
 app.use(require('serve-static')(path.join(__dirname, 'public')));
-app.use(require('body-parser')());
 app.use(require('method-override')());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.cryptoKey));
 app.use(session({
+  resave: true,
+  saveUninitialized: true,
   secret: config.cryptoKey,
   store: new mongoStore({ url: config.mongodb.uri })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(csrf({ cookie: { signed: true } }));
-helmet.defaults(app);
+helmet(app);
 
 //response locals
 app.use(function(req, res, next) {
