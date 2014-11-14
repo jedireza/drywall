@@ -51,6 +51,8 @@ exports = module.exports = function(app, passport) {
   app.get('/signup/google/callback/', require('./views/signup/index').signupGoogle);
   app.get('/signup/tumblr/', passport.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }));
   app.get('/signup/tumblr/callback/', require('./views/signup/index').signupTumblr);
+  app.get('/signup/linkedin/', passport.authenticate('linkedin', { callbackURL: '/signup/linkedin/callback/' }));
+  app.get('/signup/linkedin/callback/', require('./views/signup/index').signupLinkedin);
 
   //login/out
   app.get('/login/', require('./views/login/index').init);

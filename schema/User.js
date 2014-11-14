@@ -18,6 +18,7 @@ exports = module.exports = function(app, mongoose) {
     facebook: {},
     google: {},
     tumblr: {},
+    linkedin: {},
     search: [String]
   });
   userSchema.methods.canPlayRoleOf = function(role) {
@@ -69,6 +70,7 @@ exports = module.exports = function(app, mongoose) {
   userSchema.index({ 'github.id': 1 });
   userSchema.index({ 'facebook.id': 1 });
   userSchema.index({ 'google.id': 1 });
+  userSchema.index({ 'linkedin.id': 1 });
   userSchema.index({ search: 1 });
   userSchema.set('autoIndex', (app.get('env') === 'development'));
   app.db.model('User', userSchema);

@@ -15,7 +15,7 @@ block body
       div.page-header
         h1 Sign Up
       div#signup
-      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr
+      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr || oauthLinkedin
         hr
         p Or sign up using...
         if oauthMessage
@@ -46,6 +46,10 @@ block body
             a.btn.btn-info(href='/signup/tumblr/')
               i.fa.fa-tumblr-square.fa-lg
               |  Tumblr
+          if oauthLinkedin
+            a.btn.btn-info(href='/signup/linkedin/')
+              i.fa.fa-linkedin-square.fa-lg
+              |  Linkedin
     div.col-sm-6.marketing
       div.page-header
         h1 Campy Benefits
