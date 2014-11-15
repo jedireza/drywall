@@ -7,6 +7,26 @@ LinkedIn login was added.
 
 In future, given time permits, I might make more significant updates.
 
+
+Settings required in Linkedin Application
+=========================================
+
+We only mention application specific parts here.
+
+Under 'OAuth User Agreement'
+  a. In 'Default Scope' check following
+     - r_emailaddress
+     - r_basicprofile
+  b. In 'OAuth 2.0 Redirect URLs' add following
+     - http://localhost:4000/login/linkedin/callback/
+     - http://localhost:4000/signup/linkedin/callback/
+
+
+
+Rest of the documentation is same as from the forked branch.
+
+
+
 Drywall
 =============
 

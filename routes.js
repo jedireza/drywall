@@ -75,7 +75,7 @@ exports = module.exports = function(app, passport) {
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
   app.get('/login/tumblr/', passport.authenticate('tumblr', { callbackURL: '/login/tumblr/callback/', scope: ['profile email'] }));
   app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
-  app.get('/login/linkedin/', passport.authenticate('linkedin', { callbackURL: '/login/linkedin/callback/', scope: ['profile email'] }));
+  app.get('/login/linkedin/', passport.authenticate('linkedin', { callbackURL: '/login/linkedin/callback/', scope: ['r_emailaddress', 'r_basicprofile'] }));
   app.get('/login/linkedin/callback/', require('./views/login/index').loginLinkedin);
 
   //admin
