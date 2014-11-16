@@ -7,7 +7,7 @@ exports = module.exports = function(app, passport) {
       FacebookStrategy = require('passport-facebook').Strategy,
       GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
       TumblrStrategy = require('passport-tumblr').Strategy,
-      LinkedinStrategy = require('passport-linkedin').Strategy;
+      LinkedinStrategy = require('passport-linkedin-oauth2').Strategy;
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
@@ -121,8 +121,8 @@ exports = module.exports = function(app, passport) {
 
   if (app.config.oauth.linkedin.key) {
     passport.use(new LinkedinStrategy({
-        consumerKey: app.config.oauth.linkedin.key,
-        consumerSecret: app.config.oauth.linkedin.secret
+        clientID: app.config.oauth.linkedin.key,
+        clientSecret: app.config.oauth.linkedin.secret
       },
       function(accessToken, refreshToken, profile, done) {
         done(null, false, {
