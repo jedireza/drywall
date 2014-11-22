@@ -1,5 +1,7 @@
 'use strict';
 
+var crypto = require('crypto');
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -51,6 +53,8 @@ exports = module.exports = function(app, passport) {
   app.get('/signup/google/callback/', require('./views/signup/index').signupGoogle);
   app.get('/signup/tumblr/', passport.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }));
   app.get('/signup/tumblr/callback/', require('./views/signup/index').signupTumblr);
+  app.get('/signup/linkedin/', passport.authenticate('linkedin', { callbackURL: '/signup/linkedin/callback/' }));
+  app.get('/signup/linkedin/callback/', require('./views/signup/index').signupLinkedin);
 
   //login/out
   app.get('/login/', require('./views/login/index').init);
@@ -73,6 +77,11 @@ exports = module.exports = function(app, passport) {
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
   app.get('/login/tumblr/', passport.authenticate('tumblr', { callbackURL: '/login/tumblr/callback/', scope: ['profile email'] }));
   app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
+  app.get('/login/linkedin/', passport.authenticate('linkedin',
+              { callbackURL: '/login/linkedin/callback/',
+                scope: ['r_emailaddress', 'r_basicprofile'],
+                state: crypto.randomBytes(20).toString('hex') }));
+  app.get('/login/linkedin/callback/', require('./views/login/index').loginLinkedin);
 
   //admin
   app.all('/admin*', ensureAuthenticated);
@@ -170,6 +179,9 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/tumblr/', passport.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }));
   app.get('/account/settings/tumblr/callback/', require('./views/account/settings/index').connectTumblr);
   app.get('/account/settings/tumblr/disconnect/', require('./views/account/settings/index').disconnectTumblr);
+  app.get('/account/settings/linkedin/', passport.authenticate('linkedin', { callbackURL: '/account/settings/linkedin/callback/' }));
+  app.get('/account/settings/linkedin/callback/', require('./views/account/settings/index').connectLinkedin);
+  app.get('/account/settings/linkedin/disconnect/', require('./views/account/settings/index').disconnectLinkedin);
 
   //route not found
   app.all('*', require('./views/http/index').http404);

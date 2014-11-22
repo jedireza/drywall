@@ -46,5 +46,9 @@ exports.oauth = {
   tumblr: {
     key: process.env.TUMBLR_OAUTH_KEY || '',
     secret: process.env.TUMBLR_OAUTH_SECRET || ''
+  },
+  linkedin: {
+    key: process.env.LINKEDIN_OAUTH_KEY || '',
+    secret: process.env.LINKEDIN_OAUTH_SECRET || ''
   }
 };

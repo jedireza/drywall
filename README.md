@@ -1,3 +1,32 @@
+Forkers Note
+============
+
+This fork has a minor update.
+
+LinkedIn login was added.
+
+In future, given time permits, I might make more significant updates.
+
+
+Settings required in Linkedin Application
+=========================================
+
+We only mention application specific parts here.
+
+Under 'OAuth User Agreement'
+  a. In 'Default Scope' check following
+     - r_emailaddress
+     - r_basicprofile
+  b. In 'OAuth 2.0 Redirect URLs' add following
+     - http://localhost:4000/login/linkedin/callback/
+     - http://localhost:4000/signup/linkedin/callback/
+
+
+
+Rest of the documentation is same as from the forked branch.
+
+
+
 Drywall
 =============
 
@@ -103,7 +132,7 @@ Features
  - Basic front end web pages.
  - Contact page has form to email.
  - Login system with forgot password and reset password.
- - Signup and Login with Facebook, Twitter, GitHub, Google and Tumblr.
+ - Signup and Login with Facebook, Twitter, GitHub, Google, Tumblr and LinkedIn.
  - Optional email verification during signup flow.
  - User system with separate account and admin roles.
  - Admin groups with shared permission settings.

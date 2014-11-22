@@ -15,7 +15,7 @@ var renderSettings = function(req, res, next, oauthMessage) {
   };
 
   var getUserData = function(callback) {
-    req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id google.id tumblr.id').exec(function(err, user) {
+    req.app.db.models.User.findById(req.user.id, 'username email twitter.id github.id facebook.id google.id tumblr.id linkedin.id').exec(function(err, user) {
       if (err) {
         callback(err, null);
       }
@@ -45,7 +45,9 @@ var renderSettings = function(req, res, next, oauthMessage) {
       oauthGoogle: !!req.app.config.oauth.google.key,
       oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
       oauthTumblr: !!req.app.config.oauth.tumblr.key,
-      oauthTumblrActive: outcome.user.tumblr ? !!outcome.user.tumblr.id : false
+      oauthTumblrActive: outcome.user.tumblr ? !!outcome.user.tumblr.id : false,
+      oauthLinkedin: !!req.app.config.oauth.linkedin.key,
+      oauthLinkedinActive: outcome.user.linkedin ? !!outcome.user.linkedin.id : false
     });
   };
 
@@ -195,6 +197,37 @@ exports.connectTumblr = function(req, res, next){
   })(req, res, next);
 };
 
+exports.connectLinkedin = function(req, res, next){
+  req._passport.instance.authenticate('linkedin', { callbackURL: '/account/settings/linkedin/callback/' }, function(err, user, info) {
+    if (!info || !info.profile) {
+      return res.redirect('/account/settings/');
+    }
+
+    if (!info.profile.hasOwnProperty('id')) {
+      info.profile.id = info.profile.username;
+    }
+
+    req.app.db.models.User.findOne({ 'linkedin.id': info.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      if (user) {
+        renderSettings(req, res, next, 'Another user has already connected with that Linkedin account.');
+      }
+      else {
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'linkedin.id': info.profile.id }, function(err, user) {
+          if (err) {
+            return next(err);
+          }
+
+          res.redirect('/account/settings/');
+        });
+      }
+    });
+  })(req, res, next);
+};
+
 exports.disconnectTwitter = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: { id: undefined } }, function(err, user) {
     if (err) {
@@ -237,6 +270,16 @@ exports.disconnectGoogle = function(req, res, next){
 
 exports.disconnectTumblr = function(req, res, next){
   req.app.db.models.User.findByIdAndUpdate(req.user.id, { tumblr: { id: undefined } }, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+
+    res.redirect('/account/settings/');
+  });
+};
+
+exports.disconnectLinkedin = function(req, res, next){
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, { linkedin: { id: undefined } }, function(err, user) {
     if (err) {
       return next(err);
     }
