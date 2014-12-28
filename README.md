@@ -103,7 +103,7 @@ Features
  - Basic front end web pages.
  - Contact page has form to email.
  - Login system with forgot password and reset password.
- - Signup and Login with Facebook, Twitter, GitHub, Google and Tumblr.
+ - Signup and Login with Facebook, Twitter, GitHub, Google, Tumblr, and Heroku.
  - Optional email verification during signup flow.
  - User system with separate account and admin roles.
  - Admin groups with shared permission settings.

@@ -25,6 +25,7 @@
     "passport-facebook": "^1.0.3",
     "passport-github": "^0.1.5",
     "passport-google-oauth": "^0.1.5",
+    "passport-heroku": "0.0.2",
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
     "passport-tumblr": "^0.1.2",

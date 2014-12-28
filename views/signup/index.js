@@ -11,7 +11,8 @@ exports.init = function(req, res){
       oauthGitHub: !!req.app.config.oauth.github.key,
       oauthFacebook: !!req.app.config.oauth.facebook.key,
       oauthGoogle: !!req.app.config.oauth.google.key,
-      oauthTumblr: !!req.app.config.oauth.tumblr.key
+      oauthTumblr: !!req.app.config.oauth.tumblr.key,
+      oauthHeroku: !!req.app.config.oauth.heroku.key
     });
   }
 };
@@ -203,7 +204,42 @@ exports.signupTwitter = function(req, res, next) {
           oauthGitHub: !!req.app.config.oauth.github.key,
           oauthFacebook: !!req.app.config.oauth.facebook.key,
           oauthGoogle: !!req.app.config.oauth.google.key,
-          oauthTumblr: !!req.app.config.oauth.tumblr.key
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
+        });
+      }
+    });
+  })(req, res, next);
+};
+
+exports.signupHeroku = function (req, res, next) {
+  req._passport.instance.authenticate('heroku', { callbackURL: '/signup/heroku/callback/' }, function(err, user, info) {
+    console.log('loginHeroku - ' + JSON.stringify({
+      err: err,
+      user: user,
+      info: info
+    }, null, 4));
+    if (!info || !info.profile) {
+      return res.redirect('/signup/');
+    }
+
+    req.app.db.models.User.findOne({ 'heroku.id': info.profile.id }, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        req.session.socialProfile = info.profile;
+        res.render('signup/social', { email: info.profile.email });
+      }
+      else {
+        res.render('signup/index', {
+          oauthMessage: 'We found a user linked to your Heroku account.',
+          oauthTwitter: !!req.app.config.oauth.twitter.key,
+          oauthGitHub: !!req.app.config.oauth.github.key,
+          oauthFacebook: !!req.app.config.oauth.facebook.key,
+          oauthGoogle: !!req.app.config.oauth.google.key,
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
         });
       }
     });
@@ -232,7 +268,8 @@ exports.signupGitHub = function(req, res, next) {
           oauthGitHub: !!req.app.config.oauth.github.key,
           oauthFacebook: !!req.app.config.oauth.facebook.key,
           oauthGoogle: !!req.app.config.oauth.google.key,
-          oauthTumblr: !!req.app.config.oauth.tumblr.key
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
         });
       }
     });
@@ -260,7 +297,8 @@ exports.signupFacebook = function(req, res, next) {
           oauthGitHub: !!req.app.config.oauth.github.key,
           oauthFacebook: !!req.app.config.oauth.facebook.key,
           oauthGoogle: !!req.app.config.oauth.google.key,
-          oauthTumblr: !!req.app.config.oauth.tumblr.key
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
         });
       }
     });
@@ -288,7 +326,8 @@ exports.signupGoogle = function(req, res, next) {
           oauthGitHub: !!req.app.config.oauth.github.key,
           oauthFacebook: !!req.app.config.oauth.facebook.key,
           oauthGoogle: !!req.app.config.oauth.google.key,
-          oauthTumblr: !!req.app.config.oauth.tumblr.key
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
         });
       }
     });
@@ -320,7 +359,8 @@ exports.signupTumblr = function(req, res, next) {
           oauthGitHub: !!req.app.config.oauth.github.key,
           oauthFacebook: !!req.app.config.oauth.facebook.key,
           oauthGoogle: !!req.app.config.oauth.google.key,
-          oauthTumblr: !!req.app.config.oauth.tumblr.key
+          oauthTumblr: !!req.app.config.oauth.tumblr.key,
+          oauthHeroku: !!req.app.config.oauth.heroku.key
         });
       }
     });

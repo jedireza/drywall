@@ -17,7 +17,7 @@ block body
       div#identity
       div#password
     div.col-sm-3
-      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr
+      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr || oauthHeroku
         legend Social Connections
         if oauthMessage
           div.alerts
@@ -69,6 +69,15 @@ block body
             a.btn.btn-block.btn-default(href='/account/settings/tumblr/')
               i.fa.fa-tumblr-square.fa-lg
               |  Connect Tumblr
+        if oauthHeroku
+          if oauthHerokuActive
+            a.btn.btn-block.btn-danger(href='/account/settings/heroku/disconnect/')
+              i.fa.fa-heroku-square.fa-lg
+              |  Disconnect Heroku
+          else
+            a.btn.btn-block.btn-default(href='/account/settings/heroku/')
+              i.fa.fa-heroku-square.fa-lg
+              |  Connect Heroku
 
   script(type='text/template', id='tmpl-details')
     fieldset

@@ -51,6 +51,8 @@ exports = module.exports = function(app, passport) {
   app.get('/signup/google/callback/', require('./views/signup/index').signupGoogle);
   app.get('/signup/tumblr/', passport.authenticate('tumblr', { callbackURL: '/signup/tumblr/callback/' }));
   app.get('/signup/tumblr/callback/', require('./views/signup/index').signupTumblr);
+  app.get('/signup/heroku/', passport.authenticate('heroku', { callbackURL: '/signup/heroku/callback/' }));
+  app.get('/signup/heroku/callback/', require('./views/signup/index').signupHeroku);
 
   //login/out
   app.get('/login/', require('./views/login/index').init);
@@ -73,6 +75,8 @@ exports = module.exports = function(app, passport) {
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
   app.get('/login/tumblr/', passport.authenticate('tumblr', { callbackURL: '/login/tumblr/callback/', scope: ['profile email'] }));
   app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
+  app.get('/login/heroku/', passport.authenticate('heroku', { callbackURL: '/login/heroku/callback/', scope: ['identity'] }));
+  app.get('/login/heroku/callback/', require('./views/login/index').loginHeroku);
 
   //admin
   app.all('/admin*', ensureAuthenticated);
@@ -170,6 +174,8 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/tumblr/', passport.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }));
   app.get('/account/settings/tumblr/callback/', require('./views/account/settings/index').connectTumblr);
   app.get('/account/settings/tumblr/disconnect/', require('./views/account/settings/index').disconnectTumblr);
+  app.get('/account/settings/heroku/callback/', require('./views/account/settings/index').connectHeroku);
+  app.get('/account/settings/heroku/disconnect/', require('./views/account/settings/index').disconnectHeroku);
 
   //route not found
   app.all('*', require('./views/http/index').http404);

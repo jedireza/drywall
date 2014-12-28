@@ -15,7 +15,7 @@ block body
       div.page-header
         h1 Sign Up
       div#signup
-      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr
+      if oauthTwitter || oauthGitHub || oauthFacebook || oauthGoogle || oauthTumblr || oauthHeroku
         hr
         p Or sign up using...
         if oauthMessage
@@ -46,6 +46,10 @@ block body
             a.btn.btn-info(href='/signup/tumblr/')
               i.fa.fa-tumblr-square.fa-lg
               |  Tumblr
+          if oauthHeroku
+            a.btn.btn-info(href='/signup/heroku')
+              i.fa.fa-heroku-square.fa-lg
+              |  Heroku
     div.col-sm-6.marketing
       div.page-header
         h1 Campy Benefits
