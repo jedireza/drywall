@@ -6,7 +6,8 @@ exports = module.exports = function(app, passport) {
       GitHubStrategy = require('passport-github').Strategy,
       FacebookStrategy = require('passport-facebook').Strategy,
       GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-      TumblrStrategy = require('passport-tumblr').Strategy;
+      TumblrStrategy = require('passport-tumblr').Strategy,
+      HerokuStrategy = require('passport-heroku').Strategy;
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
@@ -112,6 +113,21 @@ exports = module.exports = function(app, passport) {
         done(null, false, {
           token: token,
           tokenSecret: tokenSecret,
+          profile: profile
+        });
+      }
+    ));
+  }
+
+  if (app.config.oauth.heroku.key) {
+    passport.use(new HerokuStrategy({
+        clientID: app.config.oauth.heroku.key,
+        clientSecret: app.config.oauth.heroku.secret
+      },
+      function(accessToken, refreshToken, profile, done) {
+        done(null, false, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
           profile: profile
         });
       }

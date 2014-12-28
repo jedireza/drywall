@@ -46,5 +46,9 @@ exports.oauth = {
   tumblr: {
     key: process.env.TUMBLR_OAUTH_KEY || '',
     secret: process.env.TUMBLR_OAUTH_SECRET || ''
+  },
+  heroku: {
+    key: process.env.HEROKU_OAUTH_KEY || '',
+    secret: process.env.HEROKU_OAUTH_SECRET || ''
   }
 };
