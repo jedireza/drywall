@@ -6,3 +6,7 @@ node_modules/*
 *.min.css
 /config.js
 .nodemonignore
+
+# IDE specific
+*.iml
+.idea
