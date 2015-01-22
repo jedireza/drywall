@@ -7,39 +7,39 @@ module.exports = function(grunt) {
       vendor: {
         files: [
           {
-            expand: true, cwd: 'bower_components/bootstrap/',
+            expand: true, cwd: 'node_modules/bootstrap/',
             src: ['js/**', 'less/**'], dest: 'public/vendor/bootstrap/'
           },
           {
-            expand: true, cwd: 'bower_components/backbone/',
+            expand: true, cwd: 'node_modules/backbone/',
             src: ['backbone.js'], dest: 'public/vendor/backbone/'
           },
           {
-            expand: true, cwd: 'bower_components/font-awesome/',
+            expand: true, cwd: 'node_modules/font-awesome/',
             src: ['fonts/**', 'less/**'], dest: 'public/vendor/font-awesome/'
           },
           {
-            expand: true, cwd: 'bower_components/html5shiv/dist/',
+            expand: true, cwd: 'node_modules/html5shiv/dist/',
             src: ['html5shiv.js'], dest: 'public/vendor/html5shiv/'
           },
           {
-            expand: true, cwd: 'bower_components/jquery/dist/',
+            expand: true, cwd: 'node_modules/jquery/dist/',
             src: ['jquery.js'], dest: 'public/vendor/jquery/'
           },
           {
-            expand: true, cwd: 'bower_components/jquery.cookie/',
+            expand: true, cwd: 'node_modules/jquery.cookie/',
             src: ['jquery.cookie.js'], dest: 'public/vendor/jquery.cookie/'
           },
           {
-            expand: true, cwd: 'bower_components/momentjs/',
+            expand: true, cwd: 'node_modules/moment/',
             src: ['moment.js'], dest: 'public/vendor/momentjs/'
           },
           {
-            expand: true, cwd: 'bower_components/respond/src/',
+            expand: true, cwd: 'node_modules/respond.js/src/',
             src: ['respond.js'], dest: 'public/vendor/respond/'
           },
           {
-            expand: true, cwd: 'bower_components/underscore/',
+            expand: true, cwd: 'node_modules/underscore/',
             src: ['underscore.js'], dest: 'public/vendor/underscore/'
           }
         ]

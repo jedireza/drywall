@@ -12,7 +12,7 @@ Technology
 | On The Server | On The Client  | Development |
 | ------------- | -------------- | ----------- |
 | Express       | Bootstrap      | Grunt       |
-| Jade          | Backbone.js    | Bower       |
+| Jade          | Backbone.js    |             |
 | Mongoose      | jQuery         |             |
 | Passport      | Underscore.js  |             |
 | Async         | Font-Awesome   |             |
@@ -39,12 +39,6 @@ We use [Grunt](http://gruntjs.com/) as our task runner. Get the CLI (command lin
 $ npm install grunt-cli -g
 ```
 
-We use [Bower](http://bower.io/) as our front-end package manager. Get the CLI (command line interface).
-
-```bash
-$ npm install bower -g
-```
-
 We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing secrets. If you have issues during installation related to `bcrypt` then [refer to this wiki page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 
 Installation
@@ -52,7 +46,7 @@ Installation
 
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
-$ npm install && bower install
+$ npm install
 $ mv ./config.example.js ./config.js #set mongodb and email credentials
 $ grunt
 ```
