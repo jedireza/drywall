@@ -3,6 +3,18 @@ var path = require('path');
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    distdir: 'client/dist',
+    src: {
+      angularJS: [
+        'client/src/common/**/*.js',
+        'client/src/app/**/*.js'
+      ],
+      angularTpl: ['<%= distdir %>/templates/**/*.js'],
+      angularHtml: {
+        app: ['client/src/app/**/*.tpl.html'],
+        common: ['client/src/common/**/*.tpl.html']
+      }
+    },
     copy: {
       vendor: {
         files: [
@@ -45,6 +57,48 @@ module.exports = function(grunt) {
         ]
       }
     },
+    concat: {
+      angular: {
+        src: ['<%= src.angularJS %>', '<%= src.angularTpl %>'],
+        dest: '<%= distdir %>/app.js'
+      },
+      index: {
+        src: ['client/src/index.html'],
+        dest: '<%= distdir %>/index.html',
+        options: {
+          process: true
+        }
+      }
+    },
+    html2js: {
+      app: {
+        options: {
+          base: 'client/src/app'
+        },
+        src: ['<%= src.angularHtml.app %>'],
+        dest: '<%= distdir %>/templates/app.js',
+        module: 'templates.app'
+      },
+      common: {
+        options: {
+          base: 'client/src/common'
+        },
+        src: ['<%= src.angularHtml.common %>'],
+        dest: '<%= distdir %>/templates/common.js',
+        module: 'templates.common'
+      }
+    },
+    sass: {
+      dev: {
+        options: {
+          style: 'expanded',
+          compass: false
+        },
+        files: {
+          'client/dist/style.css': 'client/src/assets/sass/style.scss'
+        }
+      }
+    },
     concurrent: {
       dev: {
         tasks: ['nodemon', 'watch'],
@@ -66,6 +120,18 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      angularJS: {
+        files: ['<%= src.angularJS %>'],
+        tasks: ['newer:concat:angular']
+      },
+      angularHtml: {
+        files: ['<%= src.angularHtml.app %>', '<%= src.angularHtml.common %>'],
+        tasks: ['newer:html2js']
+      },
+      sass: {
+        files: ['client/src/assets/sass/**/*.scss'],
+        tasks: ['sass:dev']
+      },
       clientJS: {
          files: [
           'public/layouts/**/*.js', '!public/layouts/**/*.min.js',
@@ -189,6 +255,12 @@ module.exports = function(grunt) {
       }
     },
     clean: {
+      angular: {
+        src: [
+            'client/dist/**/*.js',
+            'client/dist/*.html'
+        ]
+      },
       js: {
         src: [
           'public/layouts/**/*.min.js',
@@ -209,6 +281,8 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -218,8 +292,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-html2js');
 
-  grunt.registerTask('default', ['copy:vendor', 'newer:uglify', 'newer:less', 'concurrent']);
+  grunt.registerTask('default', ['clean', 'copy:vendor', 'html2js', 'newer:concat', 'newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['copy:vendor', 'uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);
 };

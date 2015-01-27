@@ -1,0 +1,13 @@
+@import 'client/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap';
+
+//variable & mixin
+@import 'util/_variable';
+@import 'util/_mixin';
+
+//component
+@import 'component/_ajax_spinner';
+
+//layout
+@import 'layout/_default';
+@import 'layout/_header';
+@import 'layout/_footer';

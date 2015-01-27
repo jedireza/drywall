@@ -6,6 +6,9 @@ node_modules/*
 *.min.css
 /config.js
 .nodemonignore
+.sass-cache
+client/bower_components/*
+client/dist/*
 
 # IDE specific
 *.iml

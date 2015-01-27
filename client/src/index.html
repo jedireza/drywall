@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <title>Drywall is Running</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="bower_components/angular-touch/angular-touch.js"></script>
+
+    <script type="text/javascript" src="dist/app.js"></script>
+    <link rel="stylesheet" href="dist/style.css">
+</head>
+<body ng-controller="AppCtrl">
+<div ng-include="'header.tpl.html'"></div>
+<div class="page">
+    <div ng-view class="container"></div>
+</div>
+<div class="footer">
+    <div class="container"><span class="copyright pull-right">&#169; 2015 Arthur Kao</span>
+        <ul class="links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!--<div class="ajax-spinner"><img src="/media/ajax-pulse.gif"></div>-->
+<!--if lte IE 9script(src='/layouts/ie-sucks.min.js?br34k-01')-->
+<!--<script src="/layouts/core.min.js?br34k-01"></script>-->
+</body>
+</html>

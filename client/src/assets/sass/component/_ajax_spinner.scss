@@ -1,0 +1,15 @@
+.ajax-spinner {
+  position: absolute;
+  z-index: 999;
+  display: none;
+  padding: 5px;
+  font-size: inherit;
+  line-height: 11px;
+  background-color: #ccc;
+  border-radius: 4px;
+  img {
+    width: inherit;
+    height: inherit;
+    margin: 0;
+  }
+}

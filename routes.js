@@ -1,5 +1,7 @@
 'use strict';
 
+var security = require('./service/security');
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -29,6 +31,10 @@ function ensureAccount(req, res, next) {
 }
 
 exports = module.exports = function(app, passport) {
+  //******** NEW JSON API ********
+  app.get('/current-user', security.sendCurrentUser);
+  //******** END OF NEW JSON API ********
+
   //front end
   app.get('/', require('./views/index').init);
   app.get('/about/', require('./views/about/index').init);

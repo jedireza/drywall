@@ -1,0 +1,30 @@
+.footer {
+  margin-top: 50px;
+  color: #999;
+
+  .container {
+    border-top: 1px solid #ccc;
+    padding: 20px 5px 20px 5px;
+    border-radius: 4px;
+  }
+  a, a:visited {
+    color: #999;
+  }
+  .links {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      padding-right: 10px;
+      margin-right: 10px;
+      list-style: none;
+      border-right: 1px dotted #999;
+    }
+    li:last-child {
+      padding-right: 0;
+      margin-right: 0;
+      border: none;
+    }
+  }
+}
