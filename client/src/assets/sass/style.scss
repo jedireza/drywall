@@ -1,4 +1,6 @@
+//bootstrap
 @import 'client/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap';
+@import 'client/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/theme';
 
 //variable & mixin
 @import 'util/_variable';
@@ -11,3 +13,9 @@
 @import 'layout/_default';
 @import 'layout/_header';
 @import 'layout/_footer';
+
+//page
+@import 'page/_index';
+
+//font-awesome
+@import 'bower_components/font-awesome/scss/font-awesome';

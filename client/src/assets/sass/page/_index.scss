@@ -1,0 +1,24 @@
+.jumbotron {
+  background-color: transparent;
+  text-align: center;
+  padding: 30px 60px;
+
+  h1 {
+    font-weight: bold;
+  }
+
+  @media (max-width: $screen-tablet) {
+    h1 {
+      font-size: ($font-size-base * 3.5);
+    }
+  }
+  @media (min-width: $screen-tablet) {
+    h1 {
+      font-size: ($font-size-base * 7.5);
+    }
+  }
+}
+
+.panel h3 {
+  margin-top: 0;
+}

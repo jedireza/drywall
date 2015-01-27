@@ -40,10 +40,10 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
       requireBase: false
   });
   $routeProvider
-      //.when('/', {
-      //  templateUrl: 'views/main.html',
-      //  controller: 'AppCtrl'
-      //})
+      .when('/', {
+        templateUrl: 'main.tpl.html',
+        controller: 'AppCtrl'
+      })
       //.when('/about', {
       //  templateUrl: 'views/about.html',
       //  controller: 'AboutCtrl'
