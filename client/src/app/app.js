@@ -75,25 +75,27 @@ angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'loc
 
 angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'security', 'breadcrumbs', 'notifications', 'httpRequestTracker',
   function ($scope, $location, $route, security, breadcrumbs, notifications, httpRequestTracker) {
-  $scope.location = $location;
-  $scope.breadcrumbs = breadcrumbs;
+  //$scope.location = $location;
+  //$scope.breadcrumbs = breadcrumbs;
 
-  $scope.isAuthenticated = security.isAuthenticated;
-  $scope.isAdmin = security.isAdmin;
-
-  $scope.home = function () {
-    if (security.isAuthenticated()) {
-      $location.path('/dashboard');
-    } else {
-      $location.path('/projectsinfo');
-    }
+  //$scope.isAuthenticated = security.isAuthenticated;
+  //$scope.isAdmin = security.isAdmin;
+  $scope.isActive = function(viewLocation){
+    return $location.path().indexOf(viewLocation) == 0;
   };
-
-  $scope.isNavbarActive = function (navBarPath) {
-    return navBarPath === breadcrumbs.getFirst().name;
-  };
-
-  $scope.hasPendingRequests = function () {
-    return httpRequestTracker.hasPendingRequests();
-  };
+  //$scope.home = function () {
+  //  if (security.isAuthenticated()) {
+  //    $location.path('/dashboard');
+  //  } else {
+  //    $location.path('/projectsinfo');
+  //  }
+  //};
+  //
+  //$scope.isNavbarActive = function (navBarPath) {
+  //  return navBarPath === breadcrumbs.getFirst().name;
+  //};
+  //
+  //$scope.hasPendingRequests = function () {
+  //  return httpRequestTracker.hasPendingRequests();
+  //};
 }]);

@@ -10,10 +10,10 @@
         </div>
         <div class="navbar-collapse my-navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about/">About</a></li>
-                <li><a href="/signup/">Sign Up</a></li>
-                <li><a href="/contact/">Contact</a></li>
+                <li ng-class="{active: isActive('/')}"><a href="/">Home</a></li>
+                <li ng-class="{active: isActive('/about')}"><a href="/about">About</a></li>
+                <li ng-class="{active: isActive('/signup')}"><a href="/signup">Sign Up</a></li>
+                <li ng-class="{active: isActive('/contact')}"><a href="/contact">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/login/"><i class="fa fa-user"></i> Sign In</a></li>
