@@ -55,19 +55,72 @@ module.exports = function(grunt) {
             src: ['underscore.js'], dest: 'public/vendor/underscore/'
           }
         ]
+      },
+      clientVendor: {
+        files: [
+          {
+            expand: true, cwd: 'client/bower_components/jquery/dist/',
+            src: ['jquery.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular/',
+            src: ['angular.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-animate/',
+            src: ['angular-animate.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-bootstrap/',
+            src: ['ui-bootstrap.js', 'ui-bootstrap-tpls.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-cookies/',
+            src: ['angular-cookies.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-resource/',
+            src: ['angular-resource.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-route/',
+            src: ['angular-route.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-sanitize/',
+            src: ['angular-sanitize.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-touch/',
+            src: ['angular-touch.js'], dest: '<%= distdir %>/vendor/'
+          }
+        ]
+      },
+      asset: {
+        files: [
+          {
+            expand: true, cwd: 'client/src/assets/img/',
+            src: ['*.png', '*.gif', '*.jpg'], dest: '<%= distdir %>/img/'
+          },
+          {
+            expand: true, cwd: 'bower_components/font-awesome/fonts/',
+            src: ['*'], dest: '<%= distdir %>/fonts/'
+          }
+        ]
+      },
+      index: {
+        files: [
+          {
+            expand: true, cwd: 'client/src/',
+            src: ['index.html'], dest: '<%= distdir %>/'
+          }
+        ]
       }
     },
     concat: {
       angular: {
         src: ['<%= src.angularJS %>', '<%= src.angularTpl %>'],
         dest: '<%= distdir %>/app.js'
-      },
-      index: {
-        src: ['client/src/index.html'],
-        dest: '<%= distdir %>/index.html',
-        options: {
-          process: true
-        }
       }
     },
     html2js: {
@@ -95,7 +148,7 @@ module.exports = function(grunt) {
           compass: false
         },
         files: {
-          'client/dist/style.css': 'client/src/assets/sass/style.scss'
+          '<%= distdir %>/css/style.css': 'client/src/assets/sass/style.scss'
         }
       }
     },
@@ -120,13 +173,17 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      angularIndex: {
+        files: ['client/src/index.html'],
+        tasks: ['copy:index']
+      },
       angularJS: {
         files: ['<%= src.angularJS %>'],
-        tasks: ['newer:concat:angular']
+        tasks: ['newer:concat']
       },
-      angularHtml: {
+      angularHtmlTpl: {
         files: ['<%= src.angularHtml.app %>', '<%= src.angularHtml.common %>'],
-        tasks: ['newer:html2js']
+        tasks: ['newer:html2js', 'newer:concat']
       },
       sass: {
         files: ['client/src/assets/sass/**/*.scss'],
@@ -255,10 +312,9 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      angular: {
+      client: {
         src: [
-            'client/dist/**/*.js',
-            'client/dist/*.html'
+            'client/dist/**'
         ]
       },
       js: {
@@ -294,7 +350,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-html2js');
 
-  grunt.registerTask('default', ['clean', 'copy:vendor', 'html2js', 'newer:concat', 'newer:uglify', 'newer:less', 'concurrent']);
-  grunt.registerTask('build', ['copy:vendor', 'uglify', 'less']);
+  grunt.registerTask('default', ['clean', 'copy', 'html2js', 'concat', 'newer:uglify', 'newer:less', 'newer:sass:dev','concurrent']);
+  grunt.registerTask('build', ['copy', 'uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);
+
+  grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat', 'sass:dev']);
+  grunt.registerTask('back', ['copy:vendor', 'newer:uglify', 'newer:less']);
+  grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
 };

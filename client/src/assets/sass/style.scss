@@ -2,6 +2,9 @@
 @import 'client/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap';
 @import 'client/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/theme';
 
+//font-awesome
+@import 'bower_components/font-awesome/scss/font-awesome';
+
 //variable & mixin
 @import 'util/_variable';
 @import 'util/_mixin';
@@ -16,6 +19,3 @@
 
 //page
 @import 'page/_index';
-
-//font-awesome
-@import 'bower_components/font-awesome/scss/font-awesome';
