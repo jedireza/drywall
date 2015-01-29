@@ -55,10 +55,9 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
       templateUrl: 'contact.tpl.html',
       controller: 'ContactCtrl'
     })
-    //.when('/about', {
-    //  templateUrl: 'views/about.html',
-    //  controller: 'AboutCtrl'
-    //})
+    .when('/about', {
+      templateUrl: 'about.tpl.html'
+    })
     .otherwise({
       redirectTo: '/'
     });
