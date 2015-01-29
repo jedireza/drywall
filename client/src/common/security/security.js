@@ -93,7 +93,7 @@ angular.module('security.service', [
       if ( service.isAuthenticated() ) {
         return $q.when(service.currentUser);
       } else {
-        return $http.get('/current-user').then(function(response) {
+        return $http.get('/api/current-user').then(function(response) {
           service.currentUser = response.data.user;
           return service.currentUser;
         });

@@ -32,7 +32,8 @@ function ensureAccount(req, res, next) {
 
 exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
-  app.get('/current-user', security.sendCurrentUser);
+  app.get('/api/current-user', security.sendCurrentUser);
+  app.post('/api/sendMessage', require('./views/contact/index').sendMessage);
   //******** END OF NEW JSON API ********
 
   //front end
