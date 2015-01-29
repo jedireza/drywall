@@ -34,7 +34,8 @@ exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
   app.post('/api/sendMessage', require('./views/contact/index').sendMessage);
-  //******** END OF NEW JSON API ********
+  app.post('/api/signup', require('./views/signup/index').signup);
+//******** END OF NEW JSON API ********
 
   //front end
   app.get('/', require('./views/index').init);

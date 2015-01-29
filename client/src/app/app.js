@@ -4,6 +4,7 @@ angular.module('app', [
   //'dashboard',
   //'projects',
   //'admin',
+  'signup',
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
@@ -57,6 +58,10 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     })
     .when('/about', {
       templateUrl: 'about.tpl.html'
+    })
+    .when('/signup', {
+      templateUrl: 'signup/signup.tpl.html',
+      controller: 'SignupCtrl'
     })
     .otherwise({
       redirectTo: '/'

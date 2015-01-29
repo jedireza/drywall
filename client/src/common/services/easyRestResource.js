@@ -7,5 +7,11 @@ angular.module('services.easyRestResource', []).factory('easyRestResource', ['$h
         return res.data;
       });
   };
+  resource.signup = function(data){
+    return $http.post(baseUrl + '/signup', data)
+      .then(function(res){
+        return res.data;
+      });
+  };
   return resource;
 }]);
