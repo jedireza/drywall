@@ -1,4 +1,4 @@
-angular.module('services.easyRestResource', []).factory('easyRestResource', ['$http', function ($http) {
+angular.module('services.easyRestResource', []).factory('easyRestResource', ['$http', '$q', function ($http, $q) {
   var baseUrl = '/api';
   var resource = {};
   resource.sendMessage = function(data){
@@ -13,5 +13,14 @@ angular.module('services.easyRestResource', []).factory('easyRestResource', ['$h
         return res.data;
       });
   };
+  //resource.socialSignup = function(provider){
+  //  var url = baseUrl + '/signup';
+  //  switch(provider){
+  //    case 'Google':
+  //      return $http.get(url + '/google');
+  //    default:
+  //  }
+  //  return $q.reject();
+  //};
   return resource;
 }]);
