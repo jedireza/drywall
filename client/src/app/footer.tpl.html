@@ -1,0 +1,10 @@
+<div class="footer" ng-controller="FooterCtrl">
+    <div class="container"><span class="copyright pull-right">&#169; 2015 Arthur Kao</span>
+        <ul class="links">
+            <li><a href="/">Home</a></li>
+            <li ng-show="!isAuthenticated()"><a href="/contact">Contact</a></li>
+            <li ng-show="isAuthenticated()"><a href="/logout">Sign Out</a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</div>

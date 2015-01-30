@@ -22,15 +22,7 @@
 <div class="page">
     <div ng-view class="container"></div>
 </div>
-<div class="footer">
-    <div class="container"><span class="copyright pull-right">&#169; 2015 Arthur Kao</span>
-        <ul class="links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-</div>
+<div ng-include="'footer.tpl.html'"></div>
 <!--<div class="ajax-spinner"><img src="/media/ajax-pulse.gif"></div>-->
 <!--if lte IE 9script(src='/layouts/ie-sucks.min.js?br34k-01')-->
 <!--<script src="/layouts/core.min.js?br34k-01"></script>-->
