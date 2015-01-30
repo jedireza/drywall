@@ -41,7 +41,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.signup($scope.user);
+      restResource.signup($scope.user).then(signupSuccess, signupError);
     };
     //$scope.socialSignup = function(provider){
     //  $log.log('Attempting to signup with ', provider);
