@@ -25,7 +25,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
     };
     var signupError = function(){
       $scope.alerts.push({
-        type: 'error',
+        type: 'danger',
         msg: 'Error creating account, Please try again'
       });
     };
