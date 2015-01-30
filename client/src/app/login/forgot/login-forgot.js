@@ -1,44 +1,40 @@
-angular.module('login', ['login.forgot', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
-angular.module('login').config(['$routeProvider', function($routeProvider){
+angular.module('login.forgot', ['services.easyRestResource', 'ui.bootstrap']);
+angular.module('login.forgot').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/login', {
-      templateUrl: 'login/login.tpl.html',
-      controller: 'LoginCtrl'
+    .when('/login/forgot', {
+      templateUrl: 'login/forgot/login-forgot.tpl.html',
+      controller: 'LoginForgotCtrl'
     });
 }]);
-angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
+angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
   function($scope, $location, $log, restResource){
     // local variable
-    var loginSuccess = function(data){
+    var resetSuccess = function(data){
+      $scope.loginForgotForm.$setPristine();
+      $scope.user = {};
       if(data.success){
-        //account/user created, redirect...
-        var url = data.defaultReturnUrl || '/';
-        return $location.path(url);
-      }else{
-        //error due to server side validation
-        $scope.errfor = data.errfor;
-        angular.forEach(data.errfor, function(err, field){
-          $scope.loginForm[field].$setValidity('server', false);
+        $scope.alerts.push({
+          type: 'info',
+          msg: 'If an account matched that address, an email will be sent with instructions.'
         });
+      }else{
         angular.forEach(data.errors, function(err, index){
           $scope.alerts.push({
             type: 'danger',
             msg: err
           });
         });
-        return;
       }
     };
-    var loginError = function(){
+    var resetError = function(){
       $scope.alerts.push({
         type: 'danger',
-        msg: 'Error logging you in, Please try again'
+        msg: 'Error resetting your account, Please try again'
       });
     };
     // model def
     $scope.user = {};
     $scope.alerts = [];
-    $scope.errfor = {};
 
     // method def
     $scope.hasError = function(ngModelCtrl){
@@ -54,7 +50,7 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.login($scope.user).then(loginSuccess, loginError);
+      restResource.loginForgot($scope.user).then(resetSuccess, resetError);
     };
     //$scope.socialLogin = function(provider){
     //  $log.log('Attempting to login with ', provider);
