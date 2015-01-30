@@ -131,8 +131,11 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
   //$scope.location = $location;
   //$scope.breadcrumbs = breadcrumbs;
 
-  //$scope.isAuthenticated = security.isAuthenticated;
+  $scope.isAuthenticated = security.isAuthenticated;
   //$scope.isAdmin = security.isAdmin;
+  $scope.logout = function(){
+    security.logout()
+  };
   $scope.isActive = function(viewLocation){
     if(viewLocation === '/') return $location.path() === '/';
     return $location.path().indexOf(viewLocation) == 0;
@@ -156,4 +159,7 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
 
 angular.module('app').controller('FooterCtrl', ['$scope', 'security', function($scope, security){
   $scope.isAuthenticated = security.isAuthenticated;
+  $scope.logout = function(){
+    security.logout()
+  };
 }]);

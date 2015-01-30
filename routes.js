@@ -38,6 +38,7 @@ exports = module.exports = function(app, passport) {
   app.post('/api/login', require('./views/login/index').login);
   app.post('/api/login/forgot', require('./views/login/forgot/index').send);
   app.put('/api/login/reset/:email/:token', require('./views/login/reset/index').set);
+  app.post('/api/logout/', require('./views/logout/index').logout);
   //******** END OF NEW JSON API ********
 
   //front end
