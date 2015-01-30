@@ -59,14 +59,9 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     .when('/about', {
       templateUrl: 'about.tpl.html'
     })
-    .when('/signup', {
-      templateUrl: 'signup/signup.tpl.html',
-      controller: 'SignupCtrl'
-    })
     .otherwise({
       redirectTo: '/'
     });
-  //$routeProvider.otherwise({redirectTo:'/projectsinfo'});
 }]);
 
 angular.module('app').run(['security', function(security) {

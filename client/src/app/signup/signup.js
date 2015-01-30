@@ -1,4 +1,11 @@
 angular.module('signup', ['directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('signup').config(['$routeProvider', function($routeProvider){
+  $routeProvider
+    .when('/signup', {
+      templateUrl: 'signup/signup.tpl.html',
+      controller: 'SignupCtrl'
+    });
+}]);
 angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
   function($scope, $location, $log, restResource){
     // local variable
