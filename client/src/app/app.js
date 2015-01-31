@@ -6,6 +6,7 @@ angular.module('app', [
   //'admin',
   'signup',
   'login',
+  'account',
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
