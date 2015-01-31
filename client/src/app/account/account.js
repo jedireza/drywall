@@ -1,9 +1,12 @@
-angular.module('account', []);
-angular.module('account').config(['$routeProvider', function($routeProvider){
+angular.module('account', ['security.authorization']);
+angular.module('account').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
   $routeProvider
     .when('/account', {
       templateUrl: 'account/account.tpl.html',
-      controller: 'AccountCtrl'
+      controller: 'AccountCtrl',
+      resolve: {
+        authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser
+      }
     });
 }]);
 angular.module('account').controller('AccountCtrl', [ '$scope',

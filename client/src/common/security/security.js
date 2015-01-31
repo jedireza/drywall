@@ -85,6 +85,7 @@ angular.module('security.service', [
         if(data.success && data.user){
           service.currentUser = data.user;
         }
+        closeLoginDialog(data.success);
         return data;
       });
     },
