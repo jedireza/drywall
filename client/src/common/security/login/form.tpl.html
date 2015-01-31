@@ -10,10 +10,14 @@
             {{authError}}
         </div>
         <div class="alert alert-info">Please enter your login details</div>
-        <label>E-mail</label>
-        <input name="login" type="email" ng-model="user.email" required autofocus>
-        <label>Password</label>
-        <input name="pass" type="password" ng-model="user.password" required>
+        <div class="form-group">
+            <label class="control-label" for="login">Username or Email:</label>
+            <input class="form-control" type="text" name="login" id="login" ng-model="user.email" required autofocus>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="pass">Password:</label>
+            <input class="form-control" type="password" name="pass" id="pass" ng-model="user.password" required>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary login" ng-click="login()" ng-disabled='form.$invalid'>Sign in</button>
