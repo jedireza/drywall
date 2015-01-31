@@ -10,12 +10,14 @@
         </div>
         <div class="navbar-collapse my-navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-class="{active: isActive('/')}"><a href="/">Home</a></li>
-                <li ng-class="{active: isActive('/about')}"><a href="/about">About</a></li>
-                <li ng-class="{active: isActive('/signup')}"><a href="/signup">Sign Up</a></li>
-                <li ng-class="{active: isActive('/contact')}"><a href="/contact">Contact</a></li>
+                <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/')}"><a href="/">Home</a></li>
+                <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/about')}"><a href="/about">About</a></li>
+                <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/signup')}"><a href="/signup">Sign Up</a></li>
+                <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/contact')}"><a href="/contact">Contact</a></li>
+                <li ng-if="isAuthenticated()" ng-class="{active: isActive('/account')}"><a href="/account">My Account</a></li>
+                <li ng-if="isAuthenticated()" ng-class="{active: isActive('/account/settings')}"><a href="/account/settings">Settings</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav pull-right">
                 <li ng-if="!isAuthenticated()"><a href="/login"><i class="fa fa-user"></i> Sign In</a></li>
                 <li ng-if="isAuthenticated()"><a href="/logout" ng-click="logout()"><i class="fa fa-user"></i> Sign Out</a></li>
             </ul>
