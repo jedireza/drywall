@@ -93,6 +93,10 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/bower_components/angular-touch/',
             src: ['angular-touch.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/moment/',
+            src: ['moment.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },
