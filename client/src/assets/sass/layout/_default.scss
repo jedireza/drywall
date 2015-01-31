@@ -18,3 +18,13 @@ table thead th {
 select, textarea, input, .form-control {
   font-size: 16px; //ios input zoom prevention hack
 }
+
+.special {
+  text-align: center;
+}
+.super-awesome {
+  display: block;
+  margin-top: -15px;
+  color: #7f7f7f;
+  font-size: 20em;
+}
