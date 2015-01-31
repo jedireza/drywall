@@ -63,7 +63,7 @@ angular.module('security.service', [
     },
 
     // Attempt to authenticate a user by the given email and password
-    login: function(email, password) {
+    loginOld: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
         service.currentUser = response.data.user;
@@ -71,6 +71,21 @@ angular.module('security.service', [
           closeLoginDialog(true);
         }
         return service.isAuthenticated();
+      });
+    },
+
+    // Attempt to authenticate a user by the given username and password
+    login: function(username, password) {
+      var request = $http.post('/api/login', {
+        username: username,
+        password: password
+      });
+      return request.then(function(response) {
+        var data = response.data;
+        if(data.success && data.user){
+          service.currentUser = data.user;
+        }
+        return data;
       });
     },
 

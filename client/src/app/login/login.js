@@ -1,4 +1,4 @@
-angular.module('login', ['login.forgot', 'login.reset', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('login', ['login.forgot', 'login.reset', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('login').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login', {
@@ -6,8 +6,8 @@ angular.module('login').config(['$routeProvider', function($routeProvider){
       controller: 'LoginCtrl'
     });
 }]);
-angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
-  function($scope, $location, $log, restResource){
+angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security',
+  function($scope, $location, $log, restResource, security){
     // local variable
     var loginSuccess = function(data){
       if(data.success){
@@ -54,7 +54,8 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.login($scope.user).then(loginSuccess, loginError);
+      security.login($scope.user.username, $scope.user.password).then(loginSuccess, loginError);
+      //restResource.login($scope.user).then(loginSuccess, loginError);
     };
     //$scope.socialLogin = function(provider){
     //  $log.log('Attempting to login with ', provider);

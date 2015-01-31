@@ -30,12 +30,22 @@ function ensureAccount(req, res, next) {
   res.redirect('/');
 }
 
+function apiEnsureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.set('X-Auth-Required', 'true');
+  //no need to store the originalUrl in session: caller knows the return url
+  //req.session.returnUrl = req.originalUrl;
+  res.status(401).send({errors: ['authentication required']});
+}
+
 exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
   app.post('/api/sendMessage', require('./views/contact/index').sendMessage);
   app.post('/api/signup', require('./views/signup/index').signup);
-  app.post('/api/login', require('./views/login/index').login);
+  app.post('/api/login', security.login);
   app.post('/api/login/forgot', require('./views/login/forgot/index').send);
   app.put('/api/login/reset/:email/:token', require('./views/login/reset/index').set);
   app.post('/api/logout/', require('./views/logout/index').logout);
