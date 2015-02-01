@@ -138,8 +138,7 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
     security.logout()
   };
   $scope.isActive = function(viewLocation){
-    if(viewLocation === '/') return $location.path() === '/';
-    return $location.path().indexOf(viewLocation) == 0;
+    return $location.path() === viewLocation;
   };
   //$scope.home = function () {
   //  if (security.isAuthenticated()) {
