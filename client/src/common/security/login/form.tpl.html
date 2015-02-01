@@ -3,13 +3,7 @@
         <h4>Sign in</h4>
     </div>
     <div class="modal-body">
-        <div class="alert alert-warning" ng-show="authReason">
-            {{authReason}}
-        </div>
-        <div class="alert alert-error" ng-show="authError">
-            {{authError}}
-        </div>
-        <div class="alert alert-info">Please enter your login details</div>
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
         <div class="form-group">
             <label class="control-label" for="login">Username or Email:</label>
             <input class="form-control" type="text" name="login" id="login" ng-model="user.email" required autofocus>

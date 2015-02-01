@@ -25,13 +25,18 @@ angular.module('security.service', [
       templateUrl: 'security/login/form.tpl.html',
       controller: 'LoginFormController'
     });
-    loginDialog.result.then(onLoginDialogClose);
+    loginDialog.result.then(onLoginDialogClose, onLoginDialogDismiss);
   }
   function closeLoginDialog(success) {
     if (loginDialog) {
       loginDialog.close(success);
     }
   }
+    function dismissLoginDialog(reason){
+      if(loginDialog){
+        loginDialog.dismiss(reason);
+      }
+    }
   function onLoginDialogClose(success) {
     loginDialog = null;
     if ( success ) {
@@ -40,6 +45,12 @@ angular.module('security.service', [
       queue.cancelAll();
       redirect();
     }
+  }
+  //modal is dismissed because escape key press or mouse click outside
+  function onLoginDialogDismiss(reason){
+    loginDialog = null;
+    queue.cancelAll();
+    redirect();
   }
 
   // Register a handler for when an item is added to the retry queue
@@ -63,16 +74,16 @@ angular.module('security.service', [
     },
 
     // Attempt to authenticate a user by the given email and password
-    loginOld: function(email, password) {
-      var request = $http.post('/login', {email: email, password: password});
-      return request.then(function(response) {
-        service.currentUser = response.data.user;
-        if ( service.isAuthenticated() ) {
-          closeLoginDialog(true);
-        }
-        return service.isAuthenticated();
-      });
-    },
+    //loginOld: function(email, password) {
+    //  var request = $http.post('/login', {email: email, password: password});
+    //  return request.then(function(response) {
+    //    service.currentUser = response.data.user;
+    //    if ( service.isAuthenticated() ) {
+    //      closeLoginDialog(true);
+    //    }
+    //    return service.isAuthenticated();
+    //  });
+    //},
 
     // Attempt to authenticate a user by the given username and password
     login: function(username, password) {
@@ -82,18 +93,19 @@ angular.module('security.service', [
       });
       return request.then(function(response) {
         var data = response.data;
-        if(data.success && data.user){
+        if(data.success){
+          closeLoginDialog(true);
           service.currentUser = data.user;
         }
-        closeLoginDialog(data.success);
         return data;
       });
     },
 
     // Give up trying to login and clear the retry queue
     cancelLogin: function() {
-      closeLoginDialog(false);
-      redirect();
+      //closeLoginDialog(false);
+      //redirect();
+      dismissLoginDialog('cancel button clicked');
     },
 
     // Logout the current user and redirect

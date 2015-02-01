@@ -1,11 +1,14 @@
 angular.module('security.interceptor', ['security.retryQueue'])
 
 // This http interceptor listens for authentication failures
-.factory('securityInterceptor', ['$injector', 'securityRetryQueue', function($injector, queue) {
+.factory('securityInterceptor', ['$log', '$injector', 'securityRetryQueue', function($log, $injector, queue) {
   return {
-    'response': function(response){
+    'responseError': function(response){
       if(response.status == 401){
-        response = queue.pushRetryFn('unauthorized-server', function retryRequest(){
+        // The request bounced because it was not authorized - add a new request to the retry queue
+        // and return a new promise that will be resolved or rejected after calling retryItem's retry or cancel method
+        // eg. retryRequest is the retryFn that will be called later
+        return queue.pushRetryFn('unauthorized-server', function retryRequest(){
           return $injector.get('$http')(response.config);
         });
       }
