@@ -1,6 +1,7 @@
 'use strict';
 
 var security = require('./service/security');
+var account = require('./service/account');
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -44,11 +45,20 @@ exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
   app.post('/api/sendMessage', require('./views/contact/index').sendMessage);
+  //TODO: move signup/login api handlers to security service
   app.post('/api/signup', require('./views/signup/index').signup);
   app.post('/api/login', security.login);
   app.post('/api/login/forgot', require('./views/login/forgot/index').send);
   app.put('/api/login/reset/:email/:token', require('./views/login/reset/index').set);
-  app.post('/api/logout/', require('./views/logout/index').logout);
+  app.post('/api/logout/', security.logout);
+
+  //-----authentication required api-----
+  app.all('/api/account*', apiEnsureAuthenticated);
+  app.get('/api/account/settings', account.getAccountDetails);
+  app.put('/api/account/settings', require('./views/account/settings/index').update);
+  app.put('/api/account/settings/identity', require('./views/account/settings/index').identity);
+  app.put('/api/account/settings/password', require('./views/account/settings/index').password);
+
   //******** END OF NEW JSON API ********
 
   //front end

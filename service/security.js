@@ -105,6 +105,10 @@ var security = {
     });
 
     workflow.emit('validate');
+  },
+  logout: function(req, res){
+    req.logout();
+    res.send({success: true});
   }
 };
 
