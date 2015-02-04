@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="page-header"><h1>Verification Required</h1></div>
+        <div class="alert alert-warning">Your account is nearly ready. Check your inbox for next steps.</div>
+        <div id="verify"></div>
+        <form name="verificationForm">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+            <div class="not-received" ng-show="!formVisible">
+                <a class="btn btn-link btn-resend" ng-click="showForm()">I checked my email and spam folder, nothing yet.</a>
+            </div>
+            <div class="verify-form" ng-show="formVisible">
+                <div class="form-group" ng-class="{'has-error': hasError(verificationForm.email)}">
+                    <label class="control-label" for="email">Your Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" ng-model="email" required server-error>
+                    <span class="help-block" ng-show="showError(verificationForm.email, 'required')">This field is required</span>
+                    <span class="help-block" ng-show="showError(verificationForm.email, 'email')">Please enter a valid email</span>
+                    <span class="help-block" ng-show="showError(verificationForm.email, 'server')">{{errfor.email}}</span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-verify" ng-click="submit()">Re-Send Verification</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-6 special">
+        <div class="page-header"><h1>You're Almost Done</h1></div>
+        <i class="fa fa-key super-awesome"></i></div>
+</div>

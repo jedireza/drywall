@@ -20,6 +20,15 @@ exports = module.exports = function(app, mongoose) {
     tumblr: {},
     search: [String]
   });
+  userSchema.methods.isVerified = function(done){
+    this.populate('roles.account', function(err, user){
+      if(err){
+        return done(err);
+      }
+      var flag = user.roles.account && user.roles.account.isVerified && user.roles.account.isVerified === 'yes';
+      return done(null, flag);
+    });
+  };
   userSchema.methods.canPlayRoleOf = function(role) {
     if (role === "admin" && this.roles.admin) {
       return true;

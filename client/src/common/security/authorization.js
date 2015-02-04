@@ -1,4 +1,4 @@
-angular.module('security.authorization', ['security.service'])
+angular.module('security.authorization', ['security.service', 'config'])
 
 // This service provides guard methods to support AngularJS routes.
 // You can add them as resolves to routes to require authorization levels
@@ -13,7 +13,15 @@ angular.module('security.authorization', ['security.service'])
     return securityAuthorization.requireAuthenticatedUser();
   }],
 
-  $get: ['security', 'securityRetryQueue', function(security, queue) {
+  requireVerifiedUser: [ 'securityAuthorization', function(securityAuthorization){
+    return securityAuthorization.requireVerifiedUser();
+  }],
+
+  requireUnverifiedUser: [ 'securityAuthorization', function(securityAuthorization){
+    return securityAuthorization.requireUnverifiedUser();
+  }],
+
+  $get: ['$log', '$q', '$location', 'security', 'securityRetryQueue', 'REQUIRE_ACCOUNT_VERIFICATION', function($log, $q, $location, security, queue, requireAccountVerification) {
     var service = {
 
       // Require that there is an authenticated user
@@ -33,6 +41,30 @@ angular.module('security.authorization', ['security.service'])
         var promise = security.requestCurrentUser().then(function(userInfo) {
           if ( !security.isAdmin() ) {
             return queue.pushRetryFn('unauthorized-client', service.requireAdminUser);
+          }
+        });
+        return promise;
+      },
+
+      requireVerifiedUser: function(){
+        var promise = security.requestCurrentUser().then(function(userInfo){
+          if( !security.isAuthenticated() ){
+            return queue.pushRetryFn('unauthenticated-client', service.requireVerifiedUser);
+          }
+          if(requireAccountVerification && userInfo && !userInfo.isVerified){
+            return $q.reject('unverified-client');
+          }
+        });
+        return promise;
+      },
+
+      requireUnverifiedUser: function(){
+        var promise = security.requestCurrentUser().then(function(userInfo){
+          if( !security.isAuthenticated() ){
+            return queue.pushRetryFn('unauthenticated-client', service.requireUnverifiedUser);
+          }
+          if(requireAccountVerification && userInfo && userInfo.isVerified){
+            return $q.reject('verified-client');
           }
         });
         return promise;

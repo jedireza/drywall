@@ -1,4 +1,4 @@
-angular.module('account', ['account.settings', 'security.authorization']);
+angular.module('account', ['account.settings', 'account.verification', 'security.authorization']);
 angular.module('account').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
   $routeProvider
     .when('/account', {

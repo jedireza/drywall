@@ -41,6 +41,26 @@ function apiEnsureAuthenticated(req, res, next){
   res.status(401).send({errors: ['authentication required']});
 }
 
+function apiEnsureAccount(req, res, next){
+  if(req.user.canPlayRoleOf('account')){
+    return next();
+  }
+  res.status(401).send({errors: ['authorization required']});
+}
+
+function apiEnsureVerifiedAccount(req, res, next){
+  req.user.isVerified(function(err, flag){
+    if(err){
+      return next(err);
+    }
+    if(flag){
+      return next();
+    }else{
+      return res.status(401).send({errors: ['verification required']});
+    }
+  });
+}
+
 exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
@@ -54,10 +74,15 @@ exports = module.exports = function(app, passport) {
 
   //-----authentication required api-----
   app.all('/api/account*', apiEnsureAuthenticated);
+  app.all('/api/account*', apiEnsureAccount);
+  app.all('/api/account/settings*', apiEnsureVerifiedAccount);
   app.get('/api/account/settings', account.getAccountDetails);
   app.put('/api/account/settings', require('./views/account/settings/index').update);
   app.put('/api/account/settings/identity', require('./views/account/settings/index').identity);
   app.put('/api/account/settings/password', require('./views/account/settings/index').password);
+  app.get('/api/account/verification', account.upsertVerification);
+  app.post('/api/account/verification', account.resendVerification);
+  app.get('/api/account/verification/:token/', account.verify);
 
   //******** END OF NEW JSON API ********
 

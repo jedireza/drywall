@@ -4,7 +4,7 @@ node_modules/*
 *.min.js
 *.min.js.map
 *.min.css
-/config.js
+config.js
 .nodemonignore
 .sass-cache
 client/bower_components/*

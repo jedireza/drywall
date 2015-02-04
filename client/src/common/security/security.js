@@ -128,6 +128,10 @@ angular.module('security.service', [
       }
     },
 
+    setCurrentUser: function(user){
+      service.currentUser = user;
+    },
+
     // Information about the current user
     currentUser: null,
 

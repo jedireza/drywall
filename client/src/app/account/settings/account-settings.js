@@ -1,14 +1,25 @@
 angular.module('account.settings', ['security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
-angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
+angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
       templateUrl: 'account/settings/account-settings.tpl.html',
       controller: 'AccountSettingsCtrl',
       resolve: {
-        authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser,
-        accountDetails: function(easyRestResource){
-          return easyRestResource.getAccountDetails();
-        }
+        accountDetails: ['$q', '$location', 'securityAuthorization', 'easyRestResource' ,function($q, $location, securityAuthorization, easyRestResource){
+          //get account details only for verified-user, otherwise redirect to /account/verification
+          var redirectUrl;
+          var promise = securityAuthorization.requireVerifiedUser()
+            .then(easyRestResource.getAccountDetails, function(){
+              redirectUrl = '/account/verification';
+              return $q.reject();
+            })
+            .catch(function(){
+              redirectUrl = redirectUrl || '/account';
+              $location.path(redirectUrl);
+              return $q.reject();
+            });
+          return promise;
+        }]
       }
     });
 }]);

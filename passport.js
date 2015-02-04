@@ -10,35 +10,74 @@ exports = module.exports = function(app, passport) {
 
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      var conditions = { isActive: 'yes' };
-      if (username.indexOf('@') === -1) {
-        conditions.username = username;
-      }
-      else {
-        conditions.email = username;
-      }
+      var workflow = new (require('events').EventEmitter)();
 
-      app.db.models.User.findOne(conditions, function(err, user) {
-        if (err) {
-          return done(err);
+      workflow.on('findUser', function(){
+        var conditions = {isActive: 'yes'};
+        if (username.indexOf('@') === -1) {
+          conditions.username = username;
+        }
+        else {
+          conditions.email = username;
         }
 
-        if (!user) {
-          return done(null, false, { message: 'Unknown user' });
-        }
+        app.db.models.User.findOne(conditions, function (err, user) {
+          if(err){
+            return workflow.emit('exception', err);
+          }
+          if(!user){
+            return workflow.emit('exception', 'Unknown user');
+          }
+          workflow.emit('validatePassword', user)
+        });
+      });
 
+      workflow.on('validatePassword', function(user){
         app.db.models.User.validatePassword(password, user.password, function(err, isValid) {
           if (err) {
-            return done(err);
+            return workflow.emit('exception', err);
           }
 
           if (!isValid) {
-            return done(null, false, { message: 'Invalid password' });
+            return workflow.emit('exception', 'Invalid password');
           }
 
-          return done(null, user);
+          workflow.emit('populateUser', user);
         });
       });
+
+      workflow.on('populateUser', function(user){
+        user.populate('roles.admin roles.account', function(err, user){
+          if(err){
+            return workflow.emit('exception', err);
+          }
+          if (user && user.roles && user.roles.admin) {
+            user.roles.admin.populate("groups", function(err, admin) {
+              if(err){
+                return workflow.emit('exception', err);
+              }
+              return workflow.emit('result', user);
+            });
+          }
+          else {
+            return workflow.emit('result', user);
+          }
+        });
+      });
+
+      workflow.on('result', function(user){
+        return done(null, user);
+      });
+
+      workflow.on('exception', function(x){
+        if(typeof x === 'string'){
+          return done(null, false, {message: x});
+        }else{
+          return done(null, false, x);
+        }
+      });
+
+      workflow.emit('findUser');
     }
   ));
 
