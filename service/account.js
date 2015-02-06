@@ -242,6 +242,72 @@ var account = {
         return res.status(200).json(outcome);
       });
     });
+  },
+
+  disconnectGoogle: function (req, res, next) {
+    var outcome = {};
+    req.app.db.models.User.findByIdAndUpdate(req.user.id, {google: {id: undefined}}, function (err, user) {
+      if (err) {
+        outcome.errors = ['error disconnecting user with google'];
+        outcome.success = false;
+        return res.status(200).json(outcome);
+      }
+      outcome.success = true;
+      return res.status(200).json(outcome);
+    });
+  },
+
+  connectGoogle: function(req, res, next){
+    var workflow = req.app.utility.workflow(req, res);
+    workflow.on('loginGoogle', function(){
+      req._passport.instance.authenticate('google', { callbackURL: 'http://127.0.0.1:8080/account/settings/google/callback/' }, function(err, user, info) {
+        if(err){
+          return workflow.emit('exception', err);
+        }
+        if (!info || !info.profile) {
+          workflow.outcome.errors.push('google user not found');
+          return workflow.emit('response');
+        }
+
+        workflow.profile = info.profile;
+        return workflow.emit('findUser');
+      })(req, res, next);
+    });
+
+    workflow.on('findUser', function(){
+      req.app.db.models.User.findOne({ 'google.id': workflow.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (user) {
+          //found another existing user already connects to google
+          workflow.outcome.errors.push('Another user has already connected with that Google account.');
+          return workflow.emit('response');
+          //renderSettings(req, res, next, 'Another user has already connected with that Google account.');
+        }
+        else {
+          return workflow.emit('linkUser');
+        }
+      });
+    });
+
+    workflow.on('linkUser', function(){
+      var fieldsToSet = {
+        google: {
+          id:      workflow.profile.id,
+          profile: workflow.profile
+        }
+      };
+      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('loginGoogle');
   }
 };
 module.exports = account;

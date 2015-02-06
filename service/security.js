@@ -110,6 +110,220 @@ var security = {
   logout: function(req, res){
     req.logout();
     res.send({success: true});
+  },
+  socialLogin: function(req, res, next){
+    var workflow = req.app.utility.workflow(req, res);
+    workflow.on('loginGoogle', function(){
+      req._passport.instance.authenticate('google', { callbackURL: 'http://127.0.0.1:8080/login/google/callback/' }, function(err, user, info) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (!info || !info.profile) {
+          workflow.outcome.errors.push('google user not found');
+          return workflow.emit('response');
+          //return res.redirect('/login/');
+        }
+        workflow.profile = info.profile;
+        return workflow.emit('findUser');
+      })(req, res, next);
+    });
+
+    workflow.on('findUser', function(){
+      req.app.db.models.User.findOne({ 'google.id': workflow.profile.id }, function(err, user) {
+        if (err) {
+          return next(err);
+        }
+
+        if (!user) {
+          return workflow.emit('duplicateEmailCheck');
+        }
+        else {
+          //user exists and is linked to google
+          workflow.user = user;
+          return workflow.emit('populateUser');
+        }
+      });
+    });
+    workflow.on('duplicateEmailCheck', function() {
+      workflow.email = workflow.profile.emails && workflow.profile.emails[0].value || '';
+      req.app.db.models.User.findOne({ email: workflow.email.toLowerCase() }, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (user) {
+          //user/account exists but not yet linked
+          workflow.user = user;
+          return workflow.emit('linkUser');
+        }
+        return workflow.emit('duplicateUsernameCheck');
+      });
+    });
+
+    workflow.on('duplicateUsernameCheck', function(){
+      workflow.username = workflow.profile.username || workflow.profile.id;
+      if (!/^[a-zA-Z0-9\-\_]+$/.test(workflow.username)) {
+        workflow.username = workflow.username.replace(/[^a-zA-Z0-9\-\_]/g, '');
+      }
+
+      req.app.db.models.User.findOne({ username: workflow.username }, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (user) {
+          workflow.username = workflow.username + workflow.profile.id;
+        }
+        else {
+          workflow.username = workflow.username;
+        }
+
+        return workflow.emit('createUser');
+      });
+    });
+
+    workflow.on('createUser', function(){
+      var fieldsToSet = {
+        isActive: 'yes',
+        username: workflow.username,
+        email: workflow.email.toLowerCase(),
+        search: [
+          workflow.username,
+          workflow.email
+        ]
+      };
+
+      //links account by saving social profile retrieved from social profile provider i.e. google
+      fieldsToSet[workflow.profile.provider] = {
+        id: workflow.profile.id,
+        profile: workflow.profile
+      };
+
+      req.app.db.models.User.create(fieldsToSet, function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        workflow.user = user;
+        return workflow.emit('createAccount');
+      });
+    });
+
+    workflow.emit('createAccount', function(){
+      var displayName = workflow.profile.displayName || '';
+      var nameParts = displayName.split(' ');
+      var fieldsToSet = {
+        isVerified: 'yes',
+        'name.first': nameParts[0],
+        'name.last': nameParts[1] || '',
+        'name.full': displayName,
+        user: {
+          id: workflow.user._id,
+          name: workflow.user.username
+        },
+        search: [
+          nameParts[0],
+          nameParts[1] || ''
+        ]
+      };
+      req.app.db.models.Account.create(fieldsToSet, function(err, account) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        //update user with account
+        workflow.user.roles.account = account._id;
+        workflow.user.save(function(err, user) {
+          if (err) {
+            return workflow.emit('exception', err);
+          }
+
+          workflow.emit('sendWelcomeEmail');
+        });
+      });
+    });
+
+    workflow.on('sendWelcomeEmail', function() {
+      req.app.utility.sendmail(req, res, {
+        from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
+        to: workflow.email,
+        subject: 'Your '+ req.app.config.projectName +' Account',
+        textPath: 'signup/email-text',
+        htmlPath: 'signup/email-html',
+        locals: {
+          username: workflow.user.username,
+          email: req.body.email,
+          loginURL: req.protocol +'://'+ req.headers.host +'/login/',
+          projectName: req.app.config.projectName
+        },
+        success: function(message) {
+          workflow.emit('populateUser');
+        },
+        error: function(err) {
+          console.log('Error Sending Welcome Email: '+ err);
+          workflow.emit('populateUser');
+        }
+      });
+    });
+
+    workflow.on('populateUser', function(){
+      var user = workflow.user;
+      user.populate('roles.admin roles.account', function(err, user){
+        if(err){
+          return workflow.emit('exception', err);
+        }
+        if (user && user.roles && user.roles.admin) {
+          user.roles.admin.populate("groups", function(err, admin) {
+            if(err){
+              return workflow.emit('exception', err);
+            }
+            workflow.user = user;
+            return workflow.emit('logUserIn');
+          });
+        }
+        else {
+          workflow.user = user;
+          return workflow.emit('logUserIn');
+        }
+      });
+    });
+
+    workflow.on('logUserIn', function(){
+
+      req.login(workflow.user, function(err) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        workflow.outcome.defaultReturnUrl = workflow.user.defaultReturnUrl();
+        workflow.outcome.user = filterUser(req.user);
+        workflow.emit('response');
+      });
+    });
+
+    workflow.on('linkUser', function(){
+      workflow.user[workflow.profile.provider] = {
+        id: workflow.profile.id,
+        profile: workflow.profile
+      };
+
+      //link existing user to social provider
+      workflow.user.save(function(err, user){
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+        //also makes sure to update account isVerified is set to true assuming user has been verified with social provider
+        var fieldsToSet = { isVerified: 'yes', verificationToken: '' };
+        req.app.db.models.Account.findByIdAndUpdate(workflow.user.roles.account, fieldsToSet, function(err, account) {
+          if (err) {
+            return workflow.emit('exception', err);
+          }
+          return workflow.emit('populateUser');
+        });
+      });
+    });
+
+    workflow.emit('loginGoogle');
   }
 };
 

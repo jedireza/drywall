@@ -84,6 +84,34 @@ angular.module('security.service', [
     //    return service.isAuthenticated();
     //  });
     //},
+    socialDisconnect: function(provider){
+      var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
+      return $http.get(url).then(function(res){ return res.data });
+    },
+
+    socialConnect: function(provider, code){
+      var url = '/api/account/settings/' + provider.toLowerCase() + '/callback';
+      if(code){
+        url += '?code=' + code;
+      }
+      return $http.get(url).then(function(res){ return res.data; });
+    },
+
+    socialLogin: function(provider, code){
+      var url = '/api/login/' + provider.toLowerCase() + '/callback';
+      if(code){
+        url += '?code=' + code;
+      }
+      var promise = $http.get(url).then(function(res){
+        var data = res.data;
+        if (data.success) {
+          closeLoginDialog(true);
+          service.currentUser = data.user;
+        }
+        return data;
+      });
+      return promise
+    },
 
     // Attempt to authenticate a user by the given username and password
     login: function(username, password) {

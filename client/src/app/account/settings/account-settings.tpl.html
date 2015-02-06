@@ -76,8 +76,10 @@
             </div>
         </form>
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3" ng-if="socialConnections">
         <legend>Social Connections</legend>
-        <a href="/account/settings/google/" class="btn btn-block btn-default"><i class="fa fa-google-plus-square fa-lg"></i> Connect Google</a>
+        <alert ng-repeat="alert in socialAlerts" type="{{alert.type}}" close="closeSocialAlert($index)">{{alert.msg}}</alert>
+        <a ng-repeat-start="(provider, property) in socialConnections" ng-if="property.connected" ng-click="disconnect(provider)" class="btn btn-block btn-danger"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> {{property.disconnectText}}</a>
+        <a ng-repeat-end target="_self" href="{{property.link}}" ng-if="!property.connected" class="btn btn-block btn-default"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> {{property.connectText}}</a>
     </div>
 </div>

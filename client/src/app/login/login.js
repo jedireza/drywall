@@ -1,4 +1,4 @@
-angular.module('login', ['login.forgot', 'login.reset', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('login', ['login.forgot', 'login.reset', 'login.social', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('login').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login', {

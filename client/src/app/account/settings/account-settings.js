@@ -1,4 +1,4 @@
-angular.module('account.settings', ['security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('account.settings', ['account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
@@ -23,8 +23,8 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
       }
     });
 }]);
-angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'accountDetails',
-  function($scope, $location, $log, restResource, accountDetails){
+angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'easyRestResource', 'accountDetails',
+  function($scope, $location, $log, security, restResource, accountDetails){
     //local vars
     var account = accountDetails.account;
     var user = accountDetails.user;
@@ -108,6 +108,27 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       });
     };
 
+    var disconnect = function(provider){
+      var errorAlert = {
+        type: 'warning',
+        msg: 'Error occurred when disconnecting your '+ provider + ' account. Please try again later.'
+      };
+      $scope.socialAlerts = [];
+      security.socialDisconnect(provider).then(function(data){
+        if(data.success){
+          $scope.socialConnections[provider]['connected'] = false;
+          $scope.socialAlerts.push({
+            type: 'info',
+            msg: 'Successfully disconnected your '+ provider +' account.'
+          });
+        }else{
+          $scope.socialAlerts.push(errorAlert);
+        }
+      }, function(x){
+        $scope.socialAlerts.push(errorAlert);
+      });
+    };
+
     //model def
     $scope.errfor = {}; //for identity server-side validation
     $scope.alerts = {
@@ -126,7 +147,38 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       email:    user.email
     };
     $scope.pass = {};
+    $scope.socialConnections = {
+      google: {
+        connected: !!(user.google && user.google.id),
+        link: '/account/settings/google/',
+        icon: 'fa-google-plus-square',
+        connectText: 'Connect Google',
+        disconnectText: 'Disconnect Google'
+      },
+      facebook: {
+        connected: !!(user.facebook && user.facebook.id),
+        link: '/account/settings/facebook/',
+        icon: 'fa-facebook-square',
+        connectText: 'Connect Facebook',
+        disconnectText: 'Disconnect Facebook'
+      }
+    };
 
+    $scope.socialAlerts = [];
+    var search = $location.search();
+    if(search.provider){
+      if(search.success === 'true'){
+        $scope.socialAlerts.push({
+          type: 'info',
+          msg: 'Successfully connected your '+ search.provider +' account.'
+        });
+      }else{
+        $scope.socialAlerts.push({
+          type: 'warning',
+          msg: 'Unable to connect your '+ search.provider + ' account. ' + search.reason
+        });
+      }
+    }
     // method def
     $scope.hasError = function(ngModelCtrl){
       return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
@@ -139,6 +191,9 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     };
     $scope.closeAlert = function(key, ind){
       $scope.alerts[key].splice(ind, 1);
+    };
+    $scope.closeSocialAlert = function(ind){
+      $scope.socialAlerts.splice(ind, 1);
     };
     $scope.submit = function(ngFormCtrl){
       switch (ngFormCtrl.$name){
@@ -155,5 +210,6 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
           return;
       }
     };
+    $scope.disconnect = disconnect;
   }
 ]);
