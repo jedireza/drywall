@@ -7,16 +7,22 @@ angular.module('account.verification').config(['$routeProvider', function($route
       resolve: {
         upsertVerificationToken: ['$q', '$location', 'easyRestResource', 'securityAuthorization', function($q, $location, restResource, securityAuthorization){
           //lazy upsert verification only for un-verified user, otherwise redirect to /account
+          var redirectUrl;
           var promise = securityAuthorization.requireUnverifiedUser()
-            .then(restResource.upsertVerification)
+            .then(restResource.upsertVerification, function(reason){
+              //rejected either user is verified already or isn't authenticated
+              redirectUrl = reason === 'verified-client'? '/account': '/login';
+              return $q.reject();
+            })
             .then(function(data){
               if(!data.success){
                 return $q.reject();
               }
             })
             .catch(function(){
-              $location.path('/account');
-              $q.reject();
+              redirectUrl = redirectUrl || '/account';
+              $location.path(redirectUrl);
+              return $q.reject();
             });
           return promise; //promise resolved if data.success == true
         }]

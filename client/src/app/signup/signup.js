@@ -1,13 +1,24 @@
-angular.module('signup', ['directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('signup', ['config', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('signup').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/signup', {
       templateUrl: 'signup/signup.tpl.html',
-      controller: 'SignupCtrl'
+      controller: 'SignupCtrl',
+      resolve: {
+        UnauthenticatedUser: ['$q', '$location', 'securityAuthorization', function($q, $location, securityAuthorization){
+          var promise = securityAuthorization.requireUnauthenticatedUser()
+            .catch(function(){
+              // user is authenticated, redirect
+              $location.path('/account');
+              return $q.reject();
+            });
+          return promise;
+        }]
+      }
     });
 }]);
-angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
-  function($scope, $location, $log, restResource){
+angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'SOCIAL',
+  function($scope, $location, $log, restResource, SOCIAL){
     // local variable
     var signupSuccess = function(data){
       if(data.success){
@@ -33,6 +44,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
     $scope.user = {};
     $scope.alerts = [];
     $scope.errfor = {};
+    $scope.social = SOCIAL;
 
     // method def
     $scope.hasError = function(ngModelCtrl){

@@ -27,11 +27,10 @@
             </div>
         </form>
         <hr>
-        <p>Or sign up using...</p>
+        <p>Or sign in using...</p>
         <div class="btn-group btn-group-justified">
-            <!--turn label into ng-repeat to render a list of buttons -->
-            <a href="/signup/google/" target="_self" class="btn btn-info"><i class="fa fa-google-plus-square fa-lg"></i> Google</a>
-            <!--<label class="btn btn-info" ng-click="socialSignup('Google')"><i class="fa fa-google-plus-square fa-lg"></i> Google</label>-->
+            <!--<a href="/signup/google/" target="_self" class="btn btn-info"><i class="fa fa-google-plus-square fa-lg"></i> Google</a>-->
+            <a ng-repeat="(provider, property) in social" ng-href="{{property.login}}" target="_self" class="btn btn-info"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> {{property.text}}</a>
         </div>
     </div>
     <div class="col-sm-6 marketing">

@@ -18,6 +18,79 @@ var sendVerificationEmail = function(req, res, options) {
   });
 };
 
+var disconnectSocial = function(provider, req, res, next){
+  provider = provider.toLowerCase();
+  var outcome = {};
+  var fieldsToSet = {};
+  fieldsToSet[provider] = { id: undefined };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function (err, user) {
+    if (err) {
+      outcome.errors = ['error disconnecting user from their '+ provider + ' account'];
+      outcome.success = false;
+      return res.status(200).json(outcome);
+    }
+    outcome.success = true;
+    return res.status(200).json(outcome);
+  });
+};
+
+var connectSocial = function(provider, req, res, next){
+  provider = provider.toLowerCase();
+  var workflow = req.app.utility.workflow(req, res);
+  workflow.on('loginSocial', function(){
+    var callbackUrl = req.app.config.oauth[provider]['connectCallback'];
+    req._passport.instance.authenticate(provider, { callbackURL: callbackUrl }, function(err, user, info) {
+      if(err){
+        return workflow.emit('exception', err);
+      }
+      if (!info || !info.profile) {
+        workflow.outcome.errors.push(provider + '  user not found');
+        return workflow.emit('response');
+      }
+
+      workflow.profile = info.profile;
+      return workflow.emit('findUser');
+    })(req, res, next);
+  });
+
+  workflow.on('findUser', function(){
+    var option = { _id: { $ne: req.user.id } };
+    option[provider +'.id'] = workflow.profile.id;
+    req.app.db.models.User.findOne(option, function(err, user) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+
+      if (user) {
+        //found another existing user already connects to provider
+        workflow.outcome.errors.push('Another user has already connected with that '+ provider +' account.');
+        return workflow.emit('response');
+      }
+      else {
+        return workflow.emit('linkUser');
+      }
+    });
+  });
+
+  workflow.on('linkUser', function(){
+    var fieldsToSet = {};
+    fieldsToSet[provider] = {
+      id: workflow.profile.id,
+      profile: workflow.profile
+    };
+
+    req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+      if (err) {
+        return workflow.emit('exception', err);
+      }
+      return workflow.emit('response');
+    });
+  });
+
+  workflow.emit('loginSocial');
+};
+
+// public api
 var account = {
   getAccountDetails: function(req, res, next){
     var outcome = {};
@@ -245,69 +318,19 @@ var account = {
   },
 
   disconnectGoogle: function (req, res, next) {
-    var outcome = {};
-    req.app.db.models.User.findByIdAndUpdate(req.user.id, {google: {id: undefined}}, function (err, user) {
-      if (err) {
-        outcome.errors = ['error disconnecting user with google'];
-        outcome.success = false;
-        return res.status(200).json(outcome);
-      }
-      outcome.success = true;
-      return res.status(200).json(outcome);
-    });
+    return disconnectSocial('google', req, res, next);
+  },
+
+  disconnectFacebook: function(req, res, next){
+    return disconnectSocial('facebook', req, res, next);
   },
 
   connectGoogle: function(req, res, next){
-    var workflow = req.app.utility.workflow(req, res);
-    workflow.on('loginGoogle', function(){
-      req._passport.instance.authenticate('google', { callbackURL: 'http://127.0.0.1:8080/account/settings/google/callback/' }, function(err, user, info) {
-        if(err){
-          return workflow.emit('exception', err);
-        }
-        if (!info || !info.profile) {
-          workflow.outcome.errors.push('google user not found');
-          return workflow.emit('response');
-        }
+    return connectSocial('google', req, res, next);
+  },
 
-        workflow.profile = info.profile;
-        return workflow.emit('findUser');
-      })(req, res, next);
-    });
-
-    workflow.on('findUser', function(){
-      req.app.db.models.User.findOne({ 'google.id': workflow.profile.id, _id: { $ne: req.user.id } }, function(err, user) {
-        if (err) {
-          return workflow.emit('exception', err);
-        }
-
-        if (user) {
-          //found another existing user already connects to google
-          workflow.outcome.errors.push('Another user has already connected with that Google account.');
-          return workflow.emit('response');
-          //renderSettings(req, res, next, 'Another user has already connected with that Google account.');
-        }
-        else {
-          return workflow.emit('linkUser');
-        }
-      });
-    });
-
-    workflow.on('linkUser', function(){
-      var fieldsToSet = {
-        google: {
-          id:      workflow.profile.id,
-          profile: workflow.profile
-        }
-      };
-      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
-        if (err) {
-          return workflow.emit('exception', err);
-        }
-        return workflow.emit('response');
-      });
-    });
-
-    workflow.emit('loginGoogle');
+  connectFacebook: function(req, res, next){
+    return connectSocial('facebook', req, res, next);
   }
 };
 module.exports = account;

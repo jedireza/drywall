@@ -71,7 +71,8 @@ exports = module.exports = function(app, passport) {
   app.post('/api/login/forgot', require('./views/login/forgot/index').send);
   app.put('/api/login/reset/:email/:token', require('./views/login/reset/index').set);
   app.post('/api/logout/', security.logout);
-  app.get('/api/login/google/callback', security.socialLogin);
+  app.get('/api/login/facebook/callback', security.loginFacebook);
+  app.get('/api/login/google/callback', security.loginGoogle);
 
   //-----authentication required api-----
   app.all('/api/account*', apiEnsureAuthenticated);
@@ -86,6 +87,8 @@ exports = module.exports = function(app, passport) {
   app.get('/api/account/verification/:token/', account.verify);
   app.get('/api/account/settings/google/callback', account.connectGoogle);
   app.get('/api/account/settings/google/disconnect', account.disconnectGoogle);
+  app.get('/api/account/settings/facebook/callback', account.connectFacebook);
+  app.get('/api/account/settings/facebook/disconnect', account.disconnectFacebook);
 
   //******** END OF NEW JSON API ********
 
@@ -127,9 +130,9 @@ exports = module.exports = function(app, passport) {
   app.get('/login/twitter/callback/', require('./views/login/index').loginTwitter);
   app.get('/login/github/', passport.authenticate('github', { callbackURL: '/login/github/callback/' }));
   app.get('/login/github/callback/', require('./views/login/index').loginGitHub);
-  app.get('/login/facebook/', passport.authenticate('facebook', { callbackURL: '/login/facebook/callback/' }));
+  app.get('/login/facebook/', passport.authenticate('facebook', { callbackURL: app.config.oauth.facebook.loginCallback, scope: ['email'] }));
   app.get('/login/facebook/callback/', require('./views/login/index').loginFacebook);
-  app.get('/login/google/', passport.authenticate('google', { callbackURL: 'http://127.0.0.1:8080/login/google/callback/', scope: ['profile email'] }));
+  app.get('/login/google/', passport.authenticate('google', { callbackURL: app.config.oauth.google.loginCallback, scope: ['profile email'] }));
   app.get('/login/google/callback/', require('./views/login/index').loginGoogle);
   app.get('/login/tumblr/', passport.authenticate('tumblr', { callbackURL: '/login/tumblr/callback/', scope: ['profile email'] }));
   app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
@@ -221,10 +224,10 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/github/', passport.authenticate('github', { callbackURL: '/account/settings/github/callback/' }));
   app.get('/account/settings/github/callback/', require('./views/account/settings/index').connectGitHub);
   app.get('/account/settings/github/disconnect/', require('./views/account/settings/index').disconnectGitHub);
-  app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: '/account/settings/facebook/callback/' }));
+  app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: app.config.oauth.facebook.connectCallback , scope: [ 'email' ]}));
   app.get('/account/settings/facebook/callback/', require('./views/account/settings/index').connectFacebook);
   app.get('/account/settings/facebook/disconnect/', require('./views/account/settings/index').disconnectFacebook);
-  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: 'http://127.0.0.1:8080/account/settings/google/callback/', scope: ['profile email'] }));
+  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: app.config.oauth.google.connectCallback, scope: ['profile email'] }));
   app.get('/account/settings/google/callback/', require('./views/account/settings/index').connectGoogle);
   app.get('/account/settings/google/disconnect/', require('./views/account/settings/index').disconnectGoogle);
   app.get('/account/settings/tumblr/', passport.authenticate('tumblr', { callbackURL: '/account/settings/tumblr/callback/' }));

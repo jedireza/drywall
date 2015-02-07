@@ -1,13 +1,24 @@
-angular.module('login', ['login.forgot', 'login.reset', 'login.social', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('login', ['login.forgot', 'login.reset', 'login.social', 'config', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('login').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login', {
       templateUrl: 'login/login.tpl.html',
-      controller: 'LoginCtrl'
+      controller: 'LoginCtrl',
+      resolve: {
+        UnauthenticatedUser: ['$q', '$location', 'securityAuthorization', function($q, $location, securityAuthorization){
+          var promise = securityAuthorization.requireUnauthenticatedUser()
+            .catch(function(){
+              // user is authenticated, redirect
+              $location.path('/account');
+              return $q.reject();
+            });
+          return promise;
+        }]
+      }
     });
 }]);
-angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security',
-  function($scope, $location, $log, restResource, security){
+angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security', 'SOCIAL',
+  function($scope, $location, $log, restResource, security, SOCIAL){
     // local variable
     var loginSuccess = function(data){
       if(data.success){
@@ -39,6 +50,7 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
     $scope.user = {};
     $scope.alerts = [];
     $scope.errfor = {};
+    $scope.social = SOCIAL;
 
     // method def
     $scope.hasError = function(ngModelCtrl){
@@ -55,10 +67,5 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
     };
     $scope.submit = function(){
       security.login($scope.user.username, $scope.user.password).then(loginSuccess, loginError);
-      //restResource.login($scope.user).then(loginSuccess, loginError);
     };
-    //$scope.socialLogin = function(provider){
-    //  $log.log('Attempting to login with ', provider);
-    //  restResource.socialLogin(provider).then(null, loginError);
-    //};
   }]);

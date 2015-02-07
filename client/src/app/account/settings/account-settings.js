@@ -1,4 +1,4 @@
-angular.module('account.settings', ['account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
@@ -9,8 +9,9 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
-            .then(easyRestResource.getAccountDetails, function(){
-              redirectUrl = '/account/verification';
+            .then(easyRestResource.getAccountDetails, function(reason){
+              //rejected either user is unverified or un-authenticated
+              redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
               return $q.reject();
             })
             .catch(function(){
@@ -23,8 +24,8 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
       }
     });
 }]);
-angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'easyRestResource', 'accountDetails',
-  function($scope, $location, $log, security, restResource, accountDetails){
+angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'easyRestResource', 'accountDetails', 'SOCIAL',
+  function($scope, $location, $log, security, restResource, accountDetails, SOCIAL){
     //local vars
     var account = accountDetails.account;
     var user = accountDetails.user;
@@ -116,7 +117,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       $scope.socialAlerts = [];
       security.socialDisconnect(provider).then(function(data){
         if(data.success){
-          $scope.socialConnections[provider]['connected'] = false;
+          $scope.social[provider]['connected'] = false;
           $scope.socialAlerts.push({
             type: 'info',
             msg: 'Successfully disconnected your '+ provider +' account.'
@@ -147,22 +148,13 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       email:    user.email
     };
     $scope.pass = {};
-    $scope.socialConnections = {
-      google: {
-        connected: !!(user.google && user.google.id),
-        link: '/account/settings/google/',
-        icon: 'fa-google-plus-square',
-        connectText: 'Connect Google',
-        disconnectText: 'Disconnect Google'
-      },
-      facebook: {
-        connected: !!(user.facebook && user.facebook.id),
-        link: '/account/settings/facebook/',
-        icon: 'fa-facebook-square',
-        connectText: 'Connect Facebook',
-        disconnectText: 'Disconnect Facebook'
-      }
-    };
+    $scope.social = SOCIAL;
+    if(user.google && user.google.id){
+      $scope.social.google.connected = true;
+    }
+    if(user.facebook && user.facebook.id){
+      $scope.social.facebook.connected = true;
+    }
 
     $scope.socialAlerts = [];
     var search = $location.search();

@@ -1,12 +1,12 @@
-angular.module('account.settings.social.google', ['security']);
-angular.module('account.settings.social.google').config(['$routeProvider', function($routeProvider){
+angular.module('account.settings.social.facebook', ['security']);
+angular.module('account.settings.social.facebook').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/account/settings/google/callback', {
+    .when('/account/settings/facebook/callback', {
       resolve: {
         connect: ['$log', '$q', '$location', '$route', 'security', function($log, $q, $location, $route, security){
           var code = $route.current.params.code || '';
           var search = {};
-          var promise = security.socialConnect('google', code)
+          var promise = security.socialConnect('facebook', code)
             .then(function(data){
               if(data.success){
                 search.success = 'true';
@@ -17,9 +17,9 @@ angular.module('account.settings.social.google').config(['$routeProvider', funct
               return $q.reject();
             })
             .catch(function(){
-              search.provider = 'google';
+              search.provider = 'facebook';
               search.success = search.success || 'false';
-              $location.search({}); //remove search param "code" added by google
+              $location.search({}); //remove search param "code" added by facebook
               $location.search(search);
               $location.path('/account/settings');
               return $q.reject();

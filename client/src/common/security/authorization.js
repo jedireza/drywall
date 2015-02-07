@@ -13,6 +13,10 @@ angular.module('security.authorization', ['security.service', 'config'])
     return securityAuthorization.requireAuthenticatedUser();
   }],
 
+  requireUnauthenticatedUser: ['securityAuthorization', function(securityAuthorization) {
+    return securityAuthorization.requireUnauthenticatedUser();
+  }],
+
   requireVerifiedUser: [ 'securityAuthorization', function(securityAuthorization){
     return securityAuthorization.requireVerifiedUser();
   }],
@@ -30,6 +34,15 @@ angular.module('security.authorization', ['security.service', 'config'])
         var promise = security.requestCurrentUser().then(function(userInfo) {
           if ( !security.isAuthenticated() ) {
             return queue.pushRetryFn('unauthenticated-client', service.requireAuthenticatedUser);
+          }
+        });
+        return promise;
+      },
+
+      requireUnauthenticatedUser: function(){
+        var promise = security.requestCurrentUser().then(function(userInfo){
+          if( security.isAuthenticated() ){
+            return $q.reject();
           }
         });
         return promise;
