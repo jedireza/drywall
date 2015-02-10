@@ -36,7 +36,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
           $scope.alerts.detail.push({
             type: 'success',
             msg: 'Account detail is updated.'
-          })
+          });
         }else{
           angular.forEach(data.errors, function(err, index){
             $scope.alerts.detail.push({
@@ -49,7 +49,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
         $scope.alerts.detail.push({
           type: 'danger',
           msg: 'Error updating account details: ' + x
-        })
+        });
       });
     };
 
@@ -60,7 +60,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
           $scope.alerts.identity.push({
             type: 'success',
             msg: 'User identity is updated.'
-          })
+          });
         }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
@@ -78,7 +78,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
         $scope.alerts.identity.push({
           type: 'danger',
           msg: 'Error updating user identity: ' + x
-        })
+        });
       });
     };
 
@@ -91,7 +91,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
           $scope.alerts.pass.push({
             type: 'success',
             msg: 'Password is updated.'
-          })
+          });
         }else{
           //error due to server side validation
           angular.forEach(data.errors, function(err, index){
@@ -105,7 +105,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
         $scope.alerts.pass.push({
           type: 'danger',
           msg: 'Error updating password: ' + x
-        })
+        });
       });
     };
 
