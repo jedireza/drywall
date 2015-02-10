@@ -183,7 +183,7 @@ module.exports = function(grunt) {
       },
       angularJS: {
         files: ['<%= src.angularJS %>'],
-        tasks: ['newer:concat']
+        tasks: ['newer:concat', 'newer:jshint:client']
       },
       angularHtmlTpl: {
         files: ['<%= src.angularHtml.app %>', '<%= src.angularHtml.common %>'],
