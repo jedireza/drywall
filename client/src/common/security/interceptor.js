@@ -4,7 +4,7 @@ angular.module('security.interceptor', ['security.retryQueue'])
 .factory('securityInterceptor', ['$q', '$log', '$injector', 'securityRetryQueue', function($q, $log, $injector, queue) {
   return {
     'responseError': function(response){
-      if(response.status == 401){
+      if(response.status === 401){
         // The request bounced because it was not authorized - add a new request to the retry queue
         // and return a new promise that will be resolved or rejected after calling retryItem's retry or cancel method
         // eg. retryRequest is the retryFn that will be called later
