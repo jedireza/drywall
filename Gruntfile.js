@@ -270,7 +270,10 @@ module.exports = function(grunt) {
     jshint: {
       client: {
         options: {
-          jshintrc: '.jshintrc-client'
+          jshintrc: '.jshintrc-client',
+          ignores: [
+           'client/src/common/directives/gravatar.js'
+          ]
         },
         src: [
           'client/src/app/**/*.js',
