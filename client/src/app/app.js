@@ -116,7 +116,7 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
   $scope.isAuthenticated = security.isAuthenticated;
   //$scope.isAdmin = security.isAdmin;
   $scope.logout = function(){
-    security.logout()
+    security.logout();
   };
   $scope.isActive = function(viewLocation){
     return $location.path() === viewLocation;
@@ -141,6 +141,6 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
 angular.module('app').controller('FooterCtrl', ['$scope', 'security', function($scope, security){
   $scope.isAuthenticated = security.isAuthenticated;
   $scope.logout = function(){
-    security.logout()
+    security.logout();
   };
 }]);
