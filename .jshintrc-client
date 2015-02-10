@@ -21,8 +21,8 @@
                               //   "single" : require single quotes
                               //   "double" : require double quotes
   "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-  "unused"        : true,     // true: Require all defined variables be used
-  "strict"        : true,     // true: Requires all functions run in ES5 Strict Mode
+  "unused"        : false,     // true: Require all defined variables be used
+  "strict"        : false,     // true: Requires all functions run in ES5 Strict Mode
   "trailing"      : false,    // true: Prohibit trailing whitespaces
   "maxparams"     : false,    // {int} Max number of formal params allowed per function
   "maxdepth"      : false,    // {int} Max depth of nested blocks (within functions)
@@ -53,7 +53,7 @@
   "scripturl"     : false,     // true: Tolerate script-targeted URLs
   "smarttabs"     : false,     // true: Tolerate mixed tabs/spaces when used for alignment
   "shadow"        : false,     // true: Allows re-define variables later in code e.g. `var x=1; x=2;`
-  "sub"           : false,     // true: Tolerate using `[]` notation when it can still be expressed in dot notation
+  "sub"           : true,     // true: Tolerate using `[]` notation when it can still be expressed in dot notation
   "supernew"      : false,     // true: Tolerate `new function () { ... };` and `new Object;`
   "validthis"     : false,     // true: Tolerate using this in a non-constructor function
 
@@ -79,5 +79,5 @@
   "white"         : false,    // true: Check against strict whitespace and indentation rules
 
   // Custom Globals
-  "predef"        : ["$", "_", "Backbone", "moment", "app"]       // additional predefined global variables
+  "predef"        : ["$", "_", "Backbone", "moment", "app", "angular"]       // additional predefined global variables
 }

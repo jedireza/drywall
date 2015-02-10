@@ -270,17 +270,26 @@ module.exports = function(grunt) {
     jshint: {
       client: {
         options: {
-          jshintrc: '.jshintrc-client',
-          ignores: [
-            'public/layouts/**/*.min.js',
-            'public/views/**/*.min.js'
-          ]
+          jshintrc: '.jshintrc-client'
         },
         src: [
-          'public/layouts/**/*.js',
-          'public/views/**/*.js'
+          'client/src/app/**/*.js',
+          'client/src/common/**/*.js'
         ]
       },
+      //client: {
+      //  options: {
+      //    jshintrc: '.jshintrc-client',
+      //    ignores: [
+      //      'public/layouts/**/*.min.js',
+      //      'public/views/**/*.min.js'
+      //    ]
+      //  },
+      //  src: [
+      //    'public/layouts/**/*.js',
+      //    'public/views/**/*.js'
+      //  ]
+      //},
       server: {
         options: {
           jshintrc: '.jshintrc-server'
@@ -358,6 +367,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['copy', 'uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);
 
+  grunt.registerTask('flint', ['jshint:client']);
   grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat', 'sass:dev']);
   grunt.registerTask('back', ['copy:vendor', 'newer:uglify', 'newer:less']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
