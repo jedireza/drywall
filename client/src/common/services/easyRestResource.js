@@ -6,9 +6,9 @@ angular.module('services.easyRestResource', ['security.service']).factory('easyR
   };
   var processError = function(e){
     var msg = [];
-    if(e.status)        msg.push(e.status);
-    if(e.statusText)    msg.push(e.statusText);
-    if(msg.length == 0) msg.push('Unknown Server Error');
+    if(e.status)         { msg.push(e.status); }
+    if(e.statusText)     { msg.push(e.statusText); }
+    if(msg.length === 0) { msg.push('Unknown Server Error'); }
     return $q.reject(msg.join(' '));
   };
   // public api
@@ -27,7 +27,7 @@ angular.module('services.easyRestResource', ['security.service']).factory('easyR
   };
   resource.loginReset = function(id, email, data){
     var url = baseUrl + '/login/reset/' + email + '/' + id;
-    return $http.put(url, data).then(processResponse, processError)
+    return $http.put(url, data).then(processResponse, processError);
   };
   //resource.socialSignup = function(provider){
   //  var url = baseUrl + '/signup';
