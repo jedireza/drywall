@@ -86,7 +86,7 @@ angular.module('security.service', [
     //},
     socialDisconnect: function(provider){
       var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
-      return $http.get(url).then(function(res){ return res.data });
+      return $http.get(url).then(function(res){ return res.data; });
     },
 
     socialConnect: function(provider, code){
@@ -110,7 +110,7 @@ angular.module('security.service', [
         }
         return data;
       });
-      return promise
+      return promise;
     },
 
     // Attempt to authenticate a user by the given username and password
