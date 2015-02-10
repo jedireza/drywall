@@ -10,7 +10,7 @@ angular.module('directives.serverError', [])
         element.on('change', function(){
           scope.$apply(function(){
             ctrl.$setValidity('server', true);
-          })
+          });
         });
       }
     };
