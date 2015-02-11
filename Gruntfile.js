@@ -156,6 +156,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    karma: {
+      unit: {
+        configFile: 'client/test/karma.conf.js'
+      },
+      watch: {
+        configFile: 'client/test/karma.conf.js',
+        background: true,
+        singleRun: false
+      }
+    },
     concurrent: {
       dev: {
         tasks: ['nodemon', 'watch'],
@@ -365,12 +375,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-html2js');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', ['clean', 'copy', 'html2js', 'concat', 'newer:uglify', 'newer:less', 'newer:sass:dev','concurrent']);
   grunt.registerTask('build', ['copy', 'uglify', 'less']);
   grunt.registerTask('lint', ['jshint']);
 
-  grunt.registerTask('flint', ['jshint:client']);
+  grunt.registerTask('unitTest', ['karma:unit']);
   grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat', 'sass:dev']);
   grunt.registerTask('back', ['copy:vendor', 'newer:uglify', 'newer:less']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
