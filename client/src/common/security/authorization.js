@@ -42,7 +42,7 @@ angular.module('security.authorization', ['security.service', 'config'])
       requireUnauthenticatedUser: function(){
         var promise = security.requestCurrentUser().then(function(userInfo){
           if( security.isAuthenticated() ){
-            return $q.reject();
+            return $q.reject('authenticated-client');
           }
         });
         return promise;
