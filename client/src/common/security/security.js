@@ -32,11 +32,11 @@ angular.module('security.service', [
       loginDialog.close(success);
     }
   }
-    function dismissLoginDialog(reason){
-      if(loginDialog){
-        loginDialog.dismiss(reason);
-      }
+  function dismissLoginDialog(reason){
+    if(loginDialog){
+      loginDialog.dismiss(reason);
     }
+  }
   function onLoginDialogClose(success) {
     loginDialog = null;
     if ( success ) {
@@ -60,8 +60,24 @@ angular.module('security.service', [
     }
   });
 
+  function processResponse(res){
+    return res.data;
+  }
+
+  function processError(e){
+    var msg = [];
+    if(e.status)         { msg.push(e.status); }
+    if(e.statusText)     { msg.push(e.statusText); }
+    if(msg.length === 0) { msg.push('Unknown Server Error'); }
+    return $q.reject(msg.join(' '));
+  }
+
   // The public API of the service
   var service = {
+
+    signup: function(data){
+      return $http.post('/api/signup', data).then(processResponse, processError);
+    },
 
     // Get the first reason for needing a login
     getLoginReason: function() {
@@ -142,6 +158,15 @@ angular.module('security.service', [
         service.currentUser = null;
         redirect(redirectTo);
       });
+    },
+
+    loginForgot: function(data){
+      return $http.post('/api/login/forgot', data).then(processResponse, processError);
+    },
+
+    loginReset: function(id, email, data){
+      var url = '/api/login/reset/' + email + '/' + id;
+      return $http.put(url, data).then(processResponse, processError);
     },
 
     // Ask the backend to see if a user is already authenticated - this may be from a previous session.

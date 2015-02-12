@@ -1,11 +1,17 @@
 describe('security', function() {
   var END_POINT = {
-    login:       '/api/login',
-    logout:      '/api/logout',
-    currentUser: '/api/current-user'
+    login:            '/api/login',
+    logout:           '/api/logout',
+    currentUser:      '/api/current-user',
+    signup:           '/api/signup',
+    loginForgot:      '/api/login/forgot',
+    loginReset:       '/api/login/reset',
+    loginGoogle:      '/api/login/google/callback',
+    connectGoogle:    '/api/account/settings/google/callback',
+    disconnectGoogle: '/api/account/settings/google/disconnect'
   };
 
-  var $rootScope, $http, $httpBackend, status, userInfo;
+  var $rootScope, $http, $httpBackend, status, userInfo, messages;
   
   angular.module('test',[]).constant('I18N.MESSAGES', messages = {});
   beforeEach(module('security', 'test', 'security/login/form.tpl.html'));
@@ -78,6 +84,83 @@ describe('security', function() {
         expect(data).toEqual(responseData);
       });
       $httpBackend.flush();
+    });
+  });
+
+  describe('socialLogin', function(){
+    var url, responseData;
+    beforeEach(function(){
+      url = END_POINT.loginGoogle + '?code=google_code';
+      responseData = { success: true, user: userInfo };
+    });
+    it('sends a http GET request to login the specified user', function() {
+      $httpBackend.when('GET', url).respond(200, responseData);
+      $httpBackend.expect('GET', url);
+      service.socialLogin('google', 'google_code');
+      $httpBackend.flush();
+      expect(service.currentUser).toEqual(userInfo);
+    });
+    it('returns data contains userInfo to success handlers if the user authenticated', function() {
+      $httpBackend.when('GET', url).respond(200, responseData);
+      service.socialLogin('google', 'google_code').then(function(data) {
+        expect(data).toEqual(responseData);
+      });
+      $httpBackend.flush();
+    });
+    it('returns data to success handlers if the user was not authenticated', function() {
+      var responseData =  { success: false };
+      $httpBackend.when('GET', url).respond(200, responseData);
+      service.socialLogin('google', 'google_code').then(function(data) {
+        expect(data).toEqual(responseData);
+      });
+      $httpBackend.flush();
+    });
+  });
+
+  describe('socialConnect', function(){
+    var url, responseData;
+    beforeEach(function(){
+      url = END_POINT.connectGoogle + '?code=google_code';
+      responseData = { success: true };
+    });
+    it('sends a http GET request to connect the specified user', function() {
+      $httpBackend.when('GET', url).respond(200, responseData);
+      $httpBackend.expect('GET', url);
+      service.socialConnect('google', 'google_code');
+      $httpBackend.flush();
+    });
+    it('returns data indicating whether user is successfully connected', function() {
+      var resolved;
+      $httpBackend.when('GET', url).respond(200, responseData);
+      service.socialConnect('google', 'google_code').then(function(data) {
+        resolved = true;
+        expect(data).toEqual(responseData);
+      });
+      $httpBackend.flush();
+      expect(resolved).toBe(true);
+    });
+  });
+
+  describe('socialDisconnect', function(){
+    var responseData;
+    beforeEach(function(){
+      responseData = { success: true };
+    });
+    it('sends a http GET request to disconnect the specified user', function() {
+      $httpBackend.when('GET', END_POINT.disconnectGoogle).respond(200, responseData);
+      $httpBackend.expect('GET', END_POINT.disconnectGoogle);
+      service.socialDisconnect('google');
+      $httpBackend.flush();
+    });
+    it('returns data indicating whether user is successfully disconnected', function() {
+      var resolved;
+      $httpBackend.when('GET', END_POINT.disconnectGoogle).respond(200, responseData);
+      service.socialDisconnect('google').then(function(data) {
+        resolved = true;
+        expect(data).toEqual(responseData);
+      });
+      $httpBackend.flush();
+      expect(resolved).toBe(true);
     });
   });
 
@@ -170,6 +253,70 @@ describe('security', function() {
         expect(service.currentUser).toBe(userInfo);
       });
       $rootScope.$digest();
+      expect(resolved).toBe(true);
+    });
+  });
+
+  describe('signup', function(){
+    var data;
+    beforeEach(function(){
+      data = {
+        username: 'test user',
+        email: 'JohnDoe@gmail.com',
+        password: 'password'
+      };
+      $httpBackend.when('POST', END_POINT.signup).respond(200, { success: true });
+    });
+    it('sends a http request to sign up the specified user', function() {
+      var resolved;
+      $httpBackend.expect('POST', END_POINT.signup, data);
+      service.signup(data).then(function(result){
+        resolved = true;
+        expect(result.success).toBe(true);
+      });
+      $httpBackend.flush();
+      expect(resolved).toBe(true);
+    });
+  });
+
+  describe('loginForgot', function(){
+    var data;
+    beforeEach(function(){
+      data = { email: 'JohnDoe@gmail.com' };
+      $httpBackend.when('POST', END_POINT.loginForgot).respond(200, { success: true });
+    });
+    it('sends a http request to send reset password token for the specified user', function() {
+      var resolved;
+      $httpBackend.expect('POST', END_POINT.loginForgot, data);
+      service.loginForgot(data).then(function(result){
+        resolved = true;
+        expect(result.success).toBe(true);
+      });
+      $httpBackend.flush();
+      expect(resolved).toBe(true);
+    });
+  });
+
+  describe('loginReset', function(){
+    var id, email, data, url;
+    beforeEach(function(){
+      id = 'token_value';
+      email = 'jdoe@gmail.com';
+      url = END_POINT.loginReset + '/' + email + '/' + id;
+      data = {
+        password: 'password',
+        confirm: 'password'
+      };
+      $httpBackend.when('PUT', url).respond(200, { success: true });
+    });
+    it('sends a http request to reset password for the specified user', function() {
+      var resolved;
+      $httpBackend.expect('PUT', url, data);
+      service.loginReset(id, email, data).then(function(result){
+        resolved = true;
+        expect(result.success).toBe(true);
+      });
+      $httpBackend.flush();
       expect(resolved).toBe(true);
     });
   });

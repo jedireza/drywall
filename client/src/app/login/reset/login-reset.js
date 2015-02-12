@@ -1,4 +1,4 @@
-angular.module('login.reset', ['services.easyRestResource', 'ui.bootstrap']);
+angular.module('login.reset', ['security.service', 'ui.bootstrap']);
 angular.module('login.reset').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login/reset', {
@@ -10,8 +10,8 @@ angular.module('login.reset').config(['$routeProvider', function($routeProvider)
       controller: 'LoginResetCtrl'
     });
 }]);
-angular.module('login.reset').controller('LoginResetCtrl', [ '$scope', '$location', '$routeParams', '$log', 'easyRestResource',
-  function($scope, $location, $routeParams, $log, restResource){
+angular.module('login.reset').controller('LoginResetCtrl', [ '$scope', '$location', '$routeParams', '$log', 'security',
+  function($scope, $location, $routeParams, $log, security){
     // local variable
     var warningAlert = {
       type: 'warning',
@@ -68,6 +68,6 @@ angular.module('login.reset').controller('LoginResetCtrl', [ '$scope', '$locatio
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.loginReset($scope.id, $scope.email, $scope.user).then(resetSuccess, resetError);
+      security.loginReset($scope.id, $scope.email, $scope.user).then(resetSuccess, resetError);
     };
   }]);

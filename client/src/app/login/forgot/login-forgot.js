@@ -1,4 +1,4 @@
-angular.module('login.forgot', ['services.easyRestResource', 'ui.bootstrap']);
+angular.module('login.forgot', ['security.service', 'ui.bootstrap']);
 angular.module('login.forgot').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login/forgot', {
@@ -6,8 +6,8 @@ angular.module('login.forgot').config(['$routeProvider', function($routeProvider
       controller: 'LoginForgotCtrl'
     });
 }]);
-angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'easyRestResource',
-  function($scope, $location, $log, restResource){
+angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'security',
+  function($scope, $location, $log, security){
     // local variable
     var resetSuccess = function(data){
       $scope.loginForgotForm.$setPristine();
@@ -50,7 +50,7 @@ angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$locat
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.loginForgot($scope.user).then(resetSuccess, resetError);
+      security.loginForgot($scope.user).then(resetSuccess, resetError);
     };
     //$scope.socialLogin = function(provider){
     //  $log.log('Attempting to login with ', provider);

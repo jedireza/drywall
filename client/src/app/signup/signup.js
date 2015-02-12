@@ -1,4 +1,4 @@
-angular.module('signup', ['config', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('signup', ['config', 'security.service', 'directives.serverError', 'ui.bootstrap']);
 angular.module('signup').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/signup', {
@@ -17,8 +17,8 @@ angular.module('signup').config(['$routeProvider', function($routeProvider){
       }
     });
 }]);
-angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'SOCIAL',
-  function($scope, $location, $log, restResource, SOCIAL){
+angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'security', 'SOCIAL',
+  function($scope, $location, $log, security, SOCIAL){
     // local variable
     var signupSuccess = function(data){
       if(data.success){
@@ -60,7 +60,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
-      restResource.signup($scope.user).then(signupSuccess, signupError);
+      security.signup($scope.user).then(signupSuccess, signupError);
     };
     //$scope.socialSignup = function(provider){
     //  $log.log('Attempting to signup with ', provider);
