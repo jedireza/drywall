@@ -8,7 +8,6 @@ angular.module('app', [
   'login',
   'account',
   'config',
-  'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'services.easyRestResource',
@@ -16,7 +15,6 @@ angular.module('app', [
   'templates.app',
   'templates.common',
   'ui.bootstrap'
-  //'directives.crud',
 ]);
 
 
@@ -108,8 +106,8 @@ angular.module('app').controller('ContactCtrl', ['$scope', '$log', 'easyRestReso
     };
   }]);
 
-angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'security', 'breadcrumbs', 'notifications', 'httpRequestTracker',
-  function ($scope, $location, $route, security, breadcrumbs, notifications, httpRequestTracker) {
+angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'security', 'notifications', 'httpRequestTracker',
+  function ($scope, $location, $route, security, notifications, httpRequestTracker) {
   //$scope.location = $location;
   //$scope.breadcrumbs = breadcrumbs;
 
