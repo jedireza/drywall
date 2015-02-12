@@ -1,5 +1,6 @@
 angular.module('app', [
   'ngRoute',
+  'base',
   //'projectsinfo',
   //'dashboard',
   //'projects',
@@ -63,48 +64,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'loc
     i18nNotifications.pushForCurrentRoute('errors.route.changeError', 'error', {}, {rejection: rejection});
   });
 }]);
-
-angular.module('app').controller('ContactCtrl', ['$scope', '$log', 'easyRestResource',
-  function($scope, $log, restResource){
-    // local var
-    var successAlert = { type: 'success', msg: 'We have received your message. Thank you.' };
-    var errorAlert = { type: 'warning', msg: 'Error submitting your message. Please try again.' };
-
-    // model def
-    $scope.msg = {};
-    $scope.alerts = [];
-
-    // method def
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
-    $scope.canSave = function(ngFormCtrl){
-      return ngFormCtrl.$dirty && ngFormCtrl.$valid;
-    };
-    $scope.closeAlert = function(ind){
-      $scope.alerts.splice(ind, 1);
-    };
-    $scope.submit = function(){
-      var msg = $scope.msg;
-      restResource.sendMessage({
-        name: msg.name,
-        email: msg.email,
-        message: msg.message
-      }).then(function(data){
-        $scope.msgForm.$setPristine();
-        $scope.msg = {};
-        if(data.success){
-          $scope.alerts.push(successAlert);
-        }else{
-          //TODO: optionally do case study errfor/errors
-          $scope.alerts.push(errorAlert);
-        }
-      });
-    };
-  }]);
 
 angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'security', 'notifications', 'httpRequestTracker',
   function ($scope, $location, $route, security, notifications, httpRequestTracker) {
