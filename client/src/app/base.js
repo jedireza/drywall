@@ -1,4 +1,32 @@
-angular.module('base',['services.utility', 'services.easyRestResource']);
+angular.module('base',['security', 'services.utility', 'services.easyRestResource']);
+
+angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security',
+  function ($scope, $location, security) {
+    $scope.isAuthenticated = function(){
+      return security.isAuthenticated();
+    };
+    //$scope.isAdmin = security.isAdmin;
+    $scope.logout = function(){
+      return security.logout();
+    };
+    $scope.isActive = function(viewLocation){
+      return $location.path() === viewLocation;
+    };
+  }
+]);
+
+angular.module('base').controller('FooterCtrl', ['$scope', 'security',
+  function($scope, security){
+    $scope.isAuthenticated = function(){
+      return security.isAuthenticated();
+    };
+    //$scope.isAdmin = security.isAdmin;
+    $scope.logout = function(){
+      return security.logout();
+    };
+  }
+]);
+
 angular.module('base').controller('ContactCtrl', ['$scope', '$log', 'utility', 'easyRestResource',
   function($scope, $log, utility, restResource){
     // local var
@@ -38,4 +66,5 @@ angular.module('base').controller('ContactCtrl', ['$scope', '$log', 'utility', '
         $scope.alerts.push(errorAlert);
       });
     };
-  }]);
+  }
+]);
