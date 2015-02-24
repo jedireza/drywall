@@ -1,4 +1,4 @@
-angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'services.utility','ui.bootstrap']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
@@ -24,8 +24,8 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
       }
     });
 }]);
-angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'easyRestResource', 'accountDetails', 'SOCIAL',
-  function($scope, $location, $log, security, restResource, accountDetails, SOCIAL){
+angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'easyRestResource', 'accountDetails', 'SOCIAL',
+  function($scope, $location, $log, security, utility, restResource, accountDetails, SOCIAL){
     //local vars
     var account = accountDetails.account;
     var user = accountDetails.user;
@@ -157,6 +157,8 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     }
 
     $scope.socialAlerts = [];
+
+    //initial behavior
     var search = $location.search();
     if(search.provider){
       if(search.success === 'true'){
@@ -171,16 +173,11 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
         });
       }
     }
+
     // method def
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
-    $scope.canSave = function(ngFormCtrl){
-      return ngFormCtrl.$dirty && ngFormCtrl.$valid;
-    };
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
     $scope.closeAlert = function(key, ind){
       $scope.alerts[key].splice(ind, 1);
     };
