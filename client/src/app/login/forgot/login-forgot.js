@@ -1,4 +1,4 @@
-angular.module('login.forgot', ['security.service', 'ui.bootstrap']);
+angular.module('login.forgot', ['security.service', 'services.utility', 'ui.bootstrap']);
 angular.module('login.forgot').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login/forgot', {
@@ -6,8 +6,8 @@ angular.module('login.forgot').config(['$routeProvider', function($routeProvider
       controller: 'LoginForgotCtrl'
     });
 }]);
-angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'security',
-  function($scope, $location, $log, security){
+angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'security', 'utility',
+  function($scope, $location, $log, security, utility){
     // local variable
     var resetSuccess = function(data){
       $scope.loginForgotForm.$setPristine();
@@ -37,23 +37,13 @@ angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$locat
     $scope.alerts = [];
 
     // method def
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
-    $scope.canSave = function(ngFormCtrl){
-      return ngFormCtrl.$dirty && ngFormCtrl.$valid;
-    };
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
     $scope.closeAlert = function(ind){
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
       security.loginForgot($scope.user).then(resetSuccess, resetError);
     };
-    //$scope.socialLogin = function(provider){
-    //  $log.log('Attempting to login with ', provider);
-    //  restResource.socialLogin(provider).then(null, loginError);
-    //};
   }]);

@@ -1,4 +1,4 @@
-angular.module('login', ['login.forgot', 'login.reset', 'login.social', 'config', 'security.service', 'directives.serverError', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('login', ['ngRoute', 'login.forgot', 'login.reset', 'login.social', 'config', 'security.service', 'directives.serverError', 'services.utility', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('login').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login', {
@@ -17,8 +17,8 @@ angular.module('login').config(['$routeProvider', function($routeProvider){
       }
     });
 }]);
-angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security', 'SOCIAL',
-  function($scope, $location, $log, restResource, security, SOCIAL){
+angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'SOCIAL',
+  function($scope, $location, $log, security, utility, SOCIAL){
     // local variable
     var loginSuccess = function(data){
       if(data.success){
@@ -37,7 +37,6 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
             msg: err
           });
         });
-        return;
       }
     };
     var loginError = function(){
@@ -53,15 +52,9 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
     $scope.social = SOCIAL;
 
     // method def
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
-    $scope.canSave = function(ngFormCtrl){
-      return ngFormCtrl.$dirty && ngFormCtrl.$valid;
-    };
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
     $scope.closeAlert = function(ind){
       $scope.alerts.splice(ind, 1);
     };
