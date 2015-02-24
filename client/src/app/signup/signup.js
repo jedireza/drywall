@@ -1,4 +1,4 @@
-angular.module('signup', ['config', 'security.service', 'directives.serverError', 'ui.bootstrap']);
+angular.module('signup', ['ngRoute', 'config', 'services.utility', 'security.service', 'directives.serverError', 'ui.bootstrap']);
 angular.module('signup').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/signup', {
@@ -17,8 +17,8 @@ angular.module('signup').config(['$routeProvider', function($routeProvider){
       }
     });
 }]);
-angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'security', 'SOCIAL',
-  function($scope, $location, $log, security, SOCIAL){
+angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log', 'utility', 'security', 'SOCIAL',
+  function($scope, $location, $log, utility, security, SOCIAL){
     // local variable
     var signupSuccess = function(data){
       if(data.success){
@@ -31,7 +31,6 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
         angular.forEach(data.errfor, function(err, field){
           $scope.signupForm[field].$setValidity('server', false);
         });
-        return;
       }
     };
     var signupError = function(){
@@ -47,23 +46,13 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
     $scope.social = SOCIAL;
 
     // method def
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
-    $scope.canSave = function(ngFormCtrl){
-      return ngFormCtrl.$dirty && ngFormCtrl.$valid;
-    };
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
     $scope.closeAlert = function(ind){
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
       security.signup($scope.user).then(signupSuccess, signupError);
     };
-    //$scope.socialSignup = function(provider){
-    //  $log.log('Attempting to signup with ', provider);
-    //  restResource.socialSignup(provider).then(null, signupError);
-    //};
   }]);
