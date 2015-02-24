@@ -1,4 +1,4 @@
-angular.module('mock.services.security', [])
+angular.module('mock.footer.services.security', [])
   .factory('security', function(){
     var service = {};
     service.isAuthenticated = function(){ return true; };
@@ -12,7 +12,7 @@ describe('FooterCtrl', function(){
   beforeEach(module('base'));
 
   // include mocked security service for this test
-  beforeEach(module('mock.services.security'));
+  beforeEach(module('mock.footer.services.security'));
 
   // instantiate controller to be tested
   beforeEach(inject(function($rootScope, $controller, _security_) {
