@@ -71,6 +71,7 @@ angular.module('security.service', [
     if(msg.length === 0) { msg.push('Unknown Server Error'); }
     return $q.reject(msg.join(' '));
   }
+  var deferredCurrentUser;
 
   // The public API of the service
   var service = {
@@ -89,17 +90,6 @@ angular.module('security.service', [
       openLoginDialog();
     },
 
-    // Attempt to authenticate a user by the given email and password
-    //loginOld: function(email, password) {
-    //  var request = $http.post('/login', {email: email, password: password});
-    //  return request.then(function(response) {
-    //    service.currentUser = response.data.user;
-    //    if ( service.isAuthenticated() ) {
-    //      closeLoginDialog(true);
-    //    }
-    //    return service.isAuthenticated();
-    //  });
-    //},
     socialDisconnect: function(provider){
       var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
       return $http.get(url).then(function(res){ return res.data; });
@@ -172,12 +162,23 @@ angular.module('security.service', [
     // Ask the backend to see if a user is already authenticated - this may be from a previous session.
     requestCurrentUser: function() {
       if ( service.isAuthenticated() ) {
+        // local currentUser is available
         return $q.when(service.currentUser);
+      } else if(deferredCurrentUser) {
+        // already an outstanding backend request for currentUser
+        return deferredCurrentUser.promise;
       } else {
-        return $http.get('/api/current-user').then(function(response) {
+        // no outstanding backend call nor local currentUser
+        deferredCurrentUser = $q.defer();
+        $http.get('/api/current-user').then(function(response){
           service.currentUser = response.data.user;
-          return service.currentUser;
+          deferredCurrentUser.resolve(service.currentUser);
+          deferredCurrentUser = null;
+        }, function(x){
+          deferredCurrentUser.reject(x);
+          deferredCurrentUser = null;
         });
+        return deferredCurrentUser.promise;
       }
     },
 
