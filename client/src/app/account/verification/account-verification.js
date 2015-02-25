@@ -1,4 +1,4 @@
-angular.module('account.verification', ['security', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('account.verification', ['security', 'services.utility', 'services.easyRestResource', 'ui.bootstrap']);
 angular.module('account.verification').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/account/verification', {
@@ -38,7 +38,7 @@ angular.module('account.verification').config(['$routeProvider', function($route
               return restResource.verifyAccount($route.current.params.token);
             }, function(){
               redirectUrl = '/account';
-              $q.reject();
+              return $q.reject();
             })
             .then(function(data){
               if(data.success) {
@@ -51,14 +51,14 @@ angular.module('account.verification').config(['$routeProvider', function($route
               $location.path(redirectUrl);
               return $q.reject();
             });
-          return promise;
+          return promise; //promise never resolves, will always redirect
         }]
       }
     })
   ;
 }]);
-angular.module('account.verification').controller('AccountVerificationCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security',
-  function($scope, $location, $log, restResource, security){
+angular.module('account.verification').controller('AccountVerificationCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security', 'utility',
+  function($scope, $location, $log, restResource, security, utility){
     //model def
     $scope.formVisible = false;
     $scope.email = security.currentUser.email;
@@ -69,12 +69,8 @@ angular.module('account.verification').controller('AccountVerificationCtrl', [ '
     $scope.showForm = function(){
       $scope.formVisible = true;
     };
-    $scope.hasError = function(ngModelCtrl){
-      return ngModelCtrl.$dirty && ngModelCtrl.$invalid;
-    };
-    $scope.showError = function(ngModelCtrl, err){
-      return ngModelCtrl.$dirty && ngModelCtrl.$error[err];
-    };
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
     $scope.closeAlert = function(ind){
       $scope.alerts.splice(ind, 1);
     };

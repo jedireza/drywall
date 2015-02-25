@@ -12,6 +12,7 @@ angular.module('mock.account.services.easyRestResource', [])
     service.setAccountDetails = function(){ return $q.when({success: true}); };
     service.setIdentity = function(){ return $q.when({success: true}); };
     service.setPassword = function(){ return $q.when({success: true}); };
+    service.resendVerification = function(){ return $q.when({ success: true }); };
     return service;
   });
 describe('AccountSettingsCtrl', function(){
