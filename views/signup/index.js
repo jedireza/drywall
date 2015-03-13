@@ -46,12 +46,13 @@ exports.signup = function(req, res){
   });
 
   workflow.on('duplicateUsernameCheck', function() {
-    req.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) {
+    req.app.db.models.User.findAndCountAll({where: { username: req.body.username }})
+    .catch(function (err) {
         return workflow.emit('exception', err);
-      }
+    })
+    .then(function (result) {
 
-      if (user) {
+      if (result.count > 0) {
         workflow.outcome.errfor.username = 'username already taken';
         return workflow.emit('response');
       }
@@ -61,12 +62,13 @@ exports.signup = function(req, res){
   });
 
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
-      if (err) {
+    req.app.db.models.User.findAndCountAll({where: { email: req.body.email.toLowerCase() }})
+    .catch(function (err) {
         return workflow.emit('exception', err);
-      }
+    })
+    .then(function (result) {
 
-      if (user) {
+      if (result.count > 0) {
         workflow.outcome.errfor.email = 'email already registered';
         return workflow.emit('response');
       }
@@ -133,6 +135,7 @@ exports.signup = function(req, res){
   });
 
   workflow.on('sendWelcomeEmail', function() {
+    return; // implement this when everything is working
     req.app.utility.sendmail(req, res, {
       from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
       to: req.body.email,
@@ -156,6 +159,7 @@ exports.signup = function(req, res){
   });
 
   workflow.on('logUserIn', function() {
+    return; 
     req._passport.instance.authenticate('local', function(err, user, info) {
       if (err) {
         return workflow.emit('exception', err);
