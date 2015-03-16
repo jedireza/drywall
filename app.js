@@ -16,7 +16,7 @@ var config = require('./config'),
     csrf = require('csurf');
 
 //create express app
-var app = express();
+var app = module.exports = express();
 
 //keep reference to config
 app.config = config;
