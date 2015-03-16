@@ -17,15 +17,20 @@ exports = module.exports = function(app, db) {
       freezeTableName: true, // Model tableName will be the same as the model name
       classMethods: {
           associate: function(models) {
-              //User.hasOne(models.Admin, {foreignKey : 'admin_id'});
-              //User.hasOne(models.Account, {foreignKey : 'account_id'});
-          },
+            
+          }
+      },
+      instanceMethods: {
           canPlayRoleOf: function(role) {
-            if (role === "admin" && this.roles.admin) {
+            if (role === "admin" && this.Admin) {
+              if(!this.admin)
+                this.admin = this.Admin;
               return true;
             }
 
-            if (role === "account" && this.roles.account) {
+            if (role === "account" && this.Account) {
+              if(!this.account)
+                this.account = this.Account;
               return true;
             }
 
