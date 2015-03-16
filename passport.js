@@ -18,28 +18,27 @@ exports = module.exports = function(app, passport) {
         conditions.email = username.toLowerCase();
       }
 
-      app.db.models.User.findOne(conditions, function(err, user) {
-        if (err) {
+      app.db.models.User.findOne({where:conditions})
+        .catch(function(err){
           return done(err);
-        }
+        })
+        .then(function(user){
+          if (!user) 
+            return done(null, false, { message: 'Unknown user' });
 
-        if (!user) {
-          return done(null, false, { message: 'Unknown user' });
-        }
+          app.db.models.User.validatePassword(password, user.password, function(err, isValid) {
+            if (err) {
+              return done(err);
+            }
 
-        app.db.models.User.validatePassword(password, user.password, function(err, isValid) {
-          if (err) {
-            return done(err);
-          }
+            if (!isValid) {
+              return done(null, false, { message: 'Invalid password' });
+            }
 
-          if (!isValid) {
-            return done(null, false, { message: 'Invalid password' });
-          }
-
-          return done(null, user);
+            return done(null, user);
+          });
         });
-      });
-    }
+      }
   ));
 
   if (app.config.oauth.twitter.key) {
@@ -119,19 +118,28 @@ exports = module.exports = function(app, passport) {
   }
 
   passport.serializeUser(function(user, done) {
-    done(null, user._id);
+    done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
-    app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
-      if (user && user.roles && user.roles.admin) {
-        user.roles.admin.populate("groups", function(err, admin) {
-          done(err, user);
+    app.db.models.User.findOne({where:{ id: id }})
+      .catch(function(err){
+        return done(err);
+      })
+      .then(function(user){
+        app.db.models.User.findOne({
+          where:{ id: id },
+          include: [
+            { model: app.db.models.Admin, include: [ app.db.models.AdminGroup ] },
+            { model: app.db.models.Account }
+          ] 
+        })
+        .catch(function(err){
+          done(err,null);
+        })
+        .then(function(user){
+          done(null,user);
         });
-      }
-      else {
-        done(err, user);
-      }
-    });
+      });
   });
 };
