@@ -1,49 +1,57 @@
 'use strict';
 
-exports = module.exports = function(app, mongoose) {
-  var userSchema = new mongoose.Schema({
-    username: { type: String, unique: true },
-    password: String,
-    email: { type: String, unique: true },
-    roles: {
-      admin: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
-      account: { type: mongoose.Schema.Types.ObjectId, ref: 'Account' }
-    },
-    isActive: String,
-    timeCreated: { type: Date, default: Date.now },
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
-    twitter: {},
-    github: {},
-    facebook: {},
-    google: {},
-    tumblr: {},
-    search: [String]
+exports = module.exports = function(app, db) {
+  var User = db.sequelize.define('User', {
+    username: {type: db.Sequelize.STRING,defaultValue: '', unique: true},
+    password: {type: db.Sequelize.STRING},
+    email: { type: db.Sequelize.STRING, unique: true },
+    isActive: {type: db.Sequelize.STRING},
+    resetPasswordToken: {type: db.Sequelize.STRING},
+    resetPasswordExpires: {type: db.Sequelize.DATE},
+    twitter: {type: db.Sequelize.STRING}, // write JSON blob for now
+    github: {type: db.Sequelize.STRING}, // write JSON blob for now
+    facebook: {type: db.Sequelize.STRING}, // write JSON blob for now
+    google: {type: db.Sequelize.STRING}, // write JSON blob for now
+    tumblr: {type: db.Sequelize.STRING} // write JSON blob for now
+  }, {
+      freezeTableName: true, // Model tableName will be the same as the model name
+      classMethods: {
+          associate: function(models) {
+            
+          }
+      },
+      instanceMethods: {
+          canPlayRoleOf: function(role) {
+            if (role === "admin" && this.Admin) {
+              if(!this.admin)
+                this.admin = this.Admin;
+              return true;
+            }
+
+            if (role === "account" && this.Account) {
+              if(!this.account)
+                this.account = this.Account;
+              return true;
+            }
+
+            return false;
+          },
+          defaultReturnUrl: function() {
+            var returnUrl = '/';
+            if (this.canPlayRoleOf('account')) {
+              returnUrl = '/account/';
+            }
+
+            if (this.canPlayRoleOf('admin')) {
+              returnUrl = '/admin/';
+            }
+
+            return returnUrl;
+          }
+      }
   });
-  userSchema.methods.canPlayRoleOf = function(role) {
-    if (role === "admin" && this.roles.admin) {
-      return true;
-    }
 
-    if (role === "account" && this.roles.account) {
-      return true;
-    }
-
-    return false;
-  };
-  userSchema.methods.defaultReturnUrl = function() {
-    var returnUrl = '/';
-    if (this.canPlayRoleOf('account')) {
-      returnUrl = '/account/';
-    }
-
-    if (this.canPlayRoleOf('admin')) {
-      returnUrl = '/admin/';
-    }
-
-    return returnUrl;
-  };
-  userSchema.statics.encryptPassword = function(password, done) {
+  User.encryptPassword = function(password, done) {
     var bcrypt = require('bcrypt');
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
@@ -55,21 +63,13 @@ exports = module.exports = function(app, mongoose) {
       });
     });
   };
-  userSchema.statics.validatePassword = function(password, hash, done) {
+  
+  User.validatePassword = function(password, hash, done) {
     var bcrypt = require('bcrypt');
     bcrypt.compare(password, hash, function(err, res) {
       done(err, res);
     });
   };
-  userSchema.plugin(require('./plugins/pagedFind'));
-  userSchema.index({ username: 1 }, { unique: true });
-  userSchema.index({ email: 1 }, { unique: true });
-  userSchema.index({ timeCreated: 1 });
-  userSchema.index({ 'twitter.id': 1 });
-  userSchema.index({ 'github.id': 1 });
-  userSchema.index({ 'facebook.id': 1 });
-  userSchema.index({ 'google.id': 1 });
-  userSchema.index({ search: 1 });
-  userSchema.set('autoIndex', (app.get('env') === 'development'));
-  app.db.model('User', userSchema);
+
+  return User;
 };

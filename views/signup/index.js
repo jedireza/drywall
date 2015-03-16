@@ -46,12 +46,13 @@ exports.signup = function(req, res){
   });
 
   workflow.on('duplicateUsernameCheck', function() {
-    req.app.db.models.User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) {
+    req.app.db.models.User.findAndCountAll({where: { username: req.body.username }})
+    .catch(function (err) {
         return workflow.emit('exception', err);
-      }
+    })
+    .then(function (result) {
 
-      if (user) {
+      if (result.count > 0) {
         workflow.outcome.errfor.username = 'username already taken';
         return workflow.emit('response');
       }
@@ -61,12 +62,13 @@ exports.signup = function(req, res){
   });
 
   workflow.on('duplicateEmailCheck', function() {
-    req.app.db.models.User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
-      if (err) {
+    req.app.db.models.User.findAndCountAll({where: { email: req.body.email.toLowerCase() }})
+    .catch(function (err) {
         return workflow.emit('exception', err);
-      }
+    })
+    .then(function (result) {
 
-      if (user) {
+      if (result.count > 0) {
         workflow.outcome.errfor.email = 'email already registered';
         return workflow.emit('response');
       }
@@ -91,10 +93,11 @@ exports.signup = function(req, res){
           req.body.email
         ]
       };
-      req.app.db.models.User.create(fieldsToSet, function(err, user) {
-        if (err) {
+      req.app.db.models.User.create(fieldsToSet)
+      .catch(function (err) {
           return workflow.emit('exception', err);
-        }
+      })
+      .then(function(user) {
 
         workflow.user = user;
         workflow.emit('createAccount');
@@ -105,30 +108,23 @@ exports.signup = function(req, res){
   workflow.on('createAccount', function() {
     var fieldsToSet = {
       isVerified: req.app.config.requireAccountVerification ? 'no' : 'yes',
-      'name.full': workflow.user.username,
-      user: {
-        id: workflow.user._id,
-        name: workflow.user.username
-      },
-      search: [
-        workflow.user.username
-      ]
+      'name_full': workflow.user.username,
+      'user_id': workflow.user._id
     };
 
-    req.app.db.models.Account.create(fieldsToSet, function(err, account) {
-      if (err) {
-        return workflow.emit('exception', err);
-      }
-
-      //update user with account
-      workflow.user.roles.account = account._id;
-      workflow.user.save(function(err, user) {
-        if (err) {
+    req.app.db.models.Account.create(fieldsToSet)
+      .catch(function (err) {
           return workflow.emit('exception', err);
-        }
-
-        workflow.emit('sendWelcomeEmail');
-      });
+      })
+      .then(function(account) {
+        //update user with account
+        workflow.user.setAccount(account)
+        .catch(function (err) {
+          return workflow.emit('exception', err);
+        })
+        .then(function() {
+          workflow.emit('sendWelcomeEmail');
+        });
     });
   });
 
