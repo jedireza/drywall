@@ -2,19 +2,20 @@
 
 exports.init = function(req, res, next){
   var sigma = {};
-  var collections = ['User', 'Account', 'Admin', 'AdminGroup', 'Category', 'Status'];
+  var collections = ['User', 'Account', 'Admin', 'AdminGroup' /*, 'Category', 'Status'*/];
   var queries = [];
 
   collections.forEach(function(el, i, arr) {
     queries.push(function(done) {
-      req.app.db.models[el].count({}, function(err, count) {
-        if (err) {
+      req.app.db.models[el].findAndCountAll({})
+      .catch(function(err){
           return done(err, null);
-        }
-
-        sigma['count'+ el] = count;
+      })
+      .then(function(result){
+        sigma['count'+ el] = result.count;
         done(null, el);
       });
+    
     });
   });
 
