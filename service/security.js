@@ -119,7 +119,7 @@ var socialLogin = function(provider, req, res, next){
     });
   });
 
-  workflow.emit('createAccount', function(){
+  workflow.on('createAccount', function(){
     var displayName = workflow.profile.displayName || '';
     var nameParts = displayName.split(' ');
     var fieldsToSet = {
@@ -165,7 +165,7 @@ var socialLogin = function(provider, req, res, next){
       htmlPath: 'signup/email-html',
       locals: {
         username: workflow.user.username,
-        email: req.body.email,
+        email: workflow.email.toLowerCase(),
         loginURL: req.protocol +'://'+ req.headers.host +'/login/',
         projectName: req.app.config.projectName
       },
