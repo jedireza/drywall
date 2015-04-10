@@ -5,7 +5,7 @@ node_js:
   - "0.10"
 before_install:
   - npm install -g grunt-cli
-  - npm instlal -g bower
+  - npm install -g bower
   - gem install sass
   - bower install
   - cd client && bower install
