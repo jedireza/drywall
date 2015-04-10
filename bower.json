@@ -1,5 +1,5 @@
 {
-  "name": "Drywall",
+  "name": "Angular-Drywall",
   "dependencies": {
     "backbone": "~1.1.0",
     "bootstrap": "~3.1.1",

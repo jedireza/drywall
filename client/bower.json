@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "Angular-Drywall",
   "version": "0.0.1",
   "dependencies": {
     "angular": "1.2.16",
@@ -11,7 +11,7 @@
     "angular-route": "1.2.16",
     "angular-sanitize": "1.2.16",
     "angular-touch": "1.2.16",
-    "bootstrap": "^3.3.2",
+    "bootstrap-sass": "^3.3.4",
     "moment": "^2.9.0"
   },
   "devDependencies": {
