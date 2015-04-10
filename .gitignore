@@ -7,6 +7,7 @@ node_modules/*
 config.js
 .nodemonignore
 .sass-cache
+.tmp
 
 # IDE specific
 *.iml

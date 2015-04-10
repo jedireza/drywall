@@ -364,6 +364,15 @@ module.exports = function(grunt) {
       vendor: {
         src: ['public/vendor/**']
       }
+    },
+    useminPrepare: {
+      html: '<%= distdir %>/index.html',
+      options: {
+        dest: '<%= distdir %>/'
+      }
+    },
+    usemin: {
+      html: ['<%= distdir %>/index.html']
     }
   });
 
@@ -375,19 +384,23 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-karma');
 
-  //grunt.registerTask('default', ['clean', 'copy', 'html2js', 'concat', 'newer:uglify', 'newer:less', 'newer:sass:dev','concurrent']);
-  //grunt.registerTask('build', ['copy', 'uglify', 'less']);
-  grunt.registerTask('default', ['clean', 'lint', 'front', 'back', 'unitTest']);
-  grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('default', ['dev']);
 
-  grunt.registerTask('unitTest', ['karma:unit']);
   grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat', 'sass:dev']);
   grunt.registerTask('back', ['copy:vendor', 'newer:less']);
+
+  grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('unitTest', ['karma:unit']);
+
+  grunt.registerTask('test', ['clean', 'lint', 'front', 'back', 'unitTest']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
+  grunt.registerTask('production', ['test', 'useminPrepare', 'concat:generated', 'uglify:generated', 'cssmin:generated', 'usemin']);
 };

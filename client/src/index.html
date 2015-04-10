@@ -3,6 +3,7 @@
 <head>
     <title>Drywall is Running</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- build:js /app.min.js -->
     <script type="text/javascript" src="/vendor/jquery.js"></script>
     <script type="text/javascript" src="/vendor/angular.js"></script>
     <script type="text/javascript" src="/vendor/angular-animate.js"></script>
@@ -16,7 +17,10 @@
     <script type="text/javascript" src="/vendor/moment.js"></script>
 
     <script type="text/javascript" src="/app.js"></script>
+    <!-- endbuild -->
+    <!-- build:css /css/style.min.css -->
     <link rel="stylesheet" href="/css/style.css">
+    <!-- endbuild -->
 </head>
 <body ng-controller="AppCtrl">
 <div ng-include="'header.tpl.html'"></div>
