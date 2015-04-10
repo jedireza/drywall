@@ -61,7 +61,7 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
-    browsers: ['Chrome'],
+    browsers: ['Firefox'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
@@ -69,7 +69,7 @@ module.exports = function (config) {
 
     // Which plugins to enable
     plugins: [
-      'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-jasmine'
     ]
   });
