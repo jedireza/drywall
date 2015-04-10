@@ -400,7 +400,7 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('unitTest', ['karma:unit']);
 
-  grunt.registerTask('test', ['clean', 'lint', 'front', 'back', 'unitTest']);
+  grunt.registerTask('test', ['clean', 'lint']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
   grunt.registerTask('production', ['clean', 'front', 'back', 'useminPrepare', 'concat:generated', 'uglify:generated', 'cssmin:generated', 'usemin']);
 };

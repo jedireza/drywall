@@ -8,6 +8,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   - npm install -g grunt-cli
   - npm install -g bower
+  - npm install -g karma-cli
   - gem install sass
   - bower install
   - cd client && bower install
