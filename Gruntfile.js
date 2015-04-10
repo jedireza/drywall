@@ -103,6 +103,10 @@ module.exports = function(grunt) {
       asset: {
         files: [
           {
+            expand: true, cwd: 'client/src/assets/',
+            src: ['favicon.ico'], dest: '<%= distdir %>/'
+          },
+          {
             expand: true, cwd: 'client/src/assets/img/',
             src: ['*.png', '*.gif', '*.jpg'], dest: '<%= distdir %>/img/'
           },
@@ -377,12 +381,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html2js');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('default', ['clean', 'copy', 'html2js', 'concat', 'newer:uglify', 'newer:less', 'newer:sass:dev','concurrent']);
-  grunt.registerTask('build', ['copy', 'uglify', 'less']);
+  //grunt.registerTask('default', ['clean', 'copy', 'html2js', 'concat', 'newer:uglify', 'newer:less', 'newer:sass:dev','concurrent']);
+  //grunt.registerTask('build', ['copy', 'uglify', 'less']);
+  grunt.registerTask('default', ['clean', 'lint', 'front', 'back', 'unitTest']);
   grunt.registerTask('lint', ['jshint']);
 
   grunt.registerTask('unitTest', ['karma:unit']);
   grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat', 'sass:dev']);
-  grunt.registerTask('back', ['copy:vendor', 'newer:uglify', 'newer:less']);
+  grunt.registerTask('back', ['copy:vendor', 'newer:less']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
 };
