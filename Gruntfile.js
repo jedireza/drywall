@@ -402,5 +402,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['clean', 'lint', 'front', 'back', 'unitTest']);
   grunt.registerTask('dev', ['clean', 'front', 'back', 'concurrent']);
-  grunt.registerTask('production', ['test', 'useminPrepare', 'concat:generated', 'uglify:generated', 'cssmin:generated', 'usemin']);
+  grunt.registerTask('production', ['useminPrepare', 'concat:generated', 'uglify:generated', 'cssmin:generated', 'usemin']);
 };

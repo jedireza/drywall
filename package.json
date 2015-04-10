@@ -12,7 +12,8 @@
     "url": "https://github.com/arthurkao/angular-drywall"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "grunt test"
   },
   "dependencies": {
     "async": "^0.9.0",
