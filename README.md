@@ -1,13 +1,18 @@
-Drywall
-=============
+# Drywall
 
-A website and user system for Node.js. What you create with Drywall is more important than Drywall. [See a bird's eye view.](http://jedireza.github.io/drywall/)
+A website and user system starter. Implemented with Express and Backbone.
 
 [![Dependency Status](https://david-dm.org/jedireza/drywall.svg?theme=shields.io)](https://david-dm.org/jedireza/drywall)
 [![devDependency Status](https://david-dm.org/jedireza/drywall/dev-status.svg?theme=shields.io)](https://david-dm.org/jedireza/drywall#info=devDependencies)
 
-Technology
-------------
+
+## Technology
+
+Server side, Drywall is built with the [Express](http://expressjs.com/)
+framework. We're using [MongoDB](http://www.mongodb.org/) as a data store.
+
+The front-end is built with [Backbone](http://backbonejs.org/).
+We're using [Grunt](http://gruntjs.com/) for the asset pipeline.
 
 | On The Server | On The Client  | Development |
 | ------------- | -------------- | ----------- |
@@ -18,31 +23,30 @@ Technology
 | Async         | Font-Awesome   |             |
 | EmailJS       | Moment.js      |             |
 
-Live Demos
-------------
+
+## Live demo
 
 | Platform                       | Username | Password |
 | ------------------------------ | -------- | -------- |
 | https://drywall.herokuapp.com/ | root     | h3r00t   |
-| https://drywall.nodejitsu.com/ | root     | j1ts00t  |
 
-__Note:__ The live demos have been modified so you cannot change the root user, the root user's linked Administrator role or the root Admin Group. This was done in order to keep the app ready to test at all times.
+__Note:__ The live demo has been modified so you cannot change the root user,
+the root user's linked admin role or the root admin group. This was done in
+order to keep the app ready to use at all times.
 
-Requirements
-------------
 
-You need [Node.js](http://nodejs.org/download/) and [MongoDB](http://www.mongodb.org/downloads) installed and running.
+## Requirements
 
-We use [Grunt](http://gruntjs.com/) as our task runner. Get the CLI (command line interface).
+You need [Node.js](http://nodejs.org/download/) and
+[MongoDB](http://www.mongodb.org/downloads) installed and running.
 
-```bash
-$ npm install grunt-cli -g
-```
+We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing
+secrets. If you have issues during installation related to `bcrypt` then [refer
+to this wiki
+page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 
-We use [`bcrypt`](https://github.com/ncb000gt/node.bcrypt.js) for hashing secrets. If you have issues during installation related to `bcrypt` then [refer to this wiki page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 
-Installation
-------------
+## Installation
 
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
@@ -51,15 +55,21 @@ $ mv ./config.example.js ./config.js #set mongodb and email credentials
 $ grunt
 ```
 
-Setup
-------------
 
-You need a few records in the database to start using the user system.
+## Setup
+
+First you need to setup your config file.
+
+```bash
+$ mv ./config.example.js ./config.js #set mongodb and email credentials
+```
+
+Next, you need a few records in the database to start using the user system.
 
 Run these commands on mongo. __Obviously you should use your email address.__
 
 ```js
-use drywall; //your mongo db name
+use drywall; // or your mongo db name if differnt
 ```
 
 ```js
@@ -72,9 +82,32 @@ rootAdmin.user = { id: rootUser._id, name: rootUser.username };
 db.admins.save(rootAdmin);
 ```
 
+
+## Running the app
+
+```bash
+$ npm start
+
+# > Drywall@0.15.2 start /Users/jedireza/projects/jedireza/drywall
+# > grunt
+
+# Running "copy:vendor" (copy) task
+# ...
+
+# Running "concurrent:dev" (concurrent) task
+# Running "watch" task
+# Running "nodemon:dev" (nodemon) task
+# Waiting...
+# [nodemon] v1.3.7
+# [nodemon] to restart at any time, enter `rs`
+# [nodemon] watching: *.*
+# [nodemon] starting `node app.js`
+# Server is running on port 3000
+```
+
 Now just use the reset password feature to set a password.
 
- - `http://localhost:3000/login/forgot/`
+ - Go to: `http://localhost:3000/login/forgot/`
  - Submit your email address and wait a second.
  - Go check your email and get the reset link.
  - `http://localhost:3000/login/reset/:email/:token/`
@@ -82,8 +115,8 @@ Now just use the reset password feature to set a password.
 
 Login. Customize. Enjoy.
 
-Philosophy
-------------
+
+## Philosophy
 
  - Create a website and user system.
  - Write code in a simple and consistent way.
@@ -91,8 +124,8 @@ Philosophy
  - Find and use good tools.
  - Use tools in their native/default behavior.
 
-Features
-------------
+
+## Features
 
  - Basic front end web pages.
  - Contact page has form to email.
@@ -104,16 +137,35 @@ Features
  - Administrator level permissions that override group permissions.
  - Global admin quick search component.
 
-Contributing
-------------
 
-Contributions welcome. Make sure your code passes `grunt lint` without error.
+## Questions and contributing
 
-If you're changing something non-trivial or user-facing, you may want to submit an issue first.
+Any issues or questions (no matter how basic), open an issue. Please take the
+initiative to include basic debugging information like operating system
+and relevant version details such as:
 
-License
-------------
+```bash
+$ npm version
+
+# { drywall: '0.0.0',
+#   npm: '2.5.1',
+#   http_parser: '2.3',
+#   modules: '14',
+#   node: '0.12.0',
+#   openssl: '1.0.1l',
+#   uv: '1.0.2',
+#   v8: '3.28.73',
+#   zlib: '1.2.8' }
+```
+
+Contributions are welcome. Your code should:
+
+ - pass `$ grunt lint` without error
+
+If you're changing something non-trivial, you may want to submit an issue
+first.
+
+
+## License
 
 MIT
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/d41f60f22a2148e2e2dc6b705cd01481 "githalytics.com")](http://githalytics.com/jedireza/drywall)
