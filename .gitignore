@@ -7,8 +7,6 @@ node_modules/*
 config.js
 .nodemonignore
 .sass-cache
-client/bower_components/*
-client/dist/*
 
 # IDE specific
 *.iml
