@@ -1,7 +1,16 @@
 {
-  "name": "Drywall",
-  "version": "0.14.5",
-  "private": true,
+  "name": "angular-drywall",
+  "version": "0.0.1",
+  "keywords": ["angular", "drywall"],
+  "license": "MIT",
+  "author": {
+    "name" : "Arthur C. Kao",
+    "email" : "arthurckao@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arthurkao/angular-drywall"
+  },
   "scripts": {
     "start": "node app.js"
   },
