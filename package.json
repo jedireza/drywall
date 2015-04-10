@@ -1,11 +1,14 @@
 {
   "name": "angular-drywall",
-  "version": "0.0.2",
-  "keywords": ["angular", "drywall"],
+  "version": "0.0.3",
+  "keywords": [
+    "angular",
+    "drywall"
+  ],
   "license": "MIT",
   "author": {
-    "name" : "Arthur C. Kao",
-    "email" : "arthurckao@gmail.com"
+    "name": "Arthur C. Kao",
+    "email": "arthurckao@gmail.com"
   },
   "repository": {
     "type": "git",
