@@ -115,9 +115,9 @@ exports = module.exports = function(app, passport) {
   app.get('/login/reset/:email/:token', useAngular);
 
   //social login
-  app.get('/login/facebook', passport.authenticate('facebook', { callbackURL: app.config.oauth.facebook.loginCallback, scope: ['email'] }));
+  app.get('/login/facebook', passport.authenticate('facebook', { callbackURL: 'http://' + app.config.hostname + '/login/facebook/callback', scope: ['email'] }));
   app.get('/login/facebook/callback', useAngular);
-  app.get('/login/google', passport.authenticate('google', { callbackURL: app.config.oauth.google.loginCallback, scope: ['profile email'] }));
+  app.get('/login/google', passport.authenticate('google', { callbackURL: 'http://' + app.config.hostname + '/login/google/callback', scope: ['profile email'] }));
   app.get('/login/google/callback', useAngular);
 
   //account
@@ -131,9 +131,9 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings', useAngular);
 
   //account > settings > social
-  app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: app.config.oauth.facebook.connectCallback , scope: [ 'email' ]}));
+  app.get('/account/settings/facebook/', passport.authenticate('facebook', { callbackURL: 'http://' + app.config.hostname + '/account/settings/facebook/callback', scope: [ 'email' ]}));
   app.get('/account/settings/facebook/callback', useAngular);
-  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: app.config.oauth.google.connectCallback, scope: ['profile email'] }));
+  app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: 'http://' + app.config.hostname + '/account/settings/google/callback', scope: ['profile email'] }));
   app.get('/account/settings/google/callback', useAngular);
 
   //******** End OF static routes ********

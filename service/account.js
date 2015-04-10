@@ -1,3 +1,7 @@
+var getCallbackUrl = function(hostname, provider){
+  return 'http://' + hostname + '/account/settings/' + provider + '/callback';
+};
+
 var sendVerificationEmail = function(req, res, options) {
   req.app.utility.sendmail(req, res, {
     from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
@@ -38,8 +42,7 @@ var connectSocial = function(provider, req, res, next){
   provider = provider.toLowerCase();
   var workflow = req.app.utility.workflow(req, res);
   workflow.on('loginSocial', function(){
-    var callbackUrl = req.app.config.oauth[provider]['connectCallback'];
-    req._passport.instance.authenticate(provider, { callbackURL: callbackUrl }, function(err, user, info) {
+    req._passport.instance.authenticate(provider, { callbackURL: getCallbackUrl(req.app.config.hostname, provider) }, function(err, user, info) {
       if(err){
         return workflow.emit('exception', err);
       }

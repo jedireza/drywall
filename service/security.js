@@ -12,11 +12,15 @@ var filterUser = function (user) {
   return null;
 };
 
+var getCallbackUrl = function(hostname, provider){
+  return 'http://' + hostname + '/login/' + provider + '/callback';
+};
+
 var socialLogin = function(provider, req, res, next){
   provider = provider.toLowerCase();
   var workflow = req.app.utility.workflow(req, res);
   workflow.on('authUser', function(){
-    req._passport.instance.authenticate(provider, { callbackURL: req.app.config.oauth[provider]['loginCallback'] }, function(err, user, info) {
+    req._passport.instance.authenticate(provider, { callbackURL: getCallbackUrl(req.app.config.hostname, provider)}, function(err, user, info) {
       if (err) {
         return workflow.emit('exception', err);
       }
