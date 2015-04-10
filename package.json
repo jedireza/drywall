@@ -60,7 +60,8 @@
     "grunt-usemin": "^3.0.0",
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.31",
-    "karma-firefox-launcher": "~0.1",
+    "karma-chrome-launcher": "~0.1",
+    "karma-phantomjs-launcher": "~0.1",
     "karma-jasmine": "^0.3.5"
   }
 }
