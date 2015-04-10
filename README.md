@@ -51,8 +51,6 @@ page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 ```bash
 $ git clone git@github.com:jedireza/drywall.git && cd ./drywall
 $ npm install
-$ mv ./config.example.js ./config.js #set mongodb and email credentials
-$ grunt
 ```
 
 
@@ -66,10 +64,11 @@ $ mv ./config.example.js ./config.js #set mongodb and email credentials
 
 Next, you need a few records in the database to start using the user system.
 
-Run these commands on mongo. __Obviously you should use your email address.__
+Run these commands on mongo via the terminal. __Obviously you should use your
+email address.__
 
 ```js
-use drywall; // or your mongo db name if differnt
+use drywall; // or your mongo db name if different
 ```
 
 ```js
@@ -88,7 +87,7 @@ db.admins.save(rootAdmin);
 ```bash
 $ npm start
 
-# > Drywall@0.15.2 start /Users/jedireza/projects/jedireza/drywall
+# > Drywall@0.0.0 start /Users/jedireza/projects/jedireza/drywall
 # > grunt
 
 # Running "copy:vendor" (copy) task
@@ -107,7 +106,7 @@ $ npm start
 
 Now just use the reset password feature to set a password.
 
- - Go to: `http://localhost:3000/login/forgot/`
+ - Go to `http://localhost:3000/login/forgot/`
  - Submit your email address and wait a second.
  - Go check your email and get the reset link.
  - `http://localhost:3000/login/reset/:email/:token/`
