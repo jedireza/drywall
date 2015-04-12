@@ -15,7 +15,7 @@
     "cookie-parser": "^1.x.x",
     "csurf": "^1.x.x",
     "emailjs": "^0.3.x",
-    "express": "^4.x.x",
+    "express": "^4.12.x",
     "express-session": "^1.x.x",
     "helmet": "^0.7.x",
     "jade": "^1.x.x",
@@ -30,7 +30,7 @@
     "passport-oauth": "^1.x.x",
     "passport-tumblr": "^0.1.x",
     "passport-twitter": "^1.x.x",
-    "serve-static": "^1.x.x",
+    "serve-static": "^1.9.x",
     "underscore": "^1.x.x"
   },
   "devDependencies": {
