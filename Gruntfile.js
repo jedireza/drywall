@@ -395,7 +395,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['dev']);
 
   grunt.registerTask('front', ['copy:clientVendor', 'copy:asset', 'copy:index', 'html2js', 'concat:angular', 'sass:dev']);
-  grunt.registerTask('back', ['copy:vendor', 'newer:less']);
+  grunt.registerTask('back', ['copy:vendor', 'newer:uglify', 'newer:less']);
 
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('unitTest', ['karma:unit']);
