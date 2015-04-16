@@ -1,0 +1,92 @@
+<div class="row" id="admin-users-index">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <form class="form-inline pull-right" name="addUserForm">
+                <div class="input-group">
+                    <input name="username" type="text" placeholder="enter a username" class="form-control" ng-model="username" required>
+                    <button type="button" class="btn btn-primary" ng-disabled="!canSave(addUserForm)" ng-click="addUser()">Add New</button>
+                </div>
+            </form>
+            <h1>Users</h1>
+        </div>
+        <form class="filters">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>Username Search</label>
+                    <input name="username" type="text" class="form-control" ng-model="filters.username" ng-model-options="{ debounce: 500 }" ng-change="filtersUpdated()">
+                </div>
+                <div class="col-sm-3">
+                    <label>Can Play Role</label>
+                    <select name="roles" class="form-control" ng-model="filters.roles" ng-model-options="{ debounce: 500 }" ng-options="role.value as role.label for role in roles"  ng-change="filtersUpdated()">
+                        <!--<option value="">any</option>-->
+                        <!--<option value="admin">admin</option>-->
+                        <!--<option value="account">account</option>-->
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Is Active</label>
+                    <select name="isActive" class="form-control" ng-model="filters.isActive" ng-model-options="{ debounce: 500 }" ng-options="isActive.value as isActive.label for isActive in isActives" ng-change="filtersUpdated()">
+                        <!--<option value="">either</option>-->
+                        <!--<option value="yes">yes</option>-->
+                        <!--<option value="no">no</option>-->
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Sort By</label>
+                    <select name="sort" class="form-control" ng-model="filters.sort" ng-model-options="{ debounce: 500 }" ng-options="sort.value as sort.label for sort in sorts" ng-change="filtersUpdated()">
+                        <!--<option value="_id">id &#9650;</option>-->
+                        <!--<option value="-_id">id &#9660;</option>-->
+                        <!--<option value="username">username &#9650;</option>-->
+                        <!--<option value="-username">username &#9660;</option>-->
+                        <!--<option value="email">email &#9650;</option>-->
+                        <!--<option value="-email">email &#9660;</option>-->
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Limit</label>
+                    <select name="limit" class="form-control" ng-model="filters.limit" ng-model-options="{ debounce: 500 }" ng-options="limit.value as limit.label for limit in limits" ng-change="filtersUpdated()">
+                        <!--<option value="10">10 items</option>-->
+                        <!--<option value="20" selected="selected">20 items</option>-->
+                        <!--<option value="50">50 items</option>-->
+                        <!--<option value="100">100 items</option>-->
+                    </select>
+                </div>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>username</th>
+                    <th class="stretch">email</th>
+                    <th>active</th>
+                    <th>id</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in users">
+                    <td><a class="btn btn-default btn-sm" ng-href="/admin/users/{{user._id}}">Edit</a></td>
+                    <td ng-bind="user.username"></td>
+                    <td ng-bind="user.email"></td>
+                    <td ng-bind="user.isActive"></td>
+                    <td ng-bind="user._id"></td>
+                </tr>
+                <tr ng-show="users.length === 0">
+                    <td colspan="5">no documents matched</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="well" ng-if="pages.total > 1">
+            <div class="btn-group pull-left">
+                <button disabled class="btn btn-default">Page {{pages.current}} of {{pages.total}}</button>
+                <button disabled class="btn btn-default">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>
+            </div>
+            <div class="btn-group pull-right">
+                <button class="btn btn-default" ng-class="{disabled: !pages.hasPrev}" ng-click="prev()">Prev</button>
+                <button class="btn btn-default" ng-class="{disabled: !pages.hasNext}" ng-click="next()"> Next</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+

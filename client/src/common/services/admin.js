@@ -19,5 +19,14 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.search = function(query){
     return $http.get(baseUrl + '/admin/search', { params: { q: query }} ).then(processResponse, processError);
   };
+  resource.findUsers = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(baseUrl + '/admin/users', { params: filters }).then(processResponse, processError);
+  };
+  resource.addUser = function(username){
+    return $http.post(baseUrl + '/admin/users', { username: username }).then(processResponse, processResponse);
+  };
   return resource;
 }]);

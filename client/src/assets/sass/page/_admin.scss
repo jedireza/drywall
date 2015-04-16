@@ -17,3 +17,22 @@
     font-weight: bold;
   }
 }
+#admin-users-index{
+  .input-group {
+    margin-bottom: 20px;
+
+    input {
+      width: 200px !important;
+    }
+
+    .btn {
+      @include border-left-radius(0);
+    }
+  }
+  .filters {
+    margin-bottom: 20px;
+  }
+  .stretch {
+    width: 100%;
+  }
+}

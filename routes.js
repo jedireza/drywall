@@ -3,6 +3,7 @@
 var security = require('./service/security');
 var account = require('./service/account');
 var admin = require('./service/admin');
+var adminUser = require('./service/admin/user');
 
 function useAngular(req, res, next){
   res.sendFile(require('path').join(__dirname, './client/dist/index.html'));
@@ -107,6 +108,10 @@ exports = module.exports = function(app, passport) {
   app.all('/api/admin*', apiEnsureAdmin);
   app.get('/api/admin', admin.getStats);
 
+  //admin > users
+  app.get('/api/admin/users', adminUser.find);
+  app.post('/api/admin/users/', adminUser.create);
+
   //admin > search
   app.get('/api/admin/search', admin.search);
 
@@ -203,6 +208,7 @@ exports = module.exports = function(app, passport) {
   //app.all('/admin*', ensureAdmin);
   app.get('/admin/', require('./views/admin/index').init);
   app.get('/adminNew', useAngular);
+  app.get('/adminNew/users', useAngular);
 
   //admin > users
   app.get('/admin/users/', require('./views/admin/users/index').find);

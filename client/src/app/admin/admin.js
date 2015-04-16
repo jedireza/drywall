@@ -1,4 +1,4 @@
-angular.module('admin', ['ngRoute', 'security.authorization', 'services.adminResource']);
+angular.module('admin', ['ngRoute', 'admin.users', 'security.authorization', 'services.adminResource']);
 angular.module('admin').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/adminNew', {
