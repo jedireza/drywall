@@ -1,0 +1,48 @@
+<div class="row" id="admin">
+    <div class="col-sm-6">
+        <div class="page-header"><h1>Admin Area</h1></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="user.users"></div>
+                    <div class="stat-label">Users</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="user.accounts"></div>
+                    <div class="stat-label">Accounts</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="user.admins"></div>
+                    <div class="stat-label">Admins</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="user.groups"></div>
+                    <div class="stat-label">Groups</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="pivoted.categories"></div>
+                    <div class="stat-label">Categories</div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well stat">
+                    <div class="stat-value" ng-bind="pivoted.statuses"></div>
+                    <div class="stat-label">Statuses</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 special">
+        <div class="page-header"><h1>Super Dashboard</h1></div>
+        <i class="fa fa-gears super-awesome"></i></div>
+</div>

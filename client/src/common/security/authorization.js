@@ -52,8 +52,10 @@ angular.module('security.authorization', ['security.service', 'config'])
       // (use this in a route resolve to prevent non-administrators from entering that route)
       requireAdminUser: function() {
         var promise = security.requestCurrentUser().then(function(userInfo) {
-          if ( !security.isAdmin() ) {
-            return queue.pushRetryFn('unauthorized-client', service.requireAdminUser);
+          if ( !security.isAuthenticated() ) {
+            return queue.pushRetryFn('unauthenticated-client', service.requireAdminUser);
+          }else if( !security.isAdmin() ){
+            return $q.reject('unauthorized-client');
           }
         });
         return promise;

@@ -63,16 +63,35 @@ describe('securityAuthorization', function() {
       expect(security.currentUser).toBe(userInfo);
       expect(resolved).toBe(true);
     });
-    it('adds a new item to the retry queue if not admin', function() {
+    it('adds a new item to the retry queue if not authenticated', function(){
+      assertAddingItemToRetryQueue(securityAuthorization.requireAdminUser);
+    });
+    it('returns a resolved promise if we are authenticated and authorized', function(){
+      userResponse.user.admin = true;
+      expect(security.isAuthenticated()).toBe(false);
       expect(queue.hasMore()).toBe(false);
-      securityAuthorization.requireAdminUser().then(function() {
+      securityAuthorization.requireAdminUser().then(function(data) {
         resolved = true;
+        expect(security.isAuthenticated()).toBe(true);
+        expect(security.isAdmin()).toBe(true);
+        expect(security.currentUser).toBe(userResponse.user);
       });
       $rootScope.$digest();
-      expect(security.isAdmin()).toBe(false);
-      expect(queue.hasMore()).toBe(true);
-      expect(queue.retryReason()).toBe('unauthorized-client');
-      expect(resolved).toBe(false);
+      expect(queue.hasMore()).toBe(false);
+      expect(resolved).toBe(true);
+    });
+    it('returns a rejected promise if authenticated but not authorized', function(){
+      var rejected = false;
+      var reason;
+      expect(queue.hasMore()).toBe(false);
+      securityAuthorization.requireAdminUser().catch(function(r) {
+        rejected = true;
+        reason = r;
+      });
+      $rootScope.$digest();
+      expect(queue.hasMore()).toBe(false);
+      expect(rejected).toBe(true);
+      expect(reason).toBe('unauthorized-client');
     });
   });
 

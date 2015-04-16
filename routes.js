@@ -2,6 +2,7 @@
 
 var security = require('./service/security');
 var account = require('./service/account');
+var admin = require('./service/admin');
 
 function useAngular(req, res, next){
   res.sendFile(require('path').join(__dirname, './client/dist/index.html'));
@@ -65,6 +66,13 @@ function apiEnsureVerifiedAccount(req, res, next){
   });
 }
 
+function apiEnsureAdmin(req, res, next){
+  if(req.user.canPlayRoleOf('admin')){
+    return next();
+  }
+  res.status(401).send({errors: ['authorization required']});
+}
+
 exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
@@ -93,6 +101,15 @@ exports = module.exports = function(app, passport) {
   app.get('/api/account/settings/google/disconnect', account.disconnectGoogle);
   app.get('/api/account/settings/facebook/callback', account.connectFacebook);
   app.get('/api/account/settings/facebook/disconnect', account.disconnectFacebook);
+
+  //-----athorization required api-----
+  app.all('/api/admin*', apiEnsureAuthenticated);
+  app.all('/api/admin*', apiEnsureAdmin);
+  app.get('/api/admin', admin.getStats);
+
+  //admin > search
+  app.get('/api/admin/search', admin.search);
+
 
   //******** END OF NEW JSON API ********
 
@@ -182,9 +199,10 @@ exports = module.exports = function(app, passport) {
   //app.get('/login/tumblr/callback/', require('./views/login/index').loginTumblr);
 
   //admin
-  app.all('/admin*', ensureAuthenticated);
-  app.all('/admin*', ensureAdmin);
+  //app.all('/admin*', ensureAuthenticated);
+  //app.all('/admin*', ensureAdmin);
   app.get('/admin/', require('./views/admin/index').init);
+  app.get('/adminNew', useAngular);
 
   //admin > users
   app.get('/admin/users/', require('./views/admin/users/index').find);

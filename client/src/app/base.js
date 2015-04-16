@@ -1,11 +1,16 @@
-angular.module('base',['security', 'services.utility', 'services.easyRestResource']);
-
-angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security',
-  function ($scope, $location, security) {
+angular.module('base',['ngRoute', 'security', 'services.utility', 'services.easyRestResource', 'services.adminResource', 'ui.bootstrap']);
+angular.module('base').controller('HeaderCtrl', ['$scope', '$route', '$location', 'security',
+  function ($scope, $route, $location, security) {
     $scope.isAuthenticated = function(){
       return security.isAuthenticated();
     };
-    //$scope.isAdmin = security.isAdmin;
+    $scope.isAdmin = function(){
+      if($location.path().indexOf('/admin') === -1){
+        return false;
+      }else{
+        return security.isAdmin();
+      }
+    };
     $scope.logout = function(){
       return security.logout();
     };
@@ -14,7 +19,56 @@ angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'securit
     };
   }
 ]);
+angular.module('base').controller('AdminSearchCtrl' ,['$scope', 'adminResource',
+  function($scope, adminResource){
 
+    var clearSearchDropdown = function(){
+      $scope.resultIsOpen = false;
+      $scope.result = {};
+    };
+    var showSearchDropdown = function(data){
+      $scope.result = data;
+      $scope.resultIsOpen = true;
+    };
+
+    $scope.showDropdownHeader = function(header){
+      var users = $scope.result.users;
+      var accounts = $scope.result.accounts;
+      var administrators = $scope.result.administrators;
+      if(!(users && accounts && administrators)) {
+        return false;
+      }
+      switch(header){
+        case 'noDocsMatched':
+          return users.length === 0 && accounts.length === 0 && administrators.length === 0;
+        case 'Users':
+          return users.length !== 0;
+        case 'Accounts':
+          return accounts.length !== 0;
+        case 'Administrators':
+          return administrators.length !== 0;
+        default:
+          return false;
+      }
+    };
+
+    $scope.update = function(){
+      clearSearchDropdown();
+      if ($scope.query) {
+        // no need to search backend if query string is empty
+        adminResource.search($scope.query).then(function (data) {
+          showSearchDropdown(data);
+        }, function (e) {
+          clearSearchDropdown();
+        });
+      }
+    };
+
+    $scope.resultIsOpen = false;
+    $scope.query = "";
+    $scope.result = {};
+  }
+]);
 angular.module('base').controller('FooterCtrl', ['$scope', 'security',
   function($scope, security){
     $scope.isAuthenticated = function(){
@@ -27,8 +81,8 @@ angular.module('base').controller('FooterCtrl', ['$scope', 'security',
   }
 ]);
 
-angular.module('base').controller('ContactCtrl', ['$scope', '$log', 'utility', 'easyRestResource',
-  function($scope, $log, utility, restResource){
+angular.module('base').controller('ContactCtrl', ['$scope', 'utility', 'easyRestResource',
+  function($scope, utility, restResource){
     // local var
     var successAlert = { type: 'success', msg: 'We have received your message. Thank you.' };
     var errorAlert = { type: 'warning', msg: 'Error submitting your message. Please try again.' };
