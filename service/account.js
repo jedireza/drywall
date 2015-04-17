@@ -243,7 +243,8 @@ var account = {
 
     workflow.on('patchUser', function() {
       var fieldsToSet = { email: req.body.email.toLowerCase() };
-      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+      var options = { new: true };
+      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
         }
