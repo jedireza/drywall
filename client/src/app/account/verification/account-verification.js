@@ -1,4 +1,4 @@
-angular.module('account.verification', ['security', 'services.utility', 'services.easyRestResource', 'ui.bootstrap']);
+angular.module('account.verification', ['security', 'services.utility', 'services.easyRestResource', 'directives.serverError', 'ui.bootstrap']);
 angular.module('account.verification').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/account/verification', {
