@@ -111,6 +111,14 @@ exports = module.exports = function(app, passport) {
   //admin > users
   app.get('/api/admin/users', adminUser.find);
   app.post('/api/admin/users/', adminUser.create);
+  app.get('/api/admin/users/:id', adminUser.read);
+  app.put('/api/admin/users/:id', adminUser.update);
+  app.put('/api/admin/users/:id/password', adminUser.password);
+  app.put('/api/admin/users/:id/role-admin', adminUser.linkAdmin);
+  app.delete('/api/admin/users/:id/role-admin', adminUser.unlinkAdmin);
+  app.put('/api/admin/users/:id/role-account', adminUser.linkAccount);
+  app.delete('/api/admin/users/:id/role-account', adminUser.unlinkAccount);
+  app.delete('/api/admin/users/:id', adminUser.delete);
 
   //admin > search
   app.get('/api/admin/search', admin.search);
@@ -157,6 +165,13 @@ exports = module.exports = function(app, passport) {
   app.get('/account/settings/facebook/callback', useAngular);
   app.get('/account/settings/google/', passport.authenticate('google', { callbackURL: 'http://' + app.config.hostname + '/account/settings/google/callback', scope: ['profile email'] }));
   app.get('/account/settings/google/callback', useAngular);
+
+  //admin
+  app.get('/admin', useAngular);
+
+  //admin > users
+  app.get('/admin/users', useAngular);
+  app.get('/admin/users/:id', useAngular);
 
   //******** End OF static routes ********
 
@@ -206,21 +221,19 @@ exports = module.exports = function(app, passport) {
   //admin
   //app.all('/admin*', ensureAuthenticated);
   //app.all('/admin*', ensureAdmin);
-  app.get('/admin/', require('./views/admin/index').init);
-  app.get('/adminNew', useAngular);
-  app.get('/adminNew/users', useAngular);
+  //app.get('/admin/', require('./views/admin/index').init);
 
   //admin > users
-  app.get('/admin/users/', require('./views/admin/users/index').find);
-  app.post('/admin/users/', require('./views/admin/users/index').create);
-  app.get('/admin/users/:id/', require('./views/admin/users/index').read);
-  app.put('/admin/users/:id/', require('./views/admin/users/index').update);
-  app.put('/admin/users/:id/password/', require('./views/admin/users/index').password);
-  app.put('/admin/users/:id/role-admin/', require('./views/admin/users/index').linkAdmin);
-  app.delete('/admin/users/:id/role-admin/', require('./views/admin/users/index').unlinkAdmin);
-  app.put('/admin/users/:id/role-account/', require('./views/admin/users/index').linkAccount);
-  app.delete('/admin/users/:id/role-account/', require('./views/admin/users/index').unlinkAccount);
-  app.delete('/admin/users/:id/', require('./views/admin/users/index').delete);
+  //app.get('/admin/users/', require('./views/admin/users/index').find);
+  //app.post('/admin/users/', require('./views/admin/users/index').create);
+  //app.get('/admin/users/:id/', require('./views/admin/users/index').read);
+  //app.put('/admin/users/:id/', require('./views/admin/users/index').update);
+  //app.put('/admin/users/:id/password/', require('./views/admin/users/index').password);
+  //app.put('/admin/users/:id/role-admin/', require('./views/admin/users/index').linkAdmin);
+  //app.delete('/admin/users/:id/role-admin/', require('./views/admin/users/index').unlinkAdmin);
+  //app.put('/admin/users/:id/role-account/', require('./views/admin/users/index').linkAccount);
+  //app.delete('/admin/users/:id/role-account/', require('./views/admin/users/index').unlinkAccount);
+  //app.delete('/admin/users/:id/', require('./views/admin/users/index').delete);
 
   //admin > administrators
   app.get('/admin/administrators/', require('./views/admin/administrators/index').find);

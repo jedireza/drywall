@@ -1,0 +1,104 @@
+<div class="row" id="admin-users-detail">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <h1><a ng-href="/admin/users">Users</a> / {{user.username}}</h1>
+        </div>
+        <form name="identityForm"><fieldset>
+            <legend>Identity</legend>
+            <alert ng-repeat="alert in identityAlerts" type="{{alert.type}}" close="closeIdentityAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': hasError(identityForm.isActive)}">
+                <label class="control-label" for="isActive">Is Active:</label>
+                <select name="isActive" id="isActive" class="form-control" ng-model="user.isActive" ng-options="active for active in isActives" server-error></select>
+                <span class="help-block" ng-show="showError(identityForm.isActive, 'server')">{{errfor.isActive}}</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(identityForm.username)}">
+                <label class="control-label" for="username">Username:</label>
+                <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required server-error>
+                <span class="help-block" ng-show="showError(identityForm.username, 'required')">This field is required</span>
+                <span class="help-block" ng-show="showError(identityForm.username, 'server')">{{errfor.username}}</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(identityForm.email)}">
+                <label class="control-label" for="email">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" ng-model="user.email" required server-error>
+                <span class="help-block" ng-show="showError(identityForm.email, 'required')">This field is required</span>
+                <span class="help-block" ng-show="showError(identityForm.email, 'email')">Please enter a valid email</span>
+                <span class="help-block" ng-show="showError(identityForm.email, 'server')">{{errfor.email}}</span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(identityForm)" ng-click="updateIdentity()">Update</button>
+            </div>
+        </fieldset></form>
+        <form name="roleForm"><fieldset>
+            <legend>Roles</legend>
+            <alert ng-repeat="alert in roleAlerts" type="{{alert.type}}" close="closeRoleAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': roleForm.newAdminId && hasError(roleForm.newAdminId)}">
+                <label class="control-label">Admin:</label>
+                <!-- show this div if there is an admin linked to this user -->
+                <div class="input-group" ng-show="user.roles && user.roles.admin">
+                    <input type="text" name="adminId" class="form-control" ng-model="user.roles.admin.name.full" disabled>
+                    <div class="input-group-btn" >
+                        <button type="button" class="btn btn-warning" ng-click="unlinkAdmin()">Unlink</button>
+                        <a type="button" class="btn btn-default" ng-href="/admin/adminstrators/{{user.roles.admin._id}}">Open</a>
+                    </div>
+                </div>
+                <!-- show this div if there isn't an admin linked to this user -->
+                <div class="input-group" ng-if="!(user.roles && user.roles.admin)">
+                    <input type="text" name="newAdminId" placeholder="enter admin id" class="form-control" ng-model="role.newAdminId" required>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-disabled="!(roleForm.newAdminId.$dirty && roleForm.newAdminId.$valid)" ng-click="linkAdmin()">Link</button>
+                    </div>
+                </div>
+                <span class="help-block" ng-if="!(user.roles && user.roles.admin)" ng-show="showError(roleForm.newAdminId, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': roleForm.newAccountId && hasError(roleForm.newAccountId)}">
+                <label class="control-label">Account:</label>
+                <!-- show this div if there is an account linked to this user -->
+                <div class="input-group" ng-show="user.roles && user.roles.account">
+                    <input type="text" name="accountId" class="form-control" ng-model="user.roles.account.name.full" disabled>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-warning" ng-click="unlinkAccount()">Unlink</button>
+                        <a type="button" class="btn btn-default" ng-href="/admin/accounts/{{user.roles.account._id}}">Open</a>
+                    </div>
+                    </div>
+                <!-- show this div if there isn't an account linked to this user -->
+                <div class="input-group" ng-if="!(user.roles && user.roles.account)">
+                    <input type="text" name="newAccountId" placeholder="enter account id" class="form-control" ng-model="role.newAccountId" required>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-disabled="!(roleForm.newAccountId.$dirty && roleForm.newAccountId.$valid)" ng-click="linkAccount()">Link</button>
+                    </div>
+                </div>
+                <span class="help-block" ng-if="!(user.roles && user.roles.account)" ng-show="showError(roleForm.newAccountId, 'required')">This field is required</span>
+            </div>
+        </fieldset></form>
+        <form name="passwordForm"><fieldset>
+            <legend>Set Password</legend>
+            <alert ng-repeat="alert in passwordAlerts" type="{{alert.type}}" close="closePasswordAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': hasError(passwordForm.password)}">
+                <label class="control-label" for="password">New Password:</label>
+                <input type="password" name="password" id="password" class="form-control" ng-model="pass.newPassword" required>
+                <span class="help-block" ng-show="showError(passwordForm.password, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(passwordForm.confirm)}">
+                <label class="control-label" for="confirm">Confirm Password:</label>
+                <input type="password" name="confirm" id="confirm" class="form-control" ng-model="pass.confirm" required>
+                <span class="help-block" ng-show="showError(passwordForm.confirm, 'required')">This field is required</span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(passwordForm)" ng-click="setPassword()">Set Password</button>
+            </div>
+        </fieldset></form>
+        <form name="deleteForm"><fieldset>
+            <legend>Danger Zone</legend>
+            <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <span class="help-block">
+                    <span class="label label-danger">If you do this, it cannot be undone.</span>&nbsp;<span class="text-muted">You may also create orphaned document relationships too.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger" ng-click="deleteUser()">Delete</button>
+            </div>
+        </fieldset></form>
+    </div>
+</div>
+
