@@ -2,6 +2,7 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   // local variable
   var baseUrl = '/api';
   var userUrl = baseUrl + '/admin/users';
+  var accountUrl = baseUrl + '/admin/accounts';
   var processResponse = function(res){
     return res.data;
   };
@@ -62,6 +63,17 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.deleteUser = function(_id){
     var url = userUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
+  };
+
+  // ----- accounts api -----
+  resource.findAccounts = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(accountUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.addAccount = function(fullname){
+    return $http.post(accountUrl, { 'name.full': fullname }).then(processResponse, processResponse);
   };
 
   return resource;

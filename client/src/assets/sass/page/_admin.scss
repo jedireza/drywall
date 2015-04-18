@@ -36,3 +36,10 @@
     width: 100%;
   }
 }
+
+#admin-accounts-index{
+  @extend #admin-users-index;
+  .nowrap {
+    white-space: nowrap;
+  }
+}
