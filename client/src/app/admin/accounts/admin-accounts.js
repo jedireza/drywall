@@ -1,7 +1,7 @@
 angular.module('admin.accounts.index', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource']);
 angular.module('admin.accounts.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/adminNew/accounts', {
+    .when('/admin/accounts', {
       templateUrl: 'admin/accounts/admin-accounts.tpl.html',
       controller: 'AccountsIndexCtrl',
       resolve: {

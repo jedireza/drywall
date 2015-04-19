@@ -124,6 +124,13 @@ exports = module.exports = function(app, passport) {
   //admin > accounts
   app.get('/api/admin/accounts', adminAccount.find);
   app.post('/api/admin/accounts', adminAccount.create);
+  app.get('/api/admin/accounts/:id', adminAccount.read);
+  app.put('/api/admin/accounts/:id', adminAccount.update);
+  app.put('/api/admin/accounts/:id/user', adminAccount.linkUser);
+  app.delete('/api/admin/accounts/:id/user', adminAccount.unlinkUser);
+  app.post('/api/admin/accounts/:id/notes', adminAccount.newNote);
+  app.post('/api/admin/accounts/:id/status', adminAccount.newStatus);
+  app.delete('/api/admin/accounts/:id', adminAccount.delete);
 
   //admin > search
   app.get('/api/admin/search', admin.search);
@@ -179,7 +186,8 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/users/:id', useAngular);
 
   //admin > accounts
-  app.get('/adminNew/accounts', useAngular);
+  app.get('/admin/accounts', useAngular);
+  app.get('/admin/accounts/:id', useAngular);
 
   //******** End OF static routes ********
 
@@ -263,15 +271,15 @@ exports = module.exports = function(app, passport) {
   app.delete('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').delete);
 
   //admin > accounts
-  app.get('/admin/accounts/', require('./views/admin/accounts/index').find);
-  app.post('/admin/accounts/', require('./views/admin/accounts/index').create);
-  app.get('/admin/accounts/:id/', require('./views/admin/accounts/index').read);
-  app.put('/admin/accounts/:id/', require('./views/admin/accounts/index').update);
-  app.put('/admin/accounts/:id/user/', require('./views/admin/accounts/index').linkUser);
-  app.delete('/admin/accounts/:id/user/', require('./views/admin/accounts/index').unlinkUser);
-  app.post('/admin/accounts/:id/notes/', require('./views/admin/accounts/index').newNote);
-  app.post('/admin/accounts/:id/status/', require('./views/admin/accounts/index').newStatus);
-  app.delete('/admin/accounts/:id/', require('./views/admin/accounts/index').delete);
+  //app.get('/admin/accounts/', require('./views/admin/accounts/index').find);
+  //app.post('/admin/accounts/', require('./views/admin/accounts/index').create);
+  //app.get('/admin/accounts/:id/', require('./views/admin/accounts/index').read);
+  //app.put('/admin/accounts/:id/', require('./views/admin/accounts/index').update);
+  //app.put('/admin/accounts/:id/user/', require('./views/admin/accounts/index').linkUser);
+  //app.delete('/admin/accounts/:id/user/', require('./views/admin/accounts/index').unlinkUser);
+  //app.post('/admin/accounts/:id/notes/', require('./views/admin/accounts/index').newNote);
+  //app.post('/admin/accounts/:id/status/', require('./views/admin/accounts/index').newStatus);
+  //app.delete('/admin/accounts/:id/', require('./views/admin/accounts/index').delete);
 
   //admin > statuses
   app.get('/admin/statuses/', require('./views/admin/statuses/index').find);

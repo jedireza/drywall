@@ -43,3 +43,56 @@
     white-space: nowrap;
   }
 }
+
+#admin-accounts-detail{
+  .status-items {
+    overflow: scroll;
+
+    .status {
+      padding: 10px 5px;
+      font-size: 12px;
+      border-bottom: 1px solid #ccc;
+
+      .author {
+        font-weight: normal;
+        color: #999;
+        text-shadow: none;
+        background-color: transparent;
+        border: 1px solid #ccc;
+      }
+    }
+    .status:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .notes-new {
+    textarea {
+      margin-bottom: 0;
+      border-bottom: none;
+      @include border-bottom-radius(0);
+    }
+    .btn {
+      @include border-top-radius(0);
+    }
+  }
+
+  .notes-items {
+    .note {
+      padding: 10px 5px;
+      font-size: 12px;
+      border-bottom: 1px solid #ccc;
+
+      .author {
+        font-weight: normal;
+        color: #999;
+        text-shadow: none;
+        background-color: transparent;
+        border: 1px solid #ccc;
+      }
+    }
+    .note:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+  }
+}

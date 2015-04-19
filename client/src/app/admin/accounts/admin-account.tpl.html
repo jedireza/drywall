@@ -1,0 +1,118 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <h1><a ng-href="/admin/accounts">Accounts</a> / {{account.name.full}}</h1>
+        </div>
+    </div>
+</div>
+<div class="row" id="admin-accounts-detail">
+    <div class="col-sm-8">
+        <form name="contactForm"><fieldset>
+            <legend>Contact Info</legend>
+            <alert ng-repeat="alert in contactAlerts" type="{{alert.type}}" close="closeContactAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.first)}">
+                <label class="control-label" for="first">First Name:</label>
+                <input type="text" name="first" id="first" class="form-control" ng-model="account.name.first" required>
+                <span class="help-block" ng-show="showError(contactForm.first, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.middle)}">
+                <label class="control-label" for="middle">Middle Name:</label>
+                <input type="text" name="middle" id="middle" class="form-control" ng-model="account.name.middle">
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.last)}">
+                <label class="control-label" for="last">Last Name:</label>
+                <input type="text" name="last" id="last" class="form-control" ng-model="account.name.last" required>
+                <span class="help-block" ng-show="showError(contactForm.last, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.company)}">
+                <label class="control-label" for="company">Company Name:</label>
+                <input type="text" name="company" id="company" class="form-control" ng-model="account.company">
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.phone)}">
+                <label class="control-label" for="phone">Phone:</label>
+                <input type="text" name="phone" id="phone" class="form-control" ng-model="account.phone">
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.zip)}">
+                <label class="control-label" for="zip">Zip:</label>
+                <input type="text" name="zip" id="zip" class="form-control" ng-model="account.zip">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(contactForm)" ng-click="updateAccount()">Update</button>
+            </div>
+        </fieldset></form>
+        <form name="loginForm"><fieldset>
+            <legend>Login</legend>
+            <alert ng-repeat="alert in loginAlerts" type="{{alert.type}}" close="closeLoginAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': loginForm.newUsername && hasError(loginForm.newUsername)}">
+                <label class="control-label">Username:</label>
+                <!-- show this div if there is an user linked to this account -->
+                <div class="input-group" ng-show="account.user && account.user.name">
+                    <input type="text" name="username" class="form-control" ng-model="account.user.name" disabled>
+                    <div class="input-group-btn" >
+                        <button type="button" class="btn btn-warning" ng-click="unlinkUser()">Unlink</button>
+                        <a type="button" class="btn btn-default" ng-href="/admin/users/{{account.user.id}}">Open</a>
+                    </div>
+                </div>
+                <!-- show this div if there isn't an user linked to this account -->
+                <div class="input-group" ng-if="!(account.user && account.user.name)">
+                    <input type="text" name="newUsername" placeholder="enter a username" class="form-control" ng-model="account.newUsername" required>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-disabled="!(loginForm.newUsername.$dirty && loginForm.newUsername.$valid)" ng-click="linkUser()">Link</button>
+                    </div>
+                </div>
+                <span class="help-block" ng-if="!(account.user && account.user.name)" ng-show="showError(loginForm.newUsername, 'required')">This field is required</span>
+            </div>
+        </fieldset></form>
+        <form name="deleteForm"><fieldset>
+            <legend>Danger Zone</legend>
+            <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <span class="help-block">
+                    <span class="label label-danger">If you do this, it cannot be undone.</span>&nbsp;<span class="text-muted">You may also create orphaned document relationships too.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger" ng-click="deleteAccount()">Delete</button>
+            </div>
+        </fieldset></form>
+    </div>
+    <div class="col-sm-4">
+        <fieldset>
+            <div class="status-new">
+                <legend>Status</legend>
+                <alert ng-repeat="alert in statusAlerts" type="{{alert.type}}" close="closeStatusAlert($index)">{{alert.msg}}</alert>
+                <div class="input-group">
+                    <select name="statusSelect" class="form-control" ng-model="selectedStatus" ng-options="status.name for status in statuses track by status._id">
+                        <option value="">-- choose --</option>
+                    </select>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" ng-click="changeStatus()">Change</button>
+                    </div>
+                </div>
+            </div>
+            <div class="status-items">
+                <div class="status" ng-repeat="status in account.statusLog | orderBy:'-_id'">
+                    <div class="pull-right badge author">{{status.userCreated.name}} -&nbsp;<span class="timeago" ng-bind="formatTime(status.userCreated.time)"></span></div>
+                    <div ng-bind="status.name"></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="notes-new">
+                <legend>Notes</legend>
+                <alert ng-repeat="alert in noteAlerts" type="{{alert.type}}" close="closeNoteAlert($index)">{{alert.msg}}</alert>
+                <textarea rows="3" name="note" placeholder="enter notes" class="form-control" ng-model="newNote"></textarea>
+                <button class="btn btn-default btn-block" ng-click="addNote()">Add New Note</button>
+            </div>
+            <div class="notes-items">
+                <div class="note" ng-repeat="note in account.notes | orderBy: '-_id'">
+                    <div class="force-wrap" ng-bind="note.data"></div>
+                    <div class="pull-right badge author">{{note.userCreated.name}} -&nbsp;<span class="timeago" ng-bind="formatTime(note.userCreated.time)"></span></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="note text-muted" ng-show="account.notes.length === 0">no notes found</div>
+            </div>
+        </fieldset>
+    </div>
+</div>

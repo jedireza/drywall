@@ -75,6 +75,34 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.addAccount = function(fullname){
     return $http.post(accountUrl, { 'name.full': fullname }).then(processResponse, processResponse);
   };
+  resource.findAccount = function(_id){
+    var url = accountUrl + '/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
+  resource.updateAccount = function(_id, data){
+    var url = accountUrl + '/' + _id;
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.linkUser = function(_id, data){
+    var url = accountUrl + '/' + _id + '/user';
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.unlinkUser = function(_id){
+    var url = accountUrl + '/' + _id + '/user';
+    return $http.delete(url).then(processResponse, processError);
+  };
+  resource.newAccountNote = function(_id, data){
+    var url = accountUrl + '/' + _id + '/notes';
+    return $http.post(url, data).then(processResponse, processError);
+  };
+  resource.newAccountStatus = function(_id, data){
+    var url = accountUrl + '/' + _id + '/status';
+    return $http.post(url, data).then(processResponse, processError);
+  };
+  resource.deleteAccount = function(_id){
+    var url = accountUrl + '/' + _id;
+    return $http.delete(url).then(processResponse, processError);
+  };
 
   return resource;
 }]);
