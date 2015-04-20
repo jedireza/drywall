@@ -1,7 +1,7 @@
 angular.module('admin.administrators.index', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource']);
 angular.module('admin.administrators.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/adminNew/administrators', {
+    .when('/admin/administrators', {
       templateUrl: 'admin/administrators/admin-administrators.tpl.html',
       controller: 'AdministratorsIndexCtrl',
       resolve: {

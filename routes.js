@@ -125,6 +125,13 @@ exports = module.exports = function(app, passport) {
   //admin > administrators
   app.get('/api/admin/administrators', adminAdministrator.find);
   app.post('/api/admin/administrators', adminAdministrator.create);
+  app.get('/api/admin/administrators/:id', adminAdministrator.read);
+  app.put('/api/admin/administrators/:id', adminAdministrator.update);
+  app.put('/api/admin/administrators/:id/permissions', adminAdministrator.permissions);
+  app.put('/api/admin/administrators/:id/groups', adminAdministrator.groups);
+  app.put('/api/admin/administrators/:id/user', adminAdministrator.linkUser);
+  app.delete('/api/admin/administrators/:id/user', adminAdministrator.unlinkUser);
+  app.delete('/api/admin/administrators/:id', adminAdministrator.delete);
 
   //admin > accounts
   app.get('/api/admin/accounts', adminAccount.find);
@@ -191,7 +198,8 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/users/:id', useAngular);
 
   //admin > administrators
-  app.get('/adminNew/administrators', useAngular);
+  app.get('/admin/administrators', useAngular);
+  app.get('/admin/administrators/:id', useAngular);
 
   //admin > accounts
   app.get('/admin/accounts', useAngular);
@@ -260,15 +268,15 @@ exports = module.exports = function(app, passport) {
   //app.delete('/admin/users/:id/', require('./views/admin/users/index').delete);
 
   //admin > administrators
-  app.get('/admin/administrators/', require('./views/admin/administrators/index').find);
-  app.post('/admin/administrators/', require('./views/admin/administrators/index').create);
-  app.get('/admin/administrators/:id/', require('./views/admin/administrators/index').read);
-  app.put('/admin/administrators/:id/', require('./views/admin/administrators/index').update);
-  app.put('/admin/administrators/:id/permissions/', require('./views/admin/administrators/index').permissions);
-  app.put('/admin/administrators/:id/groups/', require('./views/admin/administrators/index').groups);
-  app.put('/admin/administrators/:id/user/', require('./views/admin/administrators/index').linkUser);
-  app.delete('/admin/administrators/:id/user/', require('./views/admin/administrators/index').unlinkUser);
-  app.delete('/admin/administrators/:id/', require('./views/admin/administrators/index').delete);
+  //app.get('/admin/administrators/', require('./views/admin/administrators/index').find);
+  //app.post('/admin/administrators/', require('./views/admin/administrators/index').create);
+  //app.get('/admin/administrators/:id/', require('./views/admin/administrators/index').read);
+  //app.put('/admin/administrators/:id/', require('./views/admin/administrators/index').update);
+  //app.put('/admin/administrators/:id/permissions/', require('./views/admin/administrators/index').permissions);
+  //app.put('/admin/administrators/:id/groups/', require('./views/admin/administrators/index').groups);
+  //app.put('/admin/administrators/:id/user/', require('./views/admin/administrators/index').linkUser);
+  //app.delete('/admin/administrators/:id/user/', require('./views/admin/administrators/index').unlinkUser);
+  //app.delete('/admin/administrators/:id/', require('./views/admin/administrators/index').delete);
 
   //admin > admin groups
   app.get('/admin/admin-groups/', require('./views/admin/admin-groups/index').find);

@@ -115,5 +115,34 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.addAdministrator = function(fullname){
     return $http.post(administratorUrl, { 'name.full': fullname }).then(processResponse, processResponse);
   };
+  resource.findAdministrator = function(_id){
+    var url = administratorUrl + '/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
+  resource.updateAdministrator = function(_id, data){
+    var url = administratorUrl + '/' + _id;
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.adminLinkUser = function(_id, data){
+    var url = administratorUrl + '/' + _id + '/user';
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.adminUnlinkUser = function(_id){
+    var url = administratorUrl + '/' + _id + '/user';
+    return $http.delete(url).then(processResponse, processError);
+  };
+  resource.saveAdminGroups = function(_id, data){
+    var url = administratorUrl + '/' + _id + '/groups';
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.saveAdminPermissions = function(_id, data){
+    var url = administratorUrl + '/' + _id + '/permissions';
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.deleteAdministrator = function(_id){
+    var url = administratorUrl + '/' + _id;
+    return $http.delete(url).then(processResponse, processError);
+  };
+
   return resource;
 }]);

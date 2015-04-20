@@ -1,0 +1,122 @@
+<div class="row" id="admin-administrators-detail">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <h1><a href="/admin/administrators">Administrators</a> / {{administrator.name.full}}</h1>
+        </div>
+        <form name="contactForm"><fieldset>
+            <legend>Contact Info</legend>
+            <alert ng-repeat="alert in contactAlerts" type="{{alert.type}}" close="closeContactAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.first)}">
+                <label class="control-label" for="first">First Name:</label>
+                <input type="text" name="first" id="first" class="form-control" ng-model="administrator.name.first" required>
+                <span class="help-block" ng-show="showError(contactForm.first, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.middle)}">
+                <label class="control-label" for="middle">Middle Name:</label>
+                <input type="text" name="middle" id="middle" class="form-control" ng-model="administrator.name.middle">
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(contactForm.last)}">
+                <label class="control-label" for="last">Last Name:</label>
+                <input type="text" name="last" id="last" class="form-control" ng-model="administrator.name.last" required>
+                <span class="help-block" ng-show="showError(contactForm.last, 'required')">This field is required</span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(contactForm)" ng-click="updateAdmin()">Update</button>
+            </div>
+        </fieldset></form>
+        <form name="loginForm"><fieldset>
+            <legend>Login</legend>
+            <alert ng-repeat="alert in loginAlerts" type="{{alert.type}}" close="closeLoginAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': loginForm.newUsername && hasError(loginForm.newUsername)}">
+                <label class="control-label">Username:</label>
+                <!-- show this div if there is an user linked to this administrator -->
+                <div class="input-group" ng-show="administrator.user && administrator.user.name">
+                    <input type="text" name="username" class="form-control" ng-model="administrator.user.name" disabled>
+                    <div class="input-group-btn" >
+                        <button type="button" class="btn btn-warning" ng-click="unlinkUser()">Unlink</button>
+                        <a type="button" class="btn btn-default" ng-href="/admin/users/{{administrator.user.id}}">Open</a>
+                    </div>
+                </div>
+                <!-- show this div if there isn't an user linked to this administrator -->
+                <div class="input-group" ng-if="!(administrator.user && administrator.user.name)">
+                    <input type="text" name="newUsername" placeholder="enter a username" class="form-control" ng-model="administrator.newUsername" required>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-disabled="!(loginForm.newUsername.$dirty && loginForm.newUsername.$valid)" ng-click="linkUser()">Link</button>
+                    </div>
+                </div>
+                <span class="help-block" ng-if="!(administrator.user && administrator.user.name)" ng-show="showError(loginForm.newUsername, 'required')">This field is required</span>
+            </div>
+        </fieldset></form>
+        <form name="groupForm"><fieldset>
+            <legend>Groups</legend>
+            <alert ng-repeat="alert in groupAlerts" type="{{alert.type}}" close="closeGroupAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <label class="control-label">Add Membership:</label>
+                <div class="input-group">
+                    <select name="newMembership" class="form-control" ng-options="group as group.name for group in groups" ng-model="selectedNewGroup"></select>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-click="addGroup()">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Memberships:</label>
+                <div class="groups">
+                    <div class="input-group" ng-repeat="group in administrator.groups">
+                        <input disabled class="form-control" ng-model="group.name">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-danger btn-delete" ng-click="deleteGroup($index)"><i class="fa fa-trash-o fa-inverse"></i></button>
+                        </div>
+                    </div>
+                    <span class="badge" ng-show="administrator.groups.length === 0">no memberships defined</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="saveGroups()">Save Groups</button>
+            </div>
+        </fieldset></form>
+        <form name="permissionForm"><fieldset>
+            <legend>Permissions</legend>
+            <alert ng-repeat="alert in permissionAlerts" type="{{alert.type}}" close="closePermissionAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <label class="control-label">New Setting:</label>
+                <div class="input-group">
+                    <input name="permission" type="text" placeholder="enter a name" class="form-control" ng-model="newPermission">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-success" ng-click="addPermission()">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Settings:</label>
+                <div class="permissions">
+                    <div class="input-group" ng-repeat="permission in administrator.permissions">
+                        <input disabled ng-model="permission.name" class="form-control" disabled>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-class="{disabled: permission.permit}" ng-click="togglePermission($index)">Allow</button>
+                            <button type="button" class="btn btn-default" ng-class="{disabled: !permission.permit}" ng-click="togglePermission($index)">Deny</button>
+                            <button type="button" class="btn btn-danger btn-delete" ng-click="deletePermission($index)"><i class="fa fa-trash-o fa-inverse"></i></button>
+                        </div>
+                    </div>
+                    <span class="badge" ng-show="administrator.permissions.length === 0">no permissions defined</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="saveSettings()">Save Settings</button>
+            </div>
+        </fieldset></form>
+        <form name="deleteForm"><fieldset>
+            <legend>Danger Zone</legend>
+            <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <span class="help-block">
+                    <span class="label label-danger">If you do this, it cannot be undone.</span>&nbsp;<span class="text-muted">You may also create orphaned document relationships too.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger btn-delete" ng-click="deleteAdministrator()">Delete</button>
+            </div>
+        </fieldset></form>
+    </div>
+</div>
+
