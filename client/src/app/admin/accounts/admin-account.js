@@ -34,7 +34,7 @@ angular.module('admin.accounts.detail').config(['$routeProvider', function($rout
 }]);
 angular.module('admin.accounts.detail').controller('AccountsDetailCtrl', ['$scope', '$route', '$location', 'utility', 'adminResource', 'account',
   function($scope, $route, $location, utility, adminResource, data) {
-    // locat vars
+    // local vars
     var deserializeData = function(data){
       $scope.statuses = data.statuses;
       deserializeAccount(data.record);

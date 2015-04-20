@@ -34,7 +34,7 @@ angular.module('admin.users.detail').config(['$routeProvider', function($routePr
 }]);
 angular.module('admin.users.detail').controller('UsersDetailCtrl', ['$scope', '$route', '$location', 'utility', 'adminResource', 'user',
   function($scope, $route, $location, utility, adminResource, user) {
-    // locat vars
+    // local vars
     var closeAlert = function(alert, ind){
       alert.splice(ind, 1);
     };
