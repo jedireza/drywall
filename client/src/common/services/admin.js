@@ -3,6 +3,7 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   var baseUrl = '/api';
   var userUrl = baseUrl + '/admin/users';
   var accountUrl = baseUrl + '/admin/accounts';
+  var administratorUrl = baseUrl + '/admin/administrators';
   var processResponse = function(res){
     return res.data;
   };
@@ -104,5 +105,15 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     return $http.delete(url).then(processResponse, processError);
   };
 
+  // ----- administrators api -----
+  resource.findAdministrators = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(administratorUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.addAdministrator = function(fullname){
+    return $http.post(administratorUrl, { 'name.full': fullname }).then(processResponse, processResponse);
+  };
   return resource;
 }]);

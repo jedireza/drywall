@@ -5,6 +5,7 @@ var account = require('./service/account');
 var admin = require('./service/admin');
 var adminUser = require('./service/admin/user');
 var adminAccount = require('./service/admin/account');
+var adminAdministrator = require('./service/admin/administrator');
 
 function useAngular(req, res, next){
   res.sendFile(require('path').join(__dirname, './client/dist/index.html'));
@@ -121,6 +122,10 @@ exports = module.exports = function(app, passport) {
   app.delete('/api/admin/users/:id/role-account', adminUser.unlinkAccount);
   app.delete('/api/admin/users/:id', adminUser.delete);
 
+  //admin > administrators
+  app.get('/api/admin/administrators', adminAdministrator.find);
+  app.post('/api/admin/administrators', adminAdministrator.create);
+
   //admin > accounts
   app.get('/api/admin/accounts', adminAccount.find);
   app.post('/api/admin/accounts', adminAccount.create);
@@ -184,6 +189,9 @@ exports = module.exports = function(app, passport) {
   //admin > users
   app.get('/admin/users', useAngular);
   app.get('/admin/users/:id', useAngular);
+
+  //admin > administrators
+  app.get('/adminNew/administrators', useAngular);
 
   //admin > accounts
   app.get('/admin/accounts', useAngular);

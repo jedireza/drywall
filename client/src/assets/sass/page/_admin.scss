@@ -37,7 +37,7 @@
   }
 }
 
-#admin-accounts-index{
+#admin-accounts-index, #admin-administrators-index{
   @extend #admin-users-index;
   .nowrap {
     white-space: nowrap;
