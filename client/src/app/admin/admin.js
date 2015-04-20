@@ -1,5 +1,5 @@
-angular.module('admin', ['ngRoute', 'admin.users', 'admin.accounts', 'admin.administrators', 'security.authorization', 'services.adminResource']);
-angular.module('admin').config(['$routeProvider', function($routeProvider){
+angular.module('admin.index', ['ngRoute', 'security.authorization', 'services.adminResource']);
+angular.module('admin.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/admin', {
       templateUrl: 'admin/admin.tpl.html',
@@ -24,7 +24,7 @@ angular.module('admin').config(['$routeProvider', function($routeProvider){
       }
     });
 }]);
-angular.module('admin').controller('AdminCtrl', ['$scope', '$log', 'stats',
+angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats',
   function($scope, $log, stats){
     $scope.user = {
       users: stats['User'],
