@@ -4,6 +4,7 @@ angular.module('account').config(['$routeProvider', 'securityAuthorizationProvid
     .when('/account', {
       templateUrl: 'account/account.tpl.html',
       controller: 'AccountCtrl',
+      title: 'Account Area',
       resolve: {
         authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser
       }

@@ -1,6 +1,6 @@
 angular.module('base',['ngRoute', 'security', 'services.utility', 'services.easyRestResource', 'services.adminResource', 'ui.bootstrap']);
-angular.module('base').controller('HeaderCtrl', ['$scope', '$route', '$location', 'security',
-  function ($scope, $route, $location, security) {
+angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security',
+  function ($scope, $location, security) {
     $scope.isAuthenticated = function(){
       return security.isAuthenticated();
     };

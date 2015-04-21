@@ -3,7 +3,8 @@ angular.module('login.reset').config(['$routeProvider', function($routeProvider)
   $routeProvider
     .when('/login/reset', {
       templateUrl: 'login/reset/login-reset.tpl.html',
-      controller: 'LoginResetCtrl'
+      controller: 'LoginResetCtrl',
+      title: 'Reset Your Password'
     })
     .when('/login/reset/:email/:token', {
       templateUrl: 'login/reset/login-reset.tpl.html',

@@ -4,6 +4,7 @@ angular.module('admin.admin-groups.detail').config(['$routeProvider', function($
     .when('/admin/admin-groups/:id', {
       templateUrl: 'admin/admin-groups/admin-group.tpl.html',
       controller: 'AdminGroupsDetailCtrl',
+      title: 'Admin Groups / Details',
       resolve: {
         group: ['$q', '$route', '$location', 'securityAuthorization', 'adminResource', function($q, $route, $location, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account

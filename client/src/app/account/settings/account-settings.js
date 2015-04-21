@@ -4,6 +4,7 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
     .when('/account/settings', {
       templateUrl: 'account/settings/account-settings.tpl.html',
       controller: 'AccountSettingsCtrl',
+      title: 'Account Settings',
       resolve: {
         accountDetails: ['$q', '$location', 'securityAuthorization', 'easyRestResource' ,function($q, $location, securityAuthorization, easyRestResource){
           //get account details only for verified-user, otherwise redirect to /account/verification

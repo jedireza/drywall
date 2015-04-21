@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-    <title>Drywall is Running</title>
+    <title ng-bind="title"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- build:js /app.min.js -->
     <script type="text/javascript" src="/vendor/jquery.js"></script>
@@ -28,8 +28,5 @@
     <div ng-view class="container"></div>
 </div>
 <div ng-include="'footer.tpl.html'"></div>
-<!--<div class="ajax-spinner"><img src="/media/ajax-pulse.gif"></div>-->
-<!--if lte IE 9script(src='/layouts/ie-sucks.min.js?br34k-01')-->
-<!--<script src="/layouts/core.min.js?br34k-01"></script>-->
 </body>
 </html>

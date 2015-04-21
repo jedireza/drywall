@@ -1,14 +1,11 @@
 angular.module('app', [
   'ngRoute',
+  'config',
   'base',
-  //'projectsinfo',
-  //'dashboard',
-  //'projects',
-  'admin',
   'signup',
   'login',
   'account',
-  'config',
+  'admin',
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'services.easyRestResource',
@@ -37,20 +34,27 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     })
     .when('/contact', {
       templateUrl: 'contact.tpl.html',
-      controller: 'ContactCtrl'
+      controller: 'ContactCtrl',
+      title: 'Contact Us'
     })
     .when('/about', {
-      templateUrl: 'about.tpl.html'
+      templateUrl: 'about.tpl.html',
+      title: 'About Us'
     })
     .otherwise({
       redirectTo: '/'
     });
 }]);
 
-angular.module('app').run(['security', function(security) {
+angular.module('app').run(['$location', '$rootScope', 'security', function($location, $rootScope, security) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
+
+  // add a listener to $routeChangeSuccess
+  $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+    $rootScope.title = current.$$route && current.$$route.title? current.$$route.title: 'Drywall is Running';
+  });
 }]);
 
 angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {

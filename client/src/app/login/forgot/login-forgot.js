@@ -3,7 +3,8 @@ angular.module('login.forgot').config(['$routeProvider', function($routeProvider
   $routeProvider
     .when('/login/forgot', {
       templateUrl: 'login/forgot/login-forgot.tpl.html',
-      controller: 'LoginForgotCtrl'
+      controller: 'LoginForgotCtrl',
+      title: 'Forgot Your Password?'
     });
 }]);
 angular.module('login.forgot').controller('LoginForgotCtrl', [ '$scope', '$location', '$log', 'security', 'utility',
