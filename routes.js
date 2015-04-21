@@ -242,6 +242,9 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/categories', useAngular);
   app.get('/admin/categories/:id', useAngular);
 
+  //route not found is handled by Angular
+  app.all('*', useAngular);
+
   //******** End OF static routes ********
 
   //front end
@@ -349,7 +352,7 @@ exports = module.exports = function(app, passport) {
   //app.delete('/admin/categories/:id/', require('./views/admin/categories/index').delete);
 
   //admin > search
-  app.get('/admin/search/', require('./views/admin/search/index').find);
+  //app.get('/admin/search/', require('./views/admin/search/index').find);
 
   //account
   //app.all('/account*', ensureAuthenticated);
@@ -383,5 +386,5 @@ exports = module.exports = function(app, passport) {
   //app.get('/account/settings/tumblr/disconnect/', require('./views/account/settings/index').disconnectTumblr);
 
   //route not found
-  app.all('*', require('./views/http/index').http404);
+  //app.all('*', require('./views/http/index').http404);
 };

@@ -42,7 +42,8 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
       title: 'About Us'
     })
     .otherwise({
-      redirectTo: '/'
+      templateUrl: '404.tpl.html',
+      title: 'Page Not Found'
     });
 }]);
 
