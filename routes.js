@@ -157,6 +157,9 @@ exports = module.exports = function(app, passport) {
   //admin > statuses
   app.get('/api/admin/statuses', adminStatus.find);
   app.post('/api/admin/statuses', adminStatus.create);
+  app.get('/api/admin/statuses/:id', adminStatus.read);
+  app.put('/api/admin/statuses/:id', adminStatus.update);
+  app.delete('/api/admin/statuses/:id', adminStatus.delete);
 
   //admin > search
   app.get('/api/admin/search', admin.search);
@@ -224,7 +227,8 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/accounts/:id', useAngular);
 
   //admin > statuses
-  app.get('/adminNew/statuses', useAngular);
+  app.get('/admin/statuses', useAngular);
+  app.get('/admin/statuses/:id', useAngular);
 
   //******** End OF static routes ********
 

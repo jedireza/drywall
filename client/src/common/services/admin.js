@@ -184,5 +184,17 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.addStatus = function(data){
     return $http.post(adminStatusesUrl, data).then(processResponse, processResponse);
   };
+  resource.findStatus = function(_id){
+    var url = adminStatusesUrl + '/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
+  resource.updateStatus = function(_id, data){
+    var url = adminStatusesUrl + '/' + _id;
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.deleteStatus = function(_id){
+    var url = adminStatusesUrl + '/' + _id;
+    return $http.delete(url).then(processResponse, processError);
+  };
   return resource;
 }]);

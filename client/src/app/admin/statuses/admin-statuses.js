@@ -1,7 +1,7 @@
 angular.module('admin.statuses.index', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource']);
 angular.module('admin.statuses.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/adminNew/statuses', {
+    .when('/admin/statuses', {
       templateUrl: 'admin/statuses/admin-statuses.tpl.html',
       controller: 'StatusesIndexCtrl',
       resolve: {
