@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <h1><a href="/admin/categories">Categories</a> / {{category.name}}</h1>
+        </div>
+        <form name="detailForm"><fieldset>
+            <legend>Details</legend>
+            <alert ng-repeat="alert in detailAlerts" type="{{alert.type}}" close="closeDetailAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group" ng-class="{'has-error': hasError(detailForm.pivot)}">
+                <label class="control-label" for="pivot">pivot:</label>
+                <input type="text" name="pivot" id="pivot" class="form-control" ng-model="category.pivot" required>
+                <span class="help-block" ng-show="showError(detailForm.pivot, 'required')">This field is required</span>
+            </div>
+            <div class="form-group" ng-class="{'has-error': hasError(detailForm.name)}">
+                <label class="control-label" for="name">Name:</label>
+                <input type="text" name="name" id="name" class="form-control" ng-model="category.name" required>
+                <span class="help-block" ng-show="showError(detailForm.name, 'required')">This field is required</span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(detailForm)" ng-click="update()">Update</button>
+            </div>
+        </fieldset></form>
+        <form name="deleteForm"><fieldset>
+            <legend>Danger Zone</legend>
+            <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <span class="help-block">
+                    <span class="label label-danger">If you do this, it cannot be undone.</span>&nbsp;<span class="text-muted">You may also create orphaned document relationships too.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger btn-delete" ng-click="deleteCategory()">Delete</button>
+            </div>
+        </fieldset></form>
+    </div>
+</div>

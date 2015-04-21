@@ -6,6 +6,7 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   var administratorUrl = baseUrl + '/admin/administrators';
   var adminGroupUrl = baseUrl + '/admin/admin-groups';
   var adminStatusesUrl = baseUrl + '/admin/statuses';
+  var adminCategoriesUrl = baseUrl + '/admin/categories';
 
   var processResponse = function(res){
     return res.data;
@@ -174,7 +175,7 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     return $http.delete(url).then(processResponse, processError);
   };
 
-  // ----- admin-statuses api -----
+  // ----- statuses api -----
   resource.findStatuses = function(filters){
     if(angular.equals({}, filters)){
       filters = undefined;
@@ -194,6 +195,29 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   };
   resource.deleteStatus = function(_id){
     var url = adminStatusesUrl + '/' + _id;
+    return $http.delete(url).then(processResponse, processError);
+  };
+
+  // ----- categories api -----
+  resource.findCategories = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(adminCategoriesUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.addCategory = function(data){
+    return $http.post(adminCategoriesUrl, data).then(processResponse, processResponse);
+  };
+  resource.findCategory = function(_id){
+    var url = adminCategoriesUrl + '/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
+  resource.updateCategory = function(_id, data){
+    var url = adminCategoriesUrl + '/' + _id;
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.deleteCategory = function(_id){
+    var url = adminCategoriesUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
   };
   return resource;

@@ -123,7 +123,7 @@
   }
 }
 
-#admin-statuses-index{
+#admin-statuses-index, #admin-categories-index{
   @extend #admin-accounts-index;
   .input-group{
     input {

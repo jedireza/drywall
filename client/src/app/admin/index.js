@@ -4,5 +4,6 @@ angular.module('admin', [
   'admin.accounts',
   'admin.administrators',
   'admin.admin-groups',
-  'admin.statuses'
+  'admin.statuses',
+  'admin.categories'
 ]);

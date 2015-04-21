@@ -8,6 +8,7 @@ var adminAccount = require('./service/admin/account');
 var adminAdministrator = require('./service/admin/administrator');
 var adminGroup = require('./service/admin/admin-group');
 var adminStatus = require('./service/admin/status');
+var adminCategory = require('./service/admin/category');
 
 function useAngular(req, res, next){
   res.sendFile(require('path').join(__dirname, './client/dist/index.html'));
@@ -161,6 +162,13 @@ exports = module.exports = function(app, passport) {
   app.put('/api/admin/statuses/:id', adminStatus.update);
   app.delete('/api/admin/statuses/:id', adminStatus.delete);
 
+  //admin > categories
+  app.get('/api/admin/categories', adminCategory.find);
+  app.post('/api/admin/categories', adminCategory.create);
+  app.get('/api/admin/categories/:id', adminCategory.read);
+  app.put('/api/admin/categories/:id', adminCategory.update);
+  app.delete('/api/admin/categories/:id', adminCategory.delete);
+
   //admin > search
   app.get('/api/admin/search', admin.search);
 
@@ -229,6 +237,10 @@ exports = module.exports = function(app, passport) {
   //admin > statuses
   app.get('/admin/statuses', useAngular);
   app.get('/admin/statuses/:id', useAngular);
+
+  //admin > categories
+  app.get('/admin/categories', useAngular);
+  app.get('/admin/categories/:id', useAngular);
 
   //******** End OF static routes ********
 
@@ -323,18 +335,18 @@ exports = module.exports = function(app, passport) {
   //app.delete('/admin/accounts/:id/', require('./views/admin/accounts/index').delete);
 
   //admin > statuses
-  app.get('/admin/statuses/', require('./views/admin/statuses/index').find);
-  app.post('/admin/statuses/', require('./views/admin/statuses/index').create);
-  app.get('/admin/statuses/:id/', require('./views/admin/statuses/index').read);
-  app.put('/admin/statuses/:id/', require('./views/admin/statuses/index').update);
-  app.delete('/admin/statuses/:id/', require('./views/admin/statuses/index').delete);
+  //app.get('/admin/statuses/', require('./views/admin/statuses/index').find);
+  //app.post('/admin/statuses/', require('./views/admin/statuses/index').create);
+  //app.get('/admin/statuses/:id/', require('./views/admin/statuses/index').read);
+  //app.put('/admin/statuses/:id/', require('./views/admin/statuses/index').update);
+  //app.delete('/admin/statuses/:id/', require('./views/admin/statuses/index').delete);
 
   //admin > categories
-  app.get('/admin/categories/', require('./views/admin/categories/index').find);
-  app.post('/admin/categories/', require('./views/admin/categories/index').create);
-  app.get('/admin/categories/:id/', require('./views/admin/categories/index').read);
-  app.put('/admin/categories/:id/', require('./views/admin/categories/index').update);
-  app.delete('/admin/categories/:id/', require('./views/admin/categories/index').delete);
+  //app.get('/admin/categories/', require('./views/admin/categories/index').find);
+  //app.post('/admin/categories/', require('./views/admin/categories/index').create);
+  //app.get('/admin/categories/:id/', require('./views/admin/categories/index').read);
+  //app.put('/admin/categories/:id/', require('./views/admin/categories/index').update);
+  //app.delete('/admin/categories/:id/', require('./views/admin/categories/index').delete);
 
   //admin > search
   app.get('/admin/search/', require('./views/admin/search/index').find);
