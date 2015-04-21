@@ -4,6 +4,7 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   var userUrl = baseUrl + '/admin/users';
   var accountUrl = baseUrl + '/admin/accounts';
   var administratorUrl = baseUrl + '/admin/administrators';
+  var adminGroupUrl = baseUrl + '/admin/admin-groups';
   var processResponse = function(res){
     return res.data;
   };
@@ -142,6 +143,17 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.deleteAdministrator = function(_id){
     var url = administratorUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
+  };
+
+  // ----- admin-groups api -----
+  resource.findAdminGroups = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(adminGroupUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.addAdminGroup = function(name){
+    return $http.post(adminGroupUrl, { name: name }).then(processResponse, processResponse);
   };
 
   return resource;
