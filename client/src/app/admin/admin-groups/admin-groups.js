@@ -1,7 +1,7 @@
 angular.module('admin.admin-groups.index', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource']);
 angular.module('admin.admin-groups.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/adminNew/admin-groups', {
+    .when('/admin/admin-groups', {
       templateUrl: 'admin/admin-groups/admin-groups.tpl.html',
       controller: 'AdminGroupsIndexCtrl',
       resolve: {

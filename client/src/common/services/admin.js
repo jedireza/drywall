@@ -155,6 +155,22 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   resource.addAdminGroup = function(name){
     return $http.post(adminGroupUrl, { name: name }).then(processResponse, processResponse);
   };
+  resource.findAdminGroup = function(_id){
+    var url = adminGroupUrl + '/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
+  resource.updateAdminGroup = function(_id, data){
+    var url = adminGroupUrl + '/' + _id;
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.saveAdminGroupPermissions = function(_id, data){
+    var url = adminGroupUrl + '/' + _id + '/permissions';
+    return $http.put(url, data).then(processResponse, processError);
+  };
+  resource.deleteAdminGroup = function(_id){
+    var url = adminGroupUrl + '/' + _id;
+    return $http.delete(url).then(processResponse, processError);
+  };
 
   return resource;
 }]);

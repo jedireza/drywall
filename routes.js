@@ -137,6 +137,10 @@ exports = module.exports = function(app, passport) {
   //admin > admin groups
   app.get('/api/admin/admin-groups', adminGroup.find);
   app.post('/api/admin/admin-groups', adminGroup.create);
+  app.get('/api/admin/admin-groups/:id', adminGroup.read);
+  app.put('/api/admin/admin-groups/:id', adminGroup.update);
+  app.put('/api/admin/admin-groups/:id/permissions', adminGroup.permissions);
+  app.delete('/api/admin/admin-groups/:id', adminGroup.delete);
 
   //admin > accounts
   app.get('/api/admin/accounts', adminAccount.find);
@@ -207,7 +211,8 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/administrators/:id', useAngular);
 
   //admin > admin groups
-  app.get('/adminNew/admin-groups', useAngular);
+  app.get('/admin/admin-groups', useAngular);
+  app.get('/admin/admin-groups/:id', useAngular);
 
   //admin > accounts
   app.get('/admin/accounts', useAngular);
@@ -287,12 +292,12 @@ exports = module.exports = function(app, passport) {
   //app.delete('/admin/administrators/:id/', require('./views/admin/administrators/index').delete);
 
   //admin > admin groups
-  app.get('/admin/admin-groups/', require('./views/admin/admin-groups/index').find);
-  app.post('/admin/admin-groups/', require('./views/admin/admin-groups/index').create);
-  app.get('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').read);
-  app.put('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').update);
-  app.put('/admin/admin-groups/:id/permissions/', require('./views/admin/admin-groups/index').permissions);
-  app.delete('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').delete);
+  //app.get('/admin/admin-groups/', require('./views/admin/admin-groups/index').find);
+  //app.post('/admin/admin-groups/', require('./views/admin/admin-groups/index').create);
+  //app.get('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').read);
+  //app.put('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').update);
+  //app.put('/admin/admin-groups/:id/permissions/', require('./views/admin/admin-groups/index').permissions);
+  //app.delete('/admin/admin-groups/:id/', require('./views/admin/admin-groups/index').delete);
 
   //admin > accounts
   //app.get('/admin/accounts/', require('./views/admin/accounts/index').find);
