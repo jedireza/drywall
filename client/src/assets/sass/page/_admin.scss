@@ -122,3 +122,20 @@
     }
   }
 }
+
+#admin-statuses-index{
+  @extend #admin-accounts-index;
+  .input-group{
+    input {
+      width: 100px !important;
+
+      @media screen and (min-width: $grid-float-breakpoint){
+        width: 160px !important;
+      }
+    }
+
+    input:nth-child(2){
+      border-left: none;
+    }
+  }
+}

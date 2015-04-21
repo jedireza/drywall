@@ -5,6 +5,8 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
   var accountUrl = baseUrl + '/admin/accounts';
   var administratorUrl = baseUrl + '/admin/administrators';
   var adminGroupUrl = baseUrl + '/admin/admin-groups';
+  var adminStatusesUrl = baseUrl + '/admin/statuses';
+
   var processResponse = function(res){
     return res.data;
   };
@@ -172,5 +174,15 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     return $http.delete(url).then(processResponse, processError);
   };
 
+  // ----- admin-statuses api -----
+  resource.findStatuses = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(adminStatusesUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.addStatus = function(data){
+    return $http.post(adminStatusesUrl, data).then(processResponse, processResponse);
+  };
   return resource;
 }]);

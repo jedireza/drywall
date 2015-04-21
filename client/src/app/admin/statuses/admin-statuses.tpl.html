@@ -1,0 +1,76 @@
+<div class="row" id="admin-statuses-index">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <form class="form-inline pull-right" name="addStatusForm">
+                <div class="input-group">
+                    <input name="pivot" type="text" placeholder="pivot" class="form-control" ng-model="add.pivot" required>
+                    <input name="name" type="text" placeholder="name" class="form-control" ng-model="add.name" required>
+                    <button type="button" class="btn btn-primary" ng-disabled="!canSave(addStatusForm)" ng-click="addStatus()">Add New</button>
+                </div>
+            </form>
+            <h1>Statuses</h1>
+        </div>
+        <form class="filters">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>Pivot Search</label>
+                    <input name="pivot" type="text" class="form-control" ng-model="filters.pivot" ng-model-options="{ debounce: 500 }" ng-change="filtersUpdated()">
+                </div>
+                <div class="col-sm-3">
+                    <label>Name Search</label>
+                    <input name="name" type="text" class="form-control" ng-model="filters.name" ng-model-options="{ debounce: 500 }" ng-change="filtersUpdated()">
+                </div>
+                <div class="col-sm-3">
+                    <label>Sort By</label>
+                    <select name="sort" class="form-control" ng-model="filters.sort" ng-model-options="{ debounce: 500 }" ng-options="sort.value as sort.label for sort in sorts" ng-change="filtersUpdated()">
+                        <!--<option value="_id">id &#9650;</option>-->
+                        <!--<option value="-_id">id &#9660;</option>-->
+                        <!--<option value="name">name &#9650;</option>-->
+                        <!--<option value="-name">name &#9660;</option>-->
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label>Limit</label>
+                    <select name="limit" class="form-control" ng-model="filters.limit" ng-model-options="{ debounce: 500 }" ng-options="limit.value as limit.label for limit in limits" ng-change="filtersUpdated()">
+                        <!--<option value="10">10 items</option>-->
+                        <!--<option value="20" selected="selected">20 items</option>-->
+                        <!--<option value="50">50 items</option>-->
+                        <!--<option value="100">100 items</option>-->
+                    </select>
+                </div>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th>pivot</th>
+                <th class="stretch">name</th>
+                <th>id</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="status in statuses">
+                <td><a class="btn btn-default btn-sm" ng-href="/admin/statuses/{{status._id}}">Edit</a></td>
+                <td ng-bind="status.pivot"></td>
+                <td ng-bind="status.name"></td>
+                <td class="nowrap" ng-bind="status._id"></td>
+            </tr>
+            <tr ng-show="statuses.length === 0">
+                <td colspan="4">no documents matched</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="well" ng-if="pages.total > 1">
+            <div class="btn-group pull-left">
+                <button disabled class="btn btn-default">Page {{pages.current}} of {{pages.total}}</button>
+                <button disabled class="btn btn-default">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>
+            </div>
+            <div class="btn-group pull-right">
+                <button class="btn btn-default" ng-class="{disabled: !pages.hasPrev}" ng-click="prev()">Prev</button>
+                <button class="btn btn-default" ng-class="{disabled: !pages.hasNext}" ng-click="next()"> Next</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

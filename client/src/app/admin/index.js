@@ -3,5 +3,6 @@ angular.module('admin', [
   'admin.users',
   'admin.accounts',
   'admin.administrators',
-  'admin.admin-groups'
+  'admin.admin-groups',
+  'admin.statuses'
 ]);

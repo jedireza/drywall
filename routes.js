@@ -7,6 +7,7 @@ var adminUser = require('./service/admin/user');
 var adminAccount = require('./service/admin/account');
 var adminAdministrator = require('./service/admin/administrator');
 var adminGroup = require('./service/admin/admin-group');
+var adminStatus = require('./service/admin/status');
 
 function useAngular(req, res, next){
   res.sendFile(require('path').join(__dirname, './client/dist/index.html'));
@@ -153,6 +154,10 @@ exports = module.exports = function(app, passport) {
   app.post('/api/admin/accounts/:id/status', adminAccount.newStatus);
   app.delete('/api/admin/accounts/:id', adminAccount.delete);
 
+  //admin > statuses
+  app.get('/api/admin/statuses', adminStatus.find);
+  app.post('/api/admin/statuses', adminStatus.create);
+
   //admin > search
   app.get('/api/admin/search', admin.search);
 
@@ -217,6 +222,9 @@ exports = module.exports = function(app, passport) {
   //admin > accounts
   app.get('/admin/accounts', useAngular);
   app.get('/admin/accounts/:id', useAngular);
+
+  //admin > statuses
+  app.get('/adminNew/statuses', useAngular);
 
   //******** End OF static routes ********
 
