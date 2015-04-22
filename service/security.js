@@ -41,7 +41,6 @@ var socialLogin = function(provider, req, res, next){
     req.app.db.models.User.findOne(option, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
-        //return next(err);
       }
 
       if (!user) {

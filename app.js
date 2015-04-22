@@ -81,7 +81,7 @@ require('./passport')(app, passport);
 require('./routes')(app, passport);
 
 //custom (friendly) error handler
-app.use(require('./views/http/index').http500);
+app.use(require('./service/http').http500);
 
 //setup utilities
 app.utility = {};

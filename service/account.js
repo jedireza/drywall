@@ -185,7 +185,7 @@ var account = {
       var fieldsToSet = { verificationToken: hash };
       req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
         if (err) {
-          return next(err);
+          return workflow.emit('exception', err);
         }
 
         sendVerificationEmail(req, res, {

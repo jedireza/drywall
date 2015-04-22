@@ -242,8 +242,8 @@ exports = module.exports = function(app, passport) {
   app.get('/admin/categories', useAngular);
   app.get('/admin/categories/:id', useAngular);
 
-  //route not found is handled by Angular
-  app.all('*', useAngular);
+  //other routes not found nor begin with /api is handled by Angular
+  app.all(/^(?!\/api).*$/, useAngular);
 
   //******** End OF static routes ********
 
