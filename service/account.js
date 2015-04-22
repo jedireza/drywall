@@ -1,3 +1,4 @@
+'use strict';
 var getCallbackUrl = function(hostname, provider){
   return 'http://' + hostname + '/account/settings/' + provider + '/callback';
 };

@@ -1,3 +1,4 @@
+'use strict';
 var filterUser = function (user) {
   if (user) {
     return {
