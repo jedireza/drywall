@@ -1,4 +1,4 @@
-angular.module('account.verification', ['security', 'services.utility', 'services.easyRestResource', 'directives.serverError', 'ui.bootstrap']);
+angular.module('account.verification', ['security', 'services.utility', 'services.accountResource', 'directives.serverError', 'ui.bootstrap']);
 angular.module('account.verification').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/account/verification', {
@@ -6,7 +6,7 @@ angular.module('account.verification').config(['$routeProvider', function($route
       controller: 'AccountVerificationCtrl',
       title: 'Verification Required',
       resolve: {
-        upsertVerificationToken: ['$q', '$location', 'easyRestResource', 'securityAuthorization', function($q, $location, restResource, securityAuthorization){
+        upsertVerificationToken: ['$q', '$location', 'accountResource', 'securityAuthorization', function($q, $location, restResource, securityAuthorization){
           //lazy upsert verification only for un-verified user, otherwise redirect to /account
           var redirectUrl;
           var promise = securityAuthorization.requireUnverifiedUser()
@@ -31,7 +31,7 @@ angular.module('account.verification').config(['$routeProvider', function($route
     })
     .when('/account/verification/:token', {
       resolve: {
-        verify: ['$q', '$location', '$route', 'easyRestResource', 'securityAuthorization', function($q, $location, $route, restResource, securityAuthorization){
+        verify: ['$q', '$location', '$route', 'accountResource', 'securityAuthorization', function($q, $location, $route, restResource, securityAuthorization){
           //attemp to verify account only for un-verified user
           var redirectUrl;
           var promise = securityAuthorization.requireUnverifiedUser()
@@ -58,7 +58,7 @@ angular.module('account.verification').config(['$routeProvider', function($route
     })
   ;
 }]);
-angular.module('account.verification').controller('AccountVerificationCtrl', [ '$scope', '$location', '$log', 'easyRestResource', 'security', 'utility',
+angular.module('account.verification').controller('AccountVerificationCtrl', [ '$scope', '$location', '$log', 'accountResource', 'security', 'utility',
   function($scope, $location, $log, restResource, security, utility){
     //model def
     $scope.formVisible = false;

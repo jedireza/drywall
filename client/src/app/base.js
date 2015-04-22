@@ -1,4 +1,4 @@
-angular.module('base',['ngRoute', 'security', 'services.utility', 'services.easyRestResource', 'services.adminResource', 'ui.bootstrap']);
+angular.module('base',['ngRoute', 'security', 'services.utility', 'services.accountResource', 'services.adminResource', 'ui.bootstrap']);
 angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security',
   function ($scope, $location, security) {
     $scope.isAuthenticated = function(){
@@ -81,7 +81,7 @@ angular.module('base').controller('FooterCtrl', ['$scope', 'security',
   }
 ]);
 
-angular.module('base').controller('ContactCtrl', ['$scope', 'utility', 'easyRestResource',
+angular.module('base').controller('ContactCtrl', ['$scope', 'utility', 'accountResource',
   function($scope, utility, restResource){
     // local var
     var successAlert = { type: 'success', msg: 'We have received your message. Thank you.' };

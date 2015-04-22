@@ -6,8 +6,8 @@ angular.module('mock.account.services.security', [])
     };
     return service;
   });
-angular.module('mock.account.services.easyRestResource', [])
-  .factory('easyRestResource', function($q){
+angular.module('mock.account.services.accountResource', [])
+  .factory('accountResource', function($q){
     var service = {};
     service.setAccountDetails = function(){ return $q.when({success: true}); };
     service.setIdentity = function(){ return $q.when({success: true}); };
@@ -16,20 +16,20 @@ angular.module('mock.account.services.easyRestResource', [])
     return service;
   });
 describe('AccountSettingsCtrl', function(){
-  var scope, security, easyRestResource, $location, $log, $q, SOCIAL, accountDetails, detailForm, identityForm, passwordForm;
+  var scope, security, accountResource, $location, $log, $q, SOCIAL, accountDetails, detailForm, identityForm, passwordForm;
 
   // include module contains AccountSettingsCtrl
   beforeEach(module('account'));
 
   // include mocked services for this test
   beforeEach(module('mock.account.services.security'));
-  beforeEach(module('mock.account.services.easyRestResource'));
+  beforeEach(module('mock.account.services.accountResource'));
 
   // prepare common controller dependencies
-  beforeEach(inject(function($compile, _$location_, _$q_, _$log_, $rootScope, $controller, _security_, _easyRestResource_, _SOCIAL_) {
+  beforeEach(inject(function($compile, _$location_, _$q_, _$log_, $rootScope, $controller, _security_, _accountResource_, _SOCIAL_) {
     scope = $rootScope.$new();
     security = _security_;
-    easyRestResource = _easyRestResource_;
+    accountResource = _accountResource_;
     $location = _$location_;
     $log = _$log_;
     SOCIAL = _SOCIAL_;
@@ -55,7 +55,7 @@ describe('AccountSettingsCtrl', function(){
     // instantiate controller to be tested
     beforeEach(inject(function($controller, $compile){
       $controller('AccountSettingsCtrl', {
-        $scope: scope, $location: $location, $log: $log, security: security, easyRestResource: easyRestResource, SOCIAL: SOCIAL, accountDetails: accountDetails
+        $scope: scope, $location: $location, $log: $log, security: security, accountResource: accountResource, SOCIAL: SOCIAL, accountDetails: accountDetails
       });
 
       var element = angular.element( '<form name="detailForm"><input name="first" ng-model="first"><input name="last" ng-model="last"></form>'
@@ -94,10 +94,10 @@ describe('AccountSettingsCtrl', function(){
     });
 
     describe('detailForm', function(){
-      it('should use easyRestResource to set account details', function(){
-        spyOn(easyRestResource, 'setAccountDetails').and.callThrough();
+      it('should use accountResource to set account details', function(){
+        spyOn(accountResource, 'setAccountDetails').and.callThrough();
         scope.submit(detailForm);
-        expect(easyRestResource.setAccountDetails).toHaveBeenCalled();
+        expect(accountResource.setAccountDetails).toHaveBeenCalled();
       });
       it('should remove existing alerts after form submission', function(){
         scope.alerts.detail.push('some alert');
@@ -117,7 +117,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request completed with error', function(){
         var errorMessage = 'error updating account detail';
-        spyOn(easyRestResource, 'setAccountDetails').and.callFake(function(){
+        spyOn(accountResource, 'setAccountDetails').and.callFake(function(){
           return $q.when({
             success: false,
             errors: [errorMessage]
@@ -134,7 +134,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request failed', function(){
         var errorMessage = 'unknown reason';
-        spyOn(easyRestResource, 'setAccountDetails').and.callFake(function(){
+        spyOn(accountResource, 'setAccountDetails').and.callFake(function(){
           return $q.reject(errorMessage);
         });
         expect(scope.alerts.detail.length).toBe(0);
@@ -149,10 +149,10 @@ describe('AccountSettingsCtrl', function(){
     });
 
     describe('identityForm', function(){
-      it('should use easyRestResource to set identity', function(){
-        spyOn(easyRestResource, 'setIdentity').and.callThrough();
+      it('should use accountResource to set identity', function(){
+        spyOn(accountResource, 'setIdentity').and.callThrough();
         scope.submit(identityForm);
-        expect(easyRestResource.setIdentity).toHaveBeenCalled();
+        expect(accountResource.setIdentity).toHaveBeenCalled();
       });
       it('should remove existing alerts after form submission', function(){
         scope.alerts.identity.push('some alert');
@@ -172,7 +172,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request completed with error', function(){
         var errorMessage = 'error updating user identity';
-        spyOn(easyRestResource, 'setIdentity').and.callFake(function(){
+        spyOn(accountResource, 'setIdentity').and.callFake(function(){
           return $q.when({
             success: false,
             errors: [errorMessage],
@@ -194,7 +194,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request failed', function(){
         var errorMessage = 'unknown reason';
-        spyOn(easyRestResource, 'setIdentity').and.callFake(function(){
+        spyOn(accountResource, 'setIdentity').and.callFake(function(){
           return $q.reject(errorMessage);
         });
         expect(scope.alerts.identity.length).toBe(0);
@@ -209,10 +209,10 @@ describe('AccountSettingsCtrl', function(){
     });
 
     describe('passwordForm', function(){
-      it('should use easyRestResource to set identity', function(){
-        spyOn(easyRestResource, 'setPassword').and.callThrough();
+      it('should use accountResource to set identity', function(){
+        spyOn(accountResource, 'setPassword').and.callThrough();
         scope.submit(passwordForm);
-        expect(easyRestResource.setPassword).toHaveBeenCalled();
+        expect(accountResource.setPassword).toHaveBeenCalled();
       });
       it('should remove existing alerts after form submission', function(){
         scope.alerts.pass.push('some alert');
@@ -232,7 +232,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request completed with error', function(){
         var errorMessage = 'error updating password';
-        spyOn(easyRestResource, 'setPassword').and.callFake(function(){
+        spyOn(accountResource, 'setPassword').and.callFake(function(){
           return $q.when({
             success: false,
             errors: [errorMessage]
@@ -249,7 +249,7 @@ describe('AccountSettingsCtrl', function(){
       });
       it('should display error message when request failed', function(){
         var errorMessage = 'unknown reason';
-        spyOn(easyRestResource, 'setPassword').and.callFake(function(){
+        spyOn(accountResource, 'setPassword').and.callFake(function(){
           return $q.reject(errorMessage);
         });
         expect(scope.alerts.pass.length).toBe(0);
@@ -325,7 +325,7 @@ describe('AccountSettingsCtrl', function(){
     it('should be able to display successfully connected to social provider message', function(){
       $location.search('success=true&provider=google');
       $controller('AccountSettingsCtrl', {
-        $scope: scope, $location: $location, $log: $log, security: security, easyRestResource: easyRestResource, SOCIAL: SOCIAL, accountDetails: accountDetails
+        $scope: scope, $location: $location, $log: $log, security: security, accountResource: accountResource, SOCIAL: SOCIAL, accountDetails: accountDetails
       });
 
       var element = angular.element( '<form name="detailForm"><input name="first" ng-model="first"><input name="last" ng-model="last"></form>'
@@ -345,7 +345,7 @@ describe('AccountSettingsCtrl', function(){
     it('should be able to display warning connecting to social provider message', function(){
       $location.search('success=false&provider=google&reason=unknown');
       $controller('AccountSettingsCtrl', {
-        $scope: scope, $location: $location, $log: $log, security: security, easyRestResource: easyRestResource, SOCIAL: SOCIAL, accountDetails: accountDetails
+        $scope: scope, $location: $location, $log: $log, security: security, accountResource: accountResource, SOCIAL: SOCIAL, accountDetails: accountDetails
       });
 
       var element = angular.element( '<form name="detailForm"><input name="first" ng-model="first"><input name="last" ng-model="last"></form>'

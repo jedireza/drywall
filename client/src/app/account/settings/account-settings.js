@@ -1,4 +1,4 @@
-angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.easyRestResource', 'services.utility','ui.bootstrap', 'directives.serverError']);
+angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
@@ -6,11 +6,11 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
       controller: 'AccountSettingsCtrl',
       title: 'Account Settings',
       resolve: {
-        accountDetails: ['$q', '$location', 'securityAuthorization', 'easyRestResource' ,function($q, $location, securityAuthorization, easyRestResource){
+        accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
-            .then(easyRestResource.getAccountDetails, function(reason){
+            .then(accountResource.getAccountDetails, function(reason){
               //rejected either user is unverified or un-authenticated
               redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
               return $q.reject();
@@ -25,7 +25,7 @@ angular.module('account.settings').config(['$routeProvider', 'securityAuthorizat
       }
     });
 }]);
-angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'easyRestResource', 'accountDetails', 'SOCIAL',
+angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'accountResource', 'accountDetails', 'SOCIAL',
   function($scope, $location, $log, security, utility, restResource, accountDetails, SOCIAL){
     //local vars
     var account = accountDetails.account;

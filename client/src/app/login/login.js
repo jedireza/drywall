@@ -1,5 +1,5 @@
-angular.module('login', ['ngRoute', 'login.forgot', 'login.reset', 'login.social', 'config', 'security.service', 'directives.serverError', 'services.utility', 'services.easyRestResource', 'ui.bootstrap']);
-angular.module('login').config(['$routeProvider', function($routeProvider){
+angular.module('login.index', ['ngRoute', 'config', 'security.service', 'directives.serverError', 'services.utility', 'ui.bootstrap']);
+angular.module('login.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/login', {
       templateUrl: 'login/login.tpl.html',
@@ -18,7 +18,7 @@ angular.module('login').config(['$routeProvider', function($routeProvider){
       }
     });
 }]);
-angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'SOCIAL',
+angular.module('login.index').controller('LoginCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'SOCIAL',
   function($scope, $location, $log, security, utility, SOCIAL){
     // local variable
     var loginSuccess = function(data){
@@ -60,6 +60,7 @@ angular.module('login').controller('LoginCtrl', [ '$scope', '$location', '$log',
       $scope.alerts.splice(ind, 1);
     };
     $scope.submit = function(){
+      $scope.alerts = [];
       security.login($scope.user.username, $scope.user.password).then(loginSuccess, loginError);
     };
   }]);

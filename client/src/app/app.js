@@ -8,8 +8,6 @@ angular.module('app', [
   'admin',
   'services.i18nNotifications',
   'services.httpRequestTracker',
-  'services.easyRestResource',
-  'services.adminResource',
   'security',
   'templates.app',
   'templates.common',

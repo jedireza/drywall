@@ -1,5 +1,5 @@
-angular.module('mock.services.easyRestResource', [])
-  .factory('easyRestResource', function($q){
+angular.module('mock.services.accountResource', [])
+  .factory('accountResource', function($q){
     var service = {};
     service.sendMessage = function(data){
       return $q.when({ success: true }); //return a promise that's immediately resolved
@@ -13,13 +13,13 @@ describe('ContactCtrl', function(){
   beforeEach(module('base'));
 
   // include mocked easyRestService for this test
-  beforeEach(module('mock.services.easyRestResource'));
+  beforeEach(module('mock.services.accountResource'));
 
   // instantiate controller to be tested
-  beforeEach(inject(function(_$q_, $compile, $rootScope, $log, $controller, _easyRestResource_) {
+  beforeEach(inject(function(_$q_, $compile, $rootScope, $log, $controller, _accountResource_) {
     $q = _$q_;
     scope = $rootScope.$new();
-    restResource = _easyRestResource_;
+    restResource = _accountResource_;
 
     $controller('ContactCtrl', {
       $scope: scope, restResource: restResource, $log: $log
@@ -40,7 +40,7 @@ describe('ContactCtrl', function(){
     scope.$digest();
   }));
   describe('should be able to send message', function(){
-    it('by calling easyRestResource', function(){
+    it('by calling accountResource', function(){
       spyOn(restResource, 'sendMessage').and.callThrough();
       scope.submit();
       expect(restResource.sendMessage).toHaveBeenCalled();

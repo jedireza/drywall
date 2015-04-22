@@ -1,4 +1,4 @@
-angular.module('services.easyRestResource', ['security.service']).factory('easyRestResource', ['$http', '$q', '$log', 'security', function ($http, $q, $log, security) {
+angular.module('services.accountResource', ['security.service']).factory('accountResource', ['$http', '$q', '$log', 'security', function ($http, $q, $log, security) {
   // local variable
   var baseUrl = '/api';
   var processResponse = function(res){

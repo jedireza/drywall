@@ -1,5 +1,5 @@
 describe('AccountVerificationCtrl', function(){
-  var scope, security, easyRestResource, $location, $log, $q, form;
+  var scope, security, accountResource, $location, $log, $q, form;
 
   // include module contains AccountVerificationCtrl
   beforeEach(module('account'));
@@ -7,19 +7,19 @@ describe('AccountVerificationCtrl', function(){
   // include mocked services for this test
   // defined in account-settings-ctrl.spec.js
   beforeEach(module('mock.account.services.security'));
-  beforeEach(module('mock.account.services.easyRestResource'));
+  beforeEach(module('mock.account.services.accountResource'));
 
   // instantiate controller to be tested
-  beforeEach(inject(function($compile, _$location_, _$q_, _$log_, $rootScope, $controller, _security_, _easyRestResource_) {
+  beforeEach(inject(function($compile, _$location_, _$q_, _$log_, $rootScope, $controller, _security_, _accountResource_) {
     scope = $rootScope.$new();
     security = _security_;
     security.currentUser = { email: 'jdoe@gmail.com' };
-    easyRestResource = _easyRestResource_;
+    accountResource = _accountResource_;
     $location = _$location_;
     $log = _$log_;
     $q = _$q_;
     $controller('AccountVerificationCtrl', {
-      $scope: scope, $location: $location, $log: $log, security: security, easyRestResource: easyRestResource
+      $scope: scope, $location: $location, $log: $log, security: security, accountResource: accountResource
     });
 
     var element = angular.element( '<form name="verificationForm"><input name="email" ng-model="email"></form>');
@@ -38,10 +38,10 @@ describe('AccountVerificationCtrl', function(){
     scope.showForm();
     expect(scope.formVisible).toBe(true);
   });
-  it('should use easyRestResource to resend verification email', function(){
-    spyOn(easyRestResource, 'resendVerification').and.callThrough();
+  it('should use accountResource to resend verification email', function(){
+    spyOn(accountResource, 'resendVerification').and.callThrough();
     scope.submit();
-    expect(easyRestResource.resendVerification).toHaveBeenCalled();
+    expect(accountResource.resendVerification).toHaveBeenCalled();
   });
   it('should reset previous alerts', function(){
     scope.alerts.push('some old alert');
@@ -63,7 +63,7 @@ describe('AccountVerificationCtrl', function(){
   });
   it('should display error message when request completed with error', function(){
     var errorMessage = 'email already registered';
-    spyOn(easyRestResource, 'resendVerification').and.callFake(function(){
+    spyOn(accountResource, 'resendVerification').and.callFake(function(){
       return $q.when({
         success: false,
         errfor: {
@@ -78,7 +78,7 @@ describe('AccountVerificationCtrl', function(){
   });
   it('should display error message when request failed', function(){
     var errorMessage = 'unknown reason';
-    spyOn(easyRestResource, 'resendVerification').and.callFake(function(){
+    spyOn(accountResource, 'resendVerification').and.callFake(function(){
       return $q.reject(errorMessage);
     });
     expect(scope.alerts.length).toBe(0);
