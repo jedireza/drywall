@@ -1,5 +1,5 @@
-angular.module('account', ['ngRoute', 'account.settings', 'account.verification', 'security.authorization']);
-angular.module('account').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
+angular.module('account.index', ['ngRoute', 'security.authorization']);
+angular.module('account.index').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
   $routeProvider
     .when('/account', {
       templateUrl: 'account/account.tpl.html',
@@ -10,7 +10,7 @@ angular.module('account').config(['$routeProvider', 'securityAuthorizationProvid
       }
     });
 }]);
-angular.module('account').controller('AccountCtrl', [ '$scope',
+angular.module('account.index').controller('AccountCtrl', [ '$scope',
   function($scope){
     $scope.dayOfYear = moment().format('DDD');
     $scope.dayOfMonth = moment().format('D');
