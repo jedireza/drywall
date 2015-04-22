@@ -43,7 +43,6 @@ app.set('view engine', 'jade');
 app.use(require('morgan')('dev'));
 app.use(require('compression')());
 app.use(require('serve-static')(path.join(__dirname, 'client/dist')));
-app.use(require('serve-static')(path.join(__dirname, 'public')));
 app.use(require('method-override')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
