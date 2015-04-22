@@ -1,5 +1,6 @@
 'use strict';
 
+var preAuth = require('./service/pre-auth');
 var security = require('./service/security');
 var account = require('./service/account');
 var admin = require('./service/admin');
@@ -54,15 +55,14 @@ function apiEnsureAdmin(req, res, next){
 exports = module.exports = function(app, passport) {
   //******** NEW JSON API ********
   app.get('/api/current-user', security.sendCurrentUser);
-  app.post('/api/sendMessage', require('./views/contact/index').sendMessage);
-  //TODO: move signup/login api handlers to security service
-  app.post('/api/signup', require('./views/signup/index').signup);
+  app.post('/api/sendMessage', preAuth.sendMessage);
+  app.post('/api/signup', security.signup);
   app.post('/api/login', security.login);
-  app.post('/api/login/forgot', require('./views/login/forgot/index').send);
-  app.put('/api/login/reset/:email/:token', require('./views/login/reset/index').set);
-  app.post('/api/logout/', security.logout);
+  app.post('/api/login/forgot', security.forgotPassword);
+  app.put('/api/login/reset/:email/:token', security.resetPassword);
   app.get('/api/login/facebook/callback', security.loginFacebook);
   app.get('/api/login/google/callback', security.loginGoogle);
+  app.post('/api/logout', security.logout);
 
   //-----authentication required api-----
   app.all('/api/account*', apiEnsureAuthenticated);
