@@ -33,6 +33,9 @@ function apiEnsureAccount(req, res, next){
 }
 
 function apiEnsureVerifiedAccount(req, res, next){
+  if(!req.app.config.requireAccountVerification){
+    return next();
+  }
   req.user.isVerified(function(err, flag){
     if(err){
       return next(err);
