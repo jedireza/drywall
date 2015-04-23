@@ -1,4 +1,7 @@
-# Angular-Drywall  ![Build Status](https://travis-ci.org/arthurkao/angular-drywall.svg)
+# Angular-Drywall
+
+[![Build Status via Travis CI](https://travis-ci.org/arthurkao/angular-drywall.svg)](https://travis-ci.org/arthurkao/angular-drywall)
+
 
 A website and user system, implemented with [MongoDB](https://www.mongodb.org/), [Express](http://expressjs.com/), [AngularJS](https://angularjs.org/) and [Node.js](https://nodejs.org/), a.k.a MEAN stack.
 Inspired by and forked from [Drywall](https://github.com/jedireza/drywall).
