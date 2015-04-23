@@ -16,8 +16,13 @@ describe('securityAuthorization', function() {
     expect(resolved).toBe(false);
   };
 
-  angular.module('test', []).value('I18N.MESSAGES', {});
-  beforeEach(module('test', 'security.authorization', 'security/login/form.tpl.html'));
+  beforeEach(module('config'));
+  beforeEach(function() {
+    module(function($provide) {
+      $provide.constant('REQUIRE_ACCOUNT_VERIFICATION', true);
+    });
+  });
+  beforeEach(module('security.authorization', 'security/login/form.tpl.html'));
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
     securityAuthorization = $injector.get('securityAuthorization');
