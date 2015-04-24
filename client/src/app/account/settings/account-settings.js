@@ -149,12 +149,15 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       email:    user.email
     };
     $scope.pass = {};
-    $scope.social = SOCIAL;
-    if(user.google && user.google.id){
-      $scope.social.google.connected = true;
-    }
-    if(user.facebook && user.facebook.id){
-      $scope.social.facebook.connected = true;
+    $scope.social = null;
+    if(!angular.equals({}, SOCIAL)){
+      $scope.social = SOCIAL;
+      if(user.google && user.google.id){
+        $scope.social.google.connected = true;
+      }
+      if(user.facebook && user.facebook.id){
+        $scope.social.facebook.connected = true;
+      }
     }
 
     $scope.socialAlerts = [];
@@ -200,6 +203,10 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
           return;
       }
     };
-    $scope.disconnect = disconnect;
+    $scope.disconnect = function(provider){
+      if($scope.social){
+        disconnect(provider);
+      }
+    };
   }
 ]);

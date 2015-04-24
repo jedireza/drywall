@@ -44,7 +44,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
     $scope.user = {};
     $scope.alerts = [];
     $scope.errfor = {};
-    $scope.social = SOCIAL;
+    $scope.social = angular.equals({}, SOCIAL)? null: SOCIAL;
 
     // method def
     $scope.hasError = utility.hasError;

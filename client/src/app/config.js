@@ -1,6 +1,14 @@
+//----- angular app configuration-----
 angular.module('config', []);
 angular.module('config')
+  .constant('ENABLE_SOCIAL', {
+    facebook: false,
+    google: false
+  })
   .constant('REQUIRE_ACCOUNT_VERIFICATION', false)
+;
+//----- end of configuration -----
+angular.module('config')
   .constant('XSRF_COOKIE_NAME', '_csrfToken')
   .constant('I18N.MESSAGES', {
     'errors.route.changeError':'Route change error',
@@ -16,7 +24,9 @@ angular.module('config')
     'login.error.invalidCredentials': "Login failed.  Please check your credentials and try again.",
     'login.error.serverError': "There was a problem with authenticating: {{exception}}."
   })
-  .constant('SOCIAL', {
+;
+angular.module('config').config(['$provide', 'ENABLE_SOCIAL', function($provide, ENABLE_SOCIAL){
+  var setting = {
     'facebook': {
       text: 'Facebook',
       icon: 'fa-facebook-square',
@@ -29,5 +39,14 @@ angular.module('config')
       login: '/login/google',
       connect: '/account/settings/google/'
     }
-  })
-;
+  };
+  var social = {};
+  angular.forEach(ENABLE_SOCIAL, function(enable, key){
+    if(enable){
+      social[key] = setting[key];
+    }
+  });
+
+  // programmatically set constant, 'SOCIAL', in config module
+  $provide.constant('SOCIAL', social);
+}]);

@@ -50,7 +50,7 @@ angular.module('login.index').controller('LoginCtrl', [ '$scope', '$location', '
     $scope.user = {};
     $scope.alerts = [];
     $scope.errfor = {};
-    $scope.social = SOCIAL;
+    $scope.social = angular.equals({}, SOCIAL)? null: SOCIAL;
 
     // method def
     $scope.hasError = utility.hasError;

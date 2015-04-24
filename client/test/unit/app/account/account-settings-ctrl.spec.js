@@ -15,6 +15,21 @@ angular.module('mock.account.services.accountResource', [])
     service.resendVerification = function(){ return $q.when({ success: true }); };
     return service;
   });
+angular.module('mock.config', [])
+  .constant('SOCIAL', {
+    'facebook': {
+      text: 'Facebook',
+      icon: 'fa-facebook-square',
+      login: '/login/facebook',
+      connect: '/account/settings/facebook/'
+    },
+    'google': {
+      text: 'Google',
+      icon: 'fa-google-plus-square',
+      login: '/login/google',
+      connect: '/account/settings/google/'
+    }
+  });
 describe('AccountSettingsCtrl', function(){
   var scope, security, accountResource, $location, $log, $q, SOCIAL, accountDetails, detailForm, identityForm, passwordForm;
 
@@ -22,6 +37,7 @@ describe('AccountSettingsCtrl', function(){
   beforeEach(module('account'));
 
   // include mocked services for this test
+  beforeEach(module('mock.config'));
   beforeEach(module('mock.account.services.security'));
   beforeEach(module('mock.account.services.accountResource'));
 
