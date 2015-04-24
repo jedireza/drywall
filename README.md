@@ -65,7 +65,7 @@ Interactively setup basic website and necessary database configurations.
 $ node init.js
 ```
 
-Alternatively, modify config.example.js and initialize database manually. Not recommended.
+*Alternatively,* modify config.example.js and initialize database manually. __Not recommended.__
 
 ```bash
 $ cp ./config.example.js ./config.js
