@@ -93,7 +93,7 @@ workflow.on('collectUserInput', function(){
     });
   }, function(cb){
     //3. smtp email server and password
-    console.log('=====(Optional) Set Smtp server credential=====');
+    console.log('=====(Optional) Set smtp server credential (to send notification email)=====');
     var schema = {
       properties: {
         email: {
