@@ -97,7 +97,7 @@ workflow.on('collectUserInput', function(){
     var schema = {
       properties: {
         email: {
-          description: 'smtp email',
+          description: 'smtp username',
           default: workflow.admin.email
         },
         password: {
