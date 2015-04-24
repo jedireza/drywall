@@ -132,4 +132,4 @@ Contributions are welcome.
 
 ## License
 
-MITS
+MIT
