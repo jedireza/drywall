@@ -1,0 +1,74 @@
+extends ../../layouts/default
+
+block head
+  title Posts
+
+block neck
+  link(rel='stylesheet', href='/views/posts/index.min.css?#{cacheBreaker}')
+
+block feet
+  script(src='/views/posts/index.min.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-xs-12
+      div#header
+        div.page-header
+          h1 Posts
+      div#filters
+      div#results-table
+      div#results-paging
+
+  script(type='text/template', id='tmpl-filters')
+    form.filters
+      div.row
+        div.col-sm-3
+          label Search By Category
+          input.form-control(name='pivot', type='text')
+        div.col-sm-3
+          label Search By Title
+          input.form-control(name='title', type='text')
+        div.col-sm-3
+          label Sort By
+          select.form-control(name='sort')
+            option(value='userCreated.time') time &#9650;
+            option(value='-userCreated.time') time &#9660;
+            option(value='title') title &#9650;
+            option(value='-title') title &#9660;
+        div.col-sm-3
+          label View
+          select.form-control(name='limit')
+            option(value='10') 10 items
+            option(value='20', selected='selected') 20 items
+            option(value='50') 50 items
+            option(value='100') 100 items
+
+  script(type='text/template', id='tmpl-results-table')
+    div.row#results-rows
+
+  script(type='text/template', id='tmpl-results-row')
+    h2: a#title <%- title %>
+    div.col-xs-12.post-info
+      ul.list-inline.post-info
+        li.post-info-item#post-date <%- moment(userCreated.time).format("MMMM Do YYYY, h:mm:ss a") %> 
+        li.post-info-item#author By <%- userCreated.name %>
+        li.post-info-item#category In 
+          a(href!="/posts/#q/pivot=<%- pivot %>") <%- pivot %>
+    div.col-xs-12.content
+      //- input.btn.btn-default.btn-sm.btn-details(type='button', value='Read More')
+
+  script(type='text/template', id='tmpl-results-empty-row')
+    tr
+      td(colspan='4') no documents matched
+
+  script(type='text/template', id='tmpl-results-paging')
+    div.well
+      div.btn-group.pull-left
+        button.btn.btn-default(disabled=true) Page <%= pages.current %> of <%= pages.total %>
+        button.btn.btn-default(disabled=true) Rows <%= items.begin %> - <%= items.end %> of <%= items.total %>
+      div.btn-group.pull-right
+        button.btn.btn-default.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
+        button.btn.btn-default.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
+      div.clearfix
+
+  script(type='text/template', id='data-results') !{data.results}

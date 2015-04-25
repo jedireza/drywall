@@ -1,0 +1,89 @@
+extends ../../../layouts/admin
+
+block head
+  title Manage Posts
+
+block neck
+  link(rel='stylesheet', href='/views/admin/posts/index.min.css?#{cacheBreaker}')
+
+block feet
+  script(src='/vendor/momentjs/moment.js')
+  script(src='/views/admin/posts/index.min.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-xs-12
+      div#header
+      div#filters
+      div#results-table
+      div#results-paging
+
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      form.form-inline.pull-right
+        div.input-group
+          input.form-control(name='pivot', type='text', placeholder='category', value!='<%= pivot %>')
+          input.form-control(name='title', type='text', placeholder='title', value!='<%= name %>')
+          button.btn.btn-primary.btn-add(type='button') Add New
+      h1 Posts
+
+  script(type='text/template', id='tmpl-filters')
+    form.filters
+      div.row
+        div.col-sm-3
+          label Category Search
+          input.form-control(name='pivot', type='text')
+        div.col-sm-3
+          label Title Search
+          input.form-control(name='title', type='text')
+        div.col-sm-3
+          label Sort By
+          select.form-control(name='sort')
+            option(value='_id') id &#9650;
+            option(value='-_id') id &#9660;
+            option(value='title') title &#9650;
+            option(value='-title') title &#9660;
+            option(value='userCreated.time') time &#9650;
+            option(value='-userCreated.time') time &#9660;
+        div.col-sm-3
+          label Limit
+          select.form-control(name='limit')
+            option(value='10') 10 items
+            option(value='20', selected='selected') 20 items
+            option(value='50') 50 items
+            option(value='100') 100 items
+
+  script(type='text/template', id='tmpl-results-table')
+    table.table.table-striped
+      thead
+        tr
+          th
+          th category
+          th.stetch title
+          th time created
+          th id
+      tbody#results-rows
+
+  script(type='text/template', id='tmpl-results-row')
+    td
+      input.btn.btn-default.btn-sm.btn-details(type='button', value='Edit')
+    td <%- pivot %>
+    td <%- title %>
+    td <%- moment(userCreated.time).format("MMMM Do YYYY, h:mm:ss a") %>
+    td.nowrap <%= _id %>
+
+  script(type='text/template', id='tmpl-results-empty-row')
+    tr
+      td(colspan='4') no documents matched
+
+  script(type='text/template', id='tmpl-results-paging')
+    div.well
+      div.btn-group.pull-left
+        button.btn.btn-default(disabled=true) Page <%= pages.current %> of <%= pages.total %>
+        button.btn.btn-default(disabled=true) Rows <%= items.begin %> - <%= items.end %> of <%= items.total %>
+      div.btn-group.pull-right
+        button.btn.btn-default.btn-page.btn-prev(data-page!='<%= pages.prev %>') Prev
+        button.btn.btn-default.btn-page.btn-next(data-page!='<%= pages.next %>')  Next
+      div.clearfix
+
+  script(type='text/template', id='data-results') !{data.results}

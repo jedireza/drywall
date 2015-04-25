@@ -1,0 +1,74 @@
+extends ../../../layouts/admin
+
+block head
+  title Statuses / Details
+  link(rel='stylesheet', href='/views/admin/posts/details.min.css')
+  link(rel='stylesheet', href='/vendor/medium-editor/dist/css/themes/bootstrap.min.css')
+  link(rel='stylesheet', href='/vendor/medium-editor/dist/css/medium-editor.min.css')
+
+block feet
+  script(src='/vendor/medium-editor/dist/js/medium-editor.min.js')
+  script(src='/views/admin/posts/details.min.js?#{cacheBreaker}')
+  script(src='/vendor/momentjs/moment.js')
+
+block body
+  div.row
+    div.col-xs-12
+      div#header
+      div#details
+      div#delete
+
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      h1
+        a(href='/admin/posts/') Posts
+        |  / <%- title %>
+
+  script(type='text/template', id='tmpl-details')
+    fieldset
+      legend Details
+        span.pull-right Created on <%- moment(userCreated.time).format("MMMM Do YYYY, h:mm:ss a") %>
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-danger.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%- err %>
+        |<% }); %>
+        |<% if (success) { %>
+        div.alert.alert-info.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          | Changes have been saved.
+        |<% } %>
+      div.form-group(class!='<%- errfor.pivot ? "has-error" : "" %>')
+        label Category:
+        input.form-control(type='text', name='pivot', value!='<%- pivot %>')
+        span.help-block <%- errfor.pivot %>
+      div.form-group(class!='<%- errfor.title ? "has-error" : "" %>')
+        label Title:
+        input.form-control(type='text', name='title', value!='<%- title %>')
+        span.help-block <%- errfor.title %>
+      div.form-group(class!='<%- errfor.content ? "has-error" : "" %>')
+        label Content:
+        div.form-control#editable <%= content %>
+        span.help-block <%- errfor.content %>
+      div.form-group
+        button.btn.btn-primary.btn-update(type='button') Update
+
+  script(type='text/template', id='tmpl-delete')
+    fieldset
+      legend Danger Zone
+      div.alerts
+        |<% _.each(errors, function(err) { %>
+        div.alert.alert-danger.alert-dismissable
+          button.close(type='button', data-dismiss='alert') &times;
+          |<%- err %>
+        |<% }); %>
+      div.form-group
+        span.help-block
+          span.label.label-danger If you do this, it cannot be undone.
+          |&nbsp;
+          span.text-muted You may also create orphaned document relationships too.
+      div.form-group
+        button.btn.btn-danger.btn-delete(type='button') Delete
+
+  script(type='text/template', id='data-record') !{data.record}
