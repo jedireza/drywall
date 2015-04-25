@@ -135,6 +135,7 @@ Login. Customize. Enjoy.
  - Admin groups with shared permission settings.
  - Administrator level permissions that override group permissions.
  - Global admin quick search component.
+ - Blog posting system.
 
 
 ## Questions and contributing
