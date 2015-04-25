@@ -19,7 +19,7 @@ angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'securit
     };
   }
 ]);
-angular.module('base').controller('AdminSearchCtrl' ,['$scope', 'adminResource',
+angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource',
   function($scope, adminResource){
 
     var clearSearchDropdown = function(){
@@ -64,9 +64,19 @@ angular.module('base').controller('AdminSearchCtrl' ,['$scope', 'adminResource',
       }
     };
 
+    $scope.closeAdminMenu = function(){
+      $scope.adminMenuCollapsed = true;
+    };
+
+    $scope.toggleAdminMenu = function(){
+      $scope.adminMenuCollapsed = !$scope.adminMenuCollapsed;
+    };
+
+    // set $scope vars initial value
     $scope.resultIsOpen = false;
     $scope.query = "";
     $scope.result = {};
+    $scope.adminMenuCollapsed = true;
   }
 ]);
 angular.module('base').controller('FooterCtrl', ['$scope', 'security',

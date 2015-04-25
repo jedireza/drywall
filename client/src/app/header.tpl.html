@@ -6,10 +6,13 @@
                 <img src="/img/logo-symbol-64x64.png" class="navbar-logo">
                 <span class="navbar-brand-label">Angular Drywall</span>
             </a>
-            <button data-toggle="collapse" data-target=".my-navbar-collapse" class="navbar-toggle collapsed"><span
-                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <button class="navbar-toggle btn navbar-btn" ng-init="menuCollapsed = true" ng-click="menuCollapsed = !menuCollapsed">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-        <div class="navbar-collapse my-navbar-collapse collapse">
+        <div class="navbar-collapse collapse" collapse="menuCollapsed" ng-click="menuCollapsed = true">
             <ul class="nav navbar-nav">
                 <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/')}"><a href="/">Home</a></li>
                 <li ng-if="!isAuthenticated()" ng-class="{active: isActive('/about')}"><a href="/about">About</a></li>
@@ -25,30 +28,33 @@
         </div>
     </div>
 </div>
-<div class="navbar navbar-inverse navbar-fixed-top" ng-if="isAdmin()">
+<div class="navbar navbar-inverse navbar-fixed-top" ng-if="isAdmin()" ng-controller="AdminHeaderCtrl">
     <div class="container">
         <div class="navbar-header">
             <a href="/admin/" class="navbar-brand-admin">
                 <img src="/img/logo-symbol-64x64.png" class="navbar-logo">
                 <span class="navbar-brand-label">Angular Drywall</span>
             </a>
-            <button data-toggle="collapse" data-target=".my-navbar-collapse" class="navbar-toggle collapsed"><span
-                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <button class="navbar-toggle btn navbar-btn" ng-click="toggleAdminMenu()">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-        <div class="navbar-collapse my-navbar-collapse collapse" ng-controller="AdminSearchCtrl">
+        <div class="navbar-collapse collapse" collapse="adminMenuCollapsed">
             <ul class="nav navbar-nav">
                 <li class="dropdown" dropdown is-open="status.isopen">
                     <a href="#" class="dropdown-toggle navbar-dropdown-admin" dropdown-toggle>System&nbsp;<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">Pivoted Settings</li>
-                        <li><a href="/admin/statuses">Statuses</a></li>
-                        <li><a href="/admin/categories">Categories</a></li>
+                        <li><a href="/admin/statuses" ng-click="closeAdminMenu()">Statuses</a></li>
+                        <li><a href="/admin/categories" ng-click="closeAdminMenu()">Categories</a></li>
                         <li class="divider"></li>
                         <li class="dropdown-header">User Admin</li>
-                        <li><a href="/admin/users">Users</a></li>
-                        <li><a href="/admin/accounts">Accounts</a></li>
-                        <li><a href="/admin/administrators">Administrators</a></li>
-                        <li><a href="/admin/admin-groups">Admin Groups</a></li>
+                        <li><a href="/admin/users" ng-click="closeAdminMenu()">Users</a></li>
+                        <li><a href="/admin/accounts" ng-click="closeAdminMenu()">Accounts</a></li>
+                        <li><a href="/admin/administrators" ng-click="closeAdminMenu()">Administrators</a></li>
+                        <li><a href="/admin/admin-groups" ng-click="closeAdminMenu()">Admin Groups</a></li>
                     </ul>
                 </li>
             </ul>
@@ -59,15 +65,15 @@
                         <li class="dropdown-header" ng-show="showDropdownHeader('noDocsMatched')">no docs matched</li>
                         <li class="dropdown-header" ng-show="showDropdownHeader('Users')">Users</li>
                         <li ng-repeat="user in result.users">
-                            <a ng-bind="user.username" ng-href="/admin/users/{{user._id}}"></a>
+                            <a ng-bind="user.username" ng-href="/admin/users/{{user._id}}" ng-click="closeAdminMenu()"></a>
                         </li>
                         <li class="dropdown-header" ng-show="showDropdownHeader('Accounts')">Accounts</li>
                         <li ng-repeat="account in result.accounts">
-                            <a ng-bind="account.name.full" ng-href="/admin/accounts/{{account._id}}"></a>
+                            <a ng-bind="account.name.full" ng-href="/admin/accounts/{{account._id}}" ng-click="closeAdminMenu()"></a>
                         </li>
                         <li class="dropdown-header" ng-show="showDropdownHeader('Administrators')">Administrators</li>
                         <li ng-repeat="admin in result.administrators">
-                            <a ng-bind="admin.name.full" ng-href="/admin/administrators/{{admin._id}}"></a>
+                            <a ng-bind="admin.name.full" ng-href="/admin/administrators/{{admin._id}}" ng-click="closeAdminMenu()"></a>
                         </li>
                     </ul>
                 </div>
