@@ -43,11 +43,11 @@ exports = module.exports = function(app, mongoose) {
   userSchema.methods.defaultReturnUrl = function() {
     var returnUrl = '/';
     if (this.canPlayRoleOf('account')) {
-      returnUrl = '/account/';
+      returnUrl = '/account';
     }
 
     if (this.canPlayRoleOf('admin')) {
-      returnUrl = '/admin/';
+      returnUrl = '/admin';
     }
 
     return returnUrl;

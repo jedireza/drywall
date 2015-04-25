@@ -492,6 +492,7 @@ var security = {
               return workflow.emit('exception', err);
             }
             workflow.outcome.user = filterUser(req.user);
+            workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
             workflow.emit('response');
           });
         }
