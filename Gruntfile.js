@@ -41,6 +41,10 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'node_modules/underscore/',
             src: ['underscore.js'], dest: 'public/vendor/underscore/'
+          },
+          {
+            expand: true, cwd: 'node_modules/medium-editor/',
+            src: ['dist/**'], dest: 'public/vendor/medium-editor/'
           }
         ]
       }

@@ -1,0 +1,34 @@
+extends ../../layouts/default
+
+block head
+  title Posts / Details
+  link(rel='stylesheet', href='/views/posts/details.min.css?#{cacheBreaker}')
+
+block feet
+  script(src='/vendor/momentjs/moment.js')
+  script(src='/views/posts/details.min.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-xs-12
+      div#header
+      div#details
+      div#delete
+
+  script(type='text/template', id='tmpl-header')
+    div.page-header
+      h1
+        a(href='/posts/') Posts
+        |  / <%- title %>
+
+  script(type='text/template', id='tmpl-details')
+    div.col-xs-12.post-info
+      ul.list-inline.post-info
+        li.post-info-item#post-date <%- moment(userCreated.time).format("MMMM Do YYYY, h:mm:ss a") %> 
+        li.post-info-item#author By <%- userCreated.name %>
+        li.post-info-item#category In 
+          a(href!="/posts/#q/pivot=<%- pivot %>") <%- pivot %>
+    div.col-xs-12.post-content
+      p <%= content %>
+
+  script(type='text/template', id='data-record') !{data.record}
