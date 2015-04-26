@@ -194,7 +194,7 @@ angular.module('security.service', [
       return !!service.currentUser;
     },
     
-    // Is the current user an adminstrator?
+    // Is the current user an administrator?
     isAdmin: function() {
       return !!(service.currentUser && service.currentUser.admin);
     }
