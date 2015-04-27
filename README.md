@@ -32,7 +32,8 @@ Angular-Drywall's backend is pure Node.js RESTful API Server that renders no htm
 
 ## Live demo
 
-Coming soon...
+[http://angular-drywall.arthurkao.io](http://angular-drywall.arthurkao.io)
+Hosted on AWS
 
 
 ## Requirements
