@@ -12,9 +12,10 @@ Inspired by and forked from [Drywall](https://github.com/jedireza/drywall).
     - Use only the client as a non-trivial AngularJS project starter, or
     - Use only the sever as a pure User Management JSON API server.
  - Stand alone RESTful API service capable of serving any http clients, including iOS and Android app.
- - Social Login enabled currently for Facebook and Google.
+ - Social Login enabled currently for __Facebook__ and __Google__.
  - Fully functional user life cycle management.
  - Admin panel provides full CRUD UI on all database entity.
+ - Responsive web design supports Mobile-First Development.
 
 ## Technology
 
