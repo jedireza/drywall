@@ -8,9 +8,9 @@ Inspired by and forked from [Drywall](https://github.com/jedireza/drywall).
 ## Features
 
  - Versatility because you can
+    - Hack your next awesome MEAN stack web app on top of [Angular-Drywall](http://angular-drywall.arthurkao.io), or
     - Use only the client as a non-trivial AngularJS project starter, or
-    - Use only the sever as a pure JSON API server, or
-    - Use both as the first step when building your next awesome MEAN web app.
+    - Use only the sever as a pure User Management JSON API server.
  - Stand alone RESTful API service capable of serving any http clients, including iOS and Android app.
  - Social Login enabled currently for Facebook and Google.
  - Fully functional user life cycle management.
@@ -101,7 +101,7 @@ Login. Customize. Enjoy.
 
 ## Philosophy
 
- - Starter website with user management up and running in 5 minutes.
+ - MEAN stack web app starter with user management up and running in 5 minutes.
  - Carefully built on top of latest state-of-the-art javascript technologies.
  - RESTful API service that easily serves non-browser (iOS, Android, among others) clients.
  - [Single page web application](http://en.wikipedia.org/wiki/Single-page_application).
