@@ -21,7 +21,7 @@
                 <li ng-if="isAuthenticated()" ng-class="{active: isActive('/account')}"><a href="/account">My Account</a></li>
                 <li ng-if="isAuthenticated()" ng-class="{active: isActive('/account/settings')}"><a href="/account/settings">Settings</a></li>
             </ul>
-            <ul class="nav navbar-nav pull-right">
+            <ul class="nav navbar-nav navbar-right">
                 <li ng-if="!isAuthenticated()"><a href="/login"><i class="fa fa-user"></i> Sign In</a></li>
                 <li ng-if="isAuthenticated()"><a href="" ng-click="logout()"><i class="fa fa-user"></i> Sign Out</a></li>
             </ul>
@@ -58,7 +58,7 @@
                     </ul>
                 </li>
             </ul>
-            <form name="form" class="navbar-form pull-right">
+            <form name="form" class="navbar-form navbar-right">
                 <div class="dropdown" dropdown is-open="resultIsOpen">
                     <input name="search" type="text" placeholder="search" class="form-control" ng-model="query" ng-model-options="{ debounce: 500 }" ng-change="update()">
                     <ul class="dropdown-menu">
