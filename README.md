@@ -1,4 +1,4 @@
-# Angular-Drywall
+# [Angular-Drywall](http://arthurkao.github.io/angular-drywall)
 
 [![Build Status](https://travis-ci.org/arthurkao/angular-drywall.svg?branch=master)](https://travis-ci.org/arthurkao/angular-drywall)
 
@@ -8,7 +8,7 @@ Inspired by and forked from [Drywall](https://github.com/jedireza/drywall).
 ## Features
 
  - Versatility because you can
-    - Hack your next awesome MEAN stack web app on top of [Angular-Drywall](http://angular-drywall.arthurkao.io), or
+    - Hack your next awesome MEAN stack web app on top of [Angular-Drywall](http://arthurkao.github.io/angular-drywall), or
     - Use only the client as a non-trivial AngularJS project starter, or
     - Use only the sever as a pure User Management JSON API server.
  - Stand alone RESTful API service capable of serving any http clients, including iOS and Android app.
@@ -19,7 +19,7 @@ Inspired by and forked from [Drywall](https://github.com/jedireza/drywall).
 
 ## Technology
 
-Angular-Drywall's backend is pure Node.js RESTful API Server that renders no html pages . Front-end is built with [AngularJS](https://angularjs.org/), [Bootstrap](https://angular-ui.github.io/bootstrap/) and [SASS](http://sass-lang.com/).
+[Angular-Drywall](http://arthurkao.github.io/angular-drywall)'s backend is pure Node.js RESTful API Server that renders no html pages . Front-end is built with [AngularJS](https://angularjs.org/), [Bootstrap](https://angular-ui.github.io/bootstrap/) and [SASS](http://sass-lang.com/).
 [Grunt](http://gruntjs.com/) manages various development, testing and production build tasks.
 
 | On The Server  | On The Client | Development |
@@ -95,7 +95,7 @@ $ grunt
 # [nodemon] starting `node app.js`
 ```
 
-Now Angular-Drywall should be up and running at `http://localhost:3000`.
+Now [Angular-Drywall](http://arthurkao.github.io/angular-drywall) should be up and running at `http://localhost:3000`.
 
 Login. Customize. Enjoy.
 
