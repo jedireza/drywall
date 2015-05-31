@@ -113,7 +113,8 @@ module.exports = function(grunt) {
       dev: {
         options: {
           style: 'expanded',
-          compass: false
+          compass: false,
+          loadPath: '.'
         },
         files: {
           '<%= distdir %>/css/style.css': 'client/src/assets/sass/style.scss'
