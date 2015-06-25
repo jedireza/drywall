@@ -47,6 +47,7 @@
     "grunt-contrib-watch": "^0.6.x",
     "grunt-newer": "^1.x.x",
     "grunt-nodemon": "^0.4.x",
+    "grunt-penthouse": "^0.2.1",
     "html5shiv": "^3.x.x",
     "jquery": "^2.x.x",
     "jquery.cookie": "^1.x.x",

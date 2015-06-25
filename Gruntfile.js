@@ -47,7 +47,7 @@ module.exports = function(grunt) {
     },
     concurrent: {
       dev: {
-        tasks: ['nodemon', 'watch'],
+        tasks: ['nodemon', 'watch', 'penthouse'],
         options: {
           logConcurrentOutput: true
         }
@@ -59,9 +59,9 @@ module.exports = function(grunt) {
         options: {
           ignore: [
             'node_modules/**',
-            'public/**'
+            'public/vendor'
           ],
-          ext: 'js'
+          ext: 'js,ccss'
         }
       }
     },
@@ -206,6 +206,15 @@ module.exports = function(grunt) {
       vendor: {
         src: ['public/vendor/**']
       }
+    },
+    penthouse: {
+      extract: {
+        outfile: 'public/layouts/core.min.ccss',
+        css: 'public/layouts/core.min.css',
+        url: 'http://localhost:3000',
+        width: 1300,
+        height: 900
+      }
     }
   });
 
@@ -218,6 +227,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-penthouse');
 
   grunt.registerTask('default', ['copy:vendor', 'newer:uglify', 'newer:less', 'concurrent']);
   grunt.registerTask('build', ['copy:vendor', 'uglify', 'less']);
