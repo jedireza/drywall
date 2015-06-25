@@ -3,8 +3,8 @@ extends ../../../layouts/admin
 block head
   title Manage Administrators
 
-block neck
-  link(rel='stylesheet', href='/views/admin/administrators/index.min.css?#{cacheBreaker}')
+block css
+  link(rel='stylesheet', property='stylesheetCustom', href='/views/admin/administrators/index.min.css?#{cacheBreaker}')
 
 block feet
   script(src='/views/admin/administrators/index.min.js?#{cacheBreaker}')

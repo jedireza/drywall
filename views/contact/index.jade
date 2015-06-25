@@ -3,8 +3,8 @@ extends ../../layouts/default
 block head
   title Contact Us
 
-block neck
-  link(rel='stylesheet', href='/views/contact/index.min.css?#{cacheBreaker}')
+block css
+  link(rel='stylesheet', property='stylesheetCustom', href='/views/contact/index.min.css?#{cacheBreaker}')
 
 block feet
   script(src='/views/contact/index.min.js?#{cacheBreaker}')

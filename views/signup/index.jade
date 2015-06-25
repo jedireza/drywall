@@ -3,8 +3,8 @@ extends ../../layouts/default
 block head
   title Sign Up
 
-block neck
-  link(rel='stylesheet', href='/views/signup/index.min.css?#{cacheBreaker}')
+block css
+  link(rel='stylesheet', property='stylesheetCustom', href='/views/signup/index.min.css?#{cacheBreaker}')
 
 block feet
   script(src='/views/signup/index.min.js?#{cacheBreaker}')

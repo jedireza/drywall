@@ -12,7 +12,8 @@ var config = require('./config'),
     passport = require('passport'),
     mongoose = require('mongoose'),
     helmet = require('helmet'),
-    csrf = require('csurf');
+    csrf = require('csurf'),
+    fs = require('fs');
 
 //create express app
 var app = express();
@@ -72,6 +73,13 @@ app.locals.projectName = app.config.projectName;
 app.locals.copyrightYear = new Date().getFullYear();
 app.locals.copyrightName = app.config.companyName;
 app.locals.cacheBreaker = 'br34k-01';
+
+//above the fold css
+require.extensions['.ccss'] = function(module, filename) {
+	module.exports = fs.readFileSync(filename, 'utf8');
+};
+var aboveTheFoldCSSPath = './public/layouts/core.min.ccss';
+app.locals.aboveTheFoldCSS = (fs.existsSync(aboveTheFoldCSSPath)) ? require(aboveTheFoldCSSPath) : '';
 
 //setup passport
 require('./passport')(app, passport);

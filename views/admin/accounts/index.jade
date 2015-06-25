@@ -3,8 +3,8 @@ extends ../../../layouts/admin
 block head
   title Manage Accounts
 
-block neck
-  link(rel='stylesheet', href='/views/admin/accounts/index.min.css?#{cacheBreaker}')
+block css
+  link(rel='stylesheet', property='stylesheetCustom', href='/views/admin/accounts/index.min.css?#{cacheBreaker}')
 
 block feet
   script(src='/views/admin/accounts/index.min.js?#{cacheBreaker}')

@@ -4,7 +4,7 @@ html
     block head
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='/layouts/core.min.css?#{cacheBreaker}')
+    style !{aboveTheFoldCSS}
     block neck
   body
     div.navbar.navbar-default.navbar-fixed-top
@@ -42,6 +42,9 @@ html
 
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
+
+    link(rel='stylesheet', property='stylesheet', href='/layouts/core.min.css')
+    block css
 
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')

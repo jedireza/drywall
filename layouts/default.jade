@@ -4,14 +4,14 @@ html
     block head
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='/layouts/core.min.css?#{cacheBreaker}')
+    style !{aboveTheFoldCSS}
     block neck
   body
     div.navbar.navbar-default.navbar-fixed-top
       div.container
         div.navbar-header
           a.navbar-brand(href='/')
-            img.navbar-logo(src='/media/logo-symbol-64x64.png')
+            img.navbar-logo(src='/media/logo-symbol-32x32.png', srcset='/media/logo-symbol-64x64.png 2x')
             span.navbar-brand-label #{projectName}
           button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
             span.icon-bar
@@ -48,6 +48,9 @@ html
 
     div.ajax-spinner
       img(src='/media/ajax-pulse.gif')
+
+    link(rel='stylesheet', property='stylesheet', href='/layouts/core.min.css')
+    block css
 
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')

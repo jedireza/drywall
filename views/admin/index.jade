@@ -3,8 +3,8 @@ extends ../../layouts/admin
 block head
   title Admin Area
 
-block neck
-  link(rel='stylesheet', href='/views/admin/index.min.css?#{cacheBreaker}')
+block css
+  link(rel='stylesheet', property='stylesheetCustom', href='/views/admin/index.min.css?#{cacheBreaker}')
 
 block body
   div.row
