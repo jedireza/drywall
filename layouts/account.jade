@@ -11,7 +11,7 @@ html
       div.container
         div.navbar-header
           a.navbar-brand(href='/account/')
-            img.navbar-logo(src='/media/logo-symbol-64x64.png')
+            img.navbar-logo(src='/media/logo-symbol-64x64.png', alt='Logo')
             span.navbar-brand-label #{projectName}
           button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
             span.icon-bar
@@ -41,7 +41,7 @@ html
           div.clearfix
 
     div.ajax-spinner
-      img(src='/media/ajax-pulse.gif')
+      img(src='/media/ajax-pulse.gif', alt='Loading')
 
     //if lte IE 9
       script(src='/layouts/ie-sucks.min.js?#{cacheBreaker}')
