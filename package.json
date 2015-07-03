@@ -3,10 +3,11 @@
   "version": "0.16.3",
   "private": true,
   "scripts": {
-    "start": "grunt"
+    "start": "grunt",
+    "update": "david update"
   },
   "dependencies": {
-    "async": "^0.9.x",
+    "async": "^1.x.x",
     "backbone": "^1.x.x",
     "bcrypt": "^0.8.x",
     "body-parser": "^1.x.x",
@@ -17,7 +18,7 @@
     "emailjs": "^0.3.x",
     "express": "^4.12.x",
     "express-session": "^1.x.x",
-    "helmet": "^0.7.x",
+    "helmet": "^0.9.x",
     "jade": "^1.x.x",
     "method-override": "^2.x.x",
     "mongoose": "^4.x.x",
@@ -35,10 +36,11 @@
   },
   "devDependencies": {
     "bootstrap": "^3.x.x",
+    "david": "^6.x.x",
     "font-awesome": "^4.x.x",
     "grunt": "^0.4.x",
     "grunt-cli": "^0.1.13",
-    "grunt-concurrent": "^1.x.x",
+    "grunt-concurrent": "^2.x.x",
     "grunt-contrib-clean": "^0.6.x",
     "grunt-contrib-copy": "^0.8.x",
     "grunt-contrib-jshint": "^0.11.x",
