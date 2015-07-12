@@ -45,6 +45,10 @@ secrets. If you have issues during installation related to `bcrypt` then [refer
 to this wiki
 page](https://github.com/jedireza/drywall/wiki/bcrypt-Installation-Trouble).
 
+We use [`emailjs`](https://github.com/eleith/emailjs) for email transport. If
+you have issues sending email [refer to this wiki
+page](https://github.com/jedireza/drywall/wiki/Trouble-sending-email).
+
 
 ## Installation
 
