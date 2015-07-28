@@ -4,7 +4,7 @@ A website and user system starter. Implemented with Express and Backbone.
 
 [![Dependency Status](https://david-dm.org/jedireza/drywall.svg?theme=shields.io)](https://david-dm.org/jedireza/drywall)
 [![devDependency Status](https://david-dm.org/jedireza/drywall/dev-status.svg?theme=shields.io)](https://david-dm.org/jedireza/drywall#info=devDependencies)
-
+[![Support and Consulting Services](https://s3-us-west-2.amazonaws.com/supportedsourceassets/buttons/supportandservices1.png)](http://supportedsource.org/consulting-services-and-support/Drywall)
 
 ## Technology
 
@@ -141,7 +141,7 @@ Login. Customize. Enjoy.
  - Global admin quick search component.
 
 
-## Questions and contributing
+## Questions and Support
 
 Any issues or questions (no matter how basic), open an issue. Please take the
 initiative to include basic debugging information like operating system
@@ -161,9 +161,17 @@ $ npm version
 #   zlib: '1.2.8' }
 ```
 
-Contributions are welcome. Your code should:
+If you have more involved questions and would like to find someone for professional support or consulting services, go here:
 
- - pass `$ grunt lint` without error
+[![Support and Consulting Services](https://s3-us-west-2.amazonaws.com/supportedsourceassets/buttons/supportandservices1.png)](http://supportedsource.org/consulting-services-and-support/Drywall)
+
+## Contributing
+
+Contributions are welcome.
+
+Important! Before opening a pull request, your code should pass the tests! You can run the tests with:
+
+`$ grunt lint`
 
 If you're changing something non-trivial, you may want to submit an issue
 first.
