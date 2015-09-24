@@ -114,7 +114,6 @@
     initialize: function() {
       this.model = new app.Identity();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
@@ -158,7 +157,6 @@
     initialize: function() {
       this.model = new app.Roles();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },

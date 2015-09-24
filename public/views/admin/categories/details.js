@@ -68,7 +68,6 @@
     initialize: function() {
       this.model = new app.Details();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
