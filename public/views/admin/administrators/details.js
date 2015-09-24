@@ -136,7 +136,6 @@
     initialize: function() {
       this.model = new app.Details();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
@@ -207,7 +206,6 @@
     initialize: function() {
       this.model = new app.Login();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
@@ -261,7 +259,6 @@
     initialize: function() {
       this.model = new app.Groups();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
@@ -336,7 +333,6 @@
     initialize: function() {
       this.model = new app.Permissions();
       this.syncUp();
-      this.listenTo(app.mainView.model, 'change', this.syncUp);
       this.listenTo(this.model, 'sync', this.render);
       this.render();
     },
