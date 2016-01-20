@@ -1,6 +1,6 @@
 {
   "name": "Drywall",
-  "version": "0.16.5",
+  "version": "0.16.6",
   "private": true,
   "scripts": {
     "start": "grunt",
