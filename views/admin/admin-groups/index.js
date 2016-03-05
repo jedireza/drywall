@@ -121,8 +121,8 @@ exports.update = function(req, res, next){
     var fieldsToSet = {
       name: req.body.name
     };
-
-    req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
+    var options = { new: true };
+    req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, adminGroup) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -156,8 +156,8 @@ exports.permissions = function(req, res, next){
     var fieldsToSet = {
       permissions: req.body.permissions
     };
-
-    req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, adminGroup) {
+    var options = { new: true };
+    req.app.db.models.AdminGroup.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, adminGroup) {
       if (err) {
         return workflow.emit('exception', err);
       }

@@ -71,7 +71,11 @@ exports.connectTwitter = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Twitter account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'twitter.id': info.profile.id }, function(err, user) {
+        var fieldsToSet = {
+          'twitter.id': info.profile.id
+        };
+        var options = { new: true };
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -98,7 +102,11 @@ exports.connectGitHub = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that GitHub account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'github.id': info.profile.id }, function(err, user) {
+        var fieldsToSet = {
+          'github.id': info.profile.id
+        };
+        var options = { new: true };
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -125,7 +133,11 @@ exports.connectFacebook = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Facebook account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'facebook.id': info.profile.id }, function(err, user) {
+        var fieldsToSet = {
+          'facebook.id': info.profile.id
+        };
+        var options = { new: true };
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -152,7 +164,11 @@ exports.connectGoogle = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Google account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'google.id': info.profile.id }, function(err, user) {
+        var fieldsToSet = {
+          'google.id': info.profile.id
+        };
+        var options = { new: true };
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -183,7 +199,11 @@ exports.connectTumblr = function(req, res, next){
         renderSettings(req, res, next, 'Another user has already connected with that Tumblr account.');
       }
       else {
-        req.app.db.models.User.findByIdAndUpdate(req.user.id, { 'tumblr.id': info.profile.id }, function(err, user) {
+        var fieldsToSet = {
+          'tumblr.id': info.profile.id
+        };
+        var options = { new: true };
+        req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
           if (err) {
             return next(err);
           }
@@ -196,7 +216,13 @@ exports.connectTumblr = function(req, res, next){
 };
 
 exports.disconnectTwitter = function(req, res, next){
-  req.app.db.models.User.findByIdAndUpdate(req.user.id, { twitter: { id: undefined } }, function(err, user) {
+  var fieldsToSet = {
+    twitter: {
+      id: undefined
+    }
+  };
+  var options = { new: true };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
     if (err) {
       return next(err);
     }
@@ -206,7 +232,13 @@ exports.disconnectTwitter = function(req, res, next){
 };
 
 exports.disconnectGitHub = function(req, res, next){
-  req.app.db.models.User.findByIdAndUpdate(req.user.id, { github: { id: undefined } }, function(err, user) {
+  var fieldsToSet = {
+    github: {
+      id: undefined
+    }
+  };
+  var options = { new: true };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
     if (err) {
       return next(err);
     }
@@ -216,7 +248,13 @@ exports.disconnectGitHub = function(req, res, next){
 };
 
 exports.disconnectFacebook = function(req, res, next){
-  req.app.db.models.User.findByIdAndUpdate(req.user.id, { facebook: { id: undefined } }, function(err, user) {
+  var fieldsToSet = {
+    facebook: {
+      id: undefined
+    }
+  };
+  var options = { new: true };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
     if (err) {
       return next(err);
     }
@@ -226,7 +264,13 @@ exports.disconnectFacebook = function(req, res, next){
 };
 
 exports.disconnectGoogle = function(req, res, next){
-  req.app.db.models.User.findByIdAndUpdate(req.user.id, { google: { id: undefined } }, function(err, user) {
+  var fieldsToSet = {
+    google: {
+      id: undefined
+    }
+  };
+  var options = { new: true };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
     if (err) {
       return next(err);
     }
@@ -236,7 +280,13 @@ exports.disconnectGoogle = function(req, res, next){
 };
 
 exports.disconnectTumblr = function(req, res, next){
-  req.app.db.models.User.findByIdAndUpdate(req.user.id, { tumblr: { id: undefined } }, function(err, user) {
+  var fieldsToSet = {
+    tumblr: {
+      id: undefined
+    }
+  };
+  var options = { new: true };
+  req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
     if (err) {
       return next(err);
     }
@@ -284,8 +334,10 @@ exports.update = function(req, res, next){
         req.body.zip
       ]
     };
-    var options = { select: 'name company phone zip' };
-
+    var options = {
+      select: 'name company phone zip',
+      new: true
+    };
     req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
@@ -363,8 +415,10 @@ exports.identity = function(req, res, next){
         req.body.email
       ]
     };
-    var options = { select: 'username email twitter.id github.id facebook.id google.id' };
-
+    var options = {
+      select: 'username email twitter.id github.id facebook.id google.id',
+      new: true
+    };
     req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
@@ -382,7 +436,8 @@ exports.identity = function(req, res, next){
           name: user.username
         }
       };
-      req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, function(err, admin) {
+      var options = { new: true };
+      req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, options, function(err, admin) {
         if (err) {
           return workflow.emit('exception', err);
         }
@@ -403,7 +458,8 @@ exports.identity = function(req, res, next){
           name: user.username
         }
       };
-      req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, function(err, account) {
+      var options = { new: true };
+      req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, options, function(err, account) {
         if (err) {
           return workflow.emit('exception', err);
         }
@@ -460,7 +516,8 @@ exports.password = function(req, res, next){
       }
 
       var fieldsToSet = { password: hash };
-      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+      var options = { new: true };
+      req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
         }
