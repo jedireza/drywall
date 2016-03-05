@@ -3,8 +3,12 @@
   "version": "0.16.6",
   "private": true,
   "scripts": {
-    "start": "grunt",
-    "update": "david update"
+    "start": "grunt"
+  },
+  "author": "Reza Akhavan <jedireza@gmail.com> (http://reza.akhavan.me/)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=4.0.0"
   },
   "dependencies": {
     "async": "1.x.x",
@@ -16,7 +20,7 @@
     "cookie-parser": "1.x.x",
     "csurf": "1.x.x",
     "emailjs": "1.x.x",
-    "express": "4.12.x",
+    "express": "4.13.x",
     "express-session": "1.x.x",
     "helmet": "1.x.x",
     "jade": "1.x.x",
@@ -31,28 +35,27 @@
     "passport-oauth": "1.x.x",
     "passport-tumblr": "0.1.x",
     "passport-twitter": "1.x.x",
-    "serve-static": "1.9.x",
+    "serve-static": "1.10.x",
     "underscore": "1.x.x"
   },
   "devDependencies": {
     "bootstrap": "3.x.x",
-    "david": "7.x.x",
     "font-awesome": "4.x.x",
     "grunt": "0.4.x",
     "grunt-cli": "0.1.13",
     "grunt-concurrent": "2.x.x",
     "grunt-contrib-clean": "1.x.x",
-    "grunt-contrib-copy": "0.8.x",
+    "grunt-contrib-copy": "1.x.x",
     "grunt-contrib-jshint": "1.x.x",
     "grunt-contrib-less": "1.x.x",
-    "grunt-contrib-uglify": "0.11.x",
+    "grunt-contrib-uglify": "1.x.x",
     "grunt-contrib-watch": "0.6.x",
     "grunt-newer": "1.x.x",
     "grunt-nodemon": "0.4.x",
     "html5shiv": "3.x.x",
     "jquery": "2.x.x",
     "jquery.cookie": "1.x.x",
-    "moment": "2.x.x",
+    "moment": "2.11.x",
     "respond.js": "1.x.x"
   }
 }
