@@ -201,8 +201,8 @@ exports.update = function(req, res, next){
         req.body.zip
       ]
     };
-
-    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, account) {
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -268,7 +268,11 @@ exports.linkUser = function(req, res, next){
   });
 
   workflow.on('patchUser', function() {
-    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.account': req.params.id }).exec(function(err, user) {
+    var fieldsToSet = {
+      'roles.account': req.params.id
+    };
+    var options = { new: true };
+    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -278,7 +282,14 @@ exports.linkUser = function(req, res, next){
   });
 
   workflow.on('patchAccount', function(callback) {
-    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, account) {
+    var fieldsToSet = {
+      user: {
+        id: workflow.user._id,
+        name: workflow.user.username
+      }
+    };
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -365,16 +376,20 @@ exports.newNote = function(req, res, next){
   });
 
   workflow.on('addNote', function() {
-    var noteToAdd = {
-      data: req.body.data,
-      userCreated: {
-        id: req.user._id,
-        name: req.user.username,
-        time: new Date().toISOString()
+    var fieldsToSet = {
+      $push: {
+        notes: {
+          data: req.body.data,
+          userCreated: {
+            id: req.user._id,
+            name: req.user.username,
+            time: new Date().toISOString()
+          }
+        }
       }
     };
-
-    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { $push: { notes: noteToAdd } }, function(err, account) {
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -412,8 +427,14 @@ exports.newStatus = function(req, res, next){
         time: new Date().toISOString()
       }
     };
-
-    req.app.db.models.Account.findByIdAndUpdate(req.params.id, { status: statusToAdd, $push: { statusLog: statusToAdd } }, function(err, account) {
+    var fieldsToSet = {
+      status: statusToAdd,
+      $push: {
+        statusLog: statusToAdd
+      }
+    };
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }

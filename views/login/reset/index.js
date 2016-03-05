@@ -69,7 +69,8 @@ exports.set = function(req, res){
       }
 
       var fieldsToSet = { password: hash, resetPasswordToken: '' };
-      req.app.db.models.User.findByIdAndUpdate(user._id, fieldsToSet, function(err, user) {
+      var options = { new: true };
+      req.app.db.models.User.findByIdAndUpdate(user._id, fieldsToSet, options, function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
         }

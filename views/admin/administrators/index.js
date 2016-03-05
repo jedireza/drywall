@@ -154,8 +154,8 @@ exports.update = function(req, res, next){
         req.body.last
       ]
     };
-
-    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
+    var options = { new: true };
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, admin) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -195,8 +195,8 @@ exports.groups = function(req, res, next){
     var fieldsToSet = {
       groups: req.body.groups
     };
-
-    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
+    var options = { new: true };
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, admin) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -236,8 +236,8 @@ exports.permissions = function(req, res, next){
     var fieldsToSet = {
       permissions: req.body.permissions
     };
-
-    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, admin) {
+    var options = { new: true };
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, admin) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -309,7 +309,11 @@ exports.linkUser = function(req, res, next){
   });
 
   workflow.on('patchUser', function() {
-    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, { 'roles.admin': req.params.id }).exec(function(err, user) {
+    var fieldsToSet = {
+      'roles.admin': req.params.id
+    };
+    var options = { new: true };
+    req.app.db.models.User.findByIdAndUpdate(workflow.user._id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -318,7 +322,14 @@ exports.linkUser = function(req, res, next){
   });
 
   workflow.on('patchAdministrator', function(callback) {
-    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, { user: { id: workflow.user._id, name: workflow.user.username } }).exec(function(err, admin) {
+    var fieldsToSet = {
+      user: {
+        id: workflow.user._id,
+        name: workflow.user.username
+      }
+    };
+    var options = { new: true };
+    req.app.db.models.Admin.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, admin) {
       if (err) {
         return workflow.emit('exception', err);
       }

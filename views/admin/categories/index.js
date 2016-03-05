@@ -137,8 +137,8 @@ exports.update = function(req, res, next){
       pivot: req.body.pivot,
       name: req.body.name
     };
-
-    req.app.db.models.Category.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, category) {
+    var options = { new: true };
+    req.app.db.models.Category.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, category) {
       if (err) {
         return workflow.emit('exception', err);
       }

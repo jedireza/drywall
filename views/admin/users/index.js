@@ -182,8 +182,8 @@ exports.update = function(req, res, next){
         req.body.email
       ]
     };
-
-    req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, user) {
+    var options = { new: true };
+    req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -200,7 +200,8 @@ exports.update = function(req, res, next){
           name: user.username
         }
       };
-      req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, function(err, admin) {
+      var options = { new: true };
+      req.app.db.models.Admin.findByIdAndUpdate(user.roles.admin, fieldsToSet, options, function(err, admin) {
         if (err) {
           return workflow.emit('exception', err);
         }
@@ -221,7 +222,8 @@ exports.update = function(req, res, next){
           name: user.username
         }
       };
-      req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, function(err, account) {
+      var options = { new: true };
+      req.app.db.models.Account.findByIdAndUpdate(user.roles.account, fieldsToSet, options, function(err, account) {
         if (err) {
           return workflow.emit('exception', err);
         }
@@ -278,7 +280,8 @@ exports.password = function(req, res, next){
       }
 
       var fieldsToSet = { password: hash };
-      req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, function(err, user) {
+      var options = { new: true };
+      req.app.db.models.User.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, user) {
         if (err) {
           return workflow.emit('exception', err);
         }

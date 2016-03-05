@@ -69,7 +69,8 @@ exports.init = function(req, res, next){
 
   workflow.on('patchAccount', function(token, hash) {
     var fieldsToSet = { verificationToken: hash };
-    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return next(err);
       }
@@ -129,7 +130,8 @@ exports.resendVerification = function(req, res, next){
 
   workflow.on('patchUser', function() {
     var fieldsToSet = { email: req.body.email.toLowerCase() };
-    req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, function(err, user) {
+    var options = { new: true };
+    req.app.db.models.User.findByIdAndUpdate(req.user.id, fieldsToSet, options, function(err, user) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -159,7 +161,8 @@ exports.resendVerification = function(req, res, next){
 
   workflow.on('patchAccount', function(token, hash) {
     var fieldsToSet = { verificationToken: hash };
-    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, function(err, account) {
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, fieldsToSet, options, function(err, account) {
       if (err) {
         return workflow.emit('exception', err);
       }
@@ -188,7 +191,8 @@ exports.verify = function(req, res, next){
     }
 
     var fieldsToSet = { isVerified: 'yes', verificationToken: '' };
-    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account._id, fieldsToSet, function(err, account) {
+    var options = { new: true };
+    req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account._id, fieldsToSet, options, function(err, account) {
       if (err) {
         return next(err);
       }
