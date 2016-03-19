@@ -1,0 +1,103 @@
+<nav  onmouseover="minimalize()" class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+
+                <div class="profile-element" uib-dropdown>
+                    <a uib-dropdown-toggle href>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">{{main.userName}}</strong>
+                             </span>
+                                <span class="text-muted text-xs block">More Options<b class="caret"></b></span>
+                            </span>
+                    </a>
+                    <ul uib-dropdown-menu class="animated flipInX m-t-xs">
+                        <li><a ui-sref="index.profile">Profile</a></li>
+                        <li><a href="/account/billing/">Billing Details</a></li>
+                        <li><a href="/logout/">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    <img style="height:35px" src="img/logo.png">
+                </div>
+
+            </li>
+
+            <li ui-sref-active="active">
+                <a ui-sref="index.main"><i class="fa fa-laptop"></i> <span class="nav-label">Main page</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.minor"><i class="fa fa-desktop"></i> <span class="nav-label">Minor page</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.video"><i class="fa fa-desktop"></i> <span class="nav-label">Hello Archit</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.profile"><i class="fa fa-desktop"></i> <span class="nav-label">tadaaa</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+<div onmouseover="minimalize()"  style="position:fixed; background-color:red; float left; height:100%; width:70px; z-index:100; opacity:0" id="curtain"></div>
+<div onmouseover="minimalizeout()"  style="position:fixed; background-color:blue; float left; height:100%; width:100%;left:220px; z-index:-10; opacity:0" id="curtain2"></div>
+
+<script type="text/javascript">
+
+window.onload = minimalizeout();
+var open=0;
+
+function minimalize() {
+                if(open==0)
+                {
+                open=1;
+                document.getElementById('curtain').style.width = "220px";
+                document.getElementById('curtain2').style.zIndex= "10000";
+                $("body").toggleClass("mini-navbar");
+                if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                    // Hide menu in order to smoothly turn on when maximize menu
+                    $('#side-menu').hide();
+                    // For smoothly turn on menu
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 200);
+                } else if ($('body').hasClass('fixed-sidebar')){
+                    $('#side-menu').hide();
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 200);
+                } else {
+                    // Remove all inline style from jquery fadeIn function to reset menu state
+                    $('#side-menu').removeAttr('style');
+                }
+            }
+            };
+
+            function minimalizeout() {
+                open=0;
+                document.getElementById('curtain').style.width = "70px";
+                document.getElementById('curtain2').style.zIndex= "-10";
+                $("body").toggleClass("mini-navbar");
+                if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                    // Hide menu in order to smoothly turn on when maximize menu
+                    $('#side-menu').hide();
+                    // For smoothly turn on menu
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 200);
+                } else if ($('body').hasClass('fixed-sidebar')){
+                    $('#side-menu').hide();
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 200);
+                } else {
+                    // Remove all inline style from jquery fadeIn function to reset menu state
+                    $('#side-menu').removeAttr('style');
+                }
+            };
+</script>
