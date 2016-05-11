@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "async": "1.x.x",
-    "backbone": "1.x.x",
     "bcrypt": "0.8.x",
     "body-parser": "1.x.x",
     "compression": "1.x.x",
@@ -22,7 +21,7 @@
     "emailjs": "1.x.x",
     "express": "4.13.x",
     "express-session": "1.x.x",
-    "helmet": "1.x.x",
+    "helmet": "2.x.x",
     "jade": "1.x.x",
     "method-override": "2.x.x",
     "mongoose": "4.x.x",
@@ -39,23 +38,24 @@
     "underscore": "1.x.x"
   },
   "devDependencies": {
+    "backbone": "1.x.x",
     "bootstrap": "3.x.x",
     "font-awesome": "4.x.x",
-    "grunt": "0.4.x",
-    "grunt-cli": "0.1.13",
+    "grunt": "1.x.x",
+    "grunt-cli": "1.x.x",
     "grunt-concurrent": "2.x.x",
     "grunt-contrib-clean": "1.x.x",
     "grunt-contrib-copy": "1.x.x",
     "grunt-contrib-jshint": "1.x.x",
     "grunt-contrib-less": "1.x.x",
     "grunt-contrib-uglify": "1.x.x",
-    "grunt-contrib-watch": "0.6.x",
+    "grunt-contrib-watch": "1.x.x",
     "grunt-newer": "1.x.x",
     "grunt-nodemon": "0.4.x",
     "html5shiv": "3.x.x",
     "jquery": "2.x.x",
     "jquery.cookie": "1.x.x",
-    "moment": "2.11.x",
+    "moment": "2.13.x",
     "respond.js": "1.x.x"
   }
 }
