@@ -1,6 +1,6 @@
 # We moved!
 
-[Aqua](https://github.com/jedireza/aqua) is what you're looking now.
+[Aqua](https://github.com/jedireza/aqua) is what you're looking for.
 
 Also take a look at [Frame](https://github.com/jedireza/frame), which is just
 the restful API parts of Aqua, bring your own front-end.
