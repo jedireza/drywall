@@ -127,7 +127,12 @@ exports.signup = function(req, res){
           return workflow.emit('exception', err);
         }
 
-        workflow.emit('sendWelcomeEmail');
+        if (req.app.config.sendWelcomeEmail) {
+          workflow.emit('sendWelcomeEmail');
+        }
+        else {
+          workflow.emit('logUserIn');
+        }
       });
     });
   });
@@ -433,7 +438,12 @@ exports.signupSocial = function(req, res){
           return workflow.emit('exception', err);
         }
 
-        workflow.emit('sendWelcomeEmail');
+        if (req.app.config.sendWelcomeEmail) {
+          workflow.emit('sendWelcomeEmail');
+        }
+        else {
+          workflow.emit('logUserIn');
+        }
       });
     });
   });

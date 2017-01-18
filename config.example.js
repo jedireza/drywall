@@ -14,6 +14,7 @@ exports.loginAttempts = {
   logExpiration: '20m'
 };
 exports.requireAccountVerification = false;
+exports.sendWelcomeEmail = true;
 exports.smtp = {
   from: {
     name: process.env.SMTP_FROM_NAME || exports.projectName +' Website',
